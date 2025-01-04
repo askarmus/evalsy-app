@@ -1,13 +1,13 @@
+import { Button, Input, useDisclosure } from "@nextui-org/react";
+
 import {
-  Button,
-  Input,
-  Modal,
-  ModalBody,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  useDisclosure,
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerBody,
+  DrawerFooter,
 } from "@nextui-org/react";
+
 import React from "react";
 
 export const AddUser = () => {
@@ -17,20 +17,31 @@ export const AddUser = () => {
     <div>
       <>
         <Button onPress={onOpen} color="primary">
-          Add User
+          Add Job
         </Button>
-        <Modal
+        <Drawer
           isOpen={isOpen}
           onOpenChange={onOpenChange}
-          placement="top-center"
+          motionProps={{
+            variants: {
+              enter: {
+                opacity: 1,
+                x: 0,
+              },
+              exit: {
+                x: 100,
+                opacity: 0,
+              },
+            },
+          }}
         >
-          <ModalContent>
+          <DrawerContent>
             {(onClose) => (
               <>
-                <ModalHeader className="flex flex-col gap-1">
+                <DrawerHeader className="flex flex-col gap-1">
                   Add User
-                </ModalHeader>
-                <ModalBody>
+                </DrawerHeader>
+                <DrawerBody>
                   <Input label="Email" variant="bordered" />
                   <Input label="First Name" variant="bordered" />
                   <Input label="Last Name" variant="bordered" />
@@ -42,19 +53,19 @@ export const AddUser = () => {
                     type="password"
                     variant="bordered"
                   />
-                </ModalBody>
-                <ModalFooter>
+                </DrawerBody>
+                <DrawerFooter>
                   <Button color="danger" variant="flat" onClick={onClose}>
                     Close
                   </Button>
                   <Button color="primary" onPress={onClose}>
                     Add User
                   </Button>
-                </ModalFooter>
+                </DrawerFooter>
               </>
             )}
-          </ModalContent>
-        </Modal>
+          </DrawerContent>
+        </Drawer>
       </>
     </div>
   );
