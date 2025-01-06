@@ -75,7 +75,7 @@ export const AddUser = () => {
         });
 
         const newQuestions = result.data.map((text) => ({
-          id: Date.now() + Math.random(), // Ensure unique ID
+          id: 10, // Ensure unique ID
           text,
         }));
 

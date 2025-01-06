@@ -1,6 +1,5 @@
 "use client";
 
-import { createAuthCookie } from "@/actions/auth.action";
 import { LoginSchema } from "@/helpers/schemas";
 import { LoginFormType } from "@/helpers/types";
 import { loginUser } from "@/services/authService";
@@ -24,10 +23,10 @@ export const Login = () => {
       try {
         setSubmitting(true);
 
-        await loginUser(values);
-        //  await createAuthCookie();
-
-        router.replace("/");
+        const response = await loginUser(values);
+        if (response) {
+          router.replace("/");
+        }
       } catch (error: any) {
       } finally {
         setSubmitting(false);

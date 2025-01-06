@@ -1,4 +1,5 @@
 import axios from "axios";
+import Cookies from "js-cookie"; // Use js-cookie for easier cookie handling
 import { toast } from "react-toastify";
 
 // Create the Axios instance
@@ -11,14 +12,15 @@ const apiClient = axios.create({
 // Add a request interceptor to include the bearer token
 apiClient.interceptors.request.use(
   (config) => {
-    // Retrieve the token from storage or context
+    const token = Cookies.get("userAuth"); // Get the token from cookies
 
-    config.headers.Authorization = `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3Nzk2ZDg5ODY5OTZmNDk5YjQ3NDE0MCIsImVtYWlsIjoiYXNrYXJtdXNAaG90bWFpbC5jb21tbSIsImlhdCI6MTczNjE1NzA1NSwiZXhwIjoxNzM2MjQzNDU1fQ.ArGQT4mafVOQWNMZX2reb8pvyEj3-Ck8JjCe9xGwP3w`;
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
 
     return config;
   },
   (error) => {
-    // Handle request errors
     return Promise.reject(error);
   }
 );
