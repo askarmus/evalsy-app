@@ -3,31 +3,31 @@ import React from "react";
 
 const items = [
   {
-    name: "Jose Perez",
+    name: "Jose Perez 1",
     picture: "https://i.pravatar.cc/150?u=a042581f4e29026024d",
     amount: "4500 USD",
     date: "9/20/2021",
   },
   {
-    name: "Jose Perez",
+    name: "Jose Pere z",
     picture: "https://i.pravatar.cc/150?u=a042581f4e29026024d",
     amount: "4500 USD",
     date: "9/20/2021",
   },
   {
-    name: "Jose Perez",
+    name: "Joxse Pe5rez",
     picture: "https://i.pravatar.cc/150?u=a042581f4e29026024d",
     amount: "4500 USD",
     date: "9/20/2021",
   },
   {
-    name: "Jose Perez",
+    name: "Jose sPerez",
     picture: "https://i.pravatar.cc/150?u=a042581f4e29026024d",
     amount: "4500 USD",
     date: "9/20/2021",
   },
   {
-    name: "Jose Perez",
+    name: "Jose Pere2z",
     picture: "https://i.pravatar.cc/150?u=a042581f4e29026024d",
     amount: "4500 USD",
     date: "9/20/2021",

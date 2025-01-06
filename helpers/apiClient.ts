@@ -13,7 +13,7 @@ apiClient.interceptors.request.use(
   (config) => {
     // Retrieve the token from storage or context
 
-    config.headers.Authorization = `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3Nzk2ZDg5ODY5OTZmNDk5YjQ3NDE0MCIsImVtYWlsIjoiYXNrYXJtdXNAaG90bWFpbC5jb21tbSIsImlhdCI6MTczNjAxMjE2OCwiZXhwIjoxNzM2MDk4NTY4fQ.q3eluqImerqjrNLs-myuS__q1q1A9zXTQ_ryRu78K1s`;
+    config.headers.Authorization = `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3Nzk2ZDg5ODY5OTZmNDk5YjQ3NDE0MCIsImVtYWlsIjoiYXNrYXJtdXNAaG90bWFpbC5jb21tbSIsImlhdCI6MTczNjE1NzA1NSwiZXhwIjoxNzM2MjQzNDU1fQ.ArGQT4mafVOQWNMZX2reb8pvyEj3-Ck8JjCe9xGwP3w`;
 
     return config;
   },

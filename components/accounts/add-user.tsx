@@ -21,10 +21,20 @@ import {
   DrawerFooter,
 } from "@nextui-org/react";
 import { AiFillDelete, AiOutlinePlusSquare } from "react-icons/ai";
-import { array, object, string } from "yup";
-import { Formik, useFormikContext } from "formik";
+import { Formik, FormikErrors } from "formik";
 import { showToast } from "@/app/utils/toastUtils";
-import { toast, ToastContainer } from "react-toastify";
+import { ToastContainer } from "react-toastify";
+import { generateQuestions } from "@/services/job.service";
+import { AddJobSchema } from "@/helpers/schemas";
+
+export type Question = { id: number; text: string };
+
+export interface AddJobFormValues {
+  title: string;
+  description: string;
+  questions: Question[];
+  aiLevel: string;
+}
 
 export const CustomRadio = (props) => {
   const { children, ...otherProps } = props;
@@ -43,48 +53,53 @@ export const CustomRadio = (props) => {
 
 export const AddUser = () => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const [questions, setQuestions] = useState([{ id: Date.now(), text: "" }]);
+  const [isGenerating, setGenerated] = useState(false); // Loading state
+  const formRef = useRef<any | null>(null);
 
-  const [selected, setSelected] = React.useState("");
+  const handleGenerateQuestions = async (
+    validateForm,
+    values,
+    setFieldValue
+  ) => {
+    const errors = await validateForm();
 
-  const formRef = useRef(null);
+    if (!errors.title && !errors.description && !errors.aiLevel) {
+      setGenerated(true);
+
+      try {
+        const result = await generateQuestions({
+          jobTitle: values.title,
+          description: values.description,
+          expertiseLevel: values.aiLevel,
+          noOfQuestions: 10,
+        });
+
+        const newQuestions = result.data.map((text) => ({
+          id: Date.now() + Math.random(), // Ensure unique ID
+          text,
+        }));
+
+        setFieldValue("questions", [...values.questions, ...newQuestions]);
+        showToast.success(result.message || "Questions generated successfully");
+      } catch {
+      } finally {
+        setGenerated(false);
+      }
+    } else {
+      showToast.error("Job title, description, and expert level are required");
+    }
+  };
+
+  const initialValues: AddJobFormValues = {
+    title: "",
+    description: "",
+    questions: [{ id: Date.now(), text: "" }],
+    aiLevel: "",
+  };
 
   const handleSubmit = () => {
     console.log(formRef?.current);
     formRef?.current?.handleSubmit();
-  };
-
-  const AddJobSchema = object().shape({
-    title: string().required("Title is required"),
-    description: string().required("Description is required"),
-    aiLevel: string().required("Please select a level"),
-
-    questions: array()
-      .of(
-        object().shape({
-          text: string().required("Question is required"),
-        })
-      )
-      .min(1, "At least one question is required"),
-  });
-
-  // Add new row
-  const handleAddRow = () => {
-    setQuestions([...questions, { id: Date.now(), text: "" }]);
-  };
-
-  // Remove row
-  const handleRemoveRow = (id) => {
-    if (questions.length > 1) {
-      setQuestions(questions.filter((q) => q.id !== id));
-    }
-  };
-
-  // Update input value
-  const handleInputChange = (id, value) => {
-    setQuestions(
-      questions.map((q) => (q.id === id ? { ...q, text: value } : q))
-    );
   };
 
   return (
@@ -101,14 +116,9 @@ export const AddUser = () => {
                   Add Job
                 </DrawerHeader>
                 <DrawerBody>
-                  <Formik
+                  <Formik<AddJobFormValues>
                     innerRef={formRef}
-                    initialValues={{
-                      title: "",
-                      description: "",
-                      questions: [{ id: Date.now(), text: "" }],
-                      aiLevel: "",
-                    }}
+                    initialValues={initialValues}
                     onSubmit={(values) => console.log(values)}
                     validationSchema={AddJobSchema}
                   >
@@ -118,7 +128,6 @@ export const AddUser = () => {
                       touched,
                       handleChange,
                       setFieldValue,
-                      handleSubmit,
                       validateForm,
                     }) => (
                       <>
@@ -167,23 +176,14 @@ export const AddUser = () => {
                           <div className="flex items-center justify-center">
                             <Button
                               color="danger"
+                              isLoading={isGenerating}
                               variant="flat"
                               onPress={async () => {
-                                const errors = await validateForm();
-
-                                // Validate only `title`, `description`, and `aiLevel`
-                                if (
-                                  !errors.title &&
-                                  !errors.description &&
-                                  !errors.aiLevel
-                                ) {
-                                  console.log("Generating questions...");
-                                  // Add your generate logic here
-                                } else {
-                                  showToast.error(
-                                    "Job title, description and expert leavel are required"
-                                  );
-                                }
+                                handleGenerateQuestions(
+                                  validateForm,
+                                  values,
+                                  setFieldValue
+                                );
                               }}
                             >
                               Generate
@@ -221,12 +221,18 @@ export const AddUser = () => {
                                       value={question.text}
                                       isInvalid={
                                         !!(
-                                          errors.questions?.[index]?.text &&
-                                          touched.questions?.[index]?.text
-                                        )
+                                          errors.questions?.[
+                                            index
+                                          ] as FormikErrors<Question>
+                                        )?.text &&
+                                        touched.questions?.[index]?.text
                                       }
                                       errorMessage={
-                                        errors.questions?.[index]?.text || ""
+                                        (
+                                          errors.questions?.[
+                                            index
+                                          ] as FormikErrors<Question>
+                                        )?.text || ""
                                       }
                                       onChange={(e) =>
                                         setFieldValue(
@@ -236,7 +242,6 @@ export const AddUser = () => {
                                       }
                                     />
                                   </TableCell>
-
                                   <TableCell>
                                     <Button
                                       isIconOnly

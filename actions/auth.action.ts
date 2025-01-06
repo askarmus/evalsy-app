@@ -1,11 +1,11 @@
 "use server";
 
-import { cookies } from "next/headers";
+import { deleteCookie, setCookie } from "cookies-next";
 
 export const createAuthCookie = async () => {
-  cookies().set("userAuth", "myToken", { secure: true });
+  setCookie("userAuth", "myToken", { secure: true });
 };
 
 export const deleteAuthCookie = async () => {
-  cookies().delete("userAuth");
+  deleteCookie("userAuth");
 };
