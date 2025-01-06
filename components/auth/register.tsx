@@ -1,18 +1,14 @@
 "use client";
 
-import { createAuthCookie } from "@/actions/auth.action";
-import { showToast } from "@/app/utils/toastUtils";
-import { handleError } from "@/helpers/errorHandler";
 import { RegisterSchema } from "@/helpers/schemas";
 import { RegisterFormType } from "@/helpers/types";
 import { registerUser } from "@/services/authService";
 import { Button, Input } from "@nextui-org/react";
-import axios from "axios";
 import { Formik } from "formik";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 
 export const Register = () => {
   const router = useRouter();
