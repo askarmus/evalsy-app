@@ -20,6 +20,7 @@ import { AiFillDelete } from "react-icons/ai";
 
 import { AddUser } from "./add-user";
 import apiClient from "@/helpers/apiClient";
+import { getAllJobs } from "@/services/job.service";
 
 export default function Accounts() {
   const [page, setPage] = useState(1);
@@ -33,17 +34,9 @@ export default function Accounts() {
     const fetchData = async () => {
       try {
         setIsLoading(true);
-        const response = await apiClient.get(
-          "http://localhost:5000/job/getall"
-        );
-        const jobs = response.data.data;
-        const formattedUsers = jobs.map((job: any) => ({
-          key: job.id,
-          jobTitle: job.jobTitle,
-          experienceLevel: job.experienceLevel,
-          status: job.status,
-        }));
-        setJobs(formattedUsers);
+        const jobs = await getAllJobs();
+
+        setJobs(jobs);
         setIsLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -151,10 +144,10 @@ export default function Accounts() {
             }}
           >
             <TableHeader>
-              <TableColumn key="name">TITLE</TableColumn>
+              <TableColumn key="title">TITLE</TableColumn>
               <TableColumn key="role">ROLE</TableColumn>
               <TableColumn key="status">STATUS</TableColumn>
-              <TableColumn key="status" align="end">
+              <TableColumn key="action" align="end">
                 {""}
               </TableColumn>
             </TableHeader>
