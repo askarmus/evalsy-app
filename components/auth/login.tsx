@@ -25,7 +25,7 @@ export const Login = () => {
         setSubmitting(true);
 
         await loginUser(values);
-        await createAuthCookie();
+        //  await createAuthCookie();
 
         router.replace("/");
       } catch (error: any) {
