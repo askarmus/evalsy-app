@@ -18,9 +18,9 @@ import { HouseIcon } from "@/components/icons/breadcrumb/house-icon";
 import { UsersIcon } from "@/components/icons/breadcrumb/users-icon";
 import { AiFillDelete } from "react-icons/ai";
 
-import { AddUser } from "./add-user";
-import apiClient from "@/helpers/apiClient";
+import { AddJob } from "./add-job";
 import { getAllJobs } from "@/services/job.service";
+import { SendInvitationDrawer } from "./send-invitation";
 
 export default function Accounts() {
   const [page, setPage] = useState(1);
@@ -29,6 +29,18 @@ export default function Accounts() {
   const [jobs, setJobs] = useState([]);
   const rowsPerPage = 10;
   const loadingState = isLoading || jobs?.length === 0 ? "loading" : "idle";
+  const [selectedJobId, setSelectedJobId] = useState<string | null>(null);
+  const [isDrawerOpen, setDrawerOpen] = useState(false);
+
+  const handleInviteClick = (jobId: string) => {
+    setSelectedJobId(jobId);
+    setDrawerOpen(true);
+  };
+
+  const handleCloseDrawer = () => {
+    setSelectedJobId(null);
+    setDrawerOpen(false);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -119,7 +131,7 @@ export default function Accounts() {
           />
         </div>
         <div className="flex flex-row gap-3.5 flex-wrap">
-          <AddUser />
+          <AddJob />
         </div>
       </div>
       <div className="max-w-[95rem] mx-auto w-full">
@@ -145,7 +157,8 @@ export default function Accounts() {
           >
             <TableHeader>
               <TableColumn key="title">TITLE</TableColumn>
-              <TableColumn key="role">ROLE</TableColumn>
+              <TableColumn key="role">TOTAL INVITE</TableColumn>
+              <TableColumn key="expereinceLeavel">Expereince</TableColumn>
               <TableColumn key="status">STATUS</TableColumn>
               <TableColumn key="action" align="end">
                 {""}
@@ -170,14 +183,19 @@ export default function Accounts() {
                       </p>
                     </div>
                   </TableCell>
-                  <TableCell>zzzz</TableCell>
+                  <TableCell>{item.totalApplication}</TableCell>
+                  <TableCell>{item.experienceLevel}</TableCell>
                   <TableCell>
                     <Chip size="sm" color={getStatusColor(item.status)}>
                       {item.status.toUpperCase()}
                     </Chip>
                   </TableCell>
                   <TableCell>
-                    <Button color="default" radius="full">
+                    <Button
+                      color="default"
+                      radius="full"
+                      onPress={() => handleInviteClick(item.id)}
+                    >
                       Invite
                     </Button>
                   </TableCell>
@@ -185,6 +203,11 @@ export default function Accounts() {
               )}
             </TableBody>
           </Table>
+          <SendInvitationDrawer
+            isOpen={isDrawerOpen}
+            onClose={handleCloseDrawer}
+            jobId={selectedJobId}
+          />
         </div>
       </div>
     </div>

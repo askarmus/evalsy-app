@@ -51,7 +51,7 @@ export const CustomRadio = (props) => {
   );
 };
 
-export const AddUser = () => {
+export const AddJob = () => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [isGenerating, setGenerated] = useState(false); // Loading state
   const formRef = useRef<any | null>(null);
