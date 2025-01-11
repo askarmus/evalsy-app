@@ -1,5 +1,4 @@
 import {
-  Link,
   Navbar,
   NavbarBrand,
   NavbarContent,
@@ -9,6 +8,8 @@ import React from "react";
 import { BurguerButton } from "./burguer-button";
 import { NotificationsDropdown } from "./notifications-dropdown";
 import { UserDropdown } from "./user-dropdown";
+import Link from "next/link";
+import { DarkModeSwitch } from "./darkmodeswitch";
 
 interface Props {
   children: React.ReactNode;
@@ -16,12 +17,13 @@ interface Props {
 
 export const NavbarWrapper = ({ children }: Props) => {
   return (
-    <div className="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
+    <div className="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden bbzgxX">
       <Navbar
+        position="static"
         isBordered
         className="w-full"
         classNames={{
-          wrapper: "w-full max-w-full",
+          wrapper: "w-full max-w-full color-line",
         }}
       >
         <NavbarContent className=" pr-3" justify="center">
@@ -30,6 +32,11 @@ export const NavbarWrapper = ({ children }: Props) => {
           </NavbarBrand>
         </NavbarContent>
         <NavbarContent className="hidden sm:flex gap-4" justify="center">
+          <NavbarItem>
+            <Link color="foreground" href="/">
+              Home
+            </Link>
+          </NavbarItem>
           <NavbarItem>
             <Link color="foreground" href="/accounts">
               Job
@@ -41,8 +48,8 @@ export const NavbarWrapper = ({ children }: Props) => {
             </Link>
           </NavbarItem>
           <NavbarItem>
-            <Link color="foreground" href="#">
-              Integrations
+            <Link color="foreground" href="/accounts/interviwers">
+              Interviwers
             </Link>
           </NavbarItem>
         </NavbarContent>
@@ -56,11 +63,8 @@ export const NavbarWrapper = ({ children }: Props) => {
         >
           <NotificationsDropdown />
 
-          <Link
-            href="https://github.com/Siumauricio/nextui-dashboard-template"
-            target={"_blank"}
-          ></Link>
           <NavbarContent>
+            <DarkModeSwitch />
             <UserDropdown />
           </NavbarContent>
         </NavbarContent>

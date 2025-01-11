@@ -1,4 +1,5 @@
 "use client";
+import React, { useState, useMemo, useEffect, useCallback } from "react";
 import {
   Button,
   Input,
@@ -11,58 +12,68 @@ import {
   TableHeader,
   TableRow,
   Chip,
+  User,
 } from "@nextui-org/react";
 import Link from "next/link";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { HouseIcon } from "@/components/icons/breadcrumb/house-icon";
 import { UsersIcon } from "@/components/icons/breadcrumb/users-icon";
-import { AiFillDelete } from "react-icons/ai";
+import { getAllInterviewers } from "@/services/interviwers.service";
+import { AddInterviewer } from "@/components/interviwers/add.interviewer";
+import { AiFillEdit } from "react-icons/ai";
+import { showToast } from "@/app/utils/toastUtils";
 
-import { AddJob } from "./add-job";
-import { getAllJobs } from "@/services/job.service";
-import { SendInvitationDrawer } from "./send-invitation";
-
-export default function Accounts() {
+export default function InterviewerManagement() {
   const [page, setPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [filterValue, setFilterValue] = useState("");
-  const [jobs, setJobs] = useState([]);
+  const [interviewers, setInterviewers] = useState([]);
   const rowsPerPage = 10;
-  const loadingState = isLoading || jobs?.length === 0 ? "loading" : "idle";
-  const [selectedJobId, setSelectedJobId] = useState<string | null>(null);
+  const loadingState =
+    isLoading || interviewers?.length === 0 ? "loading" : "idle";
+  const [selectedInterviewerId, setSelectedInterviewerId] = useState<
+    string | null
+  >(null);
   const [isDrawerOpen, setDrawerOpen] = useState(false);
 
-  const handleInviteClick = (jobId: string) => {
-    setSelectedJobId(jobId);
+  const handleAddClick = () => {
+    setSelectedInterviewerId(null); // Reset selected interviewer
     setDrawerOpen(true);
   };
 
   const handleCloseDrawer = () => {
-    setSelectedJobId(null);
+    setSelectedInterviewerId(null);
     setDrawerOpen(false);
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setIsLoading(true);
-        const jobs = await getAllJobs();
+  const handleEditClick = (id: string) => {
+    setSelectedInterviewerId(id);
+    setDrawerOpen(true);
+  };
+  const fetchInterviewers = async () => {
+    try {
+      setIsLoading(true);
+      const data = await getAllInterviewers();
+      setInterviewers(data);
+    } catch (error) {
+      console.error("Error fetching interviewers:", error);
+      showToast.error("Failed to fetch interviewers.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const handleRefreshTable = () => {
+    fetchInterviewers();
+  };
 
-        setJobs(jobs);
-        setIsLoading(false);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        setIsLoading(false);
-      }
-    };
-    fetchData();
+  useEffect(() => {
+    fetchInterviewers();
   }, []);
 
   const filteredItems = useMemo(() => {
-    return jobs.filter((user: any) =>
-      user.jobTitle.toLowerCase().includes(filterValue.toLowerCase())
+    return interviewers.filter((interviewer: any) =>
+      interviewer.name.toLowerCase().includes(filterValue.toLowerCase())
     );
-  }, [filterValue, jobs]);
+  }, [filterValue, interviewers]);
 
   const pages = Math.ceil(filteredItems.length / rowsPerPage);
 
@@ -72,24 +83,6 @@ export default function Accounts() {
 
     return filteredItems.slice(start, end);
   }, [page, filteredItems]);
-
-  const statusColorMap: Record<
-    string,
-    "secondary" | "default" | "primary" | "success" | "warning" | "danger"
-  > = {
-    draft: "default",
-    published: "success",
-    paused: "warning",
-    expired: "secondary",
-    closed: "danger",
-    deleted: "danger",
-  };
-
-  const getStatusColor = (
-    status: string
-  ): "secondary" | "default" | "primary" | "success" | "warning" | "danger" => {
-    return statusColorMap[status] || "default"; // Fallback to "default" for invalid statuses
-  };
 
   const onSearchChange = useCallback((value: any) => {
     setFilterValue(value);
@@ -109,7 +102,7 @@ export default function Accounts() {
 
         <li className="flex gap-2">
           <UsersIcon />
-          <span>Job</span>
+          <span>Interviewers</span>
           <span> / </span>{" "}
         </li>
         <li className="flex gap-2">
@@ -117,7 +110,7 @@ export default function Accounts() {
         </li>
       </ul>
 
-      <h3 className="text-xl font-semibold">All Accounts</h3>
+      <h3 className="text-xl font-semibold">All Interviewers</h3>
       <div className="flex justify-between flex-wrap gap-4 items-center">
         <div className="flex items-center gap-3 flex-wrap md:flex-nowrap">
           <Input
@@ -127,17 +120,19 @@ export default function Accounts() {
               input: "w-full",
               mainWrapper: "w-full",
             }}
-            placeholder="Search users"
+            placeholder="Search interviewers"
           />
         </div>
         <div className="flex flex-row gap-3.5 flex-wrap">
-          <AddJob />
+          <Button onPress={handleAddClick} color="primary">
+            Add Interviewer
+          </Button>
         </div>
       </div>
       <div className="max-w-[95rem] mx-auto w-full">
         <div className=" w-full flex flex-col gap-4">
           <Table
-            aria-label="Example table with client side pagination"
+            aria-label="Example table with client-side pagination"
             bottomContent={
               <div className="flex w-full justify-center">
                 <Pagination
@@ -156,16 +151,15 @@ export default function Accounts() {
             }}
           >
             <TableHeader>
-              <TableColumn key="title">TITLE</TableColumn>
-              <TableColumn key="role">TOTAL INVITE</TableColumn>
-              <TableColumn key="expereinceLeavel">Expereince</TableColumn>
+              <TableColumn key="name">NAME</TableColumn>
+              <TableColumn key="jobTitle">JOB TITLE</TableColumn>
               <TableColumn key="status">STATUS</TableColumn>
               <TableColumn key="action" align="end">
                 {""}
               </TableColumn>
             </TableHeader>
             <TableBody
-              emptyContent={"No jobs found"}
+              emptyContent={"No interviewers found"}
               items={items}
               loadingContent={<Spinner />}
               loadingState={loadingState}
@@ -173,44 +167,40 @@ export default function Accounts() {
               {(item: any) => (
                 <TableRow key={item.key}>
                   <TableCell>
-                    <div className="flex flex-col">
-                      <p className="text-bold text-small">
-                        {" "}
-                        <strong>{item.jobTitle}</strong>
-                      </p>
-                      <p className="text-bold text-tiny capitalize text-default-400">
-                        Development
-                      </p>
-                    </div>
-                  </TableCell>
-                  <TableCell>{item.totalApplication}</TableCell>
-                  <TableCell>{item.experienceLevel}</TableCell>
-                  <TableCell>
-                    <Chip
-                      size="sm"
-                      color={getStatusColor(item.status)}
-                      variant="flat"
+                    <User
+                      avatarProps={{ src: item.photoUrl }}
+                      description={item.jobTitle}
+                      name={item.name}
                     >
-                      {item.status.toUpperCase()}
+                      {item.name}
+                    </User>
+                  </TableCell>
+                  <TableCell>{item.jobTitle}</TableCell>
+                  <TableCell>
+                    <Chip size="sm" color="success" variant="flat">
+                      Active
                     </Chip>
                   </TableCell>
                   <TableCell>
                     <Button
-                      color="default"
-                      radius="full"
-                      onPress={() => handleInviteClick(item.id)}
+                      color="primary"
+                      variant="flat"
+                      size="sm"
+                      endContent={<AiFillEdit />}
+                      onPress={() => handleEditClick(item.id)}
                     >
-                      Invite
+                      Edit
                     </Button>
                   </TableCell>
                 </TableRow>
               )}
             </TableBody>
           </Table>
-          <SendInvitationDrawer
+          <AddInterviewer
             isOpen={isDrawerOpen}
             onClose={handleCloseDrawer}
-            jobId={selectedJobId}
+            interviewerId={selectedInterviewerId}
+            onAddSuccess={handleRefreshTable} // Pass the refresh callback
           />
         </div>
       </div>

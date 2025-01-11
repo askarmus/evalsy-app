@@ -2,15 +2,15 @@ import React, { useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { showToast } from "@/app/utils/toastUtils";
 import { uploadLogo } from "@/services/company.service";
+import { CircularProgress } from "@nextui-org/react";
 
 interface FileUploadWithPreviewProps {
-  onUpload: (url: string) => void; // Callback function to return the uploaded file URL
+  onUpload: (blob: any) => void;
 }
 
 const FileUploadWithPreview: React.FC<FileUploadWithPreviewProps> = ({
   onUpload,
 }) => {
-  const [preview, setPreview] = useState<string | null>(null);
   const [isUploading, setUploading] = useState(false);
 
   const onDrop = async (acceptedFiles: File[]) => {
@@ -20,12 +20,11 @@ const FileUploadWithPreview: React.FC<FileUploadWithPreviewProps> = ({
     }
 
     const file = acceptedFiles[0];
-    setPreview(URL.createObjectURL(file));
     setUploading(true);
 
     try {
-      const url = await uploadLogo(file); // Service call to upload the file
-      onUpload(url); // Pass the file URL back to the parent component
+      const blob = await uploadLogo(file); // Service call to upload the file
+      onUpload(blob); // Pass the file URL back to the parent component
       showToast.success("File uploaded successfully!");
     } catch (error) {
       console.error("Error uploading file:", error);
@@ -38,7 +37,7 @@ const FileUploadWithPreview: React.FC<FileUploadWithPreviewProps> = ({
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
     accept: {
-      "image/*": [], // Correct type for 'accept'
+      "image/*": [],
     },
     maxFiles: 1,
   });
@@ -51,20 +50,16 @@ const FileUploadWithPreview: React.FC<FileUploadWithPreviewProps> = ({
       >
         <input {...getInputProps()} />
         {isUploading ? (
-          <p>Uploading...</p>
+          <div className="flex items-center justify-center gap-2 text-center">
+            <CircularProgress aria-label="Loading..." size="sm" />
+            Uploading...
+          </div>
         ) : (
-          <p>Drag and drop an image here, or click to select one</p>
+          <div>
+            <p>Browse Or Drag and Drop </p>
+          </div>
         )}
       </div>
-      {preview && (
-        <div className="flex flex-col items-center">
-          <img
-            src={preview}
-            alt="Preview"
-            className=" h-16 object-cover rounded-md"
-          />
-        </div>
-      )}
     </div>
   );
 };
