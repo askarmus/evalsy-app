@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Input, Textarea } from "@nextui-org/react";
+import { Button, Input, Radio, RadioGroup, Textarea } from "@nextui-org/react";
 import {
   Drawer,
   DrawerContent,
@@ -39,12 +39,8 @@ export const SendInvitationDrawer: React.FC<SendInvitationDrawerProps> = ({
   }, [isOpen, jobId]);
 
   const fetchInvitations = async () => {
-    try {
-      const result = await getInvitations(jobId!);
-      setInvitations(result);
-    } catch {
-      showToast.error("Failed to fetch invitations.");
-    }
+    const result = await getInvitations(jobId!);
+    setInvitations(result);
   };
 
   const handleSubmit = async (values: any, { resetForm }: any) => {
@@ -55,7 +51,6 @@ export const SendInvitationDrawer: React.FC<SendInvitationDrawerProps> = ({
       showToast.success("Invitation sent successfully.");
       resetForm();
     } catch {
-      showToast.error("Failed to send invitation.");
     } finally {
       setLoading(false);
     }
@@ -103,22 +98,34 @@ export const SendInvitationDrawer: React.FC<SendInvitationDrawerProps> = ({
                   />
                   <Textarea
                     label="Message"
+                    classNames={{
+                      input: "resize-y min-h-[30px]",
+                    }}
                     value={values.message}
                     onChange={handleChange("message")}
                     isInvalid={!!errors.message && !!touched.message}
                     errorMessage={errors.message}
                   />
-                  <Input
-                    label="Expires"
-                    type="datetime-local"
+                  <RadioGroup
+                    label="Invitation Expires"
+                    orientation="horizontal"
                     value={values.expires}
                     onChange={handleChange("expires")}
                     isInvalid={!!errors.expires && !!touched.expires}
                     errorMessage={errors.expires}
-                  />
+                  >
+                    <Radio value="3">3 Days</Radio>
+                    <Radio value="7">One Week</Radio>
+                    <Radio value="14">Tow Week</Radio>
+                    <Radio value="30">1 Month</Radio>
+                    <Radio value="10000">No Expiary</Radio>
+                  </RadioGroup>
+
                   <Button
+                    color="primary"
+                    variant="bordered"
                     isLoading={loading}
-                    onPress={handleSubmit as any} // Cast handleSubmit to match onPress type
+                    onPress={handleSubmit as any}
                   >
                     Send
                   </Button>
@@ -127,11 +134,6 @@ export const SendInvitationDrawer: React.FC<SendInvitationDrawerProps> = ({
                 {/* Table */}
                 <SentInvitationsTable invitations={invitations} />
               </DrawerBody>
-              <DrawerFooter>
-                <Button onPress={onClose} color="danger">
-                  Close
-                </Button>
-              </DrawerFooter>
             </>
           )}
         </Formik>

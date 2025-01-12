@@ -1,8 +1,7 @@
 import apiClient from "@/helpers/apiClient";
 
-// Fetch all invitations for a specific job
 export const getInvitations = async (jobId: string) => {
-  const response = await apiClient.get(`/invitations/fetch?jobId=${jobId}`);
+  const response = await apiClient.get(`/invitation/getall/${jobId}`);
   return response.data.data;
 };
 
