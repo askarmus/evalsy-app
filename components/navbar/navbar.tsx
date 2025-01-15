@@ -10,6 +10,7 @@ import { NotificationsDropdown } from "./notifications-dropdown";
 import { UserDropdown } from "./user-dropdown";
 import Link from "next/link";
 import { DarkModeSwitch } from "./darkmodeswitch";
+import Logo from "./logo";
 
 interface Props {
   children: React.ReactNode;
@@ -21,34 +22,43 @@ export const NavbarWrapper = ({ children }: Props) => {
       <Navbar
         position="static"
         isBordered
-        className="w-full"
+        className="w-full bg-gray-900"
         classNames={{
           wrapper: "w-full max-w-full color-line",
         }}
       >
         <NavbarContent className=" pr-3" justify="center">
           <NavbarBrand>
-            <p className="font-bold text-inherit">ACME</p>
+            <Logo />
           </NavbarBrand>
         </NavbarContent>
         <NavbarContent className="hidden sm:flex gap-4" justify="center">
           <NavbarItem>
-            <Link color="foreground" href="/">
+            <Link className="text-gray-200 hover:text-gray-100" href="/">
               Home
             </Link>
           </NavbarItem>
           <NavbarItem>
-            <Link color="foreground" href="/accounts">
+            <Link
+              className="text-gray-200 hover:text-gray-100"
+              href="/accounts"
+            >
               Job
             </Link>
           </NavbarItem>
           <NavbarItem isActive>
-            <Link aria-current="page" href="/accounts/settings">
+            <Link
+              className="text-gray-200 hover:text-gray-100"
+              href="/accounts/settings"
+            >
               Settings
             </Link>
           </NavbarItem>
           <NavbarItem>
-            <Link color="foreground" href="/accounts/interviwers">
+            <Link
+              className="text-gray-200 hover:text-gray-100"
+              href="/accounts/interviwers"
+            >
               Interviwers
             </Link>
           </NavbarItem>
