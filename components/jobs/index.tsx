@@ -97,7 +97,7 @@ export default function Accounts() {
   }, []);
 
   return (
-    <div className="my-10 px-4 lg:px-6 max-w-[95rem] mx-auto w-full flex flex-col gap-4">
+    <div className="my-10 px-4 lg:px-6 max-w-[90rem] mx-auto w-full flex flex-col gap-4">
       <ul className="flex">
         <li className="flex gap-2">
           <HouseIcon />
@@ -131,10 +131,12 @@ export default function Accounts() {
           />
         </div>
         <div className="flex flex-row gap-3.5 flex-wrap">
-          <AddJob />
+          <Link color="primary" href={"/accounts/add"}>
+            <span>Add Job</span>
+          </Link>
         </div>
       </div>
-      <div className="max-w-[95rem] mx-auto w-full">
+      <div className="max-w-[90rem] mx-auto w-full">
         <div className=" w-full flex flex-col gap-4">
           <Table
             aria-label="Example table with client side pagination"

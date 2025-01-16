@@ -129,7 +129,7 @@ export default function InterviewerManagement() {
           </Button>
         </div>
       </div>
-      <div className="max-w-[95rem] mx-auto w-full">
+      <div className="max-w-[90rem] mx-auto w-full">
         <div className=" w-full flex flex-col gap-4">
           <Table
             aria-label="Example table with client-side pagination"

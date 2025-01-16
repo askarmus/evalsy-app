@@ -1,3 +1,4 @@
+"use client";
 import React, { useRef, useState } from "react";
 import {
   Button,
@@ -26,6 +27,9 @@ import { showToast } from "@/app/utils/toastUtils";
 import { ToastContainer } from "react-toastify";
 import { generateQuestions } from "@/services/job.service";
 import { AddJobSchema } from "@/helpers/schemas";
+import { HouseIcon } from "../icons/breadcrumb/house-icon";
+import Link from "next/link";
+import { UsersIcon } from "../icons/breadcrumb/users-icon";
 
 export type Question = { id: number; text: string };
 
@@ -104,33 +108,50 @@ export const AddJob = () => {
 
   return (
     <div>
-      <>
-        <Button onPress={onOpen} color="primary">
-          Add Job
-        </Button>
-        <Drawer size="4xl" isOpen={isOpen} onOpenChange={onOpenChange}>
-          <DrawerContent>
-            {(onClose) => (
-              <>
-                <DrawerHeader className="flex flex-col gap-1">
-                  Add Job
-                </DrawerHeader>
-                <DrawerBody>
-                  <Formik<AddJobFormValues>
-                    innerRef={formRef}
-                    initialValues={initialValues}
-                    onSubmit={(values) => console.log(values)}
-                    validationSchema={AddJobSchema}
-                  >
-                    {({
-                      values,
-                      errors,
-                      touched,
-                      handleChange,
-                      setFieldValue,
-                      validateForm,
-                    }) => (
-                      <>
+      <div className="my-10 px-4 lg:px-6 max-w-[90rem] mx-auto w-full flex flex-col gap-4">
+        <ul className="flex">
+          <li className="flex gap-2">
+            <HouseIcon />
+            <Link href={"/"}>
+              <span>Home</span>
+            </Link>
+            <span> / </span>{" "}
+          </li>
+
+          <li className="flex gap-2">
+            <UsersIcon />
+            <span>Job</span>
+            <span> / </span>{" "}
+          </li>
+          <li className="flex gap-2">
+            <span>Add</span>
+          </li>
+        </ul>
+
+        <h3 className="text-xl font-semibold">Add Job</h3>
+        <div className="flex justify-between flex-wrap gap-4 items-center">
+          <div className="flex flex-row gap-3.5 flex-wrap"></div>
+        </div>
+        <div className="max-w-[90rem] mx-auto w-full">
+          <div className=" w-full flex flex-col gap-4">
+            <Formik<AddJobFormValues>
+              innerRef={formRef}
+              initialValues={initialValues}
+              onSubmit={(values) => console.log(values)}
+              validationSchema={AddJobSchema}
+            >
+              {({
+                values,
+                errors,
+                touched,
+                handleChange,
+                setFieldValue,
+                validateForm,
+              }) => (
+                <>
+                  <div className="flex gap-4">
+                    <div className="w-4/5">
+                      <div className="grid grid-cols-1 gap-4">
                         <Input
                           label="Title"
                           variant="bordered"
@@ -265,24 +286,23 @@ export const AddJob = () => {
                             </TableBody>
                           </Table>
                         </div>
-                      </>
-                    )}
-                  </Formik>
-                </DrawerBody>
-                <DrawerFooter>
-                  <Button color="danger" variant="flat" onClick={onClose}>
-                    Close
-                  </Button>
-                  <Button onPress={handleSubmit} color="primary">
-                    Save Job
-                  </Button>
-                </DrawerFooter>
-              </>
-            )}
-          </DrawerContent>
-          <ToastContainer />
-        </Drawer>
-      </>
+                      </div>
+                    </div>
+                    <div className="w-1/5">sds</div>
+                  </div>
+
+                  <div className="flex gap-2">
+                    <Button onPress={handleSubmit} color="primary">
+                      Save Job
+                    </Button>
+                  </div>
+                </>
+              )}
+            </Formik>
+            <ToastContainer />
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

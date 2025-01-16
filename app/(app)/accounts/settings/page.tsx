@@ -72,7 +72,7 @@ const CompanySettingsPage = () => {
   };
 
   return (
-    <div className="my-10 px-4 lg:px-6 max-w-[95rem] mx-auto w-full flex flex-col gap-4">
+    <div className="my-10 px-4 lg:px-6 max-w-[90rem] mx-auto w-full flex flex-col gap-4">
       <ul className="flex">
         <li className="flex gap-2">
           <HouseIcon />
@@ -91,7 +91,7 @@ const CompanySettingsPage = () => {
 
       <h3 className="text-xl font-semibold">Settings</h3>
 
-      <div className="max-w-[95rem] mx-auto w-full">
+      <div className="max-w-[90rem] mx-auto w-full">
         <Tabs aria-label="Options">
           <Tab key="settings" title="Settings">
             <Formik
