@@ -62,6 +62,9 @@ export const SendInvitationDrawer: React.FC<SendInvitationDrawerProps> = ({
   const handleSubmit = async (values: any, { resetForm }: any) => {
     setLoading(true);
     try {
+      let currentDate = new Date();
+      currentDate.setDate(currentDate.getDate() + 1);
+      values.expires = currentDate;
       const result = await sendInvitation({ ...values, jobId: jobId! });
       setInvitations((prev) => [...prev, result]);
       showToast.success("Invitation sent successfully.");
