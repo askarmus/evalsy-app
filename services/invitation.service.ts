@@ -5,6 +5,11 @@ export const getInvitations = async (jobId: string) => {
   return response.data.data;
 };
 
+export const getInvitationDetails = async (invitationId: string) => {
+  const response = await apiClient.get(`/invitation/details/${invitationId}`);
+  return response.data.data;
+};
+
 // Send a new invitation
 export const sendInvitation = async (payload: {
   jobId: string;
@@ -12,7 +17,8 @@ export const sendInvitation = async (payload: {
   email: string;
   message: string;
   expires: string;
+  interviwerId: string;
 }) => {
-  const response = await apiClient.post("/invitations/send", payload);
+  const response = await apiClient.post("/invitation/send", payload);
   return response.data.data;
 };

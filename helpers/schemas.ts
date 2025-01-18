@@ -36,6 +36,7 @@ export const SendInvitationSchema = object().shape({
   name: string().required("Name is required"),
   email: string().email("Invalid email address").required("Email is required"),
   expires: string().required("Expiration date is required"),
+  interviewerId: string().required("Interviewer is required"),
 });
 
 export const AddInterviewerSchema = object().shape({

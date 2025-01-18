@@ -50,16 +50,9 @@ export default function InterviewerManagement() {
     setDrawerOpen(true);
   };
   const fetchInterviewers = async () => {
-    try {
-      setIsLoading(true);
-      const data = await getAllInterviewers();
-      setInterviewers(data);
-    } catch (error) {
-      console.error("Error fetching interviewers:", error);
-      showToast.error("Failed to fetch interviewers.");
-    } finally {
-      setIsLoading(false);
-    }
+    const data = await getAllInterviewers();
+    setInterviewers(data);
+    setIsLoading(false);
   };
   const handleRefreshTable = () => {
     fetchInterviewers();

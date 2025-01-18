@@ -61,6 +61,7 @@ export const SentInvitationsTable: React.FC<SentInvitationsTableProps> = ({
           <TableColumn>Name</TableColumn>
           <TableColumn>Email</TableColumn>
           <TableColumn>Expires</TableColumn>
+          <TableColumn>{""}</TableColumn>
         </TableHeader>
         <TableBody emptyContent={"No invitations to display."}>
           {paginatedInvitations.map((invitation, index) => (
@@ -70,6 +71,11 @@ export const SentInvitationsTable: React.FC<SentInvitationsTableProps> = ({
               <TableCell>{invitation.email}</TableCell>
               <TableCell>
                 {new Date(invitation.expires).toLocaleString()}
+              </TableCell>
+              <TableCell>
+                <a target="_blank" href={`/interview/start/${invitation.id}`}>
+                  Start
+                </a>
               </TableCell>
             </TableRow>
           ))}

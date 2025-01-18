@@ -1,5 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Button, Input, Radio, RadioGroup, Textarea } from "@nextui-org/react";
+import {
+  Button,
+  Input,
+  Radio,
+  RadioGroup,
+  Select,
+  SelectItem,
+  Textarea,
+} from "@nextui-org/react";
 import {
   Drawer,
   DrawerContent,
@@ -16,6 +24,7 @@ import {
   SentInvitationsTable,
 } from "./components/SentInvitationsTable";
 import { SendInvitationSchema } from "@/helpers/schemas";
+import { getAllInterviewers } from "@/services/interviwers.service";
 
 interface SendInvitationDrawerProps {
   isOpen: boolean;
@@ -30,17 +39,24 @@ export const SendInvitationDrawer: React.FC<SendInvitationDrawerProps> = ({
 }) => {
   const [invitations, setInvitations] = useState<Invitation[]>([]);
   const [loading, setLoading] = useState(false);
+  const [interviewers, setInterviewers] = useState([]);
 
   // Fetch invitations on open
   useEffect(() => {
     if (isOpen && jobId) {
       fetchInvitations();
+      fetchInterviewers();
     }
   }, [isOpen, jobId]);
 
   const fetchInvitations = async () => {
     const result = await getInvitations(jobId!);
     setInvitations(result);
+  };
+
+  const fetchInterviewers = async () => {
+    const result = await getAllInterviewers();
+    setInterviewers(result);
   };
 
   const handleSubmit = async (values: any, { resetForm }: any) => {
@@ -65,6 +81,7 @@ export const SendInvitationDrawer: React.FC<SendInvitationDrawerProps> = ({
             email: "",
             message: "",
             expires: "",
+            interviewerId: "",
           }}
           validationSchema={SendInvitationSchema}
           onSubmit={handleSubmit}
@@ -106,6 +123,21 @@ export const SendInvitationDrawer: React.FC<SendInvitationDrawerProps> = ({
                     isInvalid={!!errors.message && !!touched.message}
                     errorMessage={errors.message}
                   />
+                  <Select
+                    placeholder="Choose an interviewer"
+                    value={values.interviewerId}
+                    onChange={handleChange("interviewerId")}
+                    isInvalid={
+                      !!errors.interviewerId && !!touched.interviewerId
+                    }
+                    errorMessage={errors.interviewerId}
+                  >
+                    {interviewers.map((interviewer: any) => (
+                      <SelectItem key={interviewer.id} value={interviewer.id}>
+                        {interviewer.name}
+                      </SelectItem>
+                    ))}
+                  </Select>
                   <RadioGroup
                     label="Invitation Expires"
                     orientation="horizontal"
