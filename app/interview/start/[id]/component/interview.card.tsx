@@ -12,6 +12,7 @@ import {
 } from "@heroui/react";
 import React, { useState } from "react";
 import { InvitationDetails } from "../interface/invitation.detail.int";
+import Image from "next/image";
 
 interface InterviewCardProps {
   invitationDetails: InvitationDetails;
@@ -33,9 +34,10 @@ const InterviewCard: React.FC<InterviewCardProps> = ({
       <Navbar maxWidth="full">
         <NavbarBrand>
           {invitationDetails.company.logo ? (
-            <img
+            <Image
               src={invitationDetails.company.logo}
-              style={{ maxHeight: "50px", maxWidth: "100%" }}
+              width={100}
+              height={50}
               alt={`${invitationDetails.company.name} Logo`}
             />
           ) : (
@@ -141,7 +143,7 @@ const InterviewCard: React.FC<InterviewCardProps> = ({
               </Button>
               <div className="text-small tracking-tight text-default-400">
                 <strong>Note:</strong> You must check the box before proceeding
-                to the interview. The "Start" button will only be enabled after
+                to the interview. The Start button will only be enabled after
                 you confirm.
               </div>
             </div>

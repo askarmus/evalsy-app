@@ -4,21 +4,16 @@ import {
   DropdownItem,
   DropdownMenu,
   DropdownTrigger,
-  Navbar,
   NavbarItem,
 } from "@heroui/react";
 import React, { useCallback } from "react";
-import { DarkModeSwitch } from "./darkmodeswitch";
-import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 
 export const UserDropdown = () => {
-  const router = useRouter();
-
   const handleLogout = useCallback(async () => {
     Cookies.remove("userAuth");
     window.location.href = "/login";
-  }, [router]);
+  }, []);
 
   return (
     <Dropdown>

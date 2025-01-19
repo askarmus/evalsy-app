@@ -10,17 +10,13 @@ import {
   Button,
 } from "@heroui/react";
 import { AiOutlineAudio, AiOutlineClockCircle } from "react-icons/ai";
-import {
-  Navbar,
-  NavbarBrand,
-  NavbarContent,
-  NavbarItem,
-} from "@heroui/react";
+import { Navbar, NavbarBrand, NavbarContent, NavbarItem } from "@heroui/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { getInvitationDetails } from "@/services/invitation.service";
 import InterviewCard from "./component/interview.card";
 import InterviewCardLoading from "./component/interview.card.loading";
 import { InvitationDetails } from "./interface/invitation.detail.int";
+import Image from "next/image";
 
 export default function InterviewPage() {
   const searchParams = useSearchParams();
@@ -56,7 +52,7 @@ export default function InterviewPage() {
   useEffect(() => {
     if (status == "started") setStart(true);
     fetchInvitationDetails();
-  }, [jobId]);
+  }, [jobId, status]);
 
   const restartQuestion = (index: number) => {
     const questionToRestart = skippedQuestions[index];
@@ -77,10 +73,11 @@ export default function InterviewPage() {
           <Navbar maxWidth="full">
             <NavbarBrand>
               {company.logo ? (
-                <img
+                <Image
                   src={company.logo}
-                  style={{ maxHeight: "40px", maxWidth: "100%" }}
                   alt={`${company.name} Logo`}
+                  width={40}
+                  height={100}
                 />
               ) : (
                 <p className="font-bold text-inherit">{company.name}</p>

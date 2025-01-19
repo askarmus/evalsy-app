@@ -22,6 +22,7 @@ import { UsersIcon } from "@/components/icons/breadcrumb/users-icon";
 import FileUploadWithPreview from "@/components/FileUploadWithPreview";
 import { CompanySettingsSchema } from "@/helpers/schemas";
 import { Breadcrumb } from "@/components/bread.crumb";
+import Image from "next/image";
 
 export type CompanySettingsFormValues = {
   name: string;
@@ -178,10 +179,12 @@ const CompanySettingsPage = () => {
                           />
                           <div className="mt-2">
                             {uploadLogoUrl && (
-                              <img
+                              <Image
                                 src={uploadLogoUrl}
                                 alt="Company Logo Preview"
                                 className="max-w-full h-auto"
+                                width={100}
+                                height={50}
                               />
                             )}
                           </div>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import {
   Button,
   Input,
@@ -41,23 +41,24 @@ export const SendInvitationDrawer: React.FC<SendInvitationDrawerProps> = ({
   const [loading, setLoading] = useState(false);
   const [interviewers, setInterviewers] = useState([]);
 
-  // Fetch invitations on open
+  const fetchInvitations = useCallback(async () => {
+    if (jobId) {
+      const result = await getInvitations(jobId);
+      setInvitations(result);
+    }
+  }, [jobId]);
+
+  const fetchInterviewers = useCallback(async () => {
+    const result = await getAllInterviewers();
+    setInterviewers(result);
+  }, []);
+
   useEffect(() => {
-    if (isOpen && jobId) {
+    if (isOpen) {
       fetchInvitations();
       fetchInterviewers();
     }
-  }, [isOpen, jobId]);
-
-  const fetchInvitations = async () => {
-    const result = await getInvitations(jobId!);
-    setInvitations(result);
-  };
-
-  const fetchInterviewers = async () => {
-    const result = await getAllInterviewers();
-    setInterviewers(result);
-  };
+  }, [isOpen, fetchInvitations, fetchInterviewers]);
 
   const handleSubmit = async (values: any, { resetForm }: any) => {
     setLoading(true);
@@ -69,7 +70,8 @@ export const SendInvitationDrawer: React.FC<SendInvitationDrawerProps> = ({
       setInvitations((prev) => [...prev, result]);
       showToast.success("Invitation sent successfully.");
       resetForm();
-    } catch {
+    } catch (error) {
+      showToast.error("Failed to send invitation.");
     } finally {
       setLoading(false);
     }
@@ -151,9 +153,9 @@ export const SendInvitationDrawer: React.FC<SendInvitationDrawerProps> = ({
                   >
                     <Radio value="3">3 Days</Radio>
                     <Radio value="7">One Week</Radio>
-                    <Radio value="14">Tow Week</Radio>
+                    <Radio value="14">Two Weeks</Radio>
                     <Radio value="30">1 Month</Radio>
-                    <Radio value="10000">No Expiary</Radio>
+                    <Radio value="10000">No Expiry</Radio>
                   </RadioGroup>
 
                   <Button
