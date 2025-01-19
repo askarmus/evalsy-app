@@ -49,7 +49,7 @@ export const NavbarWrapper = ({ children }: Props) => {
           <NavbarItem>
             <Link
               className="text-gray-200 hover:text-gray-100"
-              href="/accounts/interviwers"
+              href="/jobs/interviwers"
             >
               Interviwers
             </Link>
