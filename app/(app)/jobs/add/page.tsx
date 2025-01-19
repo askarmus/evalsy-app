@@ -1,4 +1,4 @@
-import Accounts from "@/components/jobs";
+import Jobs from "@/components/jobs";
 import { AddJob } from "@/components/jobs/add-job";
 import React from "react";
 

@@ -8,14 +8,14 @@ import {
   CardFooter,
   Avatar,
   Button,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { AiOutlineAudio, AiOutlineClockCircle } from "react-icons/ai";
 import {
   Navbar,
   NavbarBrand,
   NavbarContent,
   NavbarItem,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { getInvitationDetails } from "@/services/invitation.service";
 import InterviewCard from "./component/interview.card";

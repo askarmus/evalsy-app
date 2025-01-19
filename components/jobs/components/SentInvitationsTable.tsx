@@ -8,7 +8,7 @@ import {
   TableRow,
   Input,
   Pagination,
-} from "@nextui-org/react";
+} from "@heroui/react";
 
 export interface Invitation {
   id: string;

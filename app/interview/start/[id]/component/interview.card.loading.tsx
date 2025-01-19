@@ -10,7 +10,7 @@ import {
   NavbarContent,
   NavbarItem,
   Skeleton,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import React, { useState } from "react";
 import { AiOutlineClockCircle } from "react-icons/ai";
 

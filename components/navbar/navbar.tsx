@@ -1,9 +1,4 @@
-import {
-  Navbar,
-  NavbarBrand,
-  NavbarContent,
-  NavbarItem,
-} from "@nextui-org/react";
+import { Navbar, NavbarBrand, NavbarContent, NavbarItem } from "@heroui/react";
 import React from "react";
 import { BurguerButton } from "./burguer-button";
 import { NotificationsDropdown } from "./notifications-dropdown";
@@ -39,17 +34,14 @@ export const NavbarWrapper = ({ children }: Props) => {
             </Link>
           </NavbarItem>
           <NavbarItem>
-            <Link
-              className="text-gray-200 hover:text-gray-100"
-              href="/accounts"
-            >
+            <Link className="text-gray-200 hover:text-gray-100" href="/jobs">
               Job
             </Link>
           </NavbarItem>
           <NavbarItem isActive>
             <Link
               className="text-gray-200 hover:text-gray-100"
-              href="/accounts/settings"
+              href="/company/settings"
             >
               Settings
             </Link>

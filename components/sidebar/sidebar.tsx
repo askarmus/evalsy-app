@@ -1,6 +1,6 @@
 import React from "react";
 import { Sidebar } from "./sidebar.styles";
-import { Avatar, Tooltip } from "@nextui-org/react";
+import { Avatar, Tooltip } from "@heroui/react";
 import { HomeIcon } from "../icons/sidebar/home-icon";
 import { PaymentsIcon } from "../icons/sidebar/payments-icon";
 import { BalanceIcon } from "../icons/sidebar/balance-icon";
@@ -90,7 +90,7 @@ export const SidebarWrapper = () => {
               <SidebarItem
                 isActive={pathname === "/settings"}
                 title="Settings"
-                href="/accounts/settings"
+                href="/company/settings"
                 icon={<SettingsIcon />}
               />
             </SidebarMenu>

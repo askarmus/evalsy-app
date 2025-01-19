@@ -19,9 +19,9 @@ export const RegisterSchema = object().shape({
 });
 
 export const AddJobSchema = object().shape({
-  title: string().required("Title is required"),
+  jobTitle: string().required("Title is required"),
   description: string().required("Description is required"),
-  aiLevel: string().required("Please select a level"),
+  experienceLevel: string().required("Please select a experience Level"),
 
   questions: array()
     .of(

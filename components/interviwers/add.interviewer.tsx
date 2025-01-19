@@ -5,8 +5,8 @@ import {
   DrawerHeader,
   DrawerBody,
   DrawerFooter,
-} from "@nextui-org/react";
-import { Input, Textarea, Button, Spinner } from "@nextui-org/react";
+} from "@heroui/react";
+import { Input, Textarea, Button, Spinner } from "@heroui/react";
 import { Formik } from "formik";
 import { showToast } from "@/app/utils/toastUtils";
 

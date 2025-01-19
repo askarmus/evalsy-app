@@ -16,33 +16,31 @@ import {
   TableHeader,
   TableRow,
   Textarea,
-  useDisclosure,
-} from "@nextui-org/react";
+} from "@heroui/react";
 
 import { AiFillDelete, AiOutlinePlusSquare } from "react-icons/ai";
 import { Formik, FormikErrors } from "formik";
 import { showToast } from "@/app/utils/toastUtils";
 import { ToastContainer } from "react-toastify";
-import { generateQuestions } from "@/services/job.service";
+import { createJob, generateQuestions } from "@/services/job.service";
 import { AddJobSchema } from "@/helpers/schemas";
-import { HouseIcon } from "../icons/breadcrumb/house-icon";
-import Link from "next/link";
-import { UsersIcon } from "../icons/breadcrumb/users-icon";
+import { Breadcrumb } from "../bread.crumb";
+import { nanoid } from "nanoid";
 
-export type Question = { id: number; text: string };
+export type Question = { id: string; text: string };
 
 export interface AddJobFormValues {
-  title: string;
+  jobTitle: string;
   description: string;
   questions: Question[];
-  aiLevel: string;
+  experienceLevel: string;
   analysisCriteria: AnalysisCriterion[];
 }
 export interface AnalysisCriterion {
   id: number;
-  name: string; // Criterion name, e.g., "Body Language"
-  weight: number; // Percentage weight
-  enabled: boolean; // Whether this criterion is active
+  name: string;
+  weight: number;
+  enabled: boolean;
 }
 
 export const CustomRadio = (props) => {
@@ -61,9 +59,22 @@ export const CustomRadio = (props) => {
 };
 
 export const AddJob = () => {
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const [isGenerating, setGenerated] = useState(false); // Loading state
+  const [isGenerating, setGenerated] = useState(false);
   const formRef = useRef<any | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (values: any, { resetForm }: any) => {
+    console.log(values);
+    setLoading(true);
+    try {
+      await createJob(values);
+      showToast.success("Job created successfully.");
+      resetForm();
+    } catch {
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleGenerateQuestions = async (
     validateForm,
@@ -72,19 +83,19 @@ export const AddJob = () => {
   ) => {
     const errors = await validateForm();
 
-    if (!errors.title && !errors.description && !errors.aiLevel) {
+    if (!errors.title && !errors.description && !errors.experienceLevel) {
       setGenerated(true);
 
       try {
         const result = await generateQuestions({
           jobTitle: values.title,
           description: values.description,
-          expertiseLevel: values.aiLevel,
+          expertiseLevel: values.experienceLevel,
           noOfQuestions: 10,
         });
 
         const newQuestions = result.data.map((text) => ({
-          id: 10, // Ensure unique ID
+          id: nanoid(),
           text,
         }));
 
@@ -100,43 +111,26 @@ export const AddJob = () => {
   };
 
   const initialValues: AddJobFormValues = {
-    title: "",
+    jobTitle: "",
     description: "",
-    questions: [{ id: Date.now(), text: "" }],
-    aiLevel: "",
+    questions: [{ id: nanoid(), text: "" }],
+    experienceLevel: "",
     analysisCriteria: [
-      { id: 1, name: "Body Language", weight: 20, enabled: true },
+      { id: 1, name: "Body Language", weight: 20, enabled: false },
       { id: 2, name: "Voice Tone", weight: 20, enabled: true },
-      { id: 3, name: "Content Relevance", weight: 20, enabled: true },
+      { id: 3, name: "Content Relevance", weight: 20, enabled: false },
       { id: 4, name: "Eye Contact", weight: 10, enabled: true },
-      { id: 5, name: "Facial Expression", weight: 10, enabled: true },
+      { id: 5, name: "Facial Expression", weight: 10, enabled: false },
       { id: 6, name: "Posture", weight: 10, enabled: true },
-      { id: 7, name: "Speech Clarity", weight: 5, enabled: true },
-      { id: 8, name: "Engagement", weight: 5, enabled: true },
+      { id: 7, name: "Speech Clarity", weight: 5, enabled: false },
+      { id: 8, name: "Engagement", weight: 5, enabled: false },
     ],
   };
 
   return (
     <div>
       <div className="my-10 px-4 lg:px-6 max-w-[90rem] mx-auto w-full flex flex-col gap-4">
-        <ul className="flex">
-          <li className="flex gap-2">
-            <HouseIcon />
-            <Link href={"/"}>
-              <span>Home</span>
-            </Link>
-            <span> / </span>{" "}
-          </li>
-
-          <li className="flex gap-2">
-            <UsersIcon />
-            <span>Job</span>
-            <span> / </span>{" "}
-          </li>
-          <li className="flex gap-2">
-            <span>Add</span>
-          </li>
-        </ul>
+        <Breadcrumb />
 
         <h3 className="text-xl font-semibold">Add Job</h3>
         <div className="flex justify-between flex-wrap gap-4 items-center">
@@ -147,7 +141,7 @@ export const AddJob = () => {
             <Formik<AddJobFormValues>
               innerRef={formRef}
               initialValues={initialValues}
-              onSubmit={(values) => console.log(values)}
+              onSubmit={handleSubmit}
               validationSchema={AddJobSchema}
             >
               {({
@@ -168,10 +162,12 @@ export const AddJob = () => {
                               <Input
                                 label="Title"
                                 variant="bordered"
-                                value={values.title}
-                                isInvalid={!!errors.title && !!touched.title}
-                                errorMessage={errors.title}
-                                onChange={handleChange("title")}
+                                value={values.jobTitle}
+                                isInvalid={
+                                  !!errors.jobTitle && !!touched.jobTitle
+                                }
+                                errorMessage={errors.jobTitle}
+                                onChange={handleChange("jobTitle")}
                               />
                               <Textarea
                                 label="Description"
@@ -187,15 +183,16 @@ export const AddJob = () => {
                               <div className="flex">
                                 <div className="flex-1 flex">
                                   <RadioGroup
-                                    value={values.aiLevel}
+                                    value={values.experienceLevel}
                                     onValueChange={(value) =>
-                                      setFieldValue("aiLevel", value)
+                                      setFieldValue("experienceLevel", value)
                                     }
                                     orientation="horizontal"
                                     isInvalid={
-                                      !!errors.aiLevel && !!touched.aiLevel
+                                      !!errors.experienceLevel &&
+                                      !!touched.experienceLevel
                                     }
-                                    errorMessage={errors.aiLevel}
+                                    errorMessage={errors.experienceLevel}
                                     label="Generate question using AI"
                                   >
                                     <CustomRadio value="beginner">
@@ -326,11 +323,13 @@ export const AddJob = () => {
                               <TableCell>
                                 <Switch
                                   size="sm"
-                                  checked={criterion.enabled}
-                                  onChange={(e) =>
+                                  isSelected={criterion.enabled} // Use isSelected instead of checked
+                                  onValueChange={(
+                                    value // Use onValueChange instead of onChange
+                                  ) =>
                                     setFieldValue(
                                       `analysisCriteria[${index}].enabled`,
-                                      e.target.checked
+                                      value // Directly use the value provided by the Switch
                                     )
                                   }
                                 />
@@ -363,7 +362,14 @@ export const AddJob = () => {
                   </div>
 
                   <div className="flex gap-2">
-                    <Button type="submit" color="primary">
+                    <Button
+                      type="submit"
+                      color="primary"
+                      isLoading={loading}
+                      onPress={() => {
+                        formRef.current?.handleSubmit();
+                      }}
+                    >
                       Save Job
                     </Button>
                   </div>

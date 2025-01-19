@@ -11,26 +11,30 @@ import {
   TableHeader,
   TableRow,
   Chip,
-} from "@nextui-org/react";
+  Card,
+  CardBody,
+  CardFooter,
+  CardHeader,
+  Avatar,
+} from "@heroui/react";
 import Link from "next/link";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { HouseIcon } from "@/components/icons/breadcrumb/house-icon";
-import { UsersIcon } from "@/components/icons/breadcrumb/users-icon";
-import { AiFillDelete } from "react-icons/ai";
-
-import { AddJob } from "./add-job";
 import { getAllJobs } from "@/services/job.service";
 import { SendInvitationDrawer } from "./send-invitation";
+import { Breadcrumb } from "../bread.crumb";
+import { AiOutlineMore } from "react-icons/ai";
+import { useRouter } from "next/navigation";
 
-export default function Accounts() {
+export default function Jobs() {
   const [page, setPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [filterValue, setFilterValue] = useState("");
   const [jobs, setJobs] = useState([]);
-  const rowsPerPage = 10;
+  const rowsPerPage = 5;
   const loadingState = isLoading || jobs?.length === 0 ? "loading" : "idle";
   const [selectedJobId, setSelectedJobId] = useState<string | null>(null);
   const [isDrawerOpen, setDrawerOpen] = useState(false);
+  const router = useRouter();
 
   const handleInviteClick = (jobId: string) => {
     setSelectedJobId(jobId);
@@ -98,26 +102,9 @@ export default function Accounts() {
 
   return (
     <div className="my-10 px-4 lg:px-6 max-w-[90rem] mx-auto w-full flex flex-col gap-4">
-      <ul className="flex">
-        <li className="flex gap-2">
-          <HouseIcon />
-          <Link href={"/"}>
-            <span>Home</span>
-          </Link>
-          <span> / </span>{" "}
-        </li>
+      <h3 className="text-xl font-semibold">All Jobs</h3>
+      <Breadcrumb />
 
-        <li className="flex gap-2">
-          <UsersIcon />
-          <span>Job</span>
-          <span> / </span>{" "}
-        </li>
-        <li className="flex gap-2">
-          <span>List</span>
-        </li>
-      </ul>
-
-      <h3 className="text-xl font-semibold">All Accounts</h3>
       <div className="flex justify-between flex-wrap gap-4 items-center">
         <div className="flex items-center gap-3 flex-wrap md:flex-nowrap">
           <Input
@@ -127,88 +114,83 @@ export default function Accounts() {
               input: "w-full",
               mainWrapper: "w-full",
             }}
-            placeholder="Search users"
+            placeholder="Search jobs"
           />
         </div>
         <div className="flex flex-row gap-3.5 flex-wrap">
-          <Link color="primary" href={"/accounts/add"}>
-            <span>Add Job</span>
-          </Link>
+          <Button
+            color="danger"
+            variant="faded"
+            size="md"
+            onPress={() => router.push("/jobs/add")}
+          >
+            Add Job
+          </Button>
         </div>
       </div>
       <div className="max-w-[90rem] mx-auto w-full">
         <div className=" w-full flex flex-col gap-4">
-          <Table
-            aria-label="Example table with client side pagination"
-            bottomContent={
-              <div className="flex w-full justify-center">
-                <Pagination
-                  isCompact
-                  showControls
-                  showShadow
-                  color="secondary"
-                  page={page}
-                  total={pages}
-                  onChange={(page) => setPage(page)}
-                />
-              </div>
-            }
-            classNames={{
-              wrapper: "min-h-[222px]",
-            }}
-          >
-            <TableHeader>
-              <TableColumn key="title">TITLE</TableColumn>
-              <TableColumn key="role">TOTAL INVITE</TableColumn>
-              <TableColumn key="expereinceLeavel">Expereince</TableColumn>
-              <TableColumn key="status">STATUS</TableColumn>
-              <TableColumn key="action" align="end">
-                {""}
-              </TableColumn>
-            </TableHeader>
-            <TableBody
-              emptyContent={"No jobs found"}
-              items={items}
-              loadingContent={<Spinner />}
-              loadingState={loadingState}
-            >
-              {(item: any) => (
-                <TableRow key={item.key}>
-                  <TableCell>
-                    <div className="flex flex-col">
-                      <p className="text-bold text-small">
-                        {" "}
-                        <strong>{item.jobTitle}</strong>
-                      </p>
-                      <p className="text-bold text-tiny capitalize text-default-400">
-                        Development
-                      </p>
-                    </div>
-                  </TableCell>
-                  <TableCell>{item.totalApplication}</TableCell>
-                  <TableCell>{item.experienceLevel}</TableCell>
-                  <TableCell>
-                    <Chip
-                      size="sm"
-                      color={getStatusColor(item.status)}
-                      variant="flat"
-                    >
-                      {item.status.toUpperCase()}
-                    </Chip>
-                  </TableCell>
-                  <TableCell>
-                    <Button
-                      color="default"
-                      radius="full"
-                      onPress={() => handleInviteClick(item.id)}
-                    >
-                      Invite
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
+          {items.map((question: any) => (
+            <Card key={question.id}>
+              <CardHeader className="justify-between">
+                <div className="flex gap-5">
+                  <div className="flex flex-col gap-1 items-start justify-center">
+                    <h4 className="text-small font-semibold leading-none text-default-600">
+                      {question.jobTitle}
+                    </h4>
+                    <h5 className="text-small tracking-tight text-default-400">
+                      {question.experienceLevel}
+                    </h5>
+                  </div>
+                </div>
+
+                <div className="gap-3">
+                  <Button
+                    color="warning"
+                    variant="faded"
+                    className="mr-3"
+                    size="sm"
+                    onPress={() => handleInviteClick(question.id)}
+                  >
+                    Invite Candidate
+                  </Button>
+                  <Button isIconOnly size="sm" color="warning" variant="faded">
+                    <AiOutlineMore />
+                  </Button>
+                </div>
+              </CardHeader>
+              <CardFooter className="gap-3">
+                <div className="flex gap-1">
+                  <Chip
+                    size="sm"
+                    color={getStatusColor(question.status)}
+                    variant="flat"
+                  >
+                    {question.status.toUpperCase()}
+                  </Chip>
+                </div>
+                <div className="flex gap-1">
+                  <p className="font-semibold text-default-400 text-small">4</p>
+                  <p className=" text-default-400 text-small">Application</p>
+                </div>
+                <div className="flex gap-1">
+                  <p className="text-default-400 text-small">Created</p>
+                  <p className="font-semibold text-default-400 text-small">
+                    10 Jan 2204
+                  </p>
+                </div>
+              </CardFooter>
+            </Card>
+          ))}
+          <Pagination
+            isCompact
+            showControls
+            showShadow
+            page={page}
+            total={pages}
+            onChange={(page) => setPage(page)}
+          />
+
           <SendInvitationDrawer
             isOpen={isDrawerOpen}
             onClose={handleCloseDrawer}

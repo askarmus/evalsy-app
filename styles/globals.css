@@ -11,18 +11,3 @@ body {
 * {
   box-sizing: border-box;
 }
-
-body {
-  background-image: url("/colorline.png");
-  background-repeat: no-repeat;
-  background-size: 100% 4px;
-  height: 4px;
-  width: 100%;
-}
-
-.color-line {
-  background-image: url("/colorline.png");
-  background-repeat: no-repeat;
-  background-size: 100% 4px;
-  width: 100%;
-}

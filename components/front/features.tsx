@@ -1,4 +1,4 @@
-import { Card, CardBody, CardHeader, Grid } from "@nextui-org/react";
+import { Card, CardBody, CardHeader, Grid } from "@heroui/react";
 import { BrainCircuit, Clock, BarChart3, Users } from "lucide-react";
 
 const features = [

@@ -9,7 +9,7 @@ import {
   Tab,
   Card,
   CardBody,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { Formik, Form, Field } from "formik";
 import { showToast } from "@/app/utils/toastUtils";
 import { ToastContainer } from "react-toastify";

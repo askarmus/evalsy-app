@@ -1,5 +1,5 @@
-import { Image } from "@nextui-org/react";
-import { Divider } from "@nextui-org/divider";
+import { Image } from "@heroui/react";
+import { Divider } from "@heroui/divider";
 import { ToastContainer } from "react-toastify";
 
 interface Props {

@@ -7,14 +7,14 @@ import {
   Select,
   SelectItem,
   Textarea,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import {
   Drawer,
   DrawerContent,
   DrawerHeader,
   DrawerBody,
   DrawerFooter,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { ToastContainer } from "react-toastify";
 import { Formik } from "formik";
 import { getInvitations, sendInvitation } from "@/services/invitation.service";

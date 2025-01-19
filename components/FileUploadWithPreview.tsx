@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { showToast } from "@/app/utils/toastUtils";
 import { uploadLogo } from "@/services/company.service";
-import { CircularProgress } from "@nextui-org/react";
+import { CircularProgress } from "@heroui/react";
 
 interface FileUploadWithPreviewProps {
   onUpload: (blob: any) => void;
