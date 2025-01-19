@@ -9,6 +9,7 @@ import {
   Input,
   Pagination,
 } from "@heroui/react";
+import Link from "next/link";
 
 export interface Invitation {
   id: string;
@@ -73,9 +74,12 @@ export const SentInvitationsTable: React.FC<SentInvitationsTableProps> = ({
                 {new Date(invitation.expires).toLocaleString()}
               </TableCell>
               <TableCell>
-                <a target="_blank" href={`/interview/start/${invitation.id}`}>
+                <Link
+                  target="_blank"
+                  href={`/interview/start/${invitation.id}`}
+                >
                   Start
-                </a>
+                </Link>
               </TableCell>
             </TableRow>
           ))}

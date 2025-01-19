@@ -21,6 +21,7 @@ import { HouseIcon } from "@/components/icons/breadcrumb/house-icon";
 import { UsersIcon } from "@/components/icons/breadcrumb/users-icon";
 import FileUploadWithPreview from "@/components/FileUploadWithPreview";
 import { CompanySettingsSchema } from "@/helpers/schemas";
+import { Breadcrumb } from "@/components/bread.crumb";
 
 export type CompanySettingsFormValues = {
   name: string;
@@ -73,23 +74,8 @@ const CompanySettingsPage = () => {
 
   return (
     <div className="my-10 px-4 lg:px-6 max-w-[90rem] mx-auto w-full flex flex-col gap-4">
-      <ul className="flex">
-        <li className="flex gap-2">
-          <HouseIcon />
-          <a href="/">Home</a>
-          <span>/</span>
-        </li>
-        <li className="flex gap-2">
-          <UsersIcon />
-          <span>Job</span>
-          <span>/</span>
-        </li>
-        <li className="flex gap-2">
-          <span>List</span>
-        </li>
-      </ul>
-
       <h3 className="text-xl font-semibold">Settings</h3>
+      <Breadcrumb />
 
       <div className="max-w-[90rem] mx-auto w-full">
         <Tabs aria-label="Options">

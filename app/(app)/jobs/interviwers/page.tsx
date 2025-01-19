@@ -21,6 +21,7 @@ import { getAllInterviewers } from "@/services/interviwers.service";
 import { AddInterviewer } from "@/components/interviwers/add.interviewer";
 import { AiFillEdit } from "react-icons/ai";
 import { showToast } from "@/app/utils/toastUtils";
+import { Breadcrumb } from "@/components/bread.crumb";
 
 export default function InterviewerManagement() {
   const [page, setPage] = useState(1);
@@ -84,26 +85,8 @@ export default function InterviewerManagement() {
 
   return (
     <div className="my-10 px-4 lg:px-6 max-w-[90rem] mx-auto w-full flex flex-col gap-4">
-      <ul className="flex">
-        <li className="flex gap-2">
-          <HouseIcon />
-          <Link href={"/"}>
-            <span>Home</span>
-          </Link>
-          <span> / </span>{" "}
-        </li>
-
-        <li className="flex gap-2">
-          <UsersIcon />
-          <span>Interviewers</span>
-          <span> / </span>{" "}
-        </li>
-        <li className="flex gap-2">
-          <span>List</span>
-        </li>
-      </ul>
-
       <h3 className="text-xl font-semibold">All Interviewers</h3>
+      <Breadcrumb />
       <div className="flex justify-between flex-wrap gap-4 items-center">
         <div className="flex items-center gap-3 flex-wrap md:flex-nowrap">
           <Input
