@@ -17,6 +17,7 @@ import InterviewCard from "./component/interview.card";
 import InterviewCardLoading from "./component/interview.card.loading";
 import { InvitationDetails } from "./interface/invitation.detail.int";
 import Image from "next/image";
+import AudioRecorder from "@/components/AudioRecorder";
 
 export default function InterviewPage() {
   const searchParams = useSearchParams();
@@ -26,10 +27,22 @@ export default function InterviewPage() {
 
   const [currentTime, setCurrentTime] = useState("11:07:14 AM");
   const [isStarted, setStart] = useState(false);
+  const [questions, setQuestions] = useState([]);
   const [invitationDetails, setInvitationDetails] =
     useState<InvitationDetails | null>(null);
-  const [skippedQuestions, setSkippedQuestions] = useState<string[]>([]);
-  const status = searchParams.get("status"); // Get the value of 'status'
+  const status = searchParams.get("status");
+
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(0);
+  const [hasAnswered, setHasAnswered] = useState<boolean>(false);
+
+  const handleNextQuestion = (): void => {
+    if (currentQuestionIndex < questions.length - 1) {
+      setCurrentQuestionIndex((prev) => prev + 1);
+      setHasAnswered(false); // Reset the "hasAnswered" state to show the "Answer" button again
+    } else {
+      alert("You have completed all questions!");
+    }
+  };
 
   const fetchInvitationDetails = async () => {
     if (!jobId) return;
@@ -37,7 +50,7 @@ export default function InterviewPage() {
     try {
       const data = await getInvitationDetails("677e5e1b02ba3cf8471a31dd");
       setInvitationDetails(data);
-      setSkippedQuestions(data.job.questions || []);
+      setQuestions(data.job.questions || []);
     } catch (error) {
       console.error("Error fetching invitation details:", error);
     }
@@ -53,12 +66,6 @@ export default function InterviewPage() {
     if (status == "started") setStart(true);
     fetchInvitationDetails();
   }, [jobId, status]);
-
-  const restartQuestion = (index: number) => {
-    const questionToRestart = skippedQuestions[index];
-    setSkippedQuestions((prev) => prev.filter((_, i) => i !== index));
-    console.log(`Restarting question: ${questionToRestart}`);
-  };
 
   if (!invitationDetails) {
     return <InterviewCardLoading />;
@@ -76,8 +83,8 @@ export default function InterviewPage() {
                 <Image
                   src={company.logo}
                   alt={`${company.name} Logo`}
-                  width={40}
-                  height={100}
+                  width={100}
+                  height={40}
                 />
               ) : (
                 <p className="font-bold text-inherit">{company.name}</p>
@@ -138,45 +145,18 @@ export default function InterviewPage() {
                     </p>
                   </CardHeader>
                   <CardBody className="overflow-visible py-2">
-                    <div className="p-4 border border-gray-300 rounded-lg mt-4">
-                      <p className="font-bold">Tell us about yourself.</p>
+                    <div className="p-4 border border-orange-400 bg-orange-200 rounded-lg mt-4">
+                      <p className="">{questions[currentQuestionIndex]}</p>
                     </div>
-                    <h5 className="mt-6 text-orange-600 font-semibold">
-                      Skipped Questions:
-                    </h5>
-                    {skippedQuestions.length > 0 ? (
-                      <ul className="mt-4 space-y-3">
-                        {skippedQuestions.map((question, index) => (
-                          <li
-                            key={index}
-                            className="flex justify-between items-center bg-orange-100 p-3 rounded-lg"
-                          >
-                            <span>{question}</span>
-                            <Button
-                              color="warning"
-                              variant="bordered"
-                              size="sm"
-                              onPress={() => restartQuestion(index)}
-                            >
-                              Resume
-                            </Button>
-                          </li>
-                        ))}
-                      </ul>
-                    ) : (
-                      <p className="text-gray-500">No skipped questions.</p>
-                    )}
                   </CardBody>
                   <CardFooter className="absolute  bottom-0 z-10 border-1">
                     <div className="flex flex-grow gap-2 items-center">
-                      <Button color="success" endContent={<AiOutlineAudio />}>
-                        Aanswer Question
-                      </Button>
+                      <AudioRecorder
+                        hasAnswered={hasAnswered}
+                        setHasAnswered={setHasAnswered}
+                        onNextQuestion={handleNextQuestion}
+                      />
                     </div>
-
-                    <Button color="primary" variant="faded">
-                      Skip Question
-                    </Button>
                   </CardFooter>
                 </Card>
 

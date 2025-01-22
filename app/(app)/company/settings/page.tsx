@@ -10,15 +10,13 @@ import {
   Card,
   CardBody,
 } from "@heroui/react";
-import { Formik, Form, Field } from "formik";
+import { Formik, Form } from "formik";
 import { showToast } from "@/app/utils/toastUtils";
 import { ToastContainer } from "react-toastify";
 import {
   getCompanySettings,
   saveCompanySettings,
 } from "@/services/company.service";
-import { HouseIcon } from "@/components/icons/breadcrumb/house-icon";
-import { UsersIcon } from "@/components/icons/breadcrumb/users-icon";
 import FileUploadWithPreview from "@/components/FileUploadWithPreview";
 import { CompanySettingsSchema } from "@/helpers/schemas";
 import { Breadcrumb } from "@/components/bread.crumb";

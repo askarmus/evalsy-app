@@ -1,14 +1,9 @@
 import React, { useEffect, useState } from "react";
-import {
-  Drawer,
-  DrawerContent,
-  DrawerHeader,
-  DrawerBody,
-  DrawerFooter,
-} from "@heroui/react";
-import { Input, Textarea, Button, Spinner } from "@heroui/react";
+import { Drawer, DrawerContent, DrawerHeader, DrawerBody } from "@heroui/react";
+import { Input, Textarea, Button } from "@heroui/react";
 import { Formik } from "formik";
 import { showToast } from "@/app/utils/toastUtils";
+import Image from "next/image";
 
 import { AddInterviewerSchema } from "@/helpers/schemas";
 import {
@@ -17,6 +12,7 @@ import {
   updateInterviewer,
 } from "@/services/interviwers.service";
 import { ToastContainer } from "react-toastify";
+import FileUploadWithPreview from "../FileUploadWithPreview";
 
 interface AddInterviewerProps {
   isOpen: boolean;
@@ -37,7 +33,13 @@ export const AddInterviewer: React.FC<AddInterviewerProps> = ({
     biography: "",
     photoUrl: "",
   });
-  const [isLoading, setIsLoading] = useState(false); // Loading state
+  const [isLoading, setIsLoading] = useState(false);
+  const [uploadProfileUrl, setUploadProfileUrl] = useState("");
+
+  const handleClose = () => {
+    setUploadProfileUrl("");
+    onClose();
+  };
 
   useEffect(() => {
     if (interviewerId) {
@@ -50,10 +52,8 @@ export const AddInterviewer: React.FC<AddInterviewerProps> = ({
             biography: data.biography || "",
             photoUrl: data.photoUrl || "",
           });
-        } catch (error) {
-          console.error("Error fetching interviewer data:", error);
-          showToast.error("Failed to fetch interviewer data.");
-        }
+          setUploadProfileUrl(data.photoUrl || "");
+        } catch (error) {}
       };
       fetchInterviewer();
     } else {
@@ -67,27 +67,26 @@ export const AddInterviewer: React.FC<AddInterviewerProps> = ({
   }, [interviewerId]);
 
   const handleSubmit = async (values: typeof initialValues) => {
-    setIsLoading(true); // Start loading
+    setIsLoading(true);
     try {
       if (interviewerId) {
         await updateInterviewer(interviewerId, values);
         showToast.success("Interviewer updated successfully!");
+        setUploadProfileUrl("");
       } else {
         await createInterviewer(values);
         showToast.success("Interviewer created successfully!");
       }
       onAddSuccess();
-      // onClose();
+      onClose();
     } catch (error) {
-      console.error("Error saving interviewer:", error);
-      showToast.error("Failed to save interviewer.");
     } finally {
-      setIsLoading(false); // Stop loading
+      setIsLoading(false);
     }
   };
 
   return (
-    <Drawer isOpen={isOpen} onOpenChange={onClose} size="lg">
+    <Drawer isOpen={isOpen} onOpenChange={handleClose} size="lg">
       <DrawerContent>
         <DrawerHeader>
           {interviewerId ? "Edit Interviewer" : "Add Interviewer"}
@@ -99,7 +98,14 @@ export const AddInterviewer: React.FC<AddInterviewerProps> = ({
             validationSchema={AddInterviewerSchema}
             enableReinitialize
           >
-            {({ values, handleChange, handleSubmit, errors, touched }) => (
+            {({
+              values,
+              handleChange,
+              handleSubmit,
+              errors,
+              setFieldValue,
+              touched,
+            }) => (
               <>
                 <Input
                   label="Name"
@@ -122,13 +128,25 @@ export const AddInterviewer: React.FC<AddInterviewerProps> = ({
                   isInvalid={!!errors.biography && !!touched.biography}
                   errorMessage={errors.biography}
                 />
-                <Input
-                  label="Photo URL"
-                  value={values.photoUrl}
-                  onChange={handleChange("photoUrl")}
-                  isInvalid={!!errors.photoUrl && !!touched.photoUrl}
-                  errorMessage={errors.photoUrl}
+                <p className="text-sm font-semibold mb-4">Profile photo</p>
+                <FileUploadWithPreview
+                  onUpload={(blob) => {
+                    setFieldValue("photoUrl", blob.data.url);
+                    setUploadProfileUrl(blob.data.url);
+                  }}
                 />
+                <div className="mt-2">
+                  {uploadProfileUrl && (
+                    <Image
+                      src={uploadProfileUrl}
+                      alt="Profile Preview"
+                      className="max-w-full h-auto"
+                      width={100}
+                      height={50}
+                    />
+                  )}
+                </div>
+
                 <Button
                   className="w-auto"
                   color="primary"

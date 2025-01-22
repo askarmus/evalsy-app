@@ -43,7 +43,6 @@ export const AddInterviewerSchema = object().shape({
   name: string().required("Name is required"),
   jobTitle: string().required("Job Title is required"),
   biography: string().required("Biography is required"),
-  photoUrl: string().url("Invalid URL").required("Photo URL is required"),
 });
 
 export const CompanySettingsSchema = object().shape({
