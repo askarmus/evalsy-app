@@ -11,23 +11,32 @@ import {
 } from "@heroui/react";
 import { AiOutlineAudio, AiOutlineClockCircle } from "react-icons/ai";
 import { Navbar, NavbarBrand, NavbarContent, NavbarItem } from "@heroui/react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { getInvitationDetails } from "@/services/invitation.service";
 import InterviewCard from "./component/interview.card";
 import InterviewCardLoading from "./component/interview.card.loading";
 import { InvitationDetails } from "./interface/invitation.detail.int";
 import Image from "next/image";
 import AudioRecorder from "@/components/AudioRecorder";
+import { startInterview } from "@/services/interview.service";
+import ConfirmDialog from "@/components/ConfirmDialog";
+import ThankYou from "./component/thankyou";
 
+export interface Question {
+  id: string;
+  text: string;
+}
 export default function InterviewPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
-
-  const jobId = "677e5e1b02ba3cf8471a31dd"; //searchParams.get("id"); // Get the `id` from the URL search params
+  const { id } = useParams();
 
   const [currentTime, setCurrentTime] = useState("11:07:14 AM");
   const [isStarted, setStart] = useState(false);
-  const [questions, setQuestions] = useState([]);
+  const [questions, setQuestions] = useState<Question[]>([]);
+  const [startingInterview, setStartingInterview] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
   const [invitationDetails, setInvitationDetails] =
     useState<InvitationDetails | null>(null);
   const status = searchParams.get("status");
@@ -35,20 +44,28 @@ export default function InterviewPage() {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(0);
   const [hasAnswered, setHasAnswered] = useState<boolean>(false);
 
+  const handleOpenDialog = () => setIsDialogOpen(true);
+  const handleCloseDialog = () => setIsDialogOpen(false);
+
+  const handleConfirmAction = () => {
+    console.log("Action Confirmed!");
+    setIsDialogOpen(false);
+  };
+
   const handleNextQuestion = (): void => {
     if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex((prev) => prev + 1);
-      setHasAnswered(false); // Reset the "hasAnswered" state to show the "Answer" button again
+      setHasAnswered(false);
     } else {
       alert("You have completed all questions!");
     }
   };
 
   const fetchInvitationDetails = async () => {
-    if (!jobId) return;
+    if (!id) return;
 
     try {
-      const data = await getInvitationDetails("677e5e1b02ba3cf8471a31dd");
+      const data = await getInvitationDetails(id as string);
       setInvitationDetails(data);
       setQuestions(data.job.questions || []);
     } catch (error) {
@@ -56,22 +73,35 @@ export default function InterviewPage() {
     }
   };
 
-  const handleStartInterview = () => {
-    setStart(true);
-    const newQuery = { status: "started" };
-    router.push(`?${new URLSearchParams(newQuery).toString()}`);
+  const handleStartInterview = async () => {
+    setStartingInterview(true); // Show the loading spinner
+    try {
+      setStart(true);
+      const newQuery = { status: "started" };
+      const invitationId = id as string;
+      await startInterview({ invitationId });
+      router.push(`?${new URLSearchParams(newQuery).toString()}`);
+    } catch (error) {
+      console.error("Error starting the interview:", error);
+    } finally {
+      setStartingInterview(false); // Hide the loading spinner
+    }
   };
 
   useEffect(() => {
     if (status == "started") setStart(true);
     fetchInvitationDetails();
-  }, [jobId, status]);
+  }, [id, status]);
 
   if (!invitationDetails) {
     return <InterviewCardLoading />;
   }
 
   const { candidateName, candidateEmail, job, company } = invitationDetails;
+
+  if (currentQuestionIndex > questions.length - 1) {
+    return <ThankYou invitationDetails={invitationDetails} />;
+  }
 
   return (
     <>
@@ -99,7 +129,11 @@ export default function InterviewPage() {
                 </div>
               </NavbarItem>
               <NavbarItem>
-                <Button color="danger" variant="solid">
+                <Button
+                  color="danger"
+                  onPress={handleOpenDialog}
+                  variant="solid"
+                >
                   End Interview
                 </Button>
               </NavbarItem>
@@ -146,12 +180,16 @@ export default function InterviewPage() {
                   </CardHeader>
                   <CardBody className="overflow-visible py-2">
                     <div className="p-4 border border-orange-400 bg-orange-200 rounded-lg mt-4">
-                      <p className="">{questions[currentQuestionIndex]}</p>
+                      <p className="">
+                        {questions[currentQuestionIndex]?.text}
+                      </p>
                     </div>
                   </CardBody>
                   <CardFooter className="absolute  bottom-0 z-10 border-1">
                     <div className="flex flex-grow gap-2 items-center">
                       <AudioRecorder
+                        currentQuestion={questions[currentQuestionIndex]}
+                        invitationId={id as string}
                         hasAnswered={hasAnswered}
                         setHasAnswered={setHasAnswered}
                         onNextQuestion={handleNextQuestion}
@@ -201,23 +239,38 @@ export default function InterviewPage() {
                       </p>
                       <span className="pt-2">
                         #FrontendWithZoey
-                        <span aria-label="computer" className="py-2" role="img">
-                          💻
-                        </span>
+                        <span
+                          aria-label="computer"
+                          className="py-2"
+                          role="img"
+                        ></span>
                       </span>
                     </CardBody>
                   </Card>
                 </div>
               </div>
             </Card>
+            <ConfirmDialog
+              isOpen={isDialogOpen}
+              onClose={handleCloseDialog}
+              title="Confirm Delete"
+              description="Are you sure you want to delete this item? This action cannot be undone."
+              onConfirm={handleConfirmAction}
+              confirmButtonText="Yes, Delete"
+              cancelButtonText="Cancel"
+            />
           </main>
         </div>
       )}
       {!isStarted && (
         <InterviewCard
+          loading={startingInterview}
           onStartButtonClick={handleStartInterview}
           invitationDetails={invitationDetails}
         />
+      )}
+      {currentQuestionIndex > questions.length - 1 && (
+        <ThankYou invitationDetails={invitationDetails} />
       )}
     </>
   );

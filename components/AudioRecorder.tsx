@@ -1,4 +1,5 @@
 import { uploadLogo } from "@/services/company.service";
+import { updateQuestion } from "@/services/interview.service"; // Import the API call
 import { Button } from "@heroui/react";
 import React, { useState, useRef, useEffect } from "react";
 import { AiOutlineAudio } from "react-icons/ai";
@@ -7,16 +8,22 @@ interface AudioRecorderProps {
   hasAnswered: boolean; // Track if the user has answered the current question
   setHasAnswered: React.Dispatch<React.SetStateAction<boolean>>; // Function to update the state in parent
   onNextQuestion: () => void; // Callback to move to the next question
+  currentQuestion: any;
+  invitationId: string;
 }
 
 const AudioRecorder: React.FC<AudioRecorderProps> = ({
   hasAnswered,
   setHasAnswered,
   onNextQuestion,
+  currentQuestion,
+  invitationId,
 }) => {
   const [isRecording, setIsRecording] = useState<boolean>(false);
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const [startTime, setStartTime] = useState<Date>(new Date()); // Track recording start time
+  const [endTime, setEndTime] = useState<Date>(new Date()); // Track recording end time
 
   useEffect(() => {
     if (hasAnswered) {
@@ -39,11 +46,16 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
         const file = new File([blob], `recording-${Date.now()}.webm`, {
           type: "audio/webm",
         });
+
+        setEndTime(new Date());
+
         await uploadAudioAsync(file);
-        setHasAnswered(true); // Mark question as answered
+
+        setHasAnswered(true);
       };
 
       mediaRecorderRef.current.start();
+      setStartTime(new Date());
       setIsRecording(true);
     } catch (error) {
       console.error("Error accessing microphone:", error);
@@ -55,17 +67,28 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
       mediaRecorderRef.current.stop();
     }
     setIsRecording(false);
-    setHasAnswered(true); // Ensure the "Next Question" button is shown after stopping
   };
 
   const uploadAudioAsync = async (file: File): Promise<void> => {
     setIsUploading(true);
 
     try {
-      const response = await uploadLogo(file); // Use the provided service method
-      console.log("Audio uploaded successfully:", response);
+      const response = await uploadLogo(file);
+      const recordedUrl = response.data?.url;
+
+      console.log("Audio uploaded successfully:", recordedUrl);
+
+      console.log("currentQuestion", currentQuestion);
+      await updateQuestion({
+        invitationId,
+        questionId: currentQuestion.id,
+        recordedUrl,
+        startTime,
+        endTime,
+      });
+      console.log("Interview question updated successfully");
     } catch (error) {
-      console.error("Failed to upload audio:", error);
+      console.error("Failed to upload audio or update question:", error);
     } finally {
       setIsUploading(false);
     }

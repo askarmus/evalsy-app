@@ -7,8 +7,6 @@ import {
   Checkbox,
   Navbar,
   NavbarBrand,
-  NavbarContent,
-  NavbarItem,
 } from "@heroui/react";
 import React, { useState } from "react";
 import { InvitationDetails } from "../interface/invitation.detail.int";
@@ -17,18 +15,15 @@ import Image from "next/image";
 interface InterviewCardProps {
   invitationDetails: InvitationDetails;
   onStartButtonClick: () => void;
+  loading: boolean;
 }
 
 const InterviewCard: React.FC<InterviewCardProps> = ({
   invitationDetails,
   onStartButtonClick,
+  loading,
 }) => {
   const [isChecked, setIsChecked] = useState(false);
-
-  const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setIsChecked(event.target.checked);
-  };
-
   return (
     <div className="min-h-screen bg-gray-100">
       <Navbar maxWidth="full">
@@ -138,6 +133,7 @@ const InterviewCard: React.FC<InterviewCardProps> = ({
                 onPress={onStartButtonClick}
                 isDisabled={!isChecked}
                 color="success"
+                isLoading={loading}
               >
                 Start Interview
               </Button>
