@@ -15,13 +15,3 @@ export interface Company {
   logo: string;
   phone: string;
 }
-
-export interface InvitationDetails {
-  candidateName: string;
-  candidateEmail: string;
-  message: string;
-  status: string;
-  expirationDate: string;
-  job: Job;
-  company: Company;
-}

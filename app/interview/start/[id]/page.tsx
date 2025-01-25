@@ -9,64 +9,93 @@ import {
   Avatar,
   Button,
 } from "@heroui/react";
-import { AiOutlineAudio, AiOutlineClockCircle } from "react-icons/ai";
+import {
+  AiOutlineAudio,
+  AiOutlineClockCircle,
+  AiOutlinePlayCircle,
+  AiTwotoneRocket,
+} from "react-icons/ai";
 import { Navbar, NavbarBrand, NavbarContent, NavbarItem } from "@heroui/react";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { getInvitationDetails } from "@/services/invitation.service";
 import InterviewCard from "./component/interview.card";
 import InterviewCardLoading from "./component/interview.card.loading";
-import { InvitationDetails } from "./interface/invitation.detail.int";
 import Image from "next/image";
 import AudioRecorder from "@/components/AudioRecorder";
 import { startInterview } from "@/services/interview.service";
-import ConfirmDialog from "@/components/ConfirmDialog";
 import ThankYou from "./component/thankyou";
+import InterviewExpired from "./component/interview.expired";
 
 export interface Question {
   id: string;
   text: string;
+  audioUrl: string;
+  isQuestion: boolean;
 }
 export default function InterviewPage() {
-  const searchParams = useSearchParams();
-  const router = useRouter();
   const { id } = useParams();
 
   const [currentTime, setCurrentTime] = useState("11:07:14 AM");
   const [isStarted, setStart] = useState(false);
+  const [isExpiredOrCompleted, setExpiredOrCompleted] = useState(false);
   const [questions, setQuestions] = useState<Question[]>([]);
   const [startingInterview, setStartingInterview] = useState(false);
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [showWelcomeMessage, setShowWelcomeMessage] = useState(false);
+  const [showReplayButton, setShowReplayButton] = useState(false);
+  const [recordedQuestions, setRecordedQuestions] = useState<number[]>([]); // Track completed recordings
 
-  const [invitationDetails, setInvitationDetails] =
-    useState<InvitationDetails | null>(null);
-  const status = searchParams.get("status");
-
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(0);
-  const [hasAnswered, setHasAnswered] = useState<boolean>(false);
-
-  const handleOpenDialog = () => setIsDialogOpen(true);
-  const handleCloseDialog = () => setIsDialogOpen(false);
-
-  const handleConfirmAction = () => {
-    console.log("Action Confirmed!");
-    setIsDialogOpen(false);
+  const handleRecordingComplete = (questionId: number): void => {
+    setRecordedQuestions((prev) => [...prev, questionId]);
+    setShowReplayButton(false);
   };
 
+  const [invitationDetails, setInvitationDetails] = useState<any>(null);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(-1);
+  const [hasAnswered, setHasAnswered] = useState<boolean>(false);
+
   const handleNextQuestion = (): void => {
+    setShowReplayButton(false);
     if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex((prev) => prev + 1);
       setHasAnswered(false);
-    } else {
-      alert("You have completed all questions!");
+      const audioUrl = questions[currentQuestionIndex]?.audioUrl;
+      if (audioUrl) {
+        const audio = new Audio(audioUrl);
+        audio.play();
+        audio.addEventListener("ended", () => {
+          setShowReplayButton(true);
+        });
+      }
     }
+  };
+
+  const readWelcomeMessage = () => {
+    const audio = new Audio(invitationDetails.job.welcomeAudioUrl);
+    audio.play().catch((error) => {
+      console.error("Error playing audio:", error);
+    });
+
+    audio.addEventListener("ended", () => {
+      setCurrentQuestionIndex(0);
+      const firstQuestion = new Audio(questions[0].audioUrl);
+      firstQuestion.play();
+    });
   };
 
   const fetchInvitationDetails = async () => {
     if (!id) return;
-
     try {
       const data = await getInvitationDetails(id as string);
+
       setInvitationDetails(data);
+      if (data.status === "started") {
+        setStart(true);
+      } else if (data.status === "completed" || data.status === "expired") {
+        setExpiredOrCompleted(true);
+      } else if (data.status === "pending") {
+        setShowWelcomeMessage(true);
+      }
+
       setQuestions(data.job.questions || []);
     } catch (error) {
       console.error("Error fetching invitation details:", error);
@@ -77,10 +106,8 @@ export default function InterviewPage() {
     setStartingInterview(true); // Show the loading spinner
     try {
       setStart(true);
-      const newQuery = { status: "started" };
       const invitationId = id as string;
       await startInterview({ invitationId });
-      router.push(`?${new URLSearchParams(newQuery).toString()}`);
     } catch (error) {
       console.error("Error starting the interview:", error);
     } finally {
@@ -89,9 +116,8 @@ export default function InterviewPage() {
   };
 
   useEffect(() => {
-    if (status == "started") setStart(true);
     fetchInvitationDetails();
-  }, [id, status]);
+  }, [id, isStarted]);
 
   if (!invitationDetails) {
     return <InterviewCardLoading />;
@@ -99,13 +125,13 @@ export default function InterviewPage() {
 
   const { candidateName, candidateEmail, job, company } = invitationDetails;
 
-  if (currentQuestionIndex > questions.length - 1) {
+  if (recordedQuestions.length === questions.length) {
     return <ThankYou invitationDetails={invitationDetails} />;
   }
 
   return (
     <>
-      {isStarted && (
+      {isStarted && !isExpiredOrCompleted && (
         <div className="min-h-screen bg-gray-100">
           <Navbar maxWidth="full">
             <NavbarBrand>
@@ -127,15 +153,6 @@ export default function InterviewPage() {
                   <AiOutlineClockCircle />
                   <span>{currentTime}</span>
                 </div>
-              </NavbarItem>
-              <NavbarItem>
-                <Button
-                  color="danger"
-                  onPress={handleOpenDialog}
-                  variant="solid"
-                >
-                  End Interview
-                </Button>
               </NavbarItem>
             </NavbarContent>
           </Navbar>
@@ -175,25 +192,60 @@ export default function InterviewPage() {
                 <Card className="py-4" shadow="sm">
                   <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
                     <p className="text-tiny uppercase font-bold">
-                      Questions #1
+                      Questions # {1 + currentQuestionIndex} of {10}
                     </p>
                   </CardHeader>
                   <CardBody className="overflow-visible py-2">
-                    <div className="p-4 border border-orange-400 bg-orange-200 rounded-lg mt-4">
-                      <p className="">
-                        {questions[currentQuestionIndex]?.text}
-                      </p>
+                    <div>
+                      <blockquote className="border px-4 my-6 py-3 rounded-xl [&>p]:m-0 border-default-200 dark:border-default-100 bg-default-200/20">
+                        {currentQuestionIndex != -1 &&
+                          questions[currentQuestionIndex]?.text}
+
+                        {currentQuestionIndex == -1 &&
+                          invitationDetails.job.welcomeMessage}
+                      </blockquote>
+                      <div className="flex items-center space-x-4">
+                        {showReplayButton && (
+                          <Button
+                            size="sm"
+                            color="primary"
+                            endContent={<AiOutlinePlayCircle />}
+                            onPress={() => {
+                              const audio = new Audio(
+                                questions[currentQuestionIndex]?.audioUrl
+                              );
+                              audio.play();
+                            }}
+                          >
+                            Replay
+                          </Button>
+                        )}
+                      </div>
                     </div>
                   </CardBody>
                   <CardFooter className="absolute  bottom-0 z-10 border-1">
                     <div className="flex flex-grow gap-2 items-center">
-                      <AudioRecorder
-                        currentQuestion={questions[currentQuestionIndex]}
-                        invitationId={id as string}
-                        hasAnswered={hasAnswered}
-                        setHasAnswered={setHasAnswered}
-                        onNextQuestion={handleNextQuestion}
-                      />
+                      {currentQuestionIndex != -1 && (
+                        <AudioRecorder
+                          onRecordingComplete={handleRecordingComplete} // Pass this callback
+                          currentQuestion={questions[currentQuestionIndex]}
+                          invitationId={id as string}
+                          hasAnswered={hasAnswered}
+                          setHasAnswered={setHasAnswered}
+                          onNextQuestion={handleNextQuestion}
+                        />
+                      )}
+
+                      {currentQuestionIndex == -1 && (
+                        <Button
+                          endContent={<AiTwotoneRocket />}
+                          color="danger"
+                          variant="bordered"
+                          onPress={() => readWelcomeMessage()}
+                        >
+                          Start Interview
+                        </Button>
+                      )}
                     </div>
                   </CardFooter>
                 </Card>
@@ -220,49 +272,29 @@ export default function InterviewPage() {
                           isBordered
                           radius="full"
                           size="md"
-                          src="https://nextui.org/avatars/avatar-1.png"
+                          src={invitationDetails.interviewer.photoUrl}
                         />
                         <div className="flex flex-col gap-1 items-start justify-center">
                           <h4 className="text-small font-semibold leading-none text-default-600">
-                            {candidateEmail}
+                            {invitationDetails.interviewer.name}
                           </h4>
                           <h5 className="text-small tracking-tight text-default-400">
-                            @zoeylang
+                            {invitationDetails.interviewer.jobTitle}
                           </h5>
                         </div>
                       </div>
                     </CardHeader>
                     <CardBody className="px-3 py-0 text-small text-default-400">
-                      <p>
-                        Frontend developer and UI/UX enthusiast. Join me on this
-                        coding adventure!
-                      </p>
-                      <span className="pt-2">
-                        #FrontendWithZoey
-                        <span
-                          aria-label="computer"
-                          className="py-2"
-                          role="img"
-                        ></span>
-                      </span>
+                      <p>{invitationDetails.interviewer.biography}</p>
                     </CardBody>
                   </Card>
                 </div>
               </div>
             </Card>
-            <ConfirmDialog
-              isOpen={isDialogOpen}
-              onClose={handleCloseDialog}
-              title="Confirm Delete"
-              description="Are you sure you want to delete this item? This action cannot be undone."
-              onConfirm={handleConfirmAction}
-              confirmButtonText="Yes, Delete"
-              cancelButtonText="Cancel"
-            />
           </main>
         </div>
       )}
-      {!isStarted && (
+      {!isStarted && !isExpiredOrCompleted && (
         <InterviewCard
           loading={startingInterview}
           onStartButtonClick={handleStartInterview}
@@ -272,6 +304,7 @@ export default function InterviewPage() {
       {currentQuestionIndex > questions.length - 1 && (
         <ThankYou invitationDetails={invitationDetails} />
       )}
+      {isExpiredOrCompleted && <InterviewExpired />}
     </>
   );
 }

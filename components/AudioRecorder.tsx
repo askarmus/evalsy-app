@@ -2,7 +2,7 @@ import { uploadLogo } from "@/services/company.service";
 import { updateQuestion } from "@/services/interview.service"; // Import the API call
 import { Button } from "@heroui/react";
 import React, { useState, useRef, useEffect } from "react";
-import { AiOutlineAudio } from "react-icons/ai";
+import { AiFillStepForward, AiOutlineAudio } from "react-icons/ai";
 
 interface AudioRecorderProps {
   hasAnswered: boolean; // Track if the user has answered the current question
@@ -10,6 +10,7 @@ interface AudioRecorderProps {
   onNextQuestion: () => void; // Callback to move to the next question
   currentQuestion: any;
   invitationId: string;
+  onRecordingComplete: (questionId: number) => void; // Callback for recording completion
 }
 
 const AudioRecorder: React.FC<AudioRecorderProps> = ({
@@ -18,6 +19,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
   onNextQuestion,
   currentQuestion,
   invitationId,
+  onRecordingComplete,
 }) => {
   const [isRecording, setIsRecording] = useState<boolean>(false);
   const [isUploading, setIsUploading] = useState<boolean>(false);
@@ -86,6 +88,8 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
         startTime,
         endTime,
       });
+      onRecordingComplete(currentQuestion.id);
+
       console.log("Interview question updated successfully");
     } catch (error) {
       console.error("Failed to upload audio or update question:", error);
@@ -110,16 +114,42 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
   return (
     <div>
       {!hasAnswered ? (
-        <Button
-          color="success"
-          endContent={<AiOutlineAudio />}
-          onPress={handleAnswerClick}
-          disabled={isUploading}
-        >
-          {isRecording ? "Stop Recording" : "Answer"}
-        </Button>
+        <>
+          {!isUploading && (
+            <Button
+              color="danger"
+              variant="bordered"
+              endContent={
+                !isRecording ? (
+                  <AiOutlineAudio />
+                ) : (
+                  <span className="recording"></span>
+                )
+              }
+              onPress={handleAnswerClick}
+              isDisabled={isUploading}
+            >
+              {isRecording ? "Stop Recording" : "Answer"}
+            </Button>
+          )}
+          {isUploading && (
+            <Button
+              color="danger"
+              variant="bordered"
+              isLoading={true}
+              isDisabled={true}
+            >
+              Loading Next Question
+            </Button>
+          )}
+        </>
       ) : (
-        <Button color="success" onPress={handleNextQuestion}>
+        <Button
+          color="danger"
+          variant="bordered"
+          endContent={<AiFillStepForward />}
+          onPress={handleNextQuestion}
+        >
           Next Question
         </Button>
       )}

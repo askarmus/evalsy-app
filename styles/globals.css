@@ -11,3 +11,20 @@ body {
 * {
   box-sizing: border-box;
 }
+
+.recording {
+  color: firebrick;
+  display: inline-block;
+}
+.recording::before {
+  content: "🔴";
+  animation: recording 600ms alternate infinite;
+}
+@keyframes recording {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0.2;
+  }
+}
