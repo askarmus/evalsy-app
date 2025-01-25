@@ -9,11 +9,10 @@ import {
   NavbarBrand,
 } from "@heroui/react";
 import React, { useState } from "react";
-import { InvitationDetails } from "../interface/invitation.detail.int";
 import Image from "next/image";
 
 interface InterviewCardProps {
-  invitationDetails: InvitationDetails;
+  invitationDetails: any;
   onStartButtonClick: () => void;
   loading: boolean;
 }

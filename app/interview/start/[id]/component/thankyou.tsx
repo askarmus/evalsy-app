@@ -1,19 +1,9 @@
-import {
-  Button,
-  Card,
-  CardBody,
-  CardFooter,
-  CardHeader,
-  Checkbox,
-  Navbar,
-  NavbarBrand,
-} from "@heroui/react";
+import { Card, CardBody, CardHeader, Navbar, NavbarBrand } from "@heroui/react";
 import React, { useState } from "react";
-import { InvitationDetails } from "../interface/invitation.detail.int";
 import Image from "next/image";
 
 interface InterviewCardProps {
-  invitationDetails: InvitationDetails;
+  invitationDetails: any;
 }
 
 const ThankYou: React.FC<InterviewCardProps> = ({ invitationDetails }) => {
