@@ -119,12 +119,11 @@ export default function Jobs() {
         </div>
         <div className="flex flex-row gap-3.5 flex-wrap">
           <Button
-            color="danger"
             variant="faded"
-            size="md"
+            className="bg-black text-white"
             onPress={() => router.push("/jobs/add")}
           >
-            Add Job
+            Add New Job
           </Button>
         </div>
       </div>

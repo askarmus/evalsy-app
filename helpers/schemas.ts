@@ -21,6 +21,9 @@ export const RegisterSchema = object().shape({
 export const AddJobSchema = object().shape({
   jobTitle: string().required("Title is required"),
   description: string().required("Description is required"),
+  welcomeMessage: string()
+    .required("Welcome message is required")
+    .min(100, "Welcome message must be at least 100 characters long"),
   experienceLevel: string().required("Please select a experience Level"),
 
   questions: array()

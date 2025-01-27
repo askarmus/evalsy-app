@@ -105,9 +105,9 @@ export default function InterviewPage() {
   const handleStartInterview = async () => {
     setStartingInterview(true); // Show the loading spinner
     try {
-      setStart(true);
       const invitationId = id as string;
       await startInterview({ invitationId });
+      setStart(true);
     } catch (error) {
       console.error("Error starting the interview:", error);
     } finally {

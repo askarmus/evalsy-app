@@ -100,7 +100,7 @@ export default function InterviewerManagement() {
           />
         </div>
         <div className="flex flex-row gap-3.5 flex-wrap">
-          <Button onPress={handleAddClick} color="primary">
+          <Button onPress={handleAddClick} className="bg-black text-white">
             Add Interviewer
           </Button>
         </div>
@@ -138,7 +138,7 @@ export default function InterviewerManagement() {
               emptyContent={"No interviewers found"}
               items={items}
               loadingContent={<Spinner />}
-              loadingState={loadingState}
+              isLoading={isLoading}
             >
               {(item: any) => (
                 <TableRow key={item.key}>

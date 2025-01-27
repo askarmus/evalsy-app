@@ -26,12 +26,14 @@ import { createJob, generateQuestions } from "@/services/job.service";
 import { AddJobSchema } from "@/helpers/schemas";
 import { Breadcrumb } from "../bread.crumb";
 import { nanoid } from "nanoid";
+import { useRouter } from "next/navigation";
 
 export type Question = { id: string; text: string };
 
 export interface AddJobFormValues {
   jobTitle: string;
   description: string;
+  welcomeMessage: string;
   questions: Question[];
   experienceLevel: string;
   analysisCriteria: AnalysisCriterion[];
@@ -59,6 +61,8 @@ export const CustomRadio = (props) => {
 };
 
 export const AddJob = () => {
+  const router = useRouter();
+
   const [isGenerating, setGenerated] = useState(false);
   const formRef = useRef<any | null>(null);
   const [loading, setLoading] = useState(false);
@@ -69,6 +73,9 @@ export const AddJob = () => {
     try {
       await createJob(values);
       showToast.success("Job created successfully.");
+      setTimeout(() => {
+        router.push("/jobs/list");
+      }, 4000);
       resetForm();
     } catch {
     } finally {
@@ -113,6 +120,7 @@ export const AddJob = () => {
   const initialValues: AddJobFormValues = {
     jobTitle: "",
     description: "",
+    welcomeMessage: "",
     questions: [{ id: nanoid(), text: "" }],
     experienceLevel: "",
     analysisCriteria: [
@@ -168,6 +176,17 @@ export const AddJob = () => {
                                 }
                                 errorMessage={errors.jobTitle}
                                 onChange={handleChange("jobTitle")}
+                              />
+                              <Textarea
+                                label="Interview Welcome Message"
+                                variant="bordered"
+                                value={values.welcomeMessage}
+                                isInvalid={
+                                  !!errors.welcomeMessage &&
+                                  !!touched.welcomeMessage
+                                }
+                                errorMessage={errors.description}
+                                onChange={handleChange("welcomeMessage")}
                               />
                               <Textarea
                                 label="Description"
@@ -237,6 +256,7 @@ export const AddJob = () => {
                                       <Button
                                         color="primary"
                                         variant="faded"
+                                        size="sm"
                                         onPress={() =>
                                           setFieldValue("questions", [
                                             ...values.questions,
@@ -279,11 +299,12 @@ export const AddJob = () => {
                                             }
                                           />
                                         </TableCell>
-                                        <TableCell>
+                                        <TableCell align="right">
                                           <Button
                                             isIconOnly
                                             aria-label="Remove question"
                                             color="warning"
+                                            size="sm"
                                             variant="faded"
                                             onPress={() =>
                                               setFieldValue(
@@ -364,13 +385,13 @@ export const AddJob = () => {
                   <div className="flex gap-2">
                     <Button
                       type="submit"
-                      color="primary"
+                      className="bg-black text-white"
                       isLoading={loading}
                       onPress={() => {
                         formRef.current?.handleSubmit();
                       }}
                     >
-                      Save Job
+                      Subbmit
                     </Button>
                   </div>
                 </>

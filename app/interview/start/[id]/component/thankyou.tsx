@@ -35,21 +35,21 @@ const ThankYou: React.FC<InterviewCardProps> = ({ invitationDetails }) => {
                   <span className="text-small tracking-tight text-default-400">
                     Hello,
                   </span>{" "}
-                  Zoey Lang
+                  {invitationDetails.candidateName}
                 </h4>
                 <h5 className="text-small tracking-tight text-default-400">
-                  askarmus@gmail.com
+                  {invitationDetails.candidateEmail}
                 </h5>
               </div>
             </div>
             <div>
-              <h3 className="text-xxl font-semibold">
+              <h3 className="text-xl font-semibold">
                 <span className="text-gray-400  font-semibold ">
                   Intterviwing Position:
                 </span>{" "}
-                Senior Softwar Enginner
+                {invitationDetails.job.jobTitle}
               </h3>
-              <p className="text-gray-500">Acme Corporation</p>
+              <p className="text-gray-500"> {invitationDetails.company.name}</p>
             </div>
           </CardHeader>
 
