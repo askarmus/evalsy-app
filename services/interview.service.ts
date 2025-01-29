@@ -15,3 +15,8 @@ export const startInterview = async (payload: { invitationId: string }) => {
   const response = await apiClient.post("/interview/start", payload);
   return response.data.data;
 };
+
+export const getAllInterviewResult = async () => {
+  const response = await apiClient.get("/interview/result/all");
+  return response.data.data;
+};

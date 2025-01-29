@@ -6,6 +6,13 @@ import { UserDropdown } from "./user-dropdown";
 import Link from "next/link";
 import { DarkModeSwitch } from "./darkmodeswitch";
 import Logo from "./logo";
+import {
+  AiFillNotification,
+  AiFillSetting,
+  AiFillShopping,
+  AiOutlineHome,
+  AiOutlineUser,
+} from "react-icons/ai";
 
 interface Props {
   children: React.ReactNode;
@@ -22,38 +29,54 @@ export const NavbarWrapper = ({ children }: Props) => {
           wrapper: "w-full max-w-full color-line",
         }}
       >
-        <NavbarContent className=" pr-3" justify="center">
+        <NavbarContent className="pr-3" justify="center">
           <NavbarBrand>
             <Logo />
           </NavbarBrand>
         </NavbarContent>
         <NavbarContent className="hidden sm:flex gap-4" justify="center">
           <NavbarItem>
-            <Link className="text-gray-200 hover:text-gray-100" href="/">
-              Home
+            <Link
+              className="flex items-center text-sm text-gray-200 hover:text-gray-100 gap-2"
+              href="/"
+            >
+              <AiOutlineHome />
+              Dashbaord
             </Link>
           </NavbarItem>
           <NavbarItem>
             <Link
-              className="text-gray-200 hover:text-gray-100"
+              className="flex items-center text-sm text-gray-200 hover:text-gray-100 gap-2"
               href="/jobs/list"
             >
+              <AiFillShopping />
               Job
+            </Link>
+          </NavbarItem>
+          <NavbarItem>
+            <Link
+              className="flex items-center text-sm text-gray-200 hover:text-gray-100 gap-2"
+              href="/interview/result"
+            >
+              <AiFillNotification />
+              Result
             </Link>
           </NavbarItem>
           <NavbarItem isActive>
             <Link
-              className="text-gray-200 hover:text-gray-100"
+              className="flex items-center text-sm text-gray-200 hover:text-gray-100 gap-2"
               href="/company/settings"
             >
+              <AiFillSetting />
               Settings
             </Link>
           </NavbarItem>
           <NavbarItem>
             <Link
-              className="text-gray-200 hover:text-gray-100"
+              className="flex items-center text-sm text-gray-200 hover:text-gray-100 gap-2"
               href="/jobs/interviwers"
             >
+              <AiOutlineUser />
               Interviwers
             </Link>
           </NavbarItem>
@@ -74,6 +97,7 @@ export const NavbarWrapper = ({ children }: Props) => {
           </NavbarContent>
         </NavbarContent>
       </Navbar>
+
       {children}
     </div>
   );

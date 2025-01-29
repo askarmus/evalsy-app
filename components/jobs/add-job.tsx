@@ -329,7 +329,9 @@ export const AddJob = () => {
                       </div>
                     </div>
                     <div className="w-2/5">
-                      <h4 className="mb-5">Analysis Criteria</h4>
+                      <h3 className="text-xl font-semibold mb-5">
+                        Analysis Criteria
+                      </h3>
                       <Table aria-label="Analysis Criteria Table">
                         <TableHeader>
                           <TableColumn>Criterion</TableColumn>
