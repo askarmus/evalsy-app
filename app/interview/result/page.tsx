@@ -71,10 +71,11 @@ export default function InterviewResultList() {
 
   return (
     <div className="my-10 px-4 lg:px-6 max-w-[90rem] mx-auto w-full flex flex-col gap-4">
-      <h3 className="text-xl font-semibold">Interview Result</h3>
       <Breadcrumb />
-      <div className="flex justify-between flex-wrap gap-4 items-center">
-        <div className="flex items-center gap-3 flex-wrap md:flex-nowrap">
+
+      <div className=" flex items-end justify-between">
+        <h3 className="text-xl font-semibold">Interview Result</h3>
+        <div>
           <Input
             value={filterValue}
             onChange={(e) => onSearchChange(e.target.value)}
@@ -86,6 +87,7 @@ export default function InterviewResultList() {
           />
         </div>
       </div>
+
       <div className="max-w-[90rem] mx-auto w-full">
         <div className=" w-full flex flex-col gap-4">
           <Table

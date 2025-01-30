@@ -73,8 +73,9 @@ const CompanySettingsPage = () => {
 
   return (
     <div className="my-10 px-4 lg:px-6 max-w-[90rem] mx-auto w-full flex flex-col gap-4">
-      <h3 className="text-xl font-semibold">Settings</h3>
       <Breadcrumb />
+
+      <h3 className="text-xl font-semibold">Settings</h3>
 
       <div className="max-w-[90rem] mx-auto w-full">
         <Tabs aria-label="Options">

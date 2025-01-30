@@ -8,6 +8,7 @@ import { Formik } from "formik";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
+import { Logo } from "../logo";
 
 export const Login = () => {
   const router = useRouter();
@@ -37,54 +38,64 @@ export const Login = () => {
 
   return (
     <>
-      <div className="text-center text-[25px] font-bold mb-6">Login</div>
+      <main className="mx-auto w-full max-w-md sm:px-4 md:w-96 md:max-w-sm md:px-0">
+        <div className="flex">
+          <Logo />
+        </div>
+        <h2 className="mt-20 text-lg font-semibold text-gray-900">
+          Sign in to your account
+        </h2>
+        <p className="mt-2 text-sm text-gray-700">
+          Don’t have an account?{" "}
+          <Link
+            href="/register"
+            className="font-medium text-blue-600 hover:underline"
+          >
+            Register here
+          </Link>{" "}
+          for a free trial.
+        </p>
 
-      <Formik
-        initialValues={initialValues}
-        validationSchema={LoginSchema}
-        onSubmit={handleLogin}
-      >
-        {({ values, errors, touched, handleChange, handleSubmit }) => (
-          <>
-            <div className="flex flex-col w-1/2 gap-4 mb-4">
-              <Input
-                variant="bordered"
-                label="Email"
-                type="email"
-                value={values.email}
-                isInvalid={!!errors.email && !!touched.email}
-                errorMessage={errors.email}
-                onChange={handleChange("email")}
-              />
-              <Input
-                variant="bordered"
-                label="Password"
-                type="password"
-                value={values.password}
-                isInvalid={!!errors.password && !!touched.password}
-                errorMessage={errors.password}
-                onChange={handleChange("password")}
-              />
-            </div>
+        <Formik
+          initialValues={initialValues}
+          validationSchema={LoginSchema}
+          onSubmit={handleLogin}
+        >
+          {({ values, errors, touched, handleChange, handleSubmit }) => (
+            <>
+              <div className="mt-10 grid grid-cols-1 gap-y-8">
+                <Input
+                  variant="bordered"
+                  label="Email"
+                  type="email"
+                  value={values.email}
+                  isInvalid={!!errors.email && !!touched.email}
+                  errorMessage={errors.email}
+                  onChange={handleChange("email")}
+                />
+                <Input
+                  variant="bordered"
+                  label="Password"
+                  type="password"
+                  value={values.password}
+                  isInvalid={!!errors.password && !!touched.password}
+                  errorMessage={errors.password}
+                  onChange={handleChange("password")}
+                />
 
-            <Button
-              onPress={() => handleSubmit()}
-              variant="flat"
-              isLoading={isSubmitting}
-              color="primary"
-            >
-              Login
-            </Button>
-          </>
-        )}
-      </Formik>
-
-      <div className="font-light text-slate-400 mt-4 text-sm">
-        Don&apos;t have an account ?{" "}
-        <Link href="/register" className="font-bold">
-          Register here
-        </Link>
-      </div>
+                <Button
+                  onPress={() => handleSubmit()}
+                  radius="full"
+                  isLoading={isSubmitting}
+                  color="primary"
+                >
+                  Login
+                </Button>
+              </div>
+            </>
+          )}
+        </Formik>
+      </main>
     </>
   );
 };

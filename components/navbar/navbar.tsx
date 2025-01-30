@@ -5,14 +5,14 @@ import { NotificationsDropdown } from "./notifications-dropdown";
 import { UserDropdown } from "./user-dropdown";
 import Link from "next/link";
 import { DarkModeSwitch } from "./darkmodeswitch";
-import Logo from "./logo";
 import {
-  AiFillNotification,
-  AiFillSetting,
-  AiFillShopping,
   AiOutlineHome,
+  AiOutlineNotification,
+  AiOutlineSetting,
+  AiOutlineShopping,
   AiOutlineUser,
 } from "react-icons/ai";
+import { Logo } from "../logo";
 
 interface Props {
   children: React.ReactNode;
@@ -20,11 +20,11 @@ interface Props {
 
 export const NavbarWrapper = ({ children }: Props) => {
   return (
-    <div className="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden bbzgxX">
+    <div className="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden ">
       <Navbar
         position="static"
         isBordered
-        className="w-full bg-gray-900"
+        className="w-full"
         classNames={{
           wrapper: "w-full max-w-full color-line",
         }}
@@ -37,7 +37,7 @@ export const NavbarWrapper = ({ children }: Props) => {
         <NavbarContent className="hidden sm:flex gap-4" justify="center">
           <NavbarItem>
             <Link
-              className="flex items-center text-sm text-gray-200 hover:text-gray-100 gap-2"
+              className="flex items-center text-default-900 hover:text-gray-800 gap-2"
               href="/"
             >
               <AiOutlineHome />
@@ -46,34 +46,34 @@ export const NavbarWrapper = ({ children }: Props) => {
           </NavbarItem>
           <NavbarItem>
             <Link
-              className="flex items-center text-sm text-gray-200 hover:text-gray-100 gap-2"
+              className="flex items-center text-default-900  hover:text-gray-800 gap-2"
               href="/jobs/list"
             >
-              <AiFillShopping />
+              <AiOutlineShopping />
               Job
             </Link>
           </NavbarItem>
           <NavbarItem>
             <Link
-              className="flex items-center text-sm text-gray-200 hover:text-gray-100 gap-2"
+              className="flex items-center text-default-900 hover:text-gray-800 gap-2"
               href="/interview/result"
             >
-              <AiFillNotification />
+              <AiOutlineNotification />
               Result
             </Link>
           </NavbarItem>
           <NavbarItem isActive>
             <Link
-              className="flex items-center text-sm text-gray-200 hover:text-gray-100 gap-2"
+              className="flex items-center text-default-900  hover:text-gray-800 gap-2"
               href="/company/settings"
             >
-              <AiFillSetting />
+              <AiOutlineSetting />
               Settings
             </Link>
           </NavbarItem>
           <NavbarItem>
             <Link
-              className="flex items-center text-sm text-gray-200 hover:text-gray-100 gap-2"
+              className="flex items-center text-default-900  hover:text-gray-800 gap-2"
               href="/jobs/interviwers"
             >
               <AiOutlineUser />

@@ -31,7 +31,6 @@ export default function Jobs() {
   const [filterValue, setFilterValue] = useState("");
   const [jobs, setJobs] = useState([]);
   const rowsPerPage = 5;
-  const loadingState = isLoading || jobs?.length === 0 ? "loading" : "idle";
   const [selectedJobId, setSelectedJobId] = useState<string | null>(null);
   const [isDrawerOpen, setDrawerOpen] = useState(false);
   const router = useRouter();
@@ -102,9 +101,9 @@ export default function Jobs() {
 
   return (
     <div className="my-10 px-4 lg:px-6 max-w-[90rem] mx-auto w-full flex flex-col gap-4">
-      <h3 className="text-xl font-semibold">All Jobs</h3>
       <Breadcrumb />
 
+      <h3 className="text-xl font-semibold">All Jobs</h3>
       <div className="flex justify-between flex-wrap gap-4 items-center">
         <div className="flex items-center gap-3 flex-wrap md:flex-nowrap">
           <Input
@@ -130,11 +129,11 @@ export default function Jobs() {
       <div className="max-w-[90rem] mx-auto w-full">
         <div className=" w-full flex flex-col gap-4">
           {items.map((question: any) => (
-            <Card key={question.id}>
+            <Card key={question.id} className="p-5">
               <CardHeader className="justify-between">
                 <div className="flex gap-5">
                   <div className="flex flex-col gap-1 items-start justify-center">
-                    <h4 className="text-small font-semibold leading-none text-default-600">
+                    <h4 className="text-xl font-semibold leading-none text-default-600">
                       {question.jobTitle}
                     </h4>
                     <h5 className="text-small tracking-tight text-default-400">
@@ -145,16 +144,19 @@ export default function Jobs() {
 
                 <div className="gap-3">
                   <Button
-                    color="warning"
-                    variant="faded"
+                    color="primary"
                     className="mr-3"
                     size="sm"
                     onPress={() => handleInviteClick(question.id)}
                   >
-                    Invite Candidate
+                    Invite
                   </Button>
-                  <Button isIconOnly size="sm" color="warning" variant="faded">
-                    <AiOutlineMore />
+                  <Button
+                    size="sm"
+                    color="default"
+                    endContent={<AiOutlineMore />}
+                  >
+                    More
                   </Button>
                 </div>
               </CardHeader>
