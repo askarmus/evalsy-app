@@ -134,11 +134,15 @@ export const AddJob = () => {
       { id: 8, name: "Engagement", weight: 5, enabled: false },
     ],
   };
-
+  const breadcrumbItems = [
+    { name: "Dashboard", link: "/" },
+    { name: "Job", link: "/job/list" },
+    { name: "Add", link: "" },
+  ];
   return (
     <div>
       <div className="my-10 px-4 lg:px-6 max-w-[90rem] mx-auto w-full flex flex-col gap-4">
-        <Breadcrumb />
+        <Breadcrumb items={breadcrumbItems} />
 
         <h3 className="text-xl font-semibold">Add Job</h3>
         <div className="flex justify-between flex-wrap gap-4 items-center">

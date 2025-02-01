@@ -6,6 +6,7 @@ import {
   RadioGroup,
   Select,
   SelectItem,
+  Slider,
   Textarea,
 } from "@heroui/react";
 import {
@@ -87,22 +88,15 @@ export const SendInvitationDrawer: React.FC<SendInvitationDrawerProps> = ({
             message: "",
             expires: "",
             interviewerId: "",
+            duration: 15,
           }}
           validationSchema={SendInvitationSchema}
           onSubmit={handleSubmit}
         >
-          {({
-            values,
-            errors,
-            touched,
-            handleChange,
-            handleSubmit,
-            setFieldValue,
-          }) => (
+          {({ values, errors, touched, handleChange, handleSubmit }) => (
             <>
               <DrawerHeader>Send Invitation</DrawerHeader>
               <DrawerBody>
-                {/* Form */}
                 <div className="flex flex-col gap-4 mb-6">
                   <Input
                     label="Name"
@@ -119,6 +113,7 @@ export const SendInvitationDrawer: React.FC<SendInvitationDrawerProps> = ({
                     errorMessage={errors.email}
                   />
                   <Textarea
+                    rows={1}
                     label="Message"
                     classNames={{
                       input: "resize-y min-h-[30px]",
@@ -158,14 +153,32 @@ export const SendInvitationDrawer: React.FC<SendInvitationDrawerProps> = ({
                     <Radio value="10000">No Expiry</Radio>
                   </RadioGroup>
 
-                  <Button
-                    color="primary"
-                    variant="bordered"
-                    isLoading={loading}
-                    onPress={handleSubmit as any}
-                  >
-                    Send
-                  </Button>
+                  <Slider
+                    className="max-w-full"
+                    defaultValue={30}
+                    value={values.duration}
+                    label="Interview Duration (Minutes)"
+                    maxValue={120}
+                    minValue={15}
+                    showSteps={true}
+                    size="md"
+                    step={15}
+                    onChange={(e) =>
+                      handleChange({
+                        target: { name: "duration", value: Number(e) },
+                      })
+                    }
+                  />
+
+                  <div className="mt-6">
+                    <Button
+                      color="primary"
+                      isLoading={loading}
+                      onPress={handleSubmit as any}
+                    >
+                      Send
+                    </Button>
+                  </div>
                 </div>
 
                 {/* Table */}

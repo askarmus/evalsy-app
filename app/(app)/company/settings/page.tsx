@@ -58,6 +58,11 @@ const CompanySettingsPage = () => {
     fetchSettings();
   }, []);
 
+  const breadcrumbItems = [
+    { name: "Dashboard", link: "/" },
+    { name: "Company", link: "" },
+  ];
+
   const handleSubmit = async (values: CompanySettingsFormValues) => {
     try {
       setIsLoading(true);
@@ -73,7 +78,7 @@ const CompanySettingsPage = () => {
 
   return (
     <div className="my-10 px-4 lg:px-6 max-w-[90rem] mx-auto w-full flex flex-col gap-4">
-      <Breadcrumb />
+      <Breadcrumb items={breadcrumbItems} />
 
       <h3 className="text-xl font-semibold">Settings</h3>
 

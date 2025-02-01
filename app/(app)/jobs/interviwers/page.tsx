@@ -29,12 +29,16 @@ export default function InterviewerManagement() {
   const [filterValue, setFilterValue] = useState("");
   const [interviewers, setInterviewers] = useState([]);
   const rowsPerPage = 10;
-  const loadingState =
-    isLoading || interviewers?.length === 0 ? "loading" : "idle";
+
   const [selectedInterviewerId, setSelectedInterviewerId] = useState<
     string | null
   >(null);
   const [isDrawerOpen, setDrawerOpen] = useState(false);
+
+  const breadcrumbItems = [
+    { name: "Dashboard", link: "/" },
+    { name: "Interviwers", link: "" },
+  ];
 
   const handleAddClick = () => {
     setSelectedInterviewerId(null); // Reset selected interviewer
@@ -85,7 +89,7 @@ export default function InterviewerManagement() {
 
   return (
     <div className="my-10 px-4 lg:px-6 max-w-[90rem] mx-auto w-full flex flex-col gap-4">
-      <Breadcrumb />
+      <Breadcrumb items={breadcrumbItems} />
       <h3 className="text-xl font-semibold">All Interviewers</h3>
       <div className="flex justify-between flex-wrap gap-4 items-center">
         <div className="flex items-center gap-3 flex-wrap md:flex-nowrap">

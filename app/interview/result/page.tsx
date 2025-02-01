@@ -69,9 +69,14 @@ export default function InterviewResultList() {
     setPage(1);
   }, []);
 
+  const breadcrumbItems = [
+    { name: "Dashboard", link: "/" },
+    { name: "Result", link: "" },
+  ];
+
   return (
     <div className="my-10 px-4 lg:px-6 max-w-[90rem] mx-auto w-full flex flex-col gap-4">
-      <Breadcrumb />
+      <Breadcrumb items={breadcrumbItems} />
 
       <div className=" flex items-end justify-between">
         <h3 className="text-xl font-semibold">Interview Result</h3>

@@ -13,6 +13,8 @@ const apiClient = axios.create({
 apiClient.interceptors.request.use(
   (config) => {
     const token = Cookies.get("userAuth"); // Get the token from cookies
+    const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    config.headers.timeZone = userTimeZone;
 
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;

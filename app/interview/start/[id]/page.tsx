@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Card,
   CardHeader,
@@ -9,22 +9,18 @@ import {
   Avatar,
   Button,
 } from "@heroui/react";
-import {
-  AiOutlineAudio,
-  AiOutlineClockCircle,
-  AiOutlinePlayCircle,
-  AiTwotoneRocket,
-} from "react-icons/ai";
-import { Navbar, NavbarBrand, NavbarContent, NavbarItem } from "@heroui/react";
-import { useParams, useRouter, useSearchParams } from "next/navigation";
+import { AiOutlinePlayCircle, AiTwotoneRocket } from "react-icons/ai";
+import { useParams } from "next/navigation";
 import { getInvitationDetails } from "@/services/invitation.service";
-import InterviewCard from "./component/interview.card";
 import InterviewCardLoading from "./component/interview.card.loading";
-import Image from "next/image";
 import AudioRecorder from "@/components/AudioRecorder";
 import { startInterview } from "@/services/interview.service";
 import ThankYou from "./component/thankyou";
 import InterviewExpired from "./component/interview.expired";
+import { showToast } from "@/app/utils/toastUtils";
+import InterviewNavbar from "./component/InterviewNavbar";
+import InterviewerStartCard from "./component/interviewer.card";
+import InterviewCard from "./component/interview.card";
 
 export interface Question {
   id: string;
@@ -35,7 +31,6 @@ export interface Question {
 export default function InterviewPage() {
   const { id } = useParams();
 
-  const [currentTime, setCurrentTime] = useState("11:07:14 AM");
   const [isStarted, setStart] = useState(false);
   const [isExpiredOrCompleted, setExpiredOrCompleted] = useState(false);
   const [questions, setQuestions] = useState<Question[]>([]);
@@ -43,6 +38,7 @@ export default function InterviewPage() {
   const [showWelcomeMessage, setShowWelcomeMessage] = useState(false);
   const [showReplayButton, setShowReplayButton] = useState(false);
   const [recordedQuestions, setRecordedQuestions] = useState<number[]>([]); // Track completed recordings
+  const hasFetched = useRef(false);
 
   const handleRecordingComplete = (questionId: number): void => {
     setRecordedQuestions((prev) => [...prev, questionId]);
@@ -83,7 +79,8 @@ export default function InterviewPage() {
   };
 
   const fetchInvitationDetails = async () => {
-    if (!id) return;
+    if (!id || hasFetched.current) return; // Prevent duplicate calls
+
     try {
       const data = await getInvitationDetails(id as string);
 
@@ -99,6 +96,7 @@ export default function InterviewPage() {
       setQuestions(data.job.questions || []);
     } catch (error) {
       console.error("Error fetching invitation details:", error);
+      showToast.error("Error fetching invitation details.");
     }
   };
 
@@ -109,7 +107,7 @@ export default function InterviewPage() {
       await startInterview({ invitationId });
       setStart(true);
     } catch (error) {
-      console.error("Error starting the interview:", error);
+      showToast.error("Error starting the interview");
     } finally {
       setStartingInterview(false); // Hide the loading spinner
     }
@@ -117,7 +115,7 @@ export default function InterviewPage() {
 
   useEffect(() => {
     fetchInvitationDetails();
-  }, [id, isStarted]);
+  }, [id]);
 
   if (!invitationDetails) {
     return <InterviewCardLoading />;
@@ -129,33 +127,18 @@ export default function InterviewPage() {
     return <ThankYou invitationDetails={invitationDetails} />;
   }
 
+  function handleInterviewComplete(): void {}
+
   return (
     <>
       {isStarted && !isExpiredOrCompleted && (
         <div className="min-h-screen bg-gray-100">
-          <Navbar maxWidth="full">
-            <NavbarBrand>
-              {company.logo ? (
-                <Image
-                  src={company.logo}
-                  alt={`${company.name} Logo`}
-                  width={100}
-                  height={40}
-                />
-              ) : (
-                <p className="font-bold text-inherit">{company.name}</p>
-              )}
-            </NavbarBrand>
-
-            <NavbarContent justify="end">
-              <NavbarItem>
-                <div className="flex items-center gap-2">
-                  <AiOutlineClockCircle />
-                  <span>{currentTime}</span>
-                </div>
-              </NavbarItem>
-            </NavbarContent>
-          </Navbar>
+          <InterviewNavbar
+            company={company}
+            totalMinutes={10}
+            startTime="2025-02-01T14:00:00Z"
+            onInterviewComplete={handleInterviewComplete}
+          />
           <main className="max-w-7xl mx-auto px-6 py-8">
             <Card className="p-8" shadow="none">
               <CardHeader className="justify-between mb-10">
@@ -260,34 +243,9 @@ export default function InterviewPage() {
                       <div className="w-full aspect-video bg-black rounded-lg"></div>
                     </CardBody>
                   </Card>
-                  <Card className="py-4" shadow="sm">
-                    <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
-                      <p className="text-tiny uppercase font-bold">
-                        INTERVIWER
-                      </p>
-                    </CardHeader>
-                    <CardHeader className="justify-between">
-                      <div className="flex gap-5">
-                        <Avatar
-                          isBordered
-                          radius="full"
-                          size="md"
-                          src={invitationDetails.interviewer.photoUrl}
-                        />
-                        <div className="flex flex-col gap-1 items-start justify-center">
-                          <h4 className="text-small font-semibold leading-none text-default-600">
-                            {invitationDetails.interviewer.name}
-                          </h4>
-                          <h5 className="text-small tracking-tight text-default-400">
-                            {invitationDetails.interviewer.jobTitle}
-                          </h5>
-                        </div>
-                      </div>
-                    </CardHeader>
-                    <CardBody className="px-3 py-0 text-small text-default-400">
-                      <p>{invitationDetails.interviewer.biography}</p>
-                    </CardBody>
-                  </Card>
+                  <InterviewerStartCard
+                    interviewer={invitationDetails.interviewer}
+                  />
                 </div>
               </div>
             </Card>

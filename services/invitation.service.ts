@@ -18,6 +18,7 @@ export const sendInvitation = async (payload: {
   message: string;
   expires: string;
   interviwerId: string;
+  duration: number;
 }) => {
   const response = await apiClient.post("/invitation/send", payload);
   return response.data.data;
