@@ -96,11 +96,7 @@ export default function InterviewPage() {
         const filteredQuestions = data.interviewResult.questionAnswers.filter(
           (q) => q.startTime === null
         );
-
-        console.log(filteredQuestions);
-        console.log(data.job.questions);
-        setQuestions(data.job.questions);
-
+        setQuestions(filteredQuestions);
         setCurrentQuestionIndex(0);
       } else {
         setQuestions(data.job.questions || []);
@@ -222,7 +218,12 @@ export default function InterviewPage() {
                 <Card className="py-4" shadow="sm">
                   <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
                     <p className="text-tiny uppercase font-bold">
-                      Questions # {1 + currentQuestionIndex} of {10}
+                      Questions #{" "}
+                      {1 +
+                        currentQuestionIndex +
+                        (invitationDetails.job.questions.length -
+                          questions.length)}{" "}
+                      of {invitationDetails.job.questions.length}
                     </p>
                   </CardHeader>
                   <CardBody className="overflow-visible py-2">
@@ -265,7 +266,7 @@ export default function InterviewPage() {
                           onAudioRecorded={uploadAudioAsync} // Pass the new function
                           onStopRecording={() =>
                             console.log("Recording stopped externally")
-                          } // Optional
+                          }
                         />
                       )}
 
