@@ -1,26 +1,21 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
-import {
-  Card,
-  CardHeader,
-  CardBody,
-  CardFooter,
-  Avatar,
-  Button,
-} from "@heroui/react";
+import { Card, CardHeader, CardBody, CardFooter, Button } from "@heroui/react";
 import { AiOutlinePlayCircle, AiTwotoneRocket } from "react-icons/ai";
 import { useParams } from "next/navigation";
 import { getInvitationDetails } from "@/services/invitation.service";
 import InterviewCardLoading from "./component/interview.card.loading";
 import AudioRecorder from "@/components/AudioRecorder";
-import { startInterview } from "@/services/interview.service";
+
+import { startInterview, updateQuestion } from "@/services/interview.service";
 import ThankYou from "./component/thankyou";
 import InterviewExpired from "./component/interview.expired";
 import { showToast } from "@/app/utils/toastUtils";
 import InterviewNavbar from "./component/InterviewNavbar";
 import InterviewerStartCard from "./component/interviewer.card";
 import InterviewCard from "./component/interview.card";
+import { uploadLogo } from "@/services/company.service";
 
 export interface Question {
   id: string;
@@ -35,12 +30,15 @@ export default function InterviewPage() {
   const [isExpiredOrCompleted, setExpiredOrCompleted] = useState(false);
   const [questions, setQuestions] = useState<Question[]>([]);
   const [startingInterview, setStartingInterview] = useState(false);
+  const [interviewStartedOn, setInterviewStartedOn] = useState("");
+  const [isTimeOver, setIsTimeOver] = useState(false);
   const [showWelcomeMessage, setShowWelcomeMessage] = useState(false);
   const [showReplayButton, setShowReplayButton] = useState(false);
-  const [recordedQuestions, setRecordedQuestions] = useState<number[]>([]); // Track completed recordings
+  const [recordedQuestions, setRecordedQuestions] = useState<string[]>([]); // Track completed recordings
   const hasFetched = useRef(false);
+  const [isUploading, setIsUploading] = useState<boolean>(false);
 
-  const handleRecordingComplete = (questionId: number): void => {
+  const handleRecordingComplete = (questionId: string): void => {
     setRecordedQuestions((prev) => [...prev, questionId]);
     setShowReplayButton(false);
   };
@@ -84,16 +82,29 @@ export default function InterviewPage() {
     try {
       const data = await getInvitationDetails(id as string);
 
-      setInvitationDetails(data);
       if (data.status === "started") {
         setStart(true);
       } else if (data.status === "completed" || data.status === "expired") {
         setExpiredOrCompleted(true);
+        return;
       } else if (data.status === "pending") {
         setShowWelcomeMessage(true);
       }
+      setInterviewStartedOn(data.statusUpdateAt);
+      setInvitationDetails(data);
+      if (data.interviewResult) {
+        const filteredQuestions = data.interviewResult.questionAnswers.filter(
+          (q) => q.startTime === null
+        );
 
-      setQuestions(data.job.questions || []);
+        console.log(filteredQuestions);
+        console.log(data.job.questions);
+        setQuestions(data.job.questions);
+
+        setCurrentQuestionIndex(0);
+      } else {
+        setQuestions(data.job.questions || []);
+      }
     } catch (error) {
       console.error("Error fetching invitation details:", error);
       showToast.error("Error fetching invitation details.");
@@ -101,15 +112,17 @@ export default function InterviewPage() {
   };
 
   const handleStartInterview = async () => {
-    setStartingInterview(true); // Show the loading spinner
+    setStartingInterview(true);
     try {
       const invitationId = id as string;
-      await startInterview({ invitationId });
+
+      var startedDate = await startInterview({ invitationId });
+      setInterviewStartedOn(startedDate);
       setStart(true);
     } catch (error) {
       showToast.error("Error starting the interview");
     } finally {
-      setStartingInterview(false); // Hide the loading spinner
+      setStartingInterview(false);
     }
   };
 
@@ -117,26 +130,60 @@ export default function InterviewPage() {
     fetchInvitationDetails();
   }, [id]);
 
+  if (isExpiredOrCompleted) {
+    return <InterviewExpired />;
+  }
+
   if (!invitationDetails) {
     return <InterviewCardLoading />;
   }
 
-  const { candidateName, candidateEmail, job, company } = invitationDetails;
+  const { candidateName, duration, candidateEmail, job, company } =
+    invitationDetails;
 
   if (recordedQuestions.length === questions.length) {
     return <ThankYou invitationDetails={invitationDetails} />;
   }
 
-  function handleInterviewComplete(): void {}
+  const uploadAudioAsync = async (
+    file: File,
+    startTime: Date,
+    endTime: Date
+  ): Promise<void> => {
+    setIsUploading(true);
+    try {
+      const response = await uploadLogo(file);
+      const recordedUrl = response.data?.url;
+
+      await updateQuestion({
+        invitationId: id as string,
+        questionId: questions[currentQuestionIndex]?.id,
+        recordedUrl,
+        startTime,
+        endTime,
+      });
+
+      handleRecordingComplete(questions[currentQuestionIndex]?.id);
+    } catch (error) {
+      console.error("Failed to upload audio:", error);
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  function handleInterviewComplete(): void {
+    setIsTimeOver(true);
+  }
 
   return (
     <>
+      {isExpiredOrCompleted && <InterviewExpired />}
       {isStarted && !isExpiredOrCompleted && (
         <div className="min-h-screen bg-gray-100">
           <InterviewNavbar
             company={company}
-            totalMinutes={10}
-            startTime="2025-02-01T14:00:00Z"
+            totalMinutes={duration}
+            startTime={interviewStartedOn}
             onInterviewComplete={handleInterviewComplete}
           />
           <main className="max-w-7xl mx-auto px-6 py-8">
@@ -183,7 +230,6 @@ export default function InterviewPage() {
                       <blockquote className="border px-4 my-6 py-3 rounded-xl [&>p]:m-0 border-default-200 dark:border-default-100 bg-default-200/20">
                         {currentQuestionIndex != -1 &&
                           questions[currentQuestionIndex]?.text}
-
                         {currentQuestionIndex == -1 &&
                           invitationDetails.job.welcomeMessage}
                       </blockquote>
@@ -210,12 +256,16 @@ export default function InterviewPage() {
                     <div className="flex flex-grow gap-2 items-center">
                       {currentQuestionIndex != -1 && (
                         <AudioRecorder
-                          onRecordingComplete={handleRecordingComplete} // Pass this callback
+                          onRecordingComplete={handleRecordingComplete}
                           currentQuestion={questions[currentQuestionIndex]}
                           invitationId={id as string}
                           hasAnswered={hasAnswered}
                           setHasAnswered={setHasAnswered}
                           onNextQuestion={handleNextQuestion}
+                          onAudioRecorded={uploadAudioAsync} // Pass the new function
+                          onStopRecording={() =>
+                            console.log("Recording stopped externally")
+                          } // Optional
                         />
                       )}
 
@@ -259,10 +309,9 @@ export default function InterviewPage() {
           invitationDetails={invitationDetails}
         />
       )}
-      {currentQuestionIndex > questions.length - 1 && (
+      {(currentQuestionIndex > questions.length - 1 || isTimeOver) && (
         <ThankYou invitationDetails={invitationDetails} />
       )}
-      {isExpiredOrCompleted && <InterviewExpired />}
     </>
   );
 }

@@ -1,13 +1,14 @@
 "use client";
 
+import { showToast } from "@/app/utils/toastUtils";
 import React, { useEffect, useState } from "react";
 import { AiOutlineClockCircle } from "react-icons/ai";
 import { useTimer } from "react-timer-hook";
 
 interface CountdownTimerProps {
-  totalMinutes: number; // Total duration in minutes
-  startTime: string; // Start time in ISO format (e.g., "2024-02-01T10:00:00Z")
-  onComplete: () => void; // Callback when time is up
+  totalMinutes: number;
+  startTime: string;
+  onComplete: () => void;
 }
 
 const CountdownTimer: React.FC<CountdownTimerProps> = ({
@@ -16,6 +17,8 @@ const CountdownTimer: React.FC<CountdownTimerProps> = ({
   onComplete,
 }) => {
   const [remainingSeconds, setRemainingSeconds] = useState(0);
+
+  // Convert startTime from string to Date object
   const startDateTime = new Date(startTime);
   const expiryDateTime = new Date(
     startDateTime.getTime() + totalMinutes * 60 * 1000
@@ -34,19 +37,20 @@ const CountdownTimer: React.FC<CountdownTimerProps> = ({
     expiryTimestamp: expiryDateTime,
     autoStart: true,
     onExpire: () => {
-      alert("Interview time is over!");
       onComplete();
     },
   });
 
   useEffect(() => {
     if (remainingSeconds <= totalMinutes * 60 * 0.25 && remainingSeconds > 0) {
-      alert(`You have ${Math.floor(remainingSeconds / 60)} minutes remaining!`);
+      showToast.error(
+        `You have ${Math.floor(remainingSeconds / 60)} minutes remaining!`
+      );
     }
   }, [remainingSeconds, totalMinutes]);
 
   return (
-    <div className="p-4   whitespace-nowrap">
+    <div className="p-4 whitespace-nowrap">
       <span className="text-2xl text-gray-700 inline-block align-middle">
         <AiOutlineClockCircle />
       </span>
@@ -54,11 +58,6 @@ const CountdownTimer: React.FC<CountdownTimerProps> = ({
         {minutes.toString().padStart(2, "0")}:
         {seconds.toString().padStart(2, "0")}
       </span>
-      {isRunning && (
-        <p className="text-red-500 font-bold ml-4 inline-block align-middle">
-          Time is up!
-        </p>
-      )}
     </div>
   );
 };

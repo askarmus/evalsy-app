@@ -264,7 +264,7 @@ export const AddJob = () => {
                                         onPress={() =>
                                           setFieldValue("questions", [
                                             ...values.questions,
-                                            { id: Date.now(), text: "" },
+                                            { id: nanoid(), text: "" },
                                           ])
                                         }
                                       >

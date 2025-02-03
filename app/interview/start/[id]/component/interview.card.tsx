@@ -76,7 +76,8 @@ const InterviewCard: React.FC<InterviewCardProps> = ({
 
               <ul className="list-disc list-inside text-gray-700 space-y-1">
                 <li>
-                  <strong>Duration:</strong> 30 minutes
+                  <strong>Duration:</strong> {invitationDetails.duration}{" "}
+                  minutes
                 </li>
                 <li>
                   <strong>Total Questions:</strong>{" "}

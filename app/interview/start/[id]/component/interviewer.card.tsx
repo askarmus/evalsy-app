@@ -44,7 +44,6 @@ const InterviewerStartCard: React.FC<InterviewerCardProps> = ({
         </div>
       </CardHeader>
 
-      {/* Biography */}
       <CardBody className="px-3 py-0 text-small text-default-400">
         <p>{interviewer.biography}</p>
       </CardBody>

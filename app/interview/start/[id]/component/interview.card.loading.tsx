@@ -1,10 +1,7 @@
 import {
-  Button,
   Card,
   CardBody,
-  CardFooter,
   CardHeader,
-  Checkbox,
   Navbar,
   NavbarBrand,
   NavbarContent,
@@ -12,7 +9,6 @@ import {
   Skeleton,
 } from "@heroui/react";
 import React, { useState } from "react";
-import { AiOutlineClockCircle } from "react-icons/ai";
 
 export default function InterviewCardLoading() {
   return (

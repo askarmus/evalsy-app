@@ -7,7 +7,6 @@ interface InterviewCardProps {
 }
 
 const ThankYou: React.FC<InterviewCardProps> = ({ invitationDetails }) => {
-  const [isChecked, setIsChecked] = useState(false);
   return (
     <div className="min-h-screen bg-gray-100">
       <Navbar maxWidth="full">

@@ -1,35 +1,32 @@
-import { uploadLogo } from "@/services/company.service";
-import { updateQuestion } from "@/services/interview.service"; // Import the API call
 import { Button } from "@heroui/react";
 import React, { useState, useRef, useEffect } from "react";
 import { AiFillStepForward, AiOutlineAudio } from "react-icons/ai";
 
 interface AudioRecorderProps {
-  hasAnswered: boolean; // Track if the user has answered the current question
-  setHasAnswered: React.Dispatch<React.SetStateAction<boolean>>; // Function to update the state in parent
-  onNextQuestion: () => void; // Callback to move to the next question
+  hasAnswered: boolean;
+  setHasAnswered: React.Dispatch<React.SetStateAction<boolean>>;
+  onNextQuestion: () => void;
   currentQuestion: any;
   invitationId: string;
-  onRecordingComplete: (questionId: number) => void; // Callback for recording completion
+  onRecordingComplete: (questionId: string) => void;
+  onAudioRecorded: (file: File, startTime: Date, endTime: Date) => void; // Move audio upload to parent
+  onStopRecording?: () => void; // Optional prop for stopping recording externally
 }
 
 const AudioRecorder: React.FC<AudioRecorderProps> = ({
   hasAnswered,
   setHasAnswered,
   onNextQuestion,
-  currentQuestion,
-  invitationId,
-  onRecordingComplete,
+  onAudioRecorded,
+  onStopRecording,
 }) => {
   const [isRecording, setIsRecording] = useState<boolean>(false);
-  const [isUploading, setIsUploading] = useState<boolean>(false);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
-  const [startTime, setStartTime] = useState<Date>(new Date()); // Track recording start time
-  const [endTime, setEndTime] = useState<Date>(new Date()); // Track recording end time
+  const [startTime, setStartTime] = useState<Date>(new Date());
 
   useEffect(() => {
     if (hasAnswered) {
-      setIsRecording(false); // Ensure recording is stopped when the user answers
+      setIsRecording(false);
     }
   }, [hasAnswered]);
 
@@ -49,10 +46,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
           type: "audio/webm",
         });
 
-        setEndTime(new Date());
-
-        await uploadAudioAsync(file);
-
+        onAudioRecorded(file, startTime, new Date()); // Call parent function
         setHasAnswered(true);
       };
 
@@ -69,32 +63,10 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
       mediaRecorderRef.current.stop();
     }
     setIsRecording(false);
-  };
 
-  const uploadAudioAsync = async (file: File): Promise<void> => {
-    setIsUploading(true);
-
-    try {
-      const response = await uploadLogo(file);
-      const recordedUrl = response.data?.url;
-
-      console.log("Audio uploaded successfully:", recordedUrl);
-
-      console.log("currentQuestion", currentQuestion);
-      await updateQuestion({
-        invitationId,
-        questionId: currentQuestion.id,
-        recordedUrl,
-        startTime,
-        endTime,
-      });
-      onRecordingComplete(currentQuestion.id);
-
-      console.log("Interview question updated successfully");
-    } catch (error) {
-      console.error("Failed to upload audio or update question:", error);
-    } finally {
-      setIsUploading(false);
+    // Call optional stopRecording function from parent if provided
+    if (onStopRecording) {
+      onStopRecording();
     }
   };
 
@@ -107,41 +79,28 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
   };
 
   const handleNextQuestion = (): void => {
-    setHasAnswered(false); // Reset the answer state
-    onNextQuestion(); // Move to the next question
+    setHasAnswered(false);
+    onNextQuestion();
   };
 
   return (
     <div>
       {!hasAnswered ? (
         <>
-          {!isUploading && (
-            <Button
-              color="danger"
-              variant="bordered"
-              endContent={
-                !isRecording ? (
-                  <AiOutlineAudio />
-                ) : (
-                  <span className="recording"></span>
-                )
-              }
-              onPress={handleAnswerClick}
-              isDisabled={isUploading}
-            >
-              {isRecording ? "Stop Recording" : "Answer"}
-            </Button>
-          )}
-          {isUploading && (
-            <Button
-              color="danger"
-              variant="bordered"
-              isLoading={true}
-              isDisabled={true}
-            >
-              Loading Next Question
-            </Button>
-          )}
+          <Button
+            color="danger"
+            variant="bordered"
+            endContent={
+              !isRecording ? (
+                <AiOutlineAudio />
+              ) : (
+                <span className="recording"></span>
+              )
+            }
+            onPress={handleAnswerClick}
+          >
+            {isRecording ? "Stop Recording" : "Answer"}
+          </Button>
         </>
       ) : (
         <Button
