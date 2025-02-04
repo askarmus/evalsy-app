@@ -16,6 +16,8 @@ import InterviewNavbar from "./component/InterviewNavbar";
 import InterviewerStartCard from "./component/interviewer.card";
 import InterviewCard from "./component/interview.card";
 import { uploadLogo } from "@/services/company.service";
+import VideoCard from "./component/video.card";
+import CandidateInfoCard from "./component/candidate.info.card";
 
 export interface Question {
   id: string;
@@ -32,15 +34,14 @@ export default function InterviewPage() {
   const [startingInterview, setStartingInterview] = useState(false);
   const [interviewStartedOn, setInterviewStartedOn] = useState("");
   const [isTimeOver, setIsTimeOver] = useState(false);
+  const [isWelcomeMessageReading, setWelcomeMessageReading] = useState(false);
   const [showWelcomeMessage, setShowWelcomeMessage] = useState(false);
-  const [showReplayButton, setShowReplayButton] = useState(false);
   const [recordedQuestions, setRecordedQuestions] = useState<string[]>([]); // Track completed recordings
   const hasFetched = useRef(false);
   const [isUploading, setIsUploading] = useState<boolean>(false);
 
   const handleRecordingComplete = (questionId: string): void => {
     setRecordedQuestions((prev) => [...prev, questionId]);
-    setShowReplayButton(false);
   };
 
   const [invitationDetails, setInvitationDetails] = useState<any>(null);
@@ -48,31 +49,35 @@ export default function InterviewPage() {
   const [hasAnswered, setHasAnswered] = useState<boolean>(false);
 
   const handleNextQuestion = (): void => {
-    setShowReplayButton(false);
     if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex((prev) => prev + 1);
       setHasAnswered(false);
-      const audioUrl = questions[currentQuestionIndex]?.audioUrl;
+      const audioUrl = questions[currentQuestionIndex + 1]?.audioUrl;
       if (audioUrl) {
         const audio = new Audio(audioUrl);
-        audio.play();
-        audio.addEventListener("ended", () => {
-          setShowReplayButton(true);
-        });
+
+        setTimeout(() => {
+          audio.play();
+        }, 3000);
+        audio.addEventListener("ended", () => {});
       }
     }
   };
 
   const readWelcomeMessage = () => {
+    setWelcomeMessageReading(true);
     const audio = new Audio(invitationDetails.job.welcomeAudioUrl);
     audio.play().catch((error) => {
       console.error("Error playing audio:", error);
     });
 
     audio.addEventListener("ended", () => {
-      setCurrentQuestionIndex(0);
-      const firstQuestion = new Audio(questions[0].audioUrl);
-      firstQuestion.play();
+      setTimeout(() => {
+        setCurrentQuestionIndex(0);
+        const firstQuestion = new Audio(questions[0].audioUrl);
+        firstQuestion.play();
+        setWelcomeMessageReading(false);
+      }, 2000);
     });
   };
 
@@ -93,9 +98,7 @@ export default function InterviewPage() {
       setInterviewStartedOn(data.statusUpdateAt);
       setInvitationDetails(data);
       if (data.interviewResult) {
-        const filteredQuestions = data.interviewResult.questionAnswers.filter(
-          (q) => q.startTime === null
-        );
+        const filteredQuestions = data.interviewResult.questionAnswers.filter((q) => q.startTime === null);
         setQuestions(filteredQuestions);
         setCurrentQuestionIndex(0);
       } else {
@@ -134,18 +137,13 @@ export default function InterviewPage() {
     return <InterviewCardLoading />;
   }
 
-  const { candidateName, duration, candidateEmail, job, company } =
-    invitationDetails;
+  const { candidateName, duration, candidateEmail, job, company } = invitationDetails;
 
   if (recordedQuestions.length === questions.length) {
     return <ThankYou invitationDetails={invitationDetails} />;
   }
 
-  const uploadAudioAsync = async (
-    file: File,
-    startTime: Date,
-    endTime: Date
-  ): Promise<void> => {
+  const uploadAudioAsync = async (file: File, startTime: Date, endTime: Date): Promise<void> => {
     setIsUploading(true);
     try {
       const response = await uploadLogo(file);
@@ -175,86 +173,35 @@ export default function InterviewPage() {
     <>
       {isExpiredOrCompleted && <InterviewExpired />}
       {isStarted && !isExpiredOrCompleted && (
-        <div className="min-h-screen bg-gray-100">
-          <InterviewNavbar
-            company={company}
-            totalMinutes={duration}
-            startTime={interviewStartedOn}
-            onInterviewComplete={handleInterviewComplete}
-          />
-          <main className="max-w-7xl mx-auto px-6 py-8">
-            <Card className="p-8" shadow="none">
-              <CardHeader className="justify-between mb-10">
-                <div className="flex gap-5">
-                  <div className="flex flex-col gap-1 items-start justify-center">
-                    <h4 className="text-small font-semibold leading-none text-default-600">
-                      <span className="text-small tracking-tight text-default-400">
-                        Hello,
-                      </span>{" "}
-                      {candidateName}
-                    </h4>
-                    <h5 className="text-small tracking-tight text-default-400">
-                      {candidateEmail}
-                    </h5>
-                  </div>
-                </div>
-                <div>
-                  <h3 className="text-md font-semibold">
-                    <span className="text-gray-400 text-sm font-weight: 100 ">
-                      Interviewing Position:
-                    </span>{" "}
-                    {job.jobTitle}
-                  </h3>
-                  <h3 className="text-md font-semibold">
-                    <span className="text-gray-400 text-sm font-weight: 100 ">
-                      Company:
-                    </span>{" "}
-                    {company.name}
-                  </h3>
-                </div>
+        <div className='min-h-screen bg-gray-100'>
+          <InterviewNavbar company={company} totalMinutes={duration} startTime={interviewStartedOn} onInterviewComplete={handleInterviewComplete} />
+          <main className='max-w-7xl mx-auto px-6 py-8'>
+            <Card className='p-8' shadow='none'>
+              <CardHeader>
+                <CandidateInfoCard candidateEmail={candidateEmail} candidateName={candidateName} company={company} job={job} />
               </CardHeader>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <Card className="py-4" shadow="sm">
-                  <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
-                    <p className="text-tiny uppercase font-bold">
-                      Questions #{" "}
-                      {1 +
-                        currentQuestionIndex +
-                        (invitationDetails.job.questions.length -
-                          questions.length)}{" "}
-                      of {invitationDetails.job.questions.length}
-                    </p>
+              <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
+                <Card className='py-4' shadow='sm'>
+                  <CardHeader className='pb-0 pt-2 px-4 flex-col items-start'>
+                    {currentQuestionIndex !== -1 && (
+                      <p className='text-tiny uppercase font-bold'>
+                        Questions # {1 + currentQuestionIndex + (invitationDetails.job.questions.length - questions.length)} of {invitationDetails.job.questions.length}
+                      </p>
+                    )}
+                    {currentQuestionIndex == -1 && <p className='text-tiny uppercase font-bold'>Welcome Message</p>}
                   </CardHeader>
-                  <CardBody className="overflow-visible py-2">
-                    <div>
-                      <blockquote className="border px-4 my-6 py-3 rounded-xl [&>p]:m-0 border-default-200 dark:border-default-100 bg-default-200/20">
-                        {currentQuestionIndex != -1 &&
-                          questions[currentQuestionIndex]?.text}
-                        {currentQuestionIndex == -1 &&
-                          invitationDetails.job.welcomeMessage}
+                  <CardBody className='overflow-visible py-2'>
+                    {!hasAnswered && (
+                      <blockquote className='px-4 my-6 py-3 text-2xl'>
+                        {currentQuestionIndex != -1 && questions[currentQuestionIndex]?.text}
+                        {currentQuestionIndex == -1 && invitationDetails.job.welcomeMessage}
                       </blockquote>
-                      <div className="flex items-center space-x-4">
-                        {showReplayButton && (
-                          <Button
-                            size="sm"
-                            color="primary"
-                            endContent={<AiOutlinePlayCircle />}
-                            onPress={() => {
-                              const audio = new Audio(
-                                questions[currentQuestionIndex]?.audioUrl
-                              );
-                              audio.play();
-                            }}
-                          >
-                            Replay
-                          </Button>
-                        )}
-                      </div>
-                    </div>
+                    )}
+                    {hasAnswered && <blockquote className='border px-4 my-6 py-3 rounded-xl [&>p]:m-0 border-default-200 dark:border-default-100 bg-default-200/20'>Please click the {"Next Question"} button to load the next question.</blockquote>}
                   </CardBody>
-                  <CardFooter className="absolute  bottom-0 z-10 border-1">
-                    <div className="flex flex-grow gap-2 items-center">
+                  <CardFooter className='absolute  bottom-0 z-10 border-1'>
+                    <div className='flex flex-grow gap-2 items-center'>
                       {currentQuestionIndex != -1 && (
                         <AudioRecorder
                           onRecordingComplete={handleRecordingComplete}
@@ -264,20 +211,13 @@ export default function InterviewPage() {
                           setHasAnswered={setHasAnswered}
                           onNextQuestion={handleNextQuestion}
                           onAudioRecorded={uploadAudioAsync} // Pass the new function
-                          onStopRecording={() =>
-                            console.log("Recording stopped externally")
-                          }
+                          onStopRecording={() => console.log("Recording stopped externally")}
                         />
                       )}
 
                       {currentQuestionIndex == -1 && (
-                        <Button
-                          endContent={<AiTwotoneRocket />}
-                          color="danger"
-                          variant="bordered"
-                          onPress={() => readWelcomeMessage()}
-                        >
-                          Start Interview
+                        <Button isDisabled={isWelcomeMessageReading} endContent={<AiTwotoneRocket />} color='danger' variant='bordered' onPress={() => readWelcomeMessage()}>
+                          Read welcome message.
                         </Button>
                       )}
                     </div>
@@ -285,34 +225,17 @@ export default function InterviewPage() {
                 </Card>
 
                 {/* Candidate Section */}
-                <div className="flex flex-col gap-6">
-                  <Card className="py-4" shadow="sm">
-                    <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
-                      <p className="text-tiny uppercase font-bold">Video</p>
-                    </CardHeader>
-                    <CardBody>
-                      <div className="w-full aspect-video bg-black rounded-lg"></div>
-                    </CardBody>
-                  </Card>
-                  <InterviewerStartCard
-                    interviewer={invitationDetails.interviewer}
-                  />
+                <div className='flex flex-col gap-6'>
+                  <VideoCard />
+                  <InterviewerStartCard interviewer={invitationDetails.interviewer} />
                 </div>
               </div>
             </Card>
           </main>
         </div>
       )}
-      {!isStarted && !isExpiredOrCompleted && (
-        <InterviewCard
-          loading={startingInterview}
-          onStartButtonClick={handleStartInterview}
-          invitationDetails={invitationDetails}
-        />
-      )}
-      {(currentQuestionIndex > questions.length - 1 || isTimeOver) && (
-        <ThankYou invitationDetails={invitationDetails} />
-      )}
+      {!isStarted && !isExpiredOrCompleted && <InterviewCard loading={startingInterview} onStartButtonClick={handleStartInterview} invitationDetails={invitationDetails} />}
+      {(currentQuestionIndex > questions.length - 1 || isTimeOver) && <ThankYou invitationDetails={invitationDetails} />}
     </>
   );
 }
