@@ -1,4 +1,6 @@
+import { Avatar, Card, CardBody, Divider } from "@heroui/react";
 import React from "react";
+import { AiOutlineBank, AiOutlineHome, AiOutlineMail, AiOutlineUser } from "react-icons/ai";
 
 type CandidateInfoProps = {
   candidateName: string;
@@ -11,41 +13,43 @@ type CandidateInfoProps = {
   };
 };
 
-const CandidateInfoCard: React.FC<CandidateInfoProps> = ({
-  candidateName,
-  candidateEmail,
-  job,
-  company,
-}) => {
+const CandidateInfoCard: React.FC<CandidateInfoProps> = ({ candidateName, candidateEmail, job, company }) => {
+  const stats = [
+    { id: 1, name: "Transactions every 24 hours", value: "44 million" },
+    { id: 2, name: "Assets under holding", value: "$119 trillion" },
+    { id: 3, name: "New users annually", value: "46,000" },
+  ];
+
   return (
-    <div className="justify-between mb-10">
-      <div className="flex gap-5">
-        <div className="flex flex-col gap-1 items-start justify-center">
-          <h4 className="text-small font-semibold leading-none text-default-600">
-            <span className="text-small tracking-tight text-default-400">
-              Hello,
-            </span>{" "}
-            {candidateName}
-          </h4>
-          <h5 className="text-small tracking-tight text-default-400">
-            {candidateEmail}
-          </h5>
+    <div className='w-full mb-10'>
+      <dl className='grid grid-cols-1 lg:grid-cols-3'>
+        <div className=' flex max-w-xs flex-col  '>
+          <div className='flex items-center gap-3 w-full sm:w-auto'>
+            <Avatar name='XZ' className='w-12 h-12 text-lg' />
+            <div>
+              <h2 className='text-lg font-semibold'>Hello, {candidateName}</h2>
+              <div className='flex items-center text-gray-500 text-sm gap-1'>
+                <AiOutlineMail className='w-4 h-4' />
+                <span> {candidateEmail}</span>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-      <div>
-        <h3 className="text-md font-semibold">
-          <span className="text-gray-400 text-sm font-weight: 100 ">
-            Interviewing Position:
-          </span>{" "}
-          {job.jobTitle}
-        </h3>
-        <h3 className="text-md font-semibold">
-          <span className="text-gray-400 text-sm font-weight: 100 ">
-            Company:
-          </span>{" "}
-          {company.name}
-        </h3>
-      </div>
+        <div className=' flex max-w-xs flex-col'>
+          <p className='text-gray-400 text-sm'>Interviewing Position</p>
+          <div className='flex items-center gap-1 text-black font-semibold'>
+            <AiOutlineUser className='w-4 h-4' />
+            <span>{job.jobTitle}</span>
+          </div>
+        </div>
+        <div className=' flex max-w-xs flex-col  '>
+          <p className='text-gray-400 text-sm'>Company</p>
+          <div className='flex items-center gap-1 text-black font-semibold'>
+            <AiOutlineBank className='w-4 h-4' />
+            <span>{company.name}</span>
+          </div>
+        </div>
+      </dl>
     </div>
   );
 };
