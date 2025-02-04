@@ -19,6 +19,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({ hasAnswered, setHasAnswer
   const [startTime, setStartTime] = useState<Date>(new Date());
   const audioRef = React.useRef<HTMLAudioElement | null>(null);
   const [isReplaying, setIsReplaying] = useState<boolean>(false);
+  const [audioStream, setAudioStream] = useState(null);
 
   const replayQuestion = (): void => {
     if (currentQuestion.audioUrl) {
@@ -103,7 +104,6 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({ hasAnswered, setHasAnswer
           <Button color='primary' isDisabled={isReplaying} endContent={!isRecording ? <AiOutlineAudio /> : <span className='recording'></span>} onPress={handleAnswerClick}>
             {isRecording ? "Stop Recording" : "Answer"}
           </Button>
-
           {currentQuestion.audioUrl && !isRecording && (
             <Button
               color='secondary'

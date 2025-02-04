@@ -172,7 +172,7 @@ export default function InterviewPage() {
   return (
     <>
       {isExpiredOrCompleted && <InterviewExpired />}
-      {isStarted && !isExpiredOrCompleted && (
+      {isStarted && !isExpiredOrCompleted && !isTimeOver && (
         <div className='min-h-screen bg-gray-100'>
           <InterviewNavbar company={company} totalMinutes={duration} startTime={interviewStartedOn} onInterviewComplete={handleInterviewComplete} />
           <main className='max-w-7xl mx-auto px-6 py-8'>
