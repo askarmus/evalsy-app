@@ -13,7 +13,6 @@ interface CountdownTimerProps {
 
 const CountdownTimer: React.FC<CountdownTimerProps> = ({ totalMinutes, startTime, onComplete }) => {
   const [remainingSeconds, setRemainingSeconds] = useState(0);
-  const [isExpired, setIsExpired] = useState(false);
 
   // Convert startTime from string to Date object
   const startDateTime = new Date(startTime);
@@ -23,21 +22,13 @@ const CountdownTimer: React.FC<CountdownTimerProps> = ({ totalMinutes, startTime
     const now = new Date();
     const timeLeft = Math.max((expiryDateTime.getTime() - now.getTime()) / 1000, 0);
     setRemainingSeconds(Math.floor(timeLeft));
-
-    if (timeLeft === 0) {
-      setIsExpired(true);
-      onComplete(); // Trigger manually if expired
-    }
   }, [startTime, totalMinutes]);
 
   const { seconds, minutes, isRunning } = useTimer({
     expiryTimestamp: expiryDateTime,
-    autoStart: remainingSeconds > 0,
+    autoStart: true,
     onExpire: () => {
-      if (!isExpired) {
-        setIsExpired(true);
-        onComplete();
-      }
+      onComplete();
     },
   });
 
