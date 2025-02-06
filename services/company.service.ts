@@ -10,7 +10,7 @@ export const saveCompanySettings = async (payload: any) => {
   return response.data.data;
 };
 
-export const uploadLogo = async (file: File) => {
+export const upload = async (file: File) => {
   const formData = new FormData();
   formData.append("file", file);
 

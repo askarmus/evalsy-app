@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import { Card, CardHeader, CardBody, CardFooter, Button } from "@heroui/react";
-import { AiOutlinePlayCircle, AiTwotoneRocket } from "react-icons/ai";
+import { AiTwotoneRocket } from "react-icons/ai";
 import { useParams } from "next/navigation";
 import { getInvitationDetails } from "@/services/invitation.service";
 import InterviewCardLoading from "./component/interview.card.loading";
@@ -15,9 +15,9 @@ import { showToast } from "@/app/utils/toastUtils";
 import InterviewNavbar from "./component/InterviewNavbar";
 import InterviewerStartCard from "./component/interviewer.card";
 import InterviewCard from "./component/interview.card";
-import { uploadLogo } from "@/services/company.service";
-import VideoCard from "./component/video.card";
+import { upload as upload } from "@/services/company.service";
 import CandidateInfoCard from "./component/candidate.info.card";
+import VideoRecorder from "./component/video.card";
 
 export interface Question {
   id: string;
@@ -146,7 +146,7 @@ export default function InterviewPage() {
   const uploadAudioAsync = async (file: File, startTime: Date, endTime: Date): Promise<void> => {
     setIsUploading(true);
     try {
-      const response = await uploadLogo(file);
+      const response = await upload(file);
       const recordedUrl = response.data?.url;
 
       await updateQuestion({
@@ -226,7 +226,7 @@ export default function InterviewPage() {
 
                 {/* Candidate Section */}
                 <div className='flex flex-col gap-6'>
-                  <VideoCard />
+                  <VideoRecorder invitationId={id as string} />
                   <InterviewerStartCard interviewer={invitationDetails.interviewer} />
                 </div>
               </div>
