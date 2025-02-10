@@ -28,3 +28,33 @@ body {
     opacity: 0.2;
   }
 }
+
+/* Technical Accuracy */
+.color-technical-accuracy {
+  background-color: rgba(255, 99, 132, 0.6);
+}
+
+/* Clarity */
+.color-clarity {
+  background-color: rgba(54, 162, 235, 0.6);
+}
+
+/* Problem Solving */
+.color-problem-solving {
+  background-color: rgba(255, 206, 86, 0.6);
+}
+
+/* Real World Impact */
+.color-real-world-impact {
+  background-color: rgba(75, 192, 192, 0.6);
+}
+
+/* Confidence Level */
+.color-confidence-level {
+  background-color: rgba(153, 102, 255, 0.6);
+}
+
+/* Communication Skills */
+.color-communication-skills {
+  background-color: rgba(255, 159, 64, 0.6);
+}

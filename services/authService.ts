@@ -1,5 +1,5 @@
 import apiClient from "@/helpers/apiClient";
-import { LoginFormType, RegisterFormType } from "@/helpers/types";
+import { ResetPasswordFormType, ChangePasswordFormType, ForgetPasswordFormType, LoginFormType, RegisterFormType } from "@/helpers/types";
 import Cookies from "js-cookie";
 
 export const registerUser = async (values: RegisterFormType) => {
@@ -7,7 +7,21 @@ export const registerUser = async (values: RegisterFormType) => {
   return response.data;
 };
 
-export const loginUser = async (values) => {
+export const forgetPassword = async (values: ForgetPasswordFormType) => {
+  const response = await apiClient.post("/auth/forgotPassword", values);
+  return response.data;
+};
+
+export const changePassword = async (values: ChangePasswordFormType) => {
+  const response = await apiClient.post("/auth/changePassword", values);
+  return response.data;
+};
+
+export const resetPassword = async (values: ResetPasswordFormType) => {
+  const response = await apiClient.post("/auth/resetPassword", values);
+  return response.data;
+};
+export const loginUser = async (values: LoginFormType) => {
   const response = await apiClient.post("/auth/login", values);
 
   if (response.data?.token) {

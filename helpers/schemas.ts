@@ -1,29 +1,26 @@
 import { array, object, ref, string } from "yup";
 
 export const LoginSchema = object().shape({
-  email: string()
-    .email("This field must be an email")
-    .required("Email is required"),
+  email: string().email("This field must be an email").required("Email is required"),
   password: string().required("Password is required"),
 });
 
 export const RegisterSchema = object().shape({
   name: string().required("Name is required"),
-  email: string()
-    .email("This field must be an email")
-    .required("Email is required"),
+  email: string().email("This field must be an email").required("Email is required"),
   password: string().required("Password is required"),
   confirmPassword: string()
     .required("Confirm password is required")
     .oneOf([ref("password")], "Passwords must match"),
 });
 
+export const ForgetPasswordSchema = object().shape({
+  email: string().email("This field must be an email").required("Email is required"),
+});
 export const AddJobSchema = object().shape({
   jobTitle: string().required("Title is required"),
   description: string().required("Description is required"),
-  welcomeMessage: string()
-    .required("Welcome message is required")
-    .min(100, "Welcome message must be at least 100 characters long"),
+  welcomeMessage: string().required("Welcome message is required").min(100, "Welcome message must be at least 100 characters long"),
   experienceLevel: string().required("Please select a experience Level"),
 
   questions: array()
@@ -57,4 +54,19 @@ export const CompanySettingsSchema = object().shape({
   twitter: string().url("Invalid Twitter URL").nullable(),
   logo: string().url("Invalid logo URL").nullable(),
   phone: string().nullable(),
+});
+
+export const ChangePasswordSchema = object().shape({
+  newPassword: string().min(8, "Password must be at least 8 characters long").required("New Password is required"),
+  confirmPassword: string()
+    .oneOf([ref("newPassword"), undefined], "Passwords must match")
+    .required("Confirm Password is required"),
+});
+
+export const ChangePasswordSettingSchema = object().shape({
+  currentPassword: string().required("Current Password is required"),
+  newPassword: string().min(8, "Password must be at least 8 characters long").required("New Password is required"),
+  confirmPassword: string()
+    .oneOf([ref("newPassword"), undefined], "Passwords must match")
+    .required("Confirm Password is required"),
 });
