@@ -7,12 +7,15 @@ import Link from "next/link";
 import { DarkModeSwitch } from "./darkmodeswitch";
 import { AiOutlineHome, AiOutlineNotification, AiOutlineSetting, AiOutlineShopping, AiOutlineUser } from "react-icons/ai";
 import { Logo } from "../logo";
+import { usePathname } from "next/navigation";
 
 interface Props {
   children: React.ReactNode;
 }
 
 export const NavbarWrapper = ({ children }: Props) => {
+  const currentPath = usePathname();
+
   return (
     <div className='relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden '>
       <Navbar
@@ -27,42 +30,48 @@ export const NavbarWrapper = ({ children }: Props) => {
             <Logo />
           </NavbarBrand>
         </NavbarContent>
+
         <NavbarContent className='hidden sm:flex gap-4' justify='center'>
-          <NavbarItem>
+          <NavbarItem isActive={currentPath === "/dashboard"}>
             <Link className='flex items-center text-default-900 hover:text-gray-800 gap-2' href='/dashboard'>
               <AiOutlineHome />
-              Dashbaord
+              Dashboard
             </Link>
           </NavbarItem>
-          <NavbarItem>
-            <Link className='flex items-center text-default-900  hover:text-gray-800 gap-2' href='/jobs/list'>
+
+          <NavbarItem isActive={currentPath === "/jobs/list"}>
+            <Link className='flex items-center text-default-900 hover:text-gray-800 gap-2' href='/jobs/list'>
               <AiOutlineShopping />
               Job
             </Link>
           </NavbarItem>
-          <NavbarItem>
+
+          <NavbarItem isActive={currentPath === "/interview/result"}>
             <Link className='flex items-center text-default-900 hover:text-gray-800 gap-2' href='/interview/result'>
               <AiOutlineNotification />
               Result
             </Link>
           </NavbarItem>
-          <NavbarItem isActive>
-            <Link className='flex items-center text-default-900  hover:text-gray-800 gap-2' href='/company/settings'>
+
+          <NavbarItem isActive={currentPath === "/company/settings"}>
+            <Link className='flex items-center text-default-900 hover:text-gray-800 gap-2' href='/company/settings'>
               <AiOutlineSetting />
               Settings
             </Link>
           </NavbarItem>
-          <NavbarItem>
-            <Link className='flex items-center text-default-900  hover:text-gray-800 gap-2' href='/jobs/interviwers'>
+
+          <NavbarItem isActive={currentPath === "/jobs/interviwers"}>
+            <Link className='flex items-center text-default-900 hover:text-gray-800 gap-2' href='/jobs/interviwers'>
               <AiOutlineUser />
-              Interviwers
+              Interviewers
             </Link>
           </NavbarItem>
         </NavbarContent>
+
         <NavbarContent className='md:hidden'>
           <BurguerButton />
         </NavbarContent>
-        <NavbarContent className='w-full max-md:hidden'></NavbarContent>
+
         <NavbarContent justify='end' className='w-fit data-[justify=end]:flex-grow-0'>
           <NavbarContent>
             <DarkModeSwitch />
