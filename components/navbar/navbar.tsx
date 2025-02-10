@@ -29,7 +29,7 @@ export const NavbarWrapper = ({ children }: Props) => {
         </NavbarContent>
         <NavbarContent className='hidden sm:flex gap-4' justify='center'>
           <NavbarItem>
-            <Link className='flex items-center text-default-900 hover:text-gray-800 gap-2' href='/'>
+            <Link className='flex items-center text-default-900 hover:text-gray-800 gap-2' href='/dashboard'>
               <AiOutlineHome />
               Dashbaord
             </Link>
