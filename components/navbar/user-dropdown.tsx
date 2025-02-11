@@ -1,16 +1,30 @@
-import {
-  Avatar,
-  Dropdown,
-  DropdownItem,
-  DropdownMenu,
-  DropdownTrigger,
-  NavbarItem,
-} from "@heroui/react";
-import React, { useCallback } from "react";
+import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, NavbarItem, User } from "@heroui/react";
+import React, { useCallback, useEffect, useState } from "react";
 import Cookies from "js-cookie";
 
 export const UserDropdown = () => {
-  const handleLogout = useCallback(async () => {
+  const [user, setUser] = useState({ name: "", initials: "" });
+
+  useEffect(() => {
+    // Assuming the JWT token is stored in cookies under 'userAuth'
+    const token = Cookies.get("userAuth");
+
+    if (token) {
+      const payload = JSON.parse(atob(token.split(".")[1]));
+      const name = payload.name || "";
+
+      // Extract initials from the name
+      const initials = name
+        .split(" ")
+        .map((word) => word[0])
+        .join("")
+        .toUpperCase();
+
+      setUser({ name, initials });
+    }
+  }, []);
+
+  const handleLogout = useCallback(() => {
     Cookies.remove("userAuth");
     window.location.href = "/login";
   }, []);
@@ -19,32 +33,18 @@ export const UserDropdown = () => {
     <Dropdown>
       <NavbarItem>
         <DropdownTrigger>
-          <Avatar
-            as="button"
-            color="secondary"
-            size="md"
-            src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
+          <User
+            avatarProps={{
+              name: user.initials,
+              color: "primary",
+            }}
+            description='Signed in as'
+            name={user.name || "User"}
           />
         </DropdownTrigger>
       </NavbarItem>
-      <DropdownMenu
-        aria-label="User menu actions"
-        onAction={(actionKey) => console.log({ actionKey })}
-      >
-        <DropdownItem
-          key="profile"
-          className="flex flex-col justify-start w-full items-start"
-        >
-          <p>Signed in as</p>
-          <p>zoey@example.com</p>
-        </DropdownItem>
-
-        <DropdownItem
-          key="logout"
-          color="danger"
-          className="text-danger"
-          onPress={handleLogout}
-        >
+      <DropdownMenu aria-label='User menu actions' onAction={(actionKey) => console.log({ actionKey })}>
+        <DropdownItem key='logout' color='danger' className='text-danger' onPress={handleLogout}>
           Log Out
         </DropdownItem>
       </DropdownMenu>

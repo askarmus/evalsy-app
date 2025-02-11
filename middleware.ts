@@ -15,12 +15,12 @@ export function middleware(request: NextRequest) {
 
   // If the user IS logged in and tries to access login or register, redirect to "/jobs/list"
   if (token && ["/login", "/register"].includes(pathname)) {
-    return NextResponse.redirect(new URL("/jobs/list", request.url));
+    return NextResponse.redirect(new URL("/dashboard", request.url));
   }
 
   // If the user is logged in and visiting the root "/", redirect to "/jobs/list"
   if (token && pathname === "/") {
-    return NextResponse.redirect(new URL("/jobs/list", request.url));
+    return NextResponse.redirect(new URL("/dashboard", request.url));
   }
 
   // Allow the request to proceed if none of the above conditions are met
@@ -29,12 +29,5 @@ export function middleware(request: NextRequest) {
 
 // Ensure the middleware only applies to necessary paths
 export const config = {
-  matcher: [
-    "/",
-    "/jobs/:path*",
-    "/login",
-    "/register",
-    "/company/:path",
-    "/company/:path",
-  ],
+  matcher: ["/", "/jobs/:path*", "/login", "/dashboard", "/register", "/company/:path", "/company/:path"],
 };
