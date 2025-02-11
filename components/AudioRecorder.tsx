@@ -1,4 +1,4 @@
-import { Button } from "@heroui/react";
+import { Button, Progress } from "@heroui/react";
 import React, { useState, useRef, useEffect } from "react";
 import { AiFillSound, AiFillStepForward, AiOutlineAudio } from "react-icons/ai";
 
@@ -20,6 +20,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({ hasAnswered, setHasAnswer
   const audioRef = React.useRef<HTMLAudioElement | null>(null);
   const [isReplaying, setIsReplaying] = useState<boolean>(false);
   const [audioStream, setAudioStream] = useState(null);
+  const [countdown, setCountdown] = useState<number | null>(null);
 
   const replayQuestion = (): void => {
     if (currentQuestion.audioUrl) {
@@ -41,8 +42,17 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({ hasAnswered, setHasAnswer
   useEffect(() => {
     if (hasAnswered) {
       setIsRecording(false);
+      startCountdown();
     }
   }, [hasAnswered]);
+
+  // Handle automatic question transition after countdown ends
+  useEffect(() => {
+    if (countdown === 0) {
+      onNextQuestion(); // Move to next question after countdown
+      setCountdown(null); // Reset countdown
+    }
+  }, [countdown, onNextQuestion]);
 
   const startRecording = async (): Promise<void> => {
     try {
@@ -91,10 +101,18 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({ hasAnswered, setHasAnswer
       stopRecording();
     }
   };
-
-  const handleNextQuestion = (): void => {
-    setHasAnswered(false);
-    onNextQuestion();
+  const startCountdown = () => {
+    setCountdown(6); // 20 seconds countdown
+    const interval = setInterval(() => {
+      setCountdown((prev) => {
+        if (prev === 1) {
+          clearInterval(interval);
+          onNextQuestion(); // Move to next question automatically
+          return null;
+        }
+        return prev! - 1;
+      });
+    }, 1000);
   };
 
   return (
@@ -104,7 +122,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({ hasAnswered, setHasAnswer
           <Button color='primary' isDisabled={isReplaying} endContent={!isRecording ? <AiOutlineAudio /> : <span className='recording'></span>} onPress={handleAnswerClick}>
             {isRecording ? "Stop Recording" : "Answer"}
           </Button>
-          {currentQuestion.audioUrl && !isRecording && (
+          {currentQuestion && currentQuestion?.audioUrl && !isRecording && (
             <Button
               color='secondary'
               endContent={<AiFillSound />}
@@ -117,9 +135,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({ hasAnswered, setHasAnswer
           )}
         </>
       ) : (
-        <Button color='danger' variant='bordered' endContent={<AiFillStepForward />} onPress={handleNextQuestion}>
-          Next Question
-        </Button>
+        <Progress className='w-full' size='sm' minValue={0} maxValue={5} label='Loading next question...' value={5 - (countdown || 0)} />
       )}
     </div>
   );

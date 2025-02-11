@@ -1,6 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import CountdownTimer from "@/components/countdown.timer";
+import { DarkModeSwitch } from "@/components/navbar/darkmodeswitch";
 
 interface Company {
   name: string;
@@ -23,6 +24,7 @@ const InterviewNavbar: React.FC<InterviewNavbarProps> = ({ company, totalMinutes
       {/* Countdown Timer */}
       <div className='flex items-center gap-2'>
         <CountdownTimer totalMinutes={totalMinutes} startTime={startTime} onComplete={onInterviewComplete} />
+        <DarkModeSwitch />
       </div>
     </nav>
   );

@@ -50,17 +50,20 @@ export default function InterviewPage() {
 
   const handleNextQuestion = (): void => {
     if (currentQuestionIndex < questions.length - 1) {
-      setCurrentQuestionIndex((prev) => prev + 1);
-      setHasAnswered(false);
-      const audioUrl = questions[currentQuestionIndex + 1]?.audioUrl;
-      if (audioUrl) {
-        const audio = new Audio(audioUrl);
+      setTimeout(() => {
+        const index = currentQuestionIndex + 1;
+        setCurrentQuestionIndex(index);
+        setHasAnswered(false);
+        const audioUrl = questions[index]?.audioUrl;
+        if (audioUrl) {
+          const audio = new Audio(audioUrl);
 
-        setTimeout(() => {
-          audio.play();
-        }, 3000);
-        audio.addEventListener("ended", () => {});
-      }
+          setTimeout(() => {
+            audio.play();
+          }, 3000);
+          audio.addEventListener("ended", () => {});
+        }
+      }, 0); // Delay the update to the next event loop cycle
     }
   };
 
