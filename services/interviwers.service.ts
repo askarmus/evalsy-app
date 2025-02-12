@@ -7,12 +7,7 @@ export const getAllInterviewers = async () => {
 };
 
 // Create a new interviewer
-export const createInterviewer = async (payload: {
-  name: string;
-  jobTitle: string;
-  biography: string;
-  photoUrl?: string;
-}) => {
+export const createInterviewer = async (payload: { name: string; jobTitle: string; biography: string; photoUrl?: string }) => {
   const response = await apiClient.post("/interviewer/create", payload);
   return response.data;
 };

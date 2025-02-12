@@ -31,14 +31,14 @@ const CandidateInfoCard: React.FC<CandidateInfoProps> = ({ candidateName, candid
         </div>
         <div className=' flex max-w-xs flex-col'>
           <p className='text-gray-400 text-sm'>Interviewing Position</p>
-          <div className='flex items-center gap-1 text-black font-semibold'>
+          <div className='flex items-center gap-1   font-semibold'>
             <AiOutlineUser className='w-4 h-4' />
             <span>{job.jobTitle}</span>
           </div>
         </div>
         <div className=' flex max-w-xs flex-col  '>
           <p className='text-gray-400 text-sm'>Company</p>
-          <div className='flex items-center gap-1 text-black font-semibold'>
+          <div className='flex items-center gap-1 font-semibold'>
             <AiOutlineBank className='w-4 h-4' />
             <span>{company.name}</span>
           </div>

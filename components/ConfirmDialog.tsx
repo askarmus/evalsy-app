@@ -1,13 +1,5 @@
 import React from "react";
-import {
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  Button,
-  useDisclosure,
-} from "@heroui/react";
+import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button } from "@heroui/react";
 
 interface ConfirmDialogProps {
   isOpen: boolean;
@@ -19,22 +11,9 @@ interface ConfirmDialogProps {
   cancelButtonText?: string;
 }
 
-const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
-  isOpen,
-  onClose,
-  title,
-  description,
-  onConfirm,
-  confirmButtonText = "Confirm",
-  cancelButtonText = "Cancel",
-}) => {
+const ConfirmDialog: React.FC<ConfirmDialogProps> = ({ isOpen, onClose, title, description, onConfirm, confirmButtonText = "Confirm", cancelButtonText = "Cancel" }) => {
   return (
-    <Modal
-      isDismissable={false}
-      isKeyboardDismissDisabled={true}
-      isOpen={isOpen}
-      onOpenChange={onClose}
-    >
+    <Modal isDismissable={false} isKeyboardDismissDisabled={true} isOpen={isOpen} onOpenChange={onClose}>
       <ModalContent>
         {() => (
           <>
@@ -48,10 +27,10 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
 
             {/* Modal Footer */}
             <ModalFooter>
-              <Button color="danger" variant="light" onPress={onClose}>
+              <Button color='danger' variant='light' onPress={onClose}>
                 {cancelButtonText}
               </Button>
-              <Button color="primary" onPress={onConfirm}>
+              <Button color='primary' onPress={onConfirm}>
                 {confirmButtonText}
               </Button>
             </ModalFooter>

@@ -41,7 +41,9 @@ export default function InterviewPage() {
   const [isUploading, setIsUploading] = useState<boolean>(false);
 
   const handleRecordingComplete = (questionId: string): void => {
-    setRecordedQuestions((prev) => [...prev, questionId]);
+    const currentQuestions = recordedQuestions;
+    const updatedQuestions = [...currentQuestions, questionId];
+    setRecordedQuestions(updatedQuestions);
   };
 
   const [invitationDetails, setInvitationDetails] = useState<any>(null);
@@ -63,7 +65,7 @@ export default function InterviewPage() {
           }, 3000);
           audio.addEventListener("ended", () => {});
         }
-      }, 0); // Delay the update to the next event loop cycle
+      }, 0);
     }
   };
 
@@ -176,66 +178,57 @@ export default function InterviewPage() {
     <>
       {isExpiredOrCompleted && <InterviewExpired />}
       {isStarted && !isExpiredOrCompleted && !isTimeOver && (
-        <div className='min-h-screen bg-gray-100'>
+        <>
           <InterviewNavbar company={company} totalMinutes={duration} startTime={interviewStartedOn} onInterviewComplete={handleInterviewComplete} />
-          <main className='max-w-7xl mx-auto px-6 py-8'>
-            <Card className='p-8' shadow='none'>
-              <CardHeader>
-                <CandidateInfoCard candidateEmail={candidateEmail} candidateName={candidateName} company={company} job={job} />
-              </CardHeader>
+          <div className='min-h-screen  '>
+            <main className='max-w-7xl mx-auto px-6 py-8'>
+              <Card className='p-8' shadow='sm'>
+                <CardHeader>
+                  <CandidateInfoCard candidateEmail={candidateEmail} candidateName={candidateName} company={company} job={job} />
+                </CardHeader>
 
-              <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
-                <Card className='py-4' shadow='sm'>
-                  <CardHeader className='pb-0 pt-2 px-4 flex-col items-start'>
-                    {currentQuestionIndex !== -1 && (
-                      <p className='text-tiny uppercase font-bold'>
-                        Questions # {1 + currentQuestionIndex + (invitationDetails.job.questions.length - questions.length)} of {invitationDetails.job.questions.length}
-                      </p>
-                    )}
-                    {currentQuestionIndex == -1 && <p className='text-tiny uppercase font-bold'>Welcome Message</p>}
-                  </CardHeader>
-                  <CardBody className='overflow-visible py-2'>
-                    {!hasAnswered && (
-                      <blockquote className='px-4 my-6 py-3 text-2xl'>
-                        {currentQuestionIndex != -1 && questions[currentQuestionIndex]?.text}
-                        {currentQuestionIndex == -1 && invitationDetails.job.welcomeMessage}
-                      </blockquote>
-                    )}
-                    {hasAnswered && <blockquote className='border px-4 my-6 py-3 rounded-xl [&>p]:m-0 border-default-200 dark:border-default-100 bg-default-200/20'>Please click the {"Next Question"} button to load the next question.</blockquote>}
-                  </CardBody>
-                  <CardFooter className='absolute  bottom-0 z-10 border-1'>
-                    <div className='flex flex-grow gap-2 items-center'>
-                      {currentQuestionIndex != -1 && (
-                        <AudioRecorder
-                          onRecordingComplete={handleRecordingComplete}
-                          currentQuestion={questions[currentQuestionIndex]}
-                          invitationId={id as string}
-                          hasAnswered={hasAnswered}
-                          setHasAnswered={setHasAnswered}
-                          onNextQuestion={handleNextQuestion}
-                          onAudioRecorded={uploadAudioAsync} // Pass the new function
-                          onStopRecording={() => console.log("Recording stopped externally")}
-                        />
+                <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
+                  <Card className='py-4' shadow='sm'>
+                    <CardHeader className='pb-0 pt-2 px-4 flex-col items-start'>
+                      {currentQuestionIndex !== -1 && (
+                        <p className='text-tiny uppercase font-bold'>
+                          Questions # {1 + currentQuestionIndex + (invitationDetails.job.questions.length - questions.length)} of {invitationDetails.job.questions.length}
+                        </p>
                       )}
-
-                      {currentQuestionIndex == -1 && (
-                        <Button isDisabled={isWelcomeMessageReading} endContent={<AiTwotoneRocket />} color='danger' variant='bordered' onPress={() => readWelcomeMessage()}>
-                          Read welcome message.
-                        </Button>
+                      {currentQuestionIndex == -1 && <p className='text-tiny uppercase font-bold'>Welcome Message</p>}
+                    </CardHeader>
+                    <CardBody className='overflow-visible py-2'>
+                      {!hasAnswered && (
+                        <blockquote className='px-4 my-6 py-3 text-2xl'>
+                          {currentQuestionIndex != -1 && questions[currentQuestionIndex]?.text}
+                          {currentQuestionIndex == -1 && invitationDetails.job.welcomeMessage}
+                        </blockquote>
                       )}
-                    </div>
-                  </CardFooter>
-                </Card>
+                      {hasAnswered && <blockquote className='border px-4 my-6 py-3 rounded-xl [&>p]:m-0 border-default-200 dark:border-default-100 bg-default-200/20'>Please click the {"Next Question"} button to load the next question.</blockquote>}
+                    </CardBody>
+                    <CardFooter className='absolute  bottom-0 z-10 border-t-1 dark:border-t-gray-800'>
+                      <div className='flex flex-grow gap-2 items-center'>
+                        {currentQuestionIndex != -1 && <AudioRecorder onRecordingComplete={handleRecordingComplete} currentQuestion={questions[currentQuestionIndex]} invitationId={id as string} hasAnswered={hasAnswered} setHasAnswered={setHasAnswered} onNextQuestion={handleNextQuestion} onAudioRecorded={uploadAudioAsync} onStopRecording={() => console.log("Recording stopped externally")} />}
 
-                {/* Candidate Section */}
-                <div className='flex flex-col gap-6'>
-                  <VideoRecorder invitationId={id as string} />
-                  <InterviewerStartCard interviewer={invitationDetails.interviewer} />
+                        {currentQuestionIndex == -1 && (
+                          <Button isDisabled={isWelcomeMessageReading} endContent={<AiTwotoneRocket />} color='danger' variant='bordered' onPress={() => readWelcomeMessage()}>
+                            Read welcome message.
+                          </Button>
+                        )}
+                      </div>
+                    </CardFooter>
+                  </Card>
+
+                  {/* Candidate Section */}
+                  <div className='flex flex-col gap-6'>
+                    <VideoRecorder invitationId={id as string} />
+                    <InterviewerStartCard interviewer={invitationDetails.interviewer} />
+                  </div>
                 </div>
-              </div>
-            </Card>
-          </main>
-        </div>
+              </Card>
+            </main>
+          </div>
+        </>
       )}
       {!isStarted && !isExpiredOrCompleted && <InterviewCard loading={startingInterview} onStartButtonClick={handleStartInterview} invitationDetails={invitationDetails} />}
       {(currentQuestionIndex > questions.length - 1 || isTimeOver) && <ThankYou invitationDetails={invitationDetails} />}

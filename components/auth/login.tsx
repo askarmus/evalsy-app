@@ -38,59 +38,34 @@ export const Login = () => {
 
   return (
     <>
-      <main className="mx-auto w-full max-w-md sm:px-4 md:w-96 md:max-w-sm md:px-0">
-        <div className="flex">
+      <main className='mx-auto w-full max-w-md sm:px-4 md:w-96 md:max-w-sm md:px-0'>
+        <div className='flex'>
           <Logo />
         </div>
-        <h2 className="mt-20 text-lg font-semibold text-gray-900">
-          Sign in to your account
-        </h2>
-        <p className="mt-2 text-sm text-gray-700">
+        <h2 className='mt-20 text-lg font-semibold text-gray-900'>Sign in to your account</h2>
+        <p className='mt-2 text-sm text-gray-700'>
           Don’t have an account?{" "}
-          <Link
-            href="/register"
-            className="font-medium text-blue-600 hover:underline"
-          >
+          <Link href='/register' className='font-medium text-blue-600 hover:underline'>
             Register here
           </Link>{" "}
           for a free trial.
         </p>
 
-        <Formik
-          initialValues={initialValues}
-          validationSchema={LoginSchema}
-          onSubmit={handleLogin}
-        >
+        <Formik initialValues={initialValues} validationSchema={LoginSchema} onSubmit={handleLogin}>
           {({ values, errors, touched, handleChange, handleSubmit }) => (
             <>
-              <div className="mt-10 grid grid-cols-1 gap-y-8">
-                <Input
-                  variant="bordered"
-                  label="Email"
-                  type="email"
-                  value={values.email}
-                  isInvalid={!!errors.email && !!touched.email}
-                  errorMessage={errors.email}
-                  onChange={handleChange("email")}
-                />
-                <Input
-                  variant="bordered"
-                  label="Password"
-                  type="password"
-                  value={values.password}
-                  isInvalid={!!errors.password && !!touched.password}
-                  errorMessage={errors.password}
-                  onChange={handleChange("password")}
-                />
+              <div className='mt-10 grid grid-cols-1 gap-y-8'>
+                <Input variant='bordered' label='Email' type='email' value={values.email} isInvalid={!!errors.email && !!touched.email} errorMessage={errors.email} onChange={handleChange("email")} />
+                <Input variant='bordered' label='Password' type='password' value={values.password} isInvalid={!!errors.password && !!touched.password} errorMessage={errors.password} onChange={handleChange("password")} />
 
-                <Button
-                  onPress={() => handleSubmit()}
-                  radius="full"
-                  isLoading={isSubmitting}
-                  color="primary"
-                >
+                <Button onPress={() => handleSubmit()} radius='full' isLoading={isSubmitting} color='primary'>
                   Login
                 </Button>
+                <p className='mt-2 text-sm text-gray-700'>
+                  <Link href='/forgetpassword' className='font-medium text-blue-600 hover:underline'>
+                    Forget Password?
+                  </Link>
+                </p>
               </div>
             </>
           )}

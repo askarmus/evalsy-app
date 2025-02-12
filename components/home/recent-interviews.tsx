@@ -1,5 +1,8 @@
+import DateFormatter from "@/app/utils/DateFormatter";
+import { getColorByInitial } from "@/app/utils/getColorByInitial";
+import { getInitials } from "@/app/utils/getInitials";
 import { get10InterviewResult } from "@/services/dashboard.service";
-import { Avatar, Button, Card, CardBody } from "@heroui/react";
+import { Avatar, Button, Card, CardBody, User } from "@heroui/react";
 import React, { useEffect, useState } from "react";
 
 export const RecentInterviews = () => {
@@ -26,7 +29,7 @@ export const RecentInterviews = () => {
   }
 
   return (
-    <Card className=' bg-default-50 rounded-xl shadow-md px-3'>
+    <Card className='bg-default-50 rounded-xl shadow-md px-3'>
       <CardBody className='py-5 gap-4'>
         <div className='flex gap-2.5 justify-center'>
           <div className='flex flex-col border-dashed border-2 border-divider py-2 px-6 rounded-xl'>
@@ -36,20 +39,28 @@ export const RecentInterviews = () => {
 
         <div className='flex flex-col gap-1'>
           {results.map((item) => (
-            <div key={item.id} className='grid grid-cols-4 w-full'>
+            <div key={item.id} className='grid grid-cols-[2fr_1fr_1fr] w-full'>
+              {/* First Column: User Information (Wider) */}
               <div className='w-full'>
-                <Avatar isBordered color='secondary' src='https://i.pravatar.cc/150?u=a042581f4e29026024d' />
+                <User
+                  avatarProps={{
+                    name: getInitials(item.invitation.name),
+                    className: getColorByInitial(item.invitation.name),
+                  }}
+                  description={item.job.jobTitle}
+                  name={item.invitation.name}
+                />
               </div>
 
-              <span className='text-default-900  font-semibold'>{item.invitation.name}</span>
-              <div>
-                <span className='text-success text-xs'>{item.invitation.status}</span>
+              {/* Second Column: Status */}
+              <div className='flex items-center flex-col'>
+                <span className='text-success text-xs'>Weight</span>
+                <span className='text-xs'>{item.overallWeight != null ? item.overallWeight : "Unknown"}</span>
               </div>
-              <div>
-                <span className='text-default-500 text-xs'>{item.invitation.statusUpdateAt}</span>
-                <Button size='sm' variant='flat' color='primary'>
-                  View
-                </Button>
+
+              {/* Third Column: Date */}
+              <div className='flex items-center'>
+                <span className='text-default-500 text-xs'>{DateFormatter.formatDate(item.invitation.statusUpdateAt)}</span>
               </div>
             </div>
           ))}

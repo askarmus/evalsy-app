@@ -1,14 +1,10 @@
 "use client";
 import React, { useState, useMemo, useEffect, useCallback } from "react";
 import { Button, Input, Pagination, Spinner, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, Chip, User } from "@heroui/react";
-import Link from "next/link";
-import { HouseIcon } from "@/components/icons/breadcrumb/house-icon";
-import { UsersIcon } from "@/components/icons/breadcrumb/users-icon";
-import { getAllInterviewers } from "@/services/interviwers.service";
+import { deleteInterviewer, getAllInterviewers } from "@/services/interviwers.service";
 import { AddInterviewer } from "@/components/interviwers/add.interviewer";
-import { AiFillEdit } from "react-icons/ai";
-import { showToast } from "@/app/utils/toastUtils";
 import { Breadcrumb } from "@/components/bread.crumb";
+import ConfirmDialog from "@/components/ConfirmDialog";
 
 export default function InterviewerManagement() {
   const [page, setPage] = useState(1);
@@ -19,6 +15,8 @@ export default function InterviewerManagement() {
 
   const [selectedInterviewerId, setSelectedInterviewerId] = useState<string | null>(null);
   const [isDrawerOpen, setDrawerOpen] = useState(false);
+  const [isConfirmDialogOpen, setConfirmDialogOpen] = useState(false);
+  const [interviewerToDelete, setInterviewerToDelete] = useState<string | null>(null);
 
   const breadcrumbItems = [
     { name: "Dashboard", link: "/" },
@@ -40,12 +38,36 @@ export default function InterviewerManagement() {
     setDrawerOpen(true);
   };
   const fetchInterviewers = async () => {
+    setIsLoading(true);
     const data = await getAllInterviewers();
     setInterviewers(data);
     setIsLoading(false);
   };
   const handleRefreshTable = () => {
     fetchInterviewers();
+  };
+
+  const handleDeleteClick = (id: string) => {
+    setInterviewerToDelete(id); // Store the selected interviewer ID
+    setConfirmDialogOpen(true); // Open the confirmation dialog
+  };
+
+  const handleConfirmDelete = async () => {
+    if (interviewerToDelete) {
+      try {
+        await deleteInterviewer(interviewerToDelete); // Call the delete API
+        setConfirmDialogOpen(false); // Close the dialog after deletion
+        setInterviewerToDelete(null); // Reset the selected interviewer
+        fetchInterviewers(); // Refresh the list
+      } catch (error) {
+        console.error("Error deleting interviewer:", error);
+      }
+    }
+  };
+
+  const handleCancelDelete = () => {
+    setConfirmDialogOpen(false);
+    setInterviewerToDelete(null);
   };
 
   useEffect(() => {
@@ -107,12 +129,11 @@ export default function InterviewerManagement() {
             <TableHeader>
               <TableColumn key='name'>NAME</TableColumn>
               <TableColumn key='jobTitle'>JOB TITLE</TableColumn>
-              <TableColumn key='status'>STATUS</TableColumn>
               <TableColumn key='action' align='end'>
                 {""}
               </TableColumn>
             </TableHeader>
-            <TableBody emptyContent={"No interviewers found"} items={items} loadingContent={<Spinner />} isLoading={isLoading}>
+            <TableBody items={items} isLoading={isLoading} loadingContent={<Spinner />} emptyContent={"No interviewers found"}>
               {(item: any) => (
                 <TableRow key={item.key}>
                   <TableCell>
@@ -121,14 +142,13 @@ export default function InterviewerManagement() {
                     </User>
                   </TableCell>
                   <TableCell>{item.jobTitle}</TableCell>
+
                   <TableCell>
-                    <Chip size='sm' color='success' variant='flat'>
-                      Active
-                    </Chip>
-                  </TableCell>
-                  <TableCell>
-                    <Button color='primary' variant='flat' size='sm' onPress={() => handleEditClick(item.id)}>
+                    <Button color='primary' variant='flat' size='sm' className='mr-2' onPress={() => handleEditClick(item.id)}>
                       Edit
+                    </Button>
+                    <Button color='danger' variant='flat' size='sm' onPress={() => handleDeleteClick(item.id)}>
+                      Delete
                     </Button>
                   </TableCell>
                 </TableRow>
@@ -141,6 +161,7 @@ export default function InterviewerManagement() {
             interviewerId={selectedInterviewerId}
             onAddSuccess={handleRefreshTable} // Pass the refresh callback
           />
+          <ConfirmDialog isOpen={isConfirmDialogOpen} onClose={handleCancelDelete} title='Confirm Deletion' description='Are you sure you want to delete this interviewer? This action cannot be undone.' onConfirm={handleConfirmDelete} confirmButtonText='Delete' cancelButtonText='Cancel' />
         </div>
       </div>
     </div>

@@ -4,13 +4,9 @@ import { Input, Textarea, Button } from "@heroui/react";
 import { Formik } from "formik";
 import { showToast } from "@/app/utils/toastUtils";
 import Image from "next/image";
-
+import { AiOutlineCloseCircle } from "react-icons/ai";
 import { AddInterviewerSchema } from "@/helpers/schemas";
-import {
-  createInterviewer,
-  getInterviewerById,
-  updateInterviewer,
-} from "@/services/interviwers.service";
+import { createInterviewer, getInterviewerById, updateInterviewer } from "@/services/interviwers.service";
 import { ToastContainer } from "react-toastify";
 import FileUploadWithPreview from "../FileUploadWithPreview";
 
@@ -21,12 +17,7 @@ interface AddInterviewerProps {
   onAddSuccess;
 }
 
-export const AddInterviewer: React.FC<AddInterviewerProps> = ({
-  isOpen,
-  onClose,
-  interviewerId,
-  onAddSuccess,
-}) => {
+export const AddInterviewer: React.FC<AddInterviewerProps> = ({ isOpen, onClose, interviewerId, onAddSuccess }) => {
   const [initialValues, setInitialValues] = useState({
     name: "",
     jobTitle: "",
@@ -66,19 +57,28 @@ export const AddInterviewer: React.FC<AddInterviewerProps> = ({
     }
   }, [interviewerId]);
 
+  const handleRemoveImage = () => {
+    setUploadProfileUrl("");
+    setInitialValues((prevValues) => ({ ...prevValues, photoUrl: "" }));
+  };
+
   const handleSubmit = async (values: typeof initialValues) => {
     setIsLoading(true);
     try {
       if (interviewerId) {
         await updateInterviewer(interviewerId, values);
         showToast.success("Interviewer updated successfully!");
+
         setUploadProfileUrl("");
       } else {
         await createInterviewer(values);
         showToast.success("Interviewer created successfully!");
       }
+
       onAddSuccess();
-      onClose();
+      setTimeout(() => {
+        onClose();
+      }, 2000);
     } catch (error) {
     } finally {
       setIsLoading(false);
@@ -86,73 +86,34 @@ export const AddInterviewer: React.FC<AddInterviewerProps> = ({
   };
 
   return (
-    <Drawer isOpen={isOpen} onOpenChange={handleClose} size="lg">
+    <Drawer isOpen={isOpen} onOpenChange={handleClose} size='lg'>
       <DrawerContent>
-        <DrawerHeader>
-          {interviewerId ? "Edit Interviewer" : "Add Interviewer"}
-        </DrawerHeader>
+        <DrawerHeader>{interviewerId ? "Edit Interviewer" : "Add Interviewer"}</DrawerHeader>
         <DrawerBody>
-          <Formik
-            initialValues={initialValues}
-            onSubmit={handleSubmit}
-            validationSchema={AddInterviewerSchema}
-            enableReinitialize
-          >
-            {({
-              values,
-              handleChange,
-              handleSubmit,
-              errors,
-              setFieldValue,
-              touched,
-            }) => (
+          <Formik initialValues={initialValues} onSubmit={handleSubmit} validationSchema={AddInterviewerSchema} enableReinitialize>
+            {({ values, handleChange, handleSubmit, errors, setFieldValue, touched }) => (
               <>
-                <Input
-                  label="Name"
-                  value={values.name}
-                  onChange={handleChange("name")}
-                  isInvalid={!!errors.name && !!touched.name}
-                  errorMessage={errors.name}
-                />
-                <Input
-                  label="Job Title"
-                  value={values.jobTitle}
-                  onChange={handleChange("jobTitle")}
-                  isInvalid={!!errors.jobTitle && !!touched.jobTitle}
-                  errorMessage={errors.jobTitle}
-                />
-                <Textarea
-                  label="Biography"
-                  value={values.biography}
-                  onChange={handleChange("biography")}
-                  isInvalid={!!errors.biography && !!touched.biography}
-                  errorMessage={errors.biography}
-                />
-                <p className="text-sm font-semibold mb-4">Profile photo</p>
-                <FileUploadWithPreview
-                  onUpload={(blob) => {
-                    setFieldValue("photoUrl", blob.data.url);
-                    setUploadProfileUrl(blob.data.url);
-                  }}
-                />
-                <div className="mt-2">
+                <Input label='Name' value={values.name} onChange={handleChange("name")} isInvalid={!!errors.name && !!touched.name} errorMessage={errors.name} />
+                <Input label='Job Title' value={values.jobTitle} onChange={handleChange("jobTitle")} isInvalid={!!errors.jobTitle && !!touched.jobTitle} errorMessage={errors.jobTitle} />
+                <Textarea label='Biography' value={values.biography} onChange={handleChange("biography")} isInvalid={!!errors.biography && !!touched.biography} errorMessage={errors.biography} />
+                <p className='text-sm font-semibold mb-4'>Profile photo</p>
+                <div className='flex items-center space-x-4'>
+                  <FileUploadWithPreview
+                    onUpload={(blob) => {
+                      setFieldValue("photoUrl", blob.data.url);
+                      setUploadProfileUrl(blob.data.url);
+                    }}
+                  />
                   {uploadProfileUrl && (
-                    <Image
-                      src={uploadProfileUrl}
-                      alt="Profile Preview"
-                      className="max-w-full h-auto"
-                      width={100}
-                      height={50}
-                    />
+                    <div className='relative inline-block'>
+                      <img src={uploadProfileUrl} alt='Profile Preview' className='max-w-full h-auto rounded max-h-[60px]' />
+                      <button type='button' onClick={handleRemoveImage} className='absolute -top-3 -right-3'>
+                        <AiOutlineCloseCircle />
+                      </button>
+                    </div>
                   )}
                 </div>
-
-                <Button
-                  className="w-auto"
-                  color="primary"
-                  onPress={() => handleSubmit()}
-                  isLoading={isLoading}
-                >
+                <Button className='w-auto' color='primary' onPress={() => handleSubmit()} isLoading={isLoading}>
                   {interviewerId ? "Update" : "Create"}
                 </Button>
               </>
