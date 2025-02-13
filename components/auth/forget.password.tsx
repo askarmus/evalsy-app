@@ -13,7 +13,7 @@ import { Logo } from "../logo";
 export const ForgetPassword = () => {
   const router = useRouter();
   const [isSubmitting, setSubmitting] = useState(false);
-  const [isSuccess, setSuccess] = useState(false); // Track if the email was successfully sent
+  const [isSuccess, setSuccess] = useState(false);
 
   const initialValues: ForgetPasswordFormType = {
     email: "",
@@ -24,10 +24,9 @@ export const ForgetPassword = () => {
       setSubmitting(true);
       const response = await forgetPassword(values);
       if (response) {
-        setSuccess(true); // Set success state when the email is sent
+        setSuccess(true);
       }
     } catch (error: any) {
-      // Optionally handle errors here
     } finally {
       setSubmitting(false);
     }

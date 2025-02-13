@@ -20,11 +20,9 @@ const ChangePassword = () => {
   const handleSubmit = async (values: ChangePasswordFormType) => {
     try {
       setIsLoading(true);
-      await changePassword(values); // Call to change password API
+      await changePassword(values);
       showToast.success("Password updated successfully!");
     } catch (error) {
-      console.error("Error updating password: ", error);
-      showToast.error("Failed to update password.");
     } finally {
       setIsLoading(false);
     }

@@ -66,7 +66,7 @@ apiClient.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
     const status = error.response?.status || 500;
-    const message = error.response?.data?.message || "An unexpected error occurred.";
+    const message = error.response?.data?.error || "An unexpected error occurred.";
 
     // Handle 401 Unauthorized error (token expired)
     if (status === 401 && !originalRequest._retry) {

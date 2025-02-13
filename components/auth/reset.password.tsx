@@ -1,23 +1,21 @@
 "use client";
 
 import { ChangePasswordSchema } from "@/helpers/schemas";
-import { changePassword, resetPassword } from "@/services/authService";
+import { resetPassword } from "@/services/authService";
 import { Button, Input } from "@heroui/react";
 import { Formik } from "formik";
-import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useState } from "react";
 import { Logo } from "../logo";
-import { ChangePasswordFormType, ResetPasswordFormType } from "@/helpers/types";
+import { ResetPasswordFormType } from "@/helpers/types";
+import { useParams, useRouter } from "next/navigation";
 
 export const ResetPassword = () => {
+  const params = useParams();
   const router = useRouter();
-  const searchParams = useSearchParams();
   const [isSubmitting, setSubmitting] = useState(false);
   const [isSuccess, setSuccess] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
 
-  // Get token from URL (assuming the reset link includes a token)
-  const token = searchParams.get("token");
+  const token = params.token as string; // This will get the value from the URL
 
   const initialValues: ResetPasswordFormType = {
     newPassword: "",
@@ -29,15 +27,9 @@ export const ResetPassword = () => {
     async (values: ResetPasswordFormType) => {
       try {
         setSubmitting(true);
-        const response = await resetPassword(values);
-
-        if (response.success) {
-          setSuccess(true);
-        } else {
-          setErrorMessage(response.message || "Something went wrong. Please try again.");
-        }
+        await resetPassword(values);
+        setSuccess(true);
       } catch (error: any) {
-        setErrorMessage("An error occurred while changing your password.");
       } finally {
         setSubmitting(false);
       }
@@ -64,8 +56,6 @@ export const ResetPassword = () => {
         <>
           <h2 className='mt-20 text-lg font-semibold text-gray-900'>Set Your New Password</h2>
           <p className='mt-2 text-sm text-gray-700'>Please enter your new password below.</p>
-
-          {errorMessage && <div className='mt-4 text-sm text-red-600 text-center'>{errorMessage}</div>}
 
           <Formik initialValues={initialValues} validationSchema={ChangePasswordSchema} onSubmit={handleChangePassword}>
             {({ values, errors, touched, handleChange, handleSubmit }) => (
