@@ -68,7 +68,13 @@ apiClient.interceptors.response.use(
     const status = error.response?.status || 500;
     const message = error.response?.data?.error || "An unexpected error occurred.";
 
-    // Handle 401 Unauthorized error (token expired)
+    // If the error is from the login endpoint, show an appropriate error message
+    if (originalRequest.url?.includes("/auth/login") && status === 401) {
+      toast.error("Invalid email or password. Please try again.");
+      return Promise.reject({ status, message, data: error.response?.data });
+    }
+
+    // Handle 401 Unauthorized error (session expired)
     if (status === 401 && !originalRequest._retry) {
       originalRequest._retry = true; // Avoid infinite loop
 

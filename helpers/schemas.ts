@@ -57,6 +57,7 @@ export const CompanySettingsSchema = object().shape({
 });
 
 export const ChangePasswordSchema = object().shape({
+  oldPassword: string().required("Current Password is required"),
   newPassword: string().min(8, "Password must be at least 8 characters long").required("New Password is required"),
   confirmPassword: string()
     .oneOf([ref("newPassword"), undefined], "Passwords must match")

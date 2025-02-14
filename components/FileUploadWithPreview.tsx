@@ -51,7 +51,7 @@ const FileUploadWithPreview: React.FC<FileUploadWithPreviewProps> = ({ onUpload 
           </div>
         ) : (
           <div>
-            <p>Browse Or Drag and Drop </p>
+            <p>Browse</p>
           </div>
         )}
       </div>

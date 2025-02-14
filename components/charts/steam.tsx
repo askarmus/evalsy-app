@@ -1,88 +1,121 @@
 import React from "react";
 import Chart, { Props } from "react-apexcharts";
 
-const state: Props["series"] = [
+const transformedData = [
   {
-    name: "Series1",
-    data: [31, 40, 28, 51, 42, 109, 100],
+    name: "Junior",
+    data: [
+      { x: "2025-02-04", y: 8.89 }, // DevOps Engineer (junior)
+    ],
   },
   {
-    name: "Series2",
-    data: [11, 32, 45, 32, 34, 52, 41],
+    name: "Mid",
+    data: [
+      { x: "2025-02-05", y: 76.58 }, // Cybersecurity Analyst
+      { x: "2025-01-08", y: 27.95 }, // Software Engineer
+    ],
+  },
+  {
+    name: "Senior",
+    data: [
+      { x: "2025-02-07", y: 11.4 }, // AI Engineer
+      { x: "2025-01-21", y: 25.2 }, // UX Designer
+      { x: "2025-01-17", y: 32.05 }, // UX Designer
+    ],
+  },
+  {
+    name: "Expert",
+    data: [
+      { x: "2025-02-07", y: 0.1 }, // Solution Architect (Avoid 0 for log scale)
+      { x: "2025-01-17", y: 17.38 }, // Cloud Architect
+      { x: "2025-01-12", y: 91.95 }, // Data Scientist
+      { x: "2025-01-25", y: 25.71 }, // Data Scientist
+      { x: "2025-01-24", y: 89.97 }, // UX Designer
+    ],
   },
 ];
 
 const options: Props["options"] = {
   chart: {
     type: "area",
+    stacked: false, // Prevent areas from overlapping too much
     animations: {
-      easing: "linear",
-      speed: 300,
+      easing: "easeinout",
+      speed: 500,
     },
-    sparkline: {
-      enabled: false,
-    },
-    brush: {
-      enabled: false,
-    },
-    id: "basic-bar",
-    foreColor: "hsl(var(--heroui-default-800))",
-    stacked: true,
-    toolbar: {
-      show: false,
-    },
+    foreColor: "#333",
+    toolbar: { show: true },
   },
 
   xaxis: {
-    categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999],
+    type: "datetime",
     labels: {
-      // show: false,
-      style: {
-        colors: "hsl(var(--heroui-default-800))",
-      },
+      format: "dd MMM", // Improved date formatting
+      style: { colors: "#333", fontSize: "12px" },
     },
-    axisBorder: {
-      color: "hsl(var(--heroui-nextui-default-200))",
-    },
-    axisTicks: {
-      color: "hsl(var(--heroui-nextui-default-200))",
-    },
+    axisBorder: { color: "#aaa" },
+    axisTicks: { color: "#aaa" },
   },
+
   yaxis: {
+    logarithmic: false, // Remove log scale since it's causing distortion
+    min: 0, // Avoids negative or zero issues
     labels: {
-      style: {
-        // hsl(var(--heroui-content1-foreground))
-        colors: "hsl(var(--heroui-default-800))",
-      },
+      style: { colors: "#333", fontSize: "12px" },
     },
   },
+
   tooltip: {
-    enabled: false,
+    enabled: true,
+    x: { format: "dd MMM yyyy" },
   },
-  grid: {
-    show: true,
-    borderColor: "hsl(var(--heroui-default-200))",
-    strokeDashArray: 0,
-    position: "back",
-  },
+
   stroke: {
     curve: "smooth",
-    fill: {
-      colors: ["red"],
+    width: 2,
+  },
+
+  fill: {
+    opacity: 0.5, // Reduce fill intensity to make things clearer
+  },
+
+  markers: {
+    size: 4, // Improve visibility of points
+    colors: ["#FF5733", "#33FF57", "#3357FF", "#F3FF33"],
+    strokeColors: "#fff",
+    strokeWidth: 2,
+  },
+
+  grid: {
+    show: true,
+    borderColor: "#ddd",
+  },
+
+  legend: {
+    position: "top",
+    horizontalAlign: "center",
+    labels: { colors: "#333" },
+    markers: {
+      width: 12,
+      height: 12,
     },
   },
-  // @ts-ignore
-  markers: false,
+
+  dataLabels: {
+    enabled: true, // Show values on points
+    style: {
+      fontSize: "10px",
+      colors: ["#000"],
+    },
+  },
 };
 
 export const Steam = () => {
   return (
-    <>
-      <div className="w-full z-20">
-        <div id="chart">
-          <Chart options={options} series={state} type="area" height={425} />
-        </div>
+    <div className='w-full z-20'>
+      <div id='chart'>
+        <Chart options={options} series={transformedData} type='area' height={425} />
       </div>
-    </>
+    </div>
   );
 };

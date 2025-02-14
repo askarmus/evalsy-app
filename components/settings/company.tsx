@@ -7,7 +7,8 @@ import { ToastContainer } from "react-toastify";
 import { getCompanySettings, saveCompanySettings } from "@/services/company.service";
 import FileUploadWithPreview from "@/components/FileUploadWithPreview";
 import { CompanySettingsSchema } from "@/helpers/schemas";
-import Image from "next/image";
+
+import { AiOutlineCloseCircle } from "react-icons/ai";
 
 export type CompanySettingsFormValues = {
   name: string;
@@ -33,6 +34,11 @@ const CompanySettings = () => {
     logo: "",
     phone: "",
   });
+
+  const handleRemoveImage = () => {
+    setUploadLogoUrl("");
+    setInitialValues((prevValues) => ({ ...prevValues, logo: "" }));
+  };
 
   useEffect(() => {
     const fetchSettings = async () => {
@@ -86,13 +92,23 @@ const CompanySettings = () => {
                 </div>
                 <div className='w-1/5'>
                   <p className='text-sm font-semibold mb-4'>Company Logo</p>
-                  <FileUploadWithPreview
-                    onUpload={(blob) => {
-                      setFieldValue("logo", blob.data.url);
-                      setUploadLogoUrl(blob.data.url);
-                    }}
-                  />
-                  <div className='mt-2'>{uploadLogoUrl && <Image src={uploadLogoUrl} alt='Company Logo Preview' className='max-w-full h-auto' width={100} height={50} />}</div>
+
+                  <div className='flex items-center space-x-4'>
+                    <FileUploadWithPreview
+                      onUpload={(blob) => {
+                        setFieldValue("logo", blob.data.url);
+                        setUploadLogoUrl(blob.data.url);
+                      }}
+                    />
+                    {uploadLogoUrl && (
+                      <div className='relative inline-block'>
+                        <img src={uploadLogoUrl} alt='Company Logo Preview' className='max-w-full h-auto rounded max-h-[60px]' />
+                        <button type='button' onClick={handleRemoveImage} className='absolute -top-3 -right-3'>
+                          <AiOutlineCloseCircle />
+                        </button>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
               <ToastContainer />

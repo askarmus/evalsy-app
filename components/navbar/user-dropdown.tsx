@@ -34,6 +34,7 @@ export const UserDropdown = () => {
       <NavbarItem>
         <DropdownTrigger>
           <User
+            className='cursor-pointer'
             avatarProps={{
               name: user.initials,
               color: "primary",

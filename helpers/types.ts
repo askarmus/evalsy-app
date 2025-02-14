@@ -23,7 +23,7 @@ export type ResetPasswordFormType = {
 };
 
 export type ChangePasswordFormType = {
-  currentPassword: string;
+  oldPassword: string;
   newPassword: string;
   confirmPassword: string;
 };
