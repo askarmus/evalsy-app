@@ -37,12 +37,7 @@ export default function InterviewerManagement() {
     setSelectedInterviewerId(id);
     setDrawerOpen(true);
   };
-  const fetchInterviewers = async () => {
-    setIsLoading(true);
-    const data = await getAllInterviewers();
-    setInterviewers(data);
-    setIsLoading(false);
-  };
+
   const handleRefreshTable = () => {
     fetchInterviewers();
   };
@@ -68,6 +63,13 @@ export default function InterviewerManagement() {
   const handleCancelDelete = () => {
     setConfirmDialogOpen(false);
     setInterviewerToDelete(null);
+  };
+
+  const fetchInterviewers = async () => {
+    setIsLoading(true);
+    const data = await getAllInterviewers();
+    setInterviewers(data);
+    setIsLoading(false);
   };
 
   useEffect(() => {

@@ -1,18 +1,37 @@
 "use client";
 import React, { useState, useMemo, useEffect, useCallback } from "react";
-import { Button, Input, Pagination, Progress, Spinner, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from "@heroui/react";
+import { Card, CardBody, Button, Input, Pagination, Spinner, CardHeader, CardFooter } from "@heroui/react";
 import { Breadcrumb } from "@/components/bread.crumb";
 import { getAllInterviewResult } from "@/services/interview.service";
 import { ViewResultDrawer } from "./components/view.result.drawer";
+import DateFormatter from "@/app/utils/DateFormatter";
 
 export default function InterviewResultList() {
   const [page, setPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [filterValue, setFilterValue] = useState("");
-  const [interviewers, setInterviewers] = useState([]);
-  const rowsPerPage = 10;
+  const [interviewResults, setInterviewResults] = useState([]);
+  const rowsPerPage = 6;
   const [selectedInterviewerId, setSelectedInterviewerId] = useState<string | null>(null);
   const [isDrawerOpen, setDrawerOpen] = useState(false);
+
+  // Fetch interview results
+  const fetchInterviewResult = async () => {
+    setIsLoading(true);
+    const data = await getAllInterviewResult();
+    setInterviewResults(data);
+    setIsLoading(false);
+  };
+
+  useEffect(() => {
+    fetchInterviewResult();
+  }, []);
+
+  // Handle drawer open
+  const handleViewDetails = (invitationId: string) => {
+    setSelectedInterviewerId(invitationId);
+    setDrawerOpen(true);
+  };
 
   const handleAddClick = () => {
     setDrawerOpen(true);
@@ -21,110 +40,116 @@ export default function InterviewResultList() {
   const handleCloseDrawer = () => {
     setDrawerOpen(false);
   };
-
-  const fetchInterviewResult = async () => {
-    const data = await getAllInterviewResult();
-    setInterviewers(data);
-    setIsLoading(false);
-  };
-  const handleRefreshTable = () => {
-    fetchInterviewResult();
-  };
-
-  useEffect(() => {
-    fetchInterviewResult();
-  }, []);
-
-  const filteredItems = useMemo(() => {
-    return interviewers.filter((interviewer: any) => interviewer.name.toLowerCase().includes(filterValue.toLowerCase()));
-  }, [filterValue, interviewers]);
-
-  const pages = Math.ceil(filteredItems.length / rowsPerPage);
-
-  const items = useMemo(() => {
-    const start = (page - 1) * rowsPerPage;
-    const end = start + rowsPerPage;
-
-    return filteredItems.slice(start, end);
-  }, [page, filteredItems]);
-
-  const onSearchChange = useCallback((value: any) => {
+  // Handle search input change
+  const onSearchChange = useCallback((value: string) => {
     setFilterValue(value);
     setPage(1);
   }, []);
 
-  const breadcrumbItems = [
-    { name: "Dashboard", link: "/" },
-    { name: "Result", link: "" },
-  ];
+  // Filter interview results
+  const filteredResults = useMemo(() => {
+    return interviewResults.filter((result: any) => result.name.toLowerCase().includes(filterValue.toLowerCase()));
+  }, [filterValue, interviewResults]);
+
+  // Pagination logic
+  const pages = Math.ceil(filteredResults.length / rowsPerPage);
+
+  const items = useMemo(() => {
+    const start = (page - 1) * rowsPerPage;
+    const end = start + rowsPerPage;
+    return filteredResults.slice(start, end);
+  }, [page, filteredResults]);
+
+  // Define card background based on `overallWeight`
+  const getBorderColor = (weight: number | null) => {
+    if (weight === null || weight < 1) return "border-red-200";
+    if (weight >= 4) return "border-green-200";
+    if (weight >= 3) return "border-blue-200";
+    if (weight >= 2) return "border-yellow-200";
+    return "border-orange-500";
+  };
 
   return (
     <div className='my-10 px-4 lg:px-6 max-w-[90rem] mx-auto w-full flex flex-col gap-4'>
-      <Breadcrumb items={breadcrumbItems} />
-
-      <div className=' flex items-end justify-between'>
-        <h3 className='text-xl font-semibold'>Interview Result</h3>
-        <div>
-          <Input
-            value={filterValue}
-            onChange={(e) => onSearchChange(e.target.value)}
-            classNames={{
-              input: "w-full",
-              mainWrapper: "w-full",
-            }}
-            placeholder='Search candidate'
-          />
+      <Breadcrumb
+        items={[
+          { name: "Dashboard", link: "/" },
+          { name: "Result", link: "" },
+        ]}
+      />
+      <h3 className='text-xl font-semibold'>Interview Results</h3>
+      <div className='flex justify-between flex-wrap gap-4 items-center'>
+        <div className='flex items-center gap-3 flex-wrap md:flex-nowrap'>
+          <Input value={filterValue} onChange={(e) => onSearchChange(e.target.value)} classNames={{ input: "w-full", mainWrapper: "w-full max-w-md" }} placeholder='Search candidate' />
         </div>
       </div>
 
-      <div className='max-w-[90rem] mx-auto w-full'>
-        <div className=' w-full flex flex-col gap-4'>
-          <Table
-            aria-label='Example table with client-side pagination'
-            classNames={{
-              wrapper: "min-h-[222px]",
-            }}>
-            <TableHeader>
-              <TableColumn key='name'>CANDIDATE NAME</TableColumn>
-              <TableColumn key='title'>JOB TITLE</TableColumn>
-              <TableColumn key='completed'>COMPLETED</TableColumn>
-              <TableColumn key='weight'>OVERALL WEIGHT</TableColumn>
+      <div>{/* Overall Performance Chip */}</div>
+      {/* Interview Results as Cards */}
+      {isLoading ? (
+        <div className='flex justify-center'>
+          <Spinner />
+        </div>
+      ) : (
+        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
+          {items.map((result: any) => (
+            <Card key={result.id} className={`rounded-xl shadow-md px-3 py-3 w-full border-1 ${getBorderColor(result.overallWeight)}`}>
+              <CardHeader className='justify-between'>
+                <div className='flex gap-5'>
+                  <div className='flex flex-col gap-1 items-start justify-center'>
+                    <h4 className='text-1xl font-semibold leading-none text-default-600'>{result.name}</h4>
+                    <h5 className='text-small tracking-tight text-default-400'>{result.jobTitle}</h5>
+                  </div>
+                </div>
+                <Button color='primary' onPress={handleAddClick} radius='full' size='sm' variant={"flat"}>
+                  View
+                </Button>
+              </CardHeader>
+              <CardFooter className='gap-3'>
+                <div className='flex gap-1'>
+                  <p className='font-semibold text-default-400 text-small'>{result.overallWeight}</p>
+                  <p className=' text-default-400 text-small'>Overal lWeight</p>
+                </div>
+                <div className='flex gap-1'>
+                  <p className='font-semibold text-default-400 text-small'>{DateFormatter.formatDate(result.statusUpdateAt)}</p>
+                  <p className='text-default-400 text-small'>Completed</p>
+                </div>
+              </CardFooter>
+            </Card>
+          ))}
+        </div>
+      )}
 
-              <TableColumn key='status'>STATUS</TableColumn>
-
-              <TableColumn align='end' key='action'>
-                {""}
-              </TableColumn>
-            </TableHeader>
-            <TableBody emptyContent={"No interview result found"} items={items} loadingContent={<Spinner />} isLoading={isLoading}>
-              {(item: any) => (
-                <TableRow key={item.interviewResultId}>
-                  <TableCell>{item.name}</TableCell>
-                  <TableCell>{item.jobTitle}</TableCell>
-                  <TableCell>{item.statusUpdateAt}</TableCell>
-
-                  <TableCell>
-                    <Progress color='success' value={70} />
-                  </TableCell>
-                  <TableCell>{item.status}</TableCell>
-                  <TableCell>
-                    <Button onPress={handleAddClick} size='sm' color='primary'>
-                      More Result
-                    </Button>
-                    <Button onPress={handleAddClick} size='sm' color='warning'>
-                      Process
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-          <div className='flex w-full justify-center'>
-            <Pagination isCompact showControls showShadow color='secondary' page={page} total={pages} onChange={(page) => setPage(page)} />
-          </div>
-          <ViewResultDrawer isOpen={isDrawerOpen} onClose={handleCloseDrawer} invitationId={selectedInterviewerId} />
+      {/* Weight Legend */}
+      <div className='flex flex-wrap justify-center mt-6 gap-4 mb-5'>
+        <div className='flex items-center gap-2'>
+          <span className='w-4 h-4 bg-red-200 rounded-full'></span>
+          <span className='text-sm font-medium'>Poor (0 - 0.9)</span>
+        </div>
+        <div className='flex items-center gap-2'>
+          <span className='w-4 h-4 bg-orange-500 rounded-full'></span>
+          <span className='text-sm font-medium'>Below Average (1 - 1.9)</span>
+        </div>
+        <div className='flex items-center gap-2'>
+          <span className='w-4 h-4 bg-yellow-500 rounded-full'></span>
+          <span className='text-sm font-medium'>Average (2 - 2.9)</span>
+        </div>
+        <div className='flex items-center gap-2'>
+          <span className='w-4 h-4 bg-blue-500 rounded-full'></span>
+          <span className='text-sm font-medium'>Good (3 - 3.9)</span>
+        </div>
+        <div className='flex items-center gap-2'>
+          <span className='w-4 h-4 bg-green-500 rounded-full'></span>
+          <span className='text-sm font-medium'>Excellent (4 - 5)</span>
         </div>
       </div>
+      {/* Pagination */}
+      <div className='flex w-full justify-center'>
+        <Pagination isCompact showControls showShadow color='secondary' page={page} total={pages} onChange={(page) => setPage(page)} />
+      </div>
+
+      {/* View Details Drawer */}
+      <ViewResultDrawer isOpen={isDrawerOpen} onClose={() => setDrawerOpen(false)} invitationId={selectedInterviewerId} />
     </div>
   );
 }
