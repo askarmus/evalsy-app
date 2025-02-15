@@ -163,7 +163,7 @@ export default function InterviewerManagement() {
             interviewerId={selectedInterviewerId}
             onAddSuccess={handleRefreshTable} // Pass the refresh callback
           />
-          <ConfirmDialog isOpen={isConfirmDialogOpen} onClose={handleCancelDelete} title='Confirm Deletion' description='Are you sure you want to delete this interviewer? This action cannot be undone.' onConfirm={handleConfirmDelete} confirmButtonText='Delete' cancelButtonText='Cancel' />
+          <ConfirmDialog isOpen={isConfirmDialogOpen} onClose={handleCancelDelete} title='Confirm Deletion' description='Are you sure you want to delete this interviewer?' onConfirm={handleConfirmDelete} confirmButtonText='Delete' cancelButtonText='Cancel' />
         </div>
       </div>
     </div>

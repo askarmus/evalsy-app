@@ -62,10 +62,10 @@ export default function InterviewResultList() {
 
   // Define card background based on `overallWeight`
   const getBorderColor = (weight: number | null) => {
-    if (weight === null || weight < 1) return "border-red-200";
-    if (weight >= 4) return "border-green-200";
-    if (weight >= 3) return "border-blue-200";
-    if (weight >= 2) return "border-yellow-200";
+    if (weight === null || weight < 1) return "border-red-600";
+    if (weight >= 4) return "border-green-600";
+    if (weight >= 3) return "border-blue-600";
+    if (weight >= 2) return "border-yellow-600";
     return "border-orange-500";
   };
 

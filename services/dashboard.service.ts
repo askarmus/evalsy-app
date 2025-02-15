@@ -9,3 +9,8 @@ export const hiringPipelineOverview = async () => {
   const response = await apiClient.get("/dashboard/hiring-pipeline-overview");
   return response.data.data;
 };
+
+export const trendByJobSeniority = async () => {
+  const response = await apiClient.get("/dashboard/trend-by-job-seniority");
+  return response.data.data;
+};

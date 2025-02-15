@@ -15,6 +15,11 @@ export const createJob = async (payload) => {
   return response.data;
 };
 
+export const deleteJob = async (jobId) => {
+  const response = await apiClient.delete(`/job/delete/${jobId}`);
+  return response.data;
+};
+
 export const getAllJobs = async () => {
   const response = await apiClient.get("/job/getall");
   return response.data.data;
