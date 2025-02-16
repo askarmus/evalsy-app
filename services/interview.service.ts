@@ -19,3 +19,8 @@ export const getAllInterviewResult = async () => {
   const response = await apiClient.get("/interview/result/all");
   return response.data.data;
 };
+
+export const getInterviewResultById = async (id: string) => {
+  const response = await apiClient.get(`/interview/fetch/${id}`);
+  return response.data.data;
+};

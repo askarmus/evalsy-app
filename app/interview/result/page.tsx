@@ -2,18 +2,20 @@
 import React, { useState, useMemo, useEffect, useCallback } from "react";
 import { Card, CardBody, Button, Input, Pagination, Spinner, CardHeader, CardFooter } from "@heroui/react";
 import { Breadcrumb } from "@/components/bread.crumb";
-import { getAllInterviewResult } from "@/services/interview.service";
+import { getAllInterviewResult, getInterviewResultById } from "@/services/interview.service";
 import { ViewResultDrawer } from "./components/view.result.drawer";
 import DateFormatter from "@/app/utils/DateFormatter";
 
 export default function InterviewResultList() {
   const [page, setPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
+  const [loadingResults, setLoadingResults] = useState<{ [key: string]: boolean }>({});
+
   const [filterValue, setFilterValue] = useState("");
   const [interviewResults, setInterviewResults] = useState([]);
   const rowsPerPage = 6;
-  const [selectedInterviewerId, setSelectedInterviewerId] = useState<string | null>(null);
   const [isDrawerOpen, setDrawerOpen] = useState(false);
+  const [selectedInterviewerData, setSelectedInterviewerData] = useState<any>(null);
 
   // Fetch interview results
   const fetchInterviewResult = async () => {
@@ -28,17 +30,18 @@ export default function InterviewResultList() {
   }, []);
 
   // Handle drawer open
-  const handleViewDetails = (invitationId: string) => {
-    setSelectedInterviewerId(invitationId);
-    setDrawerOpen(true);
-  };
+  const handleViewDetails = async (resultId: string) => {
+    setLoadingResults((prev) => ({ ...prev, [resultId]: true })); // Set loading for the specific result
 
-  const handleAddClick = () => {
-    setDrawerOpen(true);
-  };
+    try {
+      const data = await getInterviewResultById(resultId);
+      setSelectedInterviewerData(data);
+      setDrawerOpen(true);
+    } catch (error) {
+      console.error("Error fetching interviewer data:", error);
+    }
 
-  const handleCloseDrawer = () => {
-    setDrawerOpen(false);
+    setLoadingResults((prev) => ({ ...prev, [resultId]: false })); // Reset loading after fetch
   };
   // Handle search input change
   const onSearchChange = useCallback((value: string) => {
@@ -101,8 +104,8 @@ export default function InterviewResultList() {
                     <h5 className='text-small tracking-tight text-default-400'>{result.jobTitle}</h5>
                   </div>
                 </div>
-                <Button color='primary' onPress={handleAddClick} radius='full' size='sm' variant={"flat"}>
-                  View
+                <Button color='primary' isLoading={loadingResults[result.id]} onPress={() => handleViewDetails(result.id)} radius='full' size='sm' variant={"flat"}>
+                  {loadingResults[result.id] ? "Loading.." : "View"}
                 </Button>
               </CardHeader>
               <CardFooter className='gap-3'>
@@ -149,7 +152,7 @@ export default function InterviewResultList() {
       </div>
 
       {/* View Details Drawer */}
-      <ViewResultDrawer isOpen={isDrawerOpen} onClose={() => setDrawerOpen(false)} invitationId={selectedInterviewerId} />
+      <ViewResultDrawer isOpen={isDrawerOpen} onClose={() => setDrawerOpen(false)} interviewerData={selectedInterviewerData} />
     </div>
   );
 }

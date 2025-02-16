@@ -94,9 +94,9 @@ export const SendInvitationDrawer: React.FC<SendInvitationDrawerProps> = ({ isOp
                     isInvalid={!!errors.message && !!touched.message}
                     errorMessage={errors.message}
                   />
-                  <Select placeholder='Choose an interviewer' value={values.interviewerId} onChange={(value) => setFieldValue("interviewerId", value)} isInvalid={!!errors.interviewerId && !!touched.interviewerId} errorMessage={errors.interviewerId}>
+                  <Select placeholder='Choose an interviewer' value={values.interviewerId} onChange={handleChange("interviewerId")} isInvalid={!!errors.interviewerId && !!touched.interviewerId} errorMessage={errors.interviewerId}>
                     {interviewers.map((interviewer: any) => (
-                      <SelectItem key={interviewer.id} value={interviewer.id}>
+                      <SelectItem key={interviewer.id} value={String(interviewer.id)}>
                         {interviewer.name}
                       </SelectItem>
                     ))}
@@ -127,7 +127,7 @@ export const SendInvitationDrawer: React.FC<SendInvitationDrawerProps> = ({ isOp
                   />
 
                   <div className='mt-6'>
-                    <Button color='primary' isLoading={loading} onPress={handleSubmit as any}>
+                    <Button color='primary' className='mr-2' isLoading={loading} onPress={handleSubmit as any}>
                       Send
                     </Button>
                     <Button color='primary' variant='flat' onPress={() => resetForm({ values: initialValues })}>
