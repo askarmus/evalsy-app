@@ -5,7 +5,7 @@ export const Footer = () => {
   return (
     <footer className='bg-slate-50'>
       <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
-        <div className='py-16'>
+        <div className='py-16 flex flex-col items-center'>
           <Logo />
           <nav className='mt-10 text-sm' aria-label='quick links'>
             <div className='-my-1 flex justify-center gap-x-6'>
@@ -34,7 +34,7 @@ export const Footer = () => {
               </svg>
             </a>
           </div>
-          <p className='mt-6 text-sm text-slate-500 sm:mt-0'>Copyright © {new Date().getFullYear.toString()} Evalsy. All rights reserved.</p>
+          <p className='mt-6 text-sm text-slate-500 sm:mt-0'>Copyright © {new Date().getFullYear().toString()} Evalsy. All rights reserved.</p>
         </div>
       </div>
     </footer>
