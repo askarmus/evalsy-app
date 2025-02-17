@@ -1,19 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Drawer, DrawerContent, DrawerHeader, DrawerBody, Card, CardHeader, CardBody, Accordion, AccordionItem, Tab, Tabs, Chip, Spinner, DrawerFooter } from "@heroui/react";
-
-import { getInterviewerById } from "@/services/interviwers.service";
-import { ToastContainer } from "react-toastify";
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement } from "chart.js";
 import { Bar, Pie } from "react-chartjs-2";
 import { RatingDisplay } from "./rating.display";
 import FeaturedBadge from "./featured,badge";
-import DownloadPDFButton from "./DownloadPDFButton";
+import DownloadAndEmailPDF from "./DownloadPDFButton";
 
-interface AddInterviewerProps {
-  isOpen: boolean;
-  onClose: () => void;
-  invitationId?: string | null;
-}
 const evaluationData = [
   { category: "Technical Accuracy", score: 0 },
   { category: "Clarity", score: 2.4 },
@@ -132,23 +124,21 @@ export const ViewResultDrawer: React.FC<{ isOpen: boolean; onClose: () => void; 
               </Card>
             </Tab>
             <Tab key='questionsnaswers' title='Questions and Answers'>
-              <Card className='p-2 mt-6'>
+              <Card className='p-2'>
                 <CardHeader className='text-sm font-semibold'>Questions & Answers</CardHeader>
                 <CardBody>
                   <Accordion isCompact>
                     {interviewerData?.questionAnswers?.map((qa: any, index: number) => {
-                      const questionRating = interviewerData?.questionCriteria?.find((crit: any) => crit.name === qa.name);
-
                       return (
                         <AccordionItem
                           key={qa.id}
                           aria-label={`Accordion ${index + 1}`}
                           title={`${index + 1}. ${qa.text}`}
                           subtitle={
-                            questionRating ? (
-                              <span>
-                                Technical: <RatingDisplay rating={questionRating.expectedValue} /> | Clarity: <RatingDisplay rating={questionRating.expectedValue} /> | Problem Solving: <RatingDisplay rating={questionRating.expectedValue} />
-                              </span>
+                            qa.questionCriteria ? (
+                              <div className='mt-2'>
+                                Technical: <RatingDisplay rating={qa.questionCriteria.find((c: any) => c.name === "Technical Accuracy")?.analyzedValue || 0} /> | Clarity: <RatingDisplay rating={qa.questionCriteria.find((c: any) => c.name === "Clarity")?.analyzedValue || 0} /> | Problem Solving: <RatingDisplay rating={qa.questionCriteria.find((c: any) => c.name === "ProblemSolving")?.analyzedValue || 0} />
+                              </div>
                             ) : null
                           }>
                           <p className='text-gray-700'>
@@ -171,7 +161,7 @@ export const ViewResultDrawer: React.FC<{ isOpen: boolean; onClose: () => void; 
           </Tabs>
         </DrawerBody>
         <DrawerFooter>
-          <DownloadPDFButton interviewerData={interviewerData} />
+          <DownloadAndEmailPDF interviewerData={interviewerData} />
         </DrawerFooter>
       </DrawerContent>
     </Drawer>
