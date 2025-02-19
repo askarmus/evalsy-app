@@ -103,10 +103,10 @@ export const ViewResultDrawer: React.FC<{ isOpen: boolean; onClose: () => void; 
                   <CardBody>
                     <Pie
                       data={{
-                        labels: interviewerData?.overallCriteria.map((item: any) => item.name),
+                        labels: interviewerData?.overallCriteria?.map((item: any) => item.name),
                         datasets: [
                           {
-                            data: interviewerData?.overallCriteria.map((item: any) => item.expectedValue),
+                            data: interviewerData?.overallCriteria?.map((item: any) => item.expectedValue),
                             backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0", "#9966FF", "#FF9F40"],
                           },
                         ],
