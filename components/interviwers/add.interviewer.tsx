@@ -3,7 +3,6 @@ import { Drawer, DrawerContent, DrawerHeader, DrawerBody } from "@heroui/react";
 import { Input, Textarea, Button } from "@heroui/react";
 import { Formik } from "formik";
 import { showToast } from "@/app/utils/toastUtils";
-import Image from "next/image";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import { AddInterviewerSchema } from "@/helpers/schemas";
 import { createInterviewer, getInterviewerById, updateInterviewer } from "@/services/interviwers.service";

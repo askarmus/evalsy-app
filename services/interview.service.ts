@@ -15,6 +15,23 @@ export const startInterview = async (payload: { invitationId: string }) => {
   return response.data.data;
 };
 
+export const sendResultEmail = async (file: File | null, interviewResultId: string, isSendEmail: boolean, emails: string[] | null) => {
+  const formData = new FormData();
+  if (file) {
+    formData.append("file", file);
+  }
+  formData.append("InterviewResultId", interviewResultId);
+  formData.append("email", JSON.stringify(emails));
+  formData.append("isSendEmail", JSON.stringify(isSendEmail));
+
+  const response = await apiClient.post("/interview/result/sendemail", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+  return response.data.data.downloadUrl; // Return the uploaded file URL
+};
+
 export const getAllInterviewResult = async () => {
   const response = await apiClient.get("/interview/result/all");
   return response.data.data;
