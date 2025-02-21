@@ -4,7 +4,6 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { getAllJobs, deleteJob } from "@/services/job.service"; // Make sure deleteJob is implemented in your service
 import { SendInvitationDrawer } from "./send-invitation";
 import { Breadcrumb } from "../bread.crumb";
-import { AiOutlineMore } from "react-icons/ai";
 import { useRouter } from "next/navigation";
 import JobListItemSkeleton from "./components/job.listItem.skeleton";
 import ConfirmDialog from "@/components/ConfirmDialog"; // Import your confirmation dialog component
@@ -146,7 +145,7 @@ export default function Jobs() {
                     <Button color='primary' variant='bordered' className='mr-2' size='sm' onPress={() => handleInviteClick(job.id)}>
                       Invite
                     </Button>
-                    <Button size='sm' color='secondary' variant='bordered' className='mr-2'>
+                    <Button onPress={() => router.push(`/jobs/edit/${job.id}`)} size='sm' color='secondary' variant='bordered' className='mr-2'>
                       Edit
                     </Button>
                     <Button size='sm' color='danger' variant='bordered' onPress={() => handleDeleteClick(job.id)}>

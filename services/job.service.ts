@@ -15,6 +15,11 @@ export const createJob = async (payload) => {
   return response.data;
 };
 
+export const updateJob = async (payload) => {
+  const response = await apiClient.put("/job/update", payload);
+  return response.data;
+};
+
 export const deleteJob = async (jobId) => {
   const response = await apiClient.delete(`/job/delete/${jobId}`);
   return response.data;
@@ -22,5 +27,10 @@ export const deleteJob = async (jobId) => {
 
 export const getAllJobs = async () => {
   const response = await apiClient.get("/job/getall");
+  return response.data.data;
+};
+
+export const getJobById = async (jobId: string) => {
+  const response = await apiClient.get(`/job/${jobId}`);
   return response.data.data;
 };

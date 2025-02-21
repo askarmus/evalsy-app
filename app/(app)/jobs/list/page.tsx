@@ -1,8 +1,8 @@
 import Jobs from "@/components/jobs";
 import React from "react";
 
-const accounts = () => {
+const jobs = () => {
   return <Jobs />;
 };
 
-export default accounts;
+export default jobs;

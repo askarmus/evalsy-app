@@ -1,16 +1,16 @@
 "use client";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Button, Card, CardBody, CardFooter, Input, Radio, RadioGroup, Slider, Switch, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, Textarea } from "@heroui/react";
 
 import { AiFillDelete, AiOutlinePlusSquare } from "react-icons/ai";
 import { Formik, FormikErrors } from "formik";
 import { showToast } from "@/app/utils/toastUtils";
 import { ToastContainer } from "react-toastify";
-import { createJob, generateQuestions } from "@/services/job.service";
+import { createJob, generateQuestions, getJobById, updateJob } from "@/services/job.service";
 import { AddJobSchema } from "@/helpers/schemas";
 import { Breadcrumb } from "../bread.crumb";
 import { nanoid } from "nanoid";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 
 export type Question = { id: string; text: string };
 
@@ -46,62 +46,18 @@ export const CustomRadio = (props) => {
 
 export const AddJob = () => {
   const router = useRouter();
+  const { id } = useParams();
 
   const [isGenerating, setGenerated] = useState(false);
   const formRef = useRef<any | null>(null);
   const [loading, setLoading] = useState(false);
-
-  const handleSubmit = async (values: any, { resetForm }: any) => {
-    console.log(values);
-    setLoading(true);
-    try {
-      await createJob(values);
-      showToast.success("Job created successfully.");
-      setTimeout(() => {
-        router.push("/jobs/list");
-      }, 4000);
-      resetForm();
-    } catch {
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleGenerateQuestions = async (validateForm, values, setFieldValue) => {
-    const errors = await validateForm();
-
-    if (!errors.title && !errors.description && !errors.experienceLevel) {
-      setGenerated(true);
-
-      try {
-        const result = await generateQuestions({
-          jobTitle: values.title,
-          description: values.description,
-          expertiseLevel: values.experienceLevel,
-          noOfQuestions: 10,
-        });
-
-        const newQuestions = result.data.map((text) => ({
-          id: nanoid(),
-          text,
-        }));
-
-        setFieldValue("questions", [...values.questions, ...newQuestions]);
-        showToast.success(result.message || "Questions generated successfully");
-      } catch {
-      } finally {
-        setGenerated(false);
-      }
-    } else {
-      showToast.error("Job title, description, and expert level are required");
-    }
-  };
-
-  const initialValues: AddJobFormValues = {
+  const [prompt, setPrompt] = useState("");
+  const [totalQuestions, setTotalQuestions] = useState(5);
+  const [initialValues, setInitialValues] = useState<AddJobFormValues>({
     jobTitle: "",
     description: "",
     welcomeMessage: "",
-    questions: [{ id: nanoid(), text: "" }],
+    questions: [{ id: "shgdysg1222s", text: "" }],
     experienceLevel: "",
     overallCriteria: [
       { id: 1, name: "Technical Accuracy", expectedValue: 4.0, enabled: true },
@@ -117,11 +73,75 @@ export const AddJob = () => {
       { id: 3, name: "ProblemSolving", expectedValue: 4.0, enabled: true },
       { id: 4, name: "RealWorld Impact", expectedValue: 4.0, enabled: true },
     ],
+  });
+  const isEditMode = Boolean(id);
+
+  useEffect(() => {
+    if (isEditMode) {
+      const fetchJob = async () => {
+        const jobData = await getJobById(id as string);
+        setInitialValues(jobData);
+      };
+      fetchJob();
+    }
+  }, [id]);
+
+  const handleSubmit = async (values: any, { resetForm }: any) => {
+    setLoading(true);
+    try {
+      if (!isEditMode) {
+        await createJob(values);
+        showToast.success("Job created successfully.");
+        resetForm();
+      } else {
+        await updateJob(values);
+        showToast.success("Job updated successfully.");
+      }
+      setTimeout(() => {
+        router.push("/jobs/list");
+      }, 4000);
+    } catch {
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleGenerateQuestions = async (validateForm, values, setFieldValue, prompt, totalQuestions) => {
+    const errors = await validateForm();
+
+    if (!errors.title && !errors.description && !errors.experienceLevel) {
+      setGenerated(true);
+
+      try {
+        const result = await generateQuestions({
+          jobTitle: values.jobTitle,
+          description: values.description, // Using the prompt input
+          expertiseLevel: values.experienceLevel,
+          noOfQuestions: totalQuestions, // Using total questions input
+          prompt: prompt,
+        });
+
+        const newQuestions = result.data.map((text) => ({
+          id: nanoid(),
+          text,
+        }));
+
+        setFieldValue("questions", [...values.questions, ...newQuestions]);
+        showToast.success(result.message || "Questions generated successfully");
+      } catch (error: any) {
+        console.error("Error generating questions:", error);
+        showToast.error(error.message || "Failed to generate questions. Please try again.");
+      } finally {
+        setGenerated(false);
+      }
+    } else {
+      showToast.error("Job title, description, and expertise level are required");
+    }
   };
   const breadcrumbItems = [
     { name: "Dashboard", link: "/" },
     { name: "Job", link: "/job/list" },
-    { name: "Add", link: "" },
+    { name: !isEditMode ? "Add" : "Edit", link: "" },
   ];
   return (
     <div>
@@ -134,7 +154,7 @@ export const AddJob = () => {
         </div>
         <div className='max-w-[90rem] mx-auto w-full'>
           <div className=' w-full flex flex-col gap-4'>
-            <Formik<AddJobFormValues> innerRef={formRef} initialValues={initialValues} onSubmit={handleSubmit} validationSchema={AddJobSchema}>
+            <Formik<AddJobFormValues> innerRef={formRef} enableReinitialize={true} initialValues={initialValues} onSubmit={handleSubmit} validationSchema={AddJobSchema}>
               {({ values, errors, touched, handleChange, setFieldValue, validateForm }) => (
                 <>
                   <div className='flex gap-4'>
@@ -144,7 +164,6 @@ export const AddJob = () => {
                           <CardBody>
                             <div className='grid grid-cols-1 gap-4'>
                               <Input label='Title' variant='bordered' value={values.jobTitle} isInvalid={!!errors.jobTitle && !!touched.jobTitle} errorMessage={errors.jobTitle} onChange={handleChange("jobTitle")} />
-                              <Textarea label='Interview Welcome Message' variant='bordered' value={values.welcomeMessage} isInvalid={!!errors.welcomeMessage && !!touched.welcomeMessage} errorMessage={errors.description} onChange={handleChange("welcomeMessage")} />
                               <Textarea label='Description' variant='bordered' value={values.description} isInvalid={!!errors.description && !!touched.description} errorMessage={errors.description} onChange={handleChange("description")} />
 
                               <div className='flex'>
@@ -156,14 +175,31 @@ export const AddJob = () => {
                                     <CustomRadio value='expert'>Expert</CustomRadio>
                                   </RadioGroup>
                                 </div>
+                              </div>
+                              <div className='flex gap-4'>
+                                <div className='flex-1 flex'>
+                                  <Textarea
+                                    placeholder='Prompt'
+                                    minRows={1}
+                                    disableAutosize
+                                    value={prompt}
+                                    onChange={(e) => setPrompt(e.target.value)}
+                                    classNames={{
+                                      base: "w-full",
+                                      input: "resize-y min-h-[20px]",
+                                    }}
+                                  />
+                                </div>
 
-                                <div className='flex items-center justify-center'>
+                                <div className='flex items-center justify-center  gap-4'>
+                                  <Input placeholder='Total' type='number' min='1' defaultValue={totalQuestions.toString()} onChange={(e) => setTotalQuestions(Number(e.target.value))} className='max-w-[60px]' />
+
                                   <Button
                                     color='danger'
                                     isLoading={isGenerating}
                                     variant='flat'
                                     onPress={async () => {
-                                      handleGenerateQuestions(validateForm, values, setFieldValue);
+                                      handleGenerateQuestions(validateForm, values, setFieldValue, prompt, totalQuestions);
                                     }}>
                                     Generate
                                   </Button>
@@ -173,7 +209,7 @@ export const AddJob = () => {
                               <div className='flex w-full flex-wrap md:flex-nowrap gap-4'>
                                 <Table aria-label='Example static collection table'>
                                   <TableHeader>
-                                    <TableColumn>#</TableColumn>
+                                    <TableColumn width={8}>#</TableColumn>
                                     <TableColumn>QUESTIONS</TableColumn>
                                     <TableColumn width={30}>
                                       <Button color='primary' variant='faded' size='sm' onPress={() => setFieldValue("questions", [...values.questions, { id: nanoid(), text: "" }])}>
@@ -186,7 +222,19 @@ export const AddJob = () => {
                                       <TableRow key={question.id}>
                                         <TableCell>{index + 1}</TableCell>
                                         <TableCell>
-                                          <Input variant='bordered' value={question.text} isInvalid={!!(errors.questions?.[index] as FormikErrors<Question>)?.text && touched.questions?.[index]?.text} errorMessage={(errors.questions?.[index] as FormikErrors<Question>)?.text || ""} onChange={(e) => setFieldValue(`questions[${index}].text`, e.target.value)} />
+                                          <Textarea
+                                            disableAnimation
+                                            disableAutosize
+                                            classNames={{
+                                              base: "w-full",
+                                              input: "resize-y min-h-[20px]",
+                                            }}
+                                            variant='bordered'
+                                            value={question.text}
+                                            isInvalid={!!(errors.questions?.[index] as FormikErrors<Question>)?.text && touched.questions?.[index]?.text}
+                                            errorMessage={(errors.questions?.[index] as FormikErrors<Question>)?.text || ""}
+                                            onChange={(e) => setFieldValue(`questions[${index}].text`, e.target.value)}
+                                          />
                                         </TableCell>
                                         <TableCell align='right'>
                                           <Button
