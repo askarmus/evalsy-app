@@ -7,60 +7,72 @@ export const FAQ = () => {
       <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative'>
         <div className='mx-auto max-w-2xl lg:mx-0'>
           <h2 id='faq-title' className='font-display text-3xl tracking-tight text-slate-900 sm:text-4xl'>
-            Frequently asked questions
+            What people are saying about us.
           </h2>
           <p className='mt-4 text-lg tracking-tight text-slate-700'>If you can’t find what you’re looking for, email our support team and if you’re lucky someone will get back to you.</p>
         </div>
-        <ul role='list' className='mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-8 lg:max-w-none lg:grid-cols-3'>
-          <li>
-            <ul role='list' className='flex flex-col gap-y-8'>
-              <li>
-                <h3 className='font-display text-lg/7 text-slate-900'>Does TaxPal handle VAT?</h3>
-                <p className='mt-4 text-sm text-slate-700'>Well no, but if you move your company offshore you can probably ignore it.</p>
-              </li>
-              <li>
-                <h3 className='font-display text-lg/7 text-slate-900'>Can I pay for my subscription via purchase order?</h3>
-                <p className='mt-4 text-sm text-slate-700'>Absolutely, we are happy to take your money in all forms.</p>
-              </li>
-              <li>
-                <h3 className='font-display text-lg/7 text-slate-900'>How do I apply for a job at TaxPal?</h3>
-                <p className='mt-4 text-sm text-slate-700'>We only hire our customers, so subscribe for a minimum of 6 months and then let’s talk.</p>
-              </li>
-            </ul>
-          </li>
-          <li>
-            <ul role='list' className='flex flex-col gap-y-8'>
-              <li>
-                <h3 className='font-display text-lg/7 text-slate-900'>What was that testimonial about tax fraud all about?</h3>
-                <p className='mt-4 text-sm text-slate-700'>TaxPal is just a software application, ultimately your books are your responsibility.</p>
-              </li>
-              <li>
-                <h3 className='font-display text-lg/7 text-slate-900'>TaxPal sounds horrible but why do I still feel compelled to purchase?</h3>
-                <p className='mt-4 text-sm text-slate-700'>This is the power of excellent visual design. You just can’t resist it, no matter how poorly it actually functions.</p>
-              </li>
-              <li>
-                <h3 className='font-display text-lg/7 text-slate-900'>I found other companies called TaxPal, are you sure you can use this name?</h3>
-                <p className='mt-4 text-sm text-slate-700'>Honestly not sure at all. We haven’t actually incorporated or anything, we just thought it sounded cool and made this website.</p>
-              </li>
-            </ul>
-          </li>
-          <li>
-            <ul role='list' className='flex flex-col gap-y-8'>
-              <li>
-                <h3 className='font-display text-lg/7 text-slate-900'>How do you generate reports?</h3>
-                <p className='mt-4 text-sm text-slate-700'>You just tell us what data you need a report for, and we get our kids to create beautiful charts for you using only the finest crayons.</p>
-              </li>
-              <li>
-                <h3 className='font-display text-lg/7 text-slate-900'>Can we expect more inventory features?</h3>
-                <p className='mt-4 text-sm text-slate-700'>In life it’s really better to never expect anything at all.</p>
-              </li>
-              <li>
-                <h3 className='font-display text-lg/7 text-slate-900'>I lost my password, how do I get into my account?</h3>
-                <p className='mt-4 text-sm text-slate-700'>Send us an email and we will send you a copy of our latest password spreadsheet so you can find your information.</p>
-              </li>
-            </ul>
-          </li>
-        </ul>
+        <div className='flex flex-wrap -m-4 mt-8'>
+          <div className='w-full p-4 md:w-1/3'>
+            <div className='p-6 border shadow-xl rounded-3xl'>
+              <a className='inline-flex items-center mb-2'>
+                <img alt='blog' src='https://randomuser.me/api/portraits/men/32.jpg' className='flex-shrink-0 object-cover object-center w-8 h-8 rounded-full' />
+                <span className='flex flex-col flex-grow pl-4'>
+                  <span className='text-xs uppercase text-slate-600'>James Miller</span>
+                </span>
+              </a>
+              <p className='text-sm leading-relaxed text-gray-500'>&quot;Hiring has never been this smooth! With AI automation, we filled roles faster than ever. Truly effortless and efficient!&quot;</p>
+            </div>
+            <div className='p-6 mt-4 border shadow-xl rounded-3xl'>
+              <a className='inline-flex items-center mb-2'>
+                <img alt='blog' src='https://randomuser.me/api/portraits/men/45.jpg' className='flex-shrink-0 object-cover object-center w-8 h-8 rounded-full' />
+                <span className='flex flex-col flex-grow pl-4'>
+                  <span className='text-xs uppercase text-slate-600'>Lucy Henderson</span>
+                </span>
+              </a>
+              <p className='text-sm leading-relaxed text-gray-500'>&quot;I was blown away by how simple the hiring process became. The AI did the heavy lifting, letting me focus on choosing the best candidates.&quot;</p>
+            </div>
+          </div>
+          <div className='w-full p-4 md:w-1/3'>
+            <div className='p-6 border shadow-xl rounded-3xl'>
+              <a className='inline-flex items-center mb-2'>
+                <img alt='blog' src='https://randomuser.me/api/portraits/men/76.jpg' className='flex-shrink-0 object-cover object-center w-8 h-8 rounded-full' />
+                <span className='flex flex-col flex-grow pl-4'>
+                  <span className='text-xs uppercase text-slate-600'>Michael Lee</span>
+                </span>
+              </a>
+              <p className='text-sm leading-relaxed text-gray-500'>&quot;From endless paperwork to streamlined hiring—this AI tool transformed our recruitment. Its like having an extra HR team!&quot;</p>
+            </div>
+            <div className='p-6 mt-4 border shadow-xl rounded-3xl'>
+              <a className='inline-flex items-center mb-2'>
+                <img alt='blog' src='https://randomuser.me/api/portraits/women/12.jpg' className='flex-shrink-0 object-cover object-center w-8 h-8 rounded-full' />
+                <span className='flex flex-col flex-grow pl-4'>
+                  <span className='text-xs uppercase text-slate-600'>Sophia Turner</span>
+                </span>
+              </a>
+              <p className='text-sm leading-relaxed text-gray-500'>&quot;Effortless is an understatement. The AI handled everything from screening to scheduling, saving us hours of manual work.&quot;</p>
+            </div>
+          </div>
+          <div className='w-full p-4 md:w-1/3'>
+            <div className='p-6 border shadow-xl rounded-3xl'>
+              <a className='inline-flex items-center mb-2'>
+                <img alt='blog' src='https://randomuser.me/api/portraits/men/84.jpg' className='flex-shrink-0 object-cover object-center w-8 h-8 rounded-full' />
+                <span className='flex flex-col flex-grow pl-4'>
+                  <span className='text-xs uppercase text-slate-600'>David Nguyen</span>
+                </span>
+              </a>
+              <p className='text-sm leading-relaxed text-gray-500'>&quot;What used to take weeks now takes days. The AI makes hiring so simple that I wonder how we ever managed without it.&quot;</p>
+            </div>
+            <div className='p-6 mt-4 border shadow-xl rounded-3xl'>
+              <a className='inline-flex items-center mb-2'>
+                <img alt='blog' src='https://randomuser.me/api/portraits/women/67.jpg' className='flex-shrink-0 object-cover object-center w-8 h-8 rounded-full' />
+                <span className='flex flex-col flex-grow pl-4'>
+                  <span className='text-xs uppercase text-slate-600'>Emily Clark</span>
+                </span>
+              </a>
+              <p className='text-sm leading-relaxed text-gray-500'>&quot;This tool turned hiring chaos into clarity. With AI automation, we found top talent without breaking a sweat! It’s a complete game-changer for our team.&quot;</p>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   );
