@@ -142,19 +142,19 @@ export default function Jobs() {
                     {/* Action Buttons */}
                     <div className='flex gap-2'>
                       <Tooltip content='Send invitation'>
-                        <Button isIconOnly aria-label='Edit' onPress={() => handleInviteClick(job.id)} color='primary'>
+                        <Button isIconOnly aria-label='Edit' onPress={() => handleInviteClick(job.id)} size='sm' color='primary'>
                           <AiOutlineUserAdd />
                         </Button>
                       </Tooltip>
 
                       <Tooltip content='Edit job'>
-                        <Button isIconOnly aria-label='Edit' onPress={() => router.push(`/jobs/edit/${job.id}`)} color='secondary'>
+                        <Button isIconOnly aria-label='Edit' onPress={() => router.push(`/jobs/edit/${job.id}`)} size='sm' color='secondary'>
                           <AiFillEdit />
                         </Button>
                       </Tooltip>
 
                       <Tooltip content='Delete job'>
-                        <Button isIconOnly aria-label='Delete' onPress={() => handleDeleteClick(job.id)} color='danger'>
+                        <Button isIconOnly aria-label='Delete' onPress={() => handleDeleteClick(job.id)} size='sm' color='danger'>
                           <AiOutlineDelete />
                         </Button>
                       </Tooltip>
