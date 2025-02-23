@@ -140,7 +140,7 @@ export default function Jobs() {
                   {/* Buttons & Invitation Status */}
                   <div className='flex flex-col gap-2 ml-auto items-end'>
                     {/* Action Buttons */}
-                    <div className='flex gap-2'>
+                    <div className='flex gap-1'>
                       <Tooltip content='Send invitation'>
                         <Button isIconOnly aria-label='Edit' onPress={() => handleInviteClick(job.id)} size='sm' color='primary'>
                           <AiOutlineUserAdd />
