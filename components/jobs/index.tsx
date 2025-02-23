@@ -128,7 +128,7 @@ export default function Jobs() {
         {!isLoading && (
           <div className='w-full flex flex-col gap-4'>
             {items.map((job: any) => (
-              <Card key={job.id} className='p-5'>
+              <Card key={job.id} className='px-3 py-3'>
                 <CardHeader className='flex justify-between items-center'>
                   {/* Job Title */}
                   <div className='flex gap-5'>
