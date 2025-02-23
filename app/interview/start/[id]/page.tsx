@@ -34,8 +34,8 @@ export default function InterviewPage() {
   const [startingInterview, setStartingInterview] = useState(false);
   const [interviewStartedOn, setInterviewStartedOn] = useState("");
   const [isTimeOver, setIsTimeOver] = useState(false);
-  const [isWelcomeMessageReading, setWelcomeMessageReading] = useState(false);
-  const [showWelcomeMessage, setShowWelcomeMessage] = useState(false);
+  const [isAboutCompanyReading, setAboutCompanyReading] = useState(false);
+  const [showWelcomeCompany, setShowAboutCompany] = useState(false);
   const [recordedQuestions, setRecordedQuestions] = useState<string[]>([]); // Track completed recordings
   const hasFetched = useRef(false);
   const [isUploading, setIsUploading] = useState<boolean>(false);
@@ -69,9 +69,9 @@ export default function InterviewPage() {
     }
   };
 
-  const readWelcomeMessage = () => {
-    setWelcomeMessageReading(true);
-    const audio = new Audio(invitationDetails.job.welcomeAudioUrl);
+  const readAboutCompany = () => {
+    setAboutCompanyReading(true);
+    const audio = new Audio(invitationDetails.company.aboutCompanyAudioUrl);
     audio.play().catch((error) => {
       console.error("Error playing audio:", error);
     });
@@ -81,7 +81,7 @@ export default function InterviewPage() {
         setCurrentQuestionIndex(0);
         const firstQuestion = new Audio(questions[0].audioUrl);
         firstQuestion.play();
-        setWelcomeMessageReading(false);
+        setAboutCompanyReading(false);
       }, 2000);
     });
   };
@@ -98,7 +98,7 @@ export default function InterviewPage() {
         setExpiredOrCompleted(true);
         return;
       } else if (data.status === "pending") {
-        setShowWelcomeMessage(true);
+        setShowAboutCompany(true);
       }
       setInterviewStartedOn(data.statusUpdateAt);
       setInvitationDetails(data);
@@ -201,7 +201,7 @@ export default function InterviewPage() {
                       {!hasAnswered && (
                         <blockquote className='px-4 my-6 py-3 text-2xl'>
                           {currentQuestionIndex != -1 && questions[currentQuestionIndex]?.text}
-                          {currentQuestionIndex == -1 && invitationDetails.job.welcomeMessage}
+                          {currentQuestionIndex == -1 && invitationDetails.company.aboutCompany}
                         </blockquote>
                       )}
                       {hasAnswered && <blockquote className='border px-4 my-6 py-3 rounded-xl [&>p]:m-0 border-default-200 dark:border-default-100 bg-default-200/20'>Please click the {"Next Question"} button to load the next question.</blockquote>}
@@ -211,7 +211,7 @@ export default function InterviewPage() {
                         {currentQuestionIndex != -1 && <AudioRecorder onRecordingComplete={handleRecordingComplete} currentQuestion={questions[currentQuestionIndex]} invitationId={id as string} hasAnswered={hasAnswered} setHasAnswered={setHasAnswered} onNextQuestion={handleNextQuestion} onAudioRecorded={uploadAudioAsync} onStopRecording={() => console.log("Recording stopped externally")} />}
 
                         {currentQuestionIndex == -1 && (
-                          <Button isDisabled={isWelcomeMessageReading} endContent={<AiTwotoneRocket />} color='danger' variant='bordered' onPress={() => readWelcomeMessage()}>
+                          <Button isDisabled={isAboutCompanyReading} endContent={<AiTwotoneRocket />} color='danger' variant='bordered' onPress={() => readAboutCompany()}>
                             Read welcome message.
                           </Button>
                         )}

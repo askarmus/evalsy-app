@@ -13,6 +13,7 @@ import { AiOutlineCloseCircle } from "react-icons/ai";
 export type CompanySettingsFormValues = {
   name: string;
   address?: string;
+  aboutCompany?: string;
   website?: string;
   linkedin?: string;
   facebook?: string;
@@ -27,6 +28,7 @@ const CompanySettings = () => {
   const [initialValues, setInitialValues] = useState<CompanySettingsFormValues>({
     name: "",
     address: "",
+    aboutCompany: "",
     website: "",
     linkedin: "",
     facebook: "",
@@ -79,6 +81,7 @@ const CompanySettings = () => {
                   <div className='grid grid-cols-1 gap-4'>
                     <Input label='Company Name' name='name' value={values.name || ""} onChange={handleChange} isInvalid={!!errors.name && !!touched.name} errorMessage={errors.name} />
                     <Textarea label='Address' name='address' value={values.address || ""} onChange={handleChange} isInvalid={!!errors.address && !!touched.address} errorMessage={errors.address} />
+                    <Textarea label='About Company' name='aboutCompany' value={values.aboutCompany || ""} onChange={handleChange} isInvalid={!!errors.aboutCompany && !!touched.aboutCompany} errorMessage={errors.aboutCompany} />
                     <div className='grid grid-cols-2 gap-4'>
                       <Input label='Website' name='website' value={values.website || ""} onChange={handleChange} isInvalid={!!errors.website && !!touched.website} errorMessage={errors.website} />
                       <Input label='LinkedIn' name='linkedin' value={values.linkedin || ""} onChange={handleChange} isInvalid={!!errors.linkedin && !!touched.linkedin} errorMessage={errors.linkedin} />

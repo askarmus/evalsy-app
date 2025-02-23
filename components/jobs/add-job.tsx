@@ -17,7 +17,6 @@ export type Question = { id: string; text: string };
 export interface AddJobFormValues {
   jobTitle: string;
   description: string;
-  welcomeMessage: string;
   questions: Question[];
   experienceLevel: string;
   overallCriteria: Criteria[];
@@ -56,7 +55,6 @@ export const AddJob = () => {
   const [initialValues, setInitialValues] = useState<AddJobFormValues>({
     jobTitle: "",
     description: "",
-    welcomeMessage: "",
     questions: [{ id: "shgdysg1222s", text: "" }],
     experienceLevel: "",
     overallCriteria: [
