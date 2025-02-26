@@ -98,9 +98,9 @@ export const AddInterviewer: React.FC<AddInterviewerProps> = ({ isOpen, onClose,
                 <p className='text-sm font-semibold mb-4'>Profile photo</p>
                 <div className='flex items-center space-x-4'>
                   <FileUploadWithPreview
-                    onUpload={(blob) => {
-                      setFieldValue("photoUrl", blob.data.url);
-                      setUploadProfileUrl(blob.data.url);
+                    onUpload={(data) => {
+                      setFieldValue("photoUrl", data.url);
+                      setUploadProfileUrl(data.url);
                     }}
                   />
                   {uploadProfileUrl && (

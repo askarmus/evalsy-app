@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
-import { Button, Card, CardBody, CardFooter, Input, Radio, RadioGroup, Slider, Switch, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, Textarea } from "@heroui/react";
+import { Button, Card, CardBody, CardFooter, Input, Radio, RadioGroup, Select, SelectItem, Slider, Switch, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, Textarea } from "@heroui/react";
 
 import { AiFillDelete, AiOutlinePlusSquare } from "react-icons/ai";
 import { Formik, FormikErrors } from "formik";
@@ -12,21 +12,18 @@ import { Breadcrumb } from "../bread.crumb";
 import { nanoid } from "nanoid";
 import { useParams, useRouter } from "next/navigation";
 
-export type Question = { id: string; text: string };
+export type Question = { id: string; text: string; expectedScore: number };
 
 export interface AddJobFormValues {
   jobTitle: string;
-  description: string;
   questions: Question[];
   experienceLevel: string;
-  overallCriteria: Criteria[];
-  questionCriteria: Criteria[];
 }
 export interface Criteria {
   id: number;
   name: string;
-  expectedValue: number;
-  enabled: boolean;
+  description: string;
+  scoreRange: string;
 }
 
 export const CustomRadio = (props) => {
@@ -54,24 +51,18 @@ export const AddJob = () => {
   const [totalQuestions, setTotalQuestions] = useState(5);
   const [initialValues, setInitialValues] = useState<AddJobFormValues>({
     jobTitle: "",
-    description: "",
-    questions: [{ id: "shgdysg1222s", text: "" }],
+    questions: [{ id: "shgdysg1222s", text: "", expectedScore: 20 }],
     experienceLevel: "",
-    overallCriteria: [
-      { id: 1, name: "Technical Accuracy", expectedValue: 4.0, enabled: true },
-      { id: 2, name: "Clarity", expectedValue: 4.0, enabled: true },
-      { id: 3, name: "Problem Solving", expectedValue: 4.0, enabled: true },
-      { id: 4, name: "RealWorld Impact", expectedValue: 4.0, enabled: true },
-      { id: 7, name: "Confidence Level", expectedValue: 4.0, enabled: true },
-      { id: 8, name: "Communication Skills", expectedValue: 4.0, enabled: true },
-    ],
-    questionCriteria: [
-      { id: 1, name: "Technical Accuracy", expectedValue: 4.0, enabled: true },
-      { id: 2, name: "Clarity", expectedValue: 4.0, enabled: true },
-      { id: 3, name: "ProblemSolving", expectedValue: 4.0, enabled: true },
-      { id: 4, name: "RealWorld Impact", expectedValue: 4.0, enabled: true },
-    ],
   });
+
+  const evaluationCriteria = [
+    { id: 1, name: "Relevance", description: "Does the answer correctly address the question?", scoreRange: "1-5" },
+    { id: 2, name: "Completeness", description: "Is the response well-explained and detailed?	", scoreRange: "1-5" },
+    { id: 3, name: "Clarity", description: "Is the answer structured and easy to understand?	", scoreRange: "1-5" },
+    { id: 4, name: "Grammar & Language", description: "Is the language correct, with no major mistakes?	", scoreRange: "1-5" },
+    { id: 5, name: "Technical Accuracy", description: "Is the answer factually correct?	", scoreRange: "1-5" },
+  ];
+
   const isEditMode = Boolean(id);
 
   useEffect(() => {
@@ -107,13 +98,12 @@ export const AddJob = () => {
   const handleGenerateQuestions = async (validateForm, values, setFieldValue, prompt, totalQuestions) => {
     const errors = await validateForm();
 
-    if (!errors.title && !errors.description && !errors.experienceLevel) {
+    if (!errors.title && !errors.experienceLevel) {
       setGenerated(true);
 
       try {
         const result = await generateQuestions({
           jobTitle: values.jobTitle,
-          description: values.description, // Using the prompt input
           expertiseLevel: values.experienceLevel,
           noOfQuestions: totalQuestions, // Using total questions input
           prompt: prompt,
@@ -133,7 +123,7 @@ export const AddJob = () => {
         setGenerated(false);
       }
     } else {
-      showToast.error("Job title, description, and expertise level are required");
+      showToast.error("Job title, and expertise level are required");
     }
   };
   const breadcrumbItems = [
@@ -162,7 +152,6 @@ export const AddJob = () => {
                           <CardBody>
                             <div className='grid grid-cols-1 gap-4'>
                               <Input label='Title' variant='bordered' value={values.jobTitle} isInvalid={!!errors.jobTitle && !!touched.jobTitle} errorMessage={errors.jobTitle} onChange={handleChange("jobTitle")} />
-                              <Textarea label='Description' variant='bordered' value={values.description} isInvalid={!!errors.description && !!touched.description} errorMessage={errors.description} onChange={handleChange("description")} />
 
                               <div className='flex'>
                                 <div className='flex-1 flex'>
@@ -207,11 +196,12 @@ export const AddJob = () => {
                               <div className='flex w-full flex-wrap md:flex-nowrap gap-4'>
                                 <Table aria-label='Example static collection table'>
                                   <TableHeader>
-                                    <TableColumn width={8}>#</TableColumn>
+                                    <TableColumn width={5}>#</TableColumn>
                                     <TableColumn>QUESTIONS</TableColumn>
-                                    <TableColumn width={30}>
+                                    <TableColumn width={30}>SCORE RANGE</TableColumn>
+                                    <TableColumn width={20}>
                                       <Button color='primary' variant='faded' size='sm' onPress={() => setFieldValue("questions", [...values.questions, { id: nanoid(), text: "" }])}>
-                                        Add <AiOutlinePlusSquare />
+                                        Add
                                       </Button>
                                     </TableColumn>
                                   </TableHeader>
@@ -233,6 +223,14 @@ export const AddJob = () => {
                                             errorMessage={(errors.questions?.[index] as FormikErrors<Question>)?.text || ""}
                                             onChange={(e) => setFieldValue(`questions[${index}].text`, e.target.value)}
                                           />
+                                        </TableCell>
+
+                                        <TableCell>
+                                          <Select defaultSelectedKeys={"2"} onChange={(e) => setFieldValue(`questions[${index}].expectedScore`, e.target.value)}>
+                                            <SelectItem key={1}>15/30</SelectItem>
+                                            <SelectItem key={2}>25/30</SelectItem>
+                                            <SelectItem key={3}>30/30</SelectItem>
+                                          </Select>
                                         </TableCell>
                                         <TableCell align='right'>
                                           <Button
@@ -274,75 +272,20 @@ export const AddJob = () => {
                       </div>
                     </div>
                     <div className='w-2/5'>
-                      <h3 className='text-xl1 tex mb-4'>Overall Criteria</h3>
+                      <h3 className='text-xl1'>Evaluation Criteria</h3>
+                      <p className='text-sm mb-5'>For each question, score the candidate’s response based on key factors:</p>
                       <Table aria-label='Analysis Criteria Table mb-5'>
                         <TableHeader>
-                          <TableColumn>Criterion</TableColumn>
-                          <TableColumn>Status</TableColumn>
-                          <TableColumn>Value</TableColumn>
-                          <TableColumn>Expected Value</TableColumn>
+                          <TableColumn>Criteria</TableColumn>
+                          <TableColumn>Description</TableColumn>
+                          <TableColumn>Score Range</TableColumn>
                         </TableHeader>
                         <TableBody>
-                          {values.overallCriteria.map((criterion, index) => (
+                          {evaluationCriteria.map((criterion, index) => (
                             <TableRow key={criterion.id}>
                               <TableCell>{criterion.name}</TableCell>
-                              <TableCell>
-                                <Switch
-                                  size='sm'
-                                  isSelected={criterion.enabled} // Use isSelected instead of checked
-                                  onValueChange={(
-                                    value // Use onValueChange instead of onChange
-                                  ) =>
-                                    setFieldValue(
-                                      `overallCriteria[${index}].enabled`,
-                                      value // Directly use the value provided by the Switch
-                                    )
-                                  }
-                                />
-                              </TableCell>
-                              <TableCell>
-                                <span className='text-sm'>{criterion.expectedValue}</span>
-                              </TableCell>
-                              <TableCell>
-                                <Slider size='sm' value={criterion.expectedValue} onChange={(value) => setFieldValue(`overallCriteria[${index}].expectedValue`, value)} minValue={1} maxValue={5} step={0.5} />
-                              </TableCell>
-                            </TableRow>
-                          ))}
-                        </TableBody>
-                      </Table>
-
-                      <h3 className='text-xl1 tex mb-3 mt-5'> Question Specific Criteria</h3>
-                      <Table aria-label='Analysis Criteria Table'>
-                        <TableHeader>
-                          <TableColumn>Criterion</TableColumn>
-                          <TableColumn>Status</TableColumn>
-                          <TableColumn>Value</TableColumn>
-                          <TableColumn>Expected Value</TableColumn>
-                        </TableHeader>
-                        <TableBody>
-                          {values.questionCriteria.map((criterion, index) => (
-                            <TableRow key={criterion.id}>
-                              <TableCell>{criterion.name}</TableCell>
-                              <TableCell>
-                                <Switch
-                                  size='sm'
-                                  isSelected={criterion.enabled} // Use isSelected instead of checked
-                                  onValueChange={(
-                                    value // Use onValueChange instead of onChange
-                                  ) =>
-                                    setFieldValue(
-                                      `questionCriteria[${index}].enabled`,
-                                      value // Directly use the value provided by the Switch
-                                    )
-                                  }
-                                />
-                              </TableCell>
-                              <TableCell>
-                                <span className='text-sm'>{criterion.expectedValue}</span>
-                              </TableCell>
-                              <TableCell>
-                                <Slider size='sm' value={criterion.expectedValue} onChange={(value) => setFieldValue(`questionCriteria[${index}].expectedValue`, value)} minValue={1} maxValue={5} step={0.5} />
-                              </TableCell>
+                              <TableCell>{criterion.description}</TableCell>
+                              <TableCell>{criterion.scoreRange}</TableCell>
                             </TableRow>
                           ))}
                         </TableBody>

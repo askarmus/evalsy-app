@@ -19,7 +19,6 @@ export const ForgetPasswordSchema = object().shape({
 });
 export const AddJobSchema = object().shape({
   jobTitle: string().required("Title is required"),
-  description: string().required("Description is required"),
   experienceLevel: string().required("Please select a experience Level"),
 
   questions: array()

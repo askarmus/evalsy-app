@@ -152,7 +152,7 @@ export default function InterviewPage() {
     setIsUploading(true);
     try {
       const response = await upload(file);
-      const recordedUrl = response.data?.url;
+      const recordedUrl = response.url;
 
       await updateQuestion({
         invitationId: id as string,

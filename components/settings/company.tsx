@@ -98,9 +98,9 @@ const CompanySettings = () => {
 
                   <div className='flex items-center space-x-4'>
                     <FileUploadWithPreview
-                      onUpload={(blob) => {
-                        setFieldValue("logo", blob.data.url);
-                        setUploadLogoUrl(blob.data.url);
+                      onUpload={(data) => {
+                        setFieldValue("logo", data.url);
+                        setUploadLogoUrl(data.url);
                       }}
                     />
                     {uploadLogoUrl && (
