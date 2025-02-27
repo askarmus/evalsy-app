@@ -56,12 +56,12 @@ const EvaluationTable = ({ data }) => {
                     </tr>
                     {expandedRow === answer.id && (
                       <tr>
-                        <td colSpan={8} className='p-5'>
-                          <p className='text-gray-700'>
+                        <td colSpan={8} className='p-3'>
+                          <p className='text-gray-700 text-small'>
                             <strong>Answer:</strong> {answer.transcription || "No transcription available."}
                           </p>
                           {answer.recordedUrl && (
-                            <audio controls className='mt-2 mb-2 w-full'>
+                            <audio controls className='mt-4 mb-2 w-full'>
                               <source src={answer.recordedUrl} type='audio/mpeg' />
                               Your browser does not support the audio element.
                             </audio>

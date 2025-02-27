@@ -25,7 +25,7 @@ export const ViewResultDrawer: React.FC<{ isOpen: boolean; onClose: () => void; 
                 <div className='col-span-3 flex justify-end items-start'>
                   <div>
                     <p className='rounded-lg text-sky-500 text-sm py-1 px-3 center'>Overall Score </p>
-                    <p className='rounded-lg text-sky-500 font-bold bg-sky-100 py-1 px-3 text-sm text-center'>{interviewerData?.overallWeight}</p>
+                    <p className='rounded-lg text-sky-500 font-bold bg-sky-100 py-1 px-3 text-sm text-center'>{((interviewerData?.overallWeight / 30) * 100).toFixed(2)}%</p>
                   </div>
                 </div>
               </div>

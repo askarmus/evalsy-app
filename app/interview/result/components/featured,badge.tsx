@@ -1,15 +1,13 @@
 import React from "react";
 
 const getBadgeStyle = (weight) => {
-  if (weight >= 0 && weight <= 0.9) {
-    return { bgColor: "bg-red-200", text: "Poor" };
-  } else if (weight >= 1 && weight <= 1.9) {
+  if (weight >= 1 && weight <= 7.5) {
     return { bgColor: "bg-orange-500", text: "Below Average" };
-  } else if (weight >= 2 && weight <= 2.9) {
+  } else if (weight >= 7.6 && weight <= 15) {
     return { bgColor: "bg-yellow-500", text: "Average" };
-  } else if (weight >= 3 && weight <= 3.9) {
+  } else if (weight >= 15.1 && weight <= 22.5) {
     return { bgColor: "bg-blue-500", text: "Good" };
-  } else if (weight >= 4 && weight <= 5) {
+  } else if (weight >= 22.6 && weight <= 30) {
     return { bgColor: "bg-green-500", text: "Excellent" };
   }
   return { bgColor: "bg-gray-500", text: "Unknown" }; // Default case

@@ -203,10 +203,8 @@ export default function Jobs() {
               </Card>
             ))}
 
-            {/* Pagination */}
-            <Pagination isCompact showControls showShadow page={page} total={pages} onChange={(page) => setPage(page)} />
+            <Pagination color='primary' isCompact showControls showShadow page={page} total={pages} onChange={(page) => setPage(page)} />
 
-            {/* Send Invitation Drawer */}
             <SendInvitationDrawer isOpen={isDrawerOpen} onClose={handleCloseDrawer} jobId={selectedJobId} />
           </div>
         )}

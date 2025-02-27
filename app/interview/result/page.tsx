@@ -5,6 +5,8 @@ import { Breadcrumb } from "@/components/bread.crumb";
 import { getAllInterviewResult, getInterviewResultById } from "@/services/interview.service";
 import { ViewResultDrawer } from "./components/view.result.drawer";
 import DateFormatter from "@/app/utils/DateFormatter";
+import RatingLegend from "./components/RatingLegend";
+import FeaturedBadge from "./components/featured,badge";
 
 export default function InterviewResultList() {
   const [page, setPage] = useState(1);
@@ -64,12 +66,12 @@ export default function InterviewResultList() {
   }, [page, filteredResults]);
 
   // Define card background based on `overallWeight`
-  const getBorderColor = (weight: number | null) => {
-    if (weight === null || weight < 1) return "border-red-600";
-    if (weight >= 4) return "border-green-600";
-    if (weight >= 3) return "border-blue-600";
-    if (weight >= 2) return "border-yellow-600";
-    return "border-orange-500";
+  const getBorderColor = (weight: number) => {
+    if (weight >= 1 && weight <= 7.5) return "border-orange-500"; // Below Average
+    if (weight >= 7.6 && weight <= 15) return "border-yellow-600"; // Average
+    if (weight >= 15.1 && weight <= 22.5) return "border-blue-600"; // Good
+    if (weight >= 22.6 && weight <= 30) return "border-green-600"; // Excellent
+    return "border-gray-500"; // Fallback (if weight is out of range)
   };
 
   return (
@@ -96,26 +98,30 @@ export default function InterviewResultList() {
       ) : (
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
           {items.map((result: any) => (
-            <Card key={result.id} className={`rounded-xl shadow-md px-3 py-3 w-full border-1 ${getBorderColor(result.overallWeight)}`}>
-              <CardHeader className='justify-between'>
-                <div className='flex gap-5'>
-                  <div className='flex flex-col gap-1 items-start justify-center'>
-                    <h4 className='text-1xl font-semibold leading-none text-default-600'>{result.name}</h4>
-                    <h5 className='text-small tracking-tight text-default-400'>{result.jobTitle}</h5>
+            <Card key={result.id} className={`rounded-xl shadow-md    w-full border-2 ${getBorderColor(result.overallWeight)}`}>
+              <CardBody className='p-0 w-full'>
+                <FeaturedBadge weight={result?.overallWeight} />
+                <div className='grid grid-cols-12 gap-4 p-5 w-full'>
+                  <div className='col-span-9'>
+                    <p className='text-sm font-semibold'>{result?.name}</p>
+                    <p className='text-sm text-gray-400'>{result?.jobTitle}</p>
+                  </div>
+                  <div className='col-span-3 flex justify-end items-start'>
+                    <div>
+                      <p className='rounded-lg text-sky-500 text-sm py-1 px-3 center'>Score </p>
+                      <p className='rounded-lg text-sky-500 font-bold bg-sky-100 py-1 px-3 text-sm text-center'>{result?.overallWeight}</p>
+                    </div>
                   </div>
                 </div>
-                <Button color='primary' isLoading={loadingResults[result.id]} onPress={() => handleViewDetails(result.id)} radius='full' size='sm' variant={"flat"}>
-                  {loadingResults[result.id] ? "Loading.." : "View"}
-                </Button>
-              </CardHeader>
+              </CardBody>
               <CardFooter className='gap-3'>
-                <div className='flex gap-1'>
-                  <p className='font-semibold text-default-400 text-small'>{result.overallWeight}</p>
-                  <p className=' text-default-400 text-small'>Overal lWeight</p>
-                </div>
-                <div className='flex gap-1'>
-                  <p className='font-semibold text-default-400 text-small'>{DateFormatter.formatDate(result.statusUpdateAt)}</p>
-                  <p className='text-default-400 text-small'>Completed</p>
+                <div className='flex justify-between gap-5 w-full'>
+                  <div className='flex flex-col gap-1 items-start justify-center'>
+                    <p className='font-semibold text-default-400 text-small'> {DateFormatter.formatDate(result.statusUpdateAt)}</p>
+                  </div>
+                  <Button color='primary' isLoading={loadingResults[result.id]} onPress={() => handleViewDetails(result.id)} radius='full' size='sm' variant='flat'>
+                    {loadingResults[result.id] ? "Loading.." : "View"}
+                  </Button>
                 </div>
               </CardFooter>
             </Card>
@@ -123,35 +129,10 @@ export default function InterviewResultList() {
         </div>
       )}
 
-      {/* Weight Legend */}
-      <div className='flex flex-wrap justify-center mt-6 gap-4 mb-5'>
-        <div className='flex items-center gap-2'>
-          <span className='w-4 h-4 bg-red-200 rounded-full'></span>
-          <span className='text-sm font-medium'>Poor (0 - 0.9)</span>
-        </div>
-        <div className='flex items-center gap-2'>
-          <span className='w-4 h-4 bg-orange-500 rounded-full'></span>
-          <span className='text-sm font-medium'>Below Average (1 - 1.9)</span>
-        </div>
-        <div className='flex items-center gap-2'>
-          <span className='w-4 h-4 bg-yellow-500 rounded-full'></span>
-          <span className='text-sm font-medium'>Average (2 - 2.9)</span>
-        </div>
-        <div className='flex items-center gap-2'>
-          <span className='w-4 h-4 bg-blue-500 rounded-full'></span>
-          <span className='text-sm font-medium'>Good (3 - 3.9)</span>
-        </div>
-        <div className='flex items-center gap-2'>
-          <span className='w-4 h-4 bg-green-500 rounded-full'></span>
-          <span className='text-sm font-medium'>Excellent (4 - 5)</span>
-        </div>
-      </div>
-      {/* Pagination */}
+      <RatingLegend />
       <div className='flex w-full justify-center'>
-        <Pagination isCompact showControls showShadow color='secondary' page={page} total={pages} onChange={(page) => setPage(page)} />
+        <Pagination isCompact showControls showShadow color='primary' page={page} total={pages} onChange={(page) => setPage(page)} />
       </div>
-
-      {/* View Details Drawer */}
       <ViewResultDrawer isOpen={isDrawerOpen} onClose={() => setDrawerOpen(false)} interviewerData={selectedInterviewerData} />
     </div>
   );
