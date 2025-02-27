@@ -1,3 +1,4 @@
+import { Card, CardBody } from "@heroui/react";
 import React from "react";
 import { Bar } from "react-chartjs-2";
 
@@ -29,38 +30,42 @@ const EvaluationChart = ({ data }) => {
   };
 
   return (
-    <Bar
-      data={chartData}
-      options={{
-        responsive: true,
-        scales: {
-          x: {
-            grid: { display: true }, // Removes vertical grid lines
-            ticks: { font: { size: 8 } }, // Reduces font size of X-axis labels
-          },
-          y: {
-            beginAtZero: false,
-            min: 2.5, // Start from 2.5
-            max: 5,
-            grid: { display: false }, // Removes horizontal grid lines
-            ticks: { font: { size: 8 } }, // Reduces font size of Y-axis labels
-          },
-        },
-        plugins: {
-          legend: {
-            display: false,
-            labels: {
-              font: { size: 12 }, // Reduces font size of the legend
+    <Card className='p-2 mb-6'>
+      <CardBody>
+        <Bar
+          data={chartData}
+          options={{
+            responsive: true,
+            scales: {
+              x: {
+                grid: { display: true }, // Removes vertical grid lines
+                ticks: { font: { size: 8 } }, // Reduces font size of X-axis labels
+              },
+              y: {
+                beginAtZero: false,
+                min: 2.5, // Start from 2.5
+                max: 5,
+                grid: { display: false }, // Removes horizontal grid lines
+                ticks: { font: { size: 8 } }, // Reduces font size of Y-axis labels
+              },
             },
-          },
-          title: {
-            display: false,
-            text: "Evaluation Chart", // Custom chart title
-            font: { size: 14 }, // Reduces title font size
-          },
-        },
-      }}
-    />
+            plugins: {
+              legend: {
+                display: false,
+                labels: {
+                  font: { size: 12 }, // Reduces font size of the legend
+                },
+              },
+              title: {
+                display: false,
+                text: "Evaluation Chart", // Custom chart title
+                font: { size: 14 }, // Reduces title font size
+              },
+            },
+          }}
+        />
+      </CardBody>
+    </Card>
   );
 };
 

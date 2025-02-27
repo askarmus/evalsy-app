@@ -1,8 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Drawer, DrawerContent, DrawerHeader, DrawerBody, Card, CardHeader, CardBody, Accordion, AccordionItem, Tab, Tabs, Chip, Spinner, DrawerFooter } from "@heroui/react";
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement } from "chart.js";
-import { Bar, Pie } from "react-chartjs-2";
-import { RatingDisplay } from "./rating.display";
 import FeaturedBadge from "./featured,badge";
 import DownloadAndEmailPDF from "./DownloadPDFButton";
 import EvaluationTable from "./EvaluationTable";
@@ -38,13 +36,8 @@ export const ViewResultDrawer: React.FC<{ isOpen: boolean; onClose: () => void; 
         <DrawerBody>
           <Tabs aria-label='Options'>
             <Tab key='overallresult' title='Overall Result'>
-              <Card className='p-2 mb-6'>
-                <CardBody>
-                  <EvaluationChart data={interviewerData}></EvaluationChart>
-                </CardBody>
-              </Card>
+              <EvaluationChart data={interviewerData}></EvaluationChart>
               <EvaluationTable data={interviewerData} />
-
               <Card className='p-2 mt-6 w-full'>
                 <CardHeader className='text-sm font-semibold'>Feedabck</CardHeader>
                 <CardBody className='  w-full'>
@@ -55,41 +48,6 @@ export const ViewResultDrawer: React.FC<{ isOpen: boolean; onClose: () => void; 
                       </li>
                     ))}
                   </ul>
-                </CardBody>
-              </Card>
-            </Tab>
-            <Tab key='questionsnaswers' title='Questions and Answers'>
-              <Card className='p-2'>
-                <CardHeader className='text-sm font-semibold'>Questions & Answers</CardHeader>
-                <CardBody>
-                  <Accordion isCompact>
-                    {interviewerData?.questionAnswers?.map((qa: any, index: number) => {
-                      return (
-                        <AccordionItem
-                          key={qa.id}
-                          aria-label={`Accordion ${index + 1}`}
-                          title={`${index + 1}. ${qa.text}`}
-                          subtitle={
-                            qa.questionCriteria ? (
-                              <div className='mt-2'>
-                                Technical: <RatingDisplay rating={qa.questionCriteria.find((c: any) => c.name === "Technical Accuracy")?.analyzedValue || 0} /> | Clarity: <RatingDisplay rating={qa.questionCriteria.find((c: any) => c.name === "Clarity")?.analyzedValue || 0} /> | Problem Solving: <RatingDisplay rating={qa.questionCriteria.find((c: any) => c.name === "ProblemSolving")?.analyzedValue || 0} />
-                              </div>
-                            ) : null
-                          }>
-                          <p className='text-gray-700'>
-                            <strong>Answer:</strong> {qa.transcription || "No transcription available."}
-                          </p>
-
-                          {qa.recordedUrl && (
-                            <audio controls className='mt-2 mb-2 w-full'>
-                              <source src={qa.recordedUrl} type='audio/mpeg' />
-                              Your browser does not support the audio element.
-                            </audio>
-                          )}
-                        </AccordionItem>
-                      );
-                    })}
-                  </Accordion>
                 </CardBody>
               </Card>
             </Tab>
