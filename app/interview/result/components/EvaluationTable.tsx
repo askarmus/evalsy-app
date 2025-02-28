@@ -5,14 +5,9 @@ import { AiOutlineDown, AiOutlineUp } from "react-icons/ai";
 const EvaluationTable = ({ data }) => {
   const categories = ["relevance", "completeness", "clarity", "grammar_language", "technical_accuracy"];
   let totalScore = 0;
-  let totalPossibleScore = data.questionAnswers.length * 25;
 
   const [expandedRow, setExpandedRow] = useState<number | null>(null);
-  const datas = [
-    { id: 1, name: "Alice", role: "Software Engineer", status: "Active", details: "Joined in 2021, works on frontend" },
-    { id: 2, name: "Bob", role: "Backend Engineer", status: "Paused", details: "Expert in Node.js and databases" },
-    { id: 3, name: "Charlie", role: "DevOps Engineer", status: "Vacation", details: "AWS Certified, works on CI/CD" },
-  ];
+
   const toggleRow = (id: number) => {
     setExpandedRow(expandedRow === id ? null : id);
   };

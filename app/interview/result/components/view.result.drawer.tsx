@@ -54,7 +54,7 @@ export const ViewResultDrawer: React.FC<{ isOpen: boolean; onClose: () => void; 
           </Tabs>
         </DrawerBody>
         <DrawerFooter>
-          <DownloadAndEmailPDF interviewerData={interviewerData} />
+          <DownloadAndEmailPDF result={interviewerData} />
         </DrawerFooter>
       </DrawerContent>
     </Drawer>

@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useMemo, useEffect, useCallback } from "react";
-import { Card, CardBody, Button, Input, Pagination, Spinner, CardHeader, CardFooter } from "@heroui/react";
+import { Card, CardBody, Button, Input, Pagination, Spinner, CardFooter } from "@heroui/react";
 import { Breadcrumb } from "@/components/bread.crumb";
 import { getAllInterviewResult, getInterviewResultById } from "@/services/interview.service";
 import { ViewResultDrawer } from "./components/view.result.drawer";
@@ -12,7 +12,6 @@ export default function InterviewResultList() {
   const [page, setPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [loadingResults, setLoadingResults] = useState<{ [key: string]: boolean }>({});
-
   const [filterValue, setFilterValue] = useState("");
   const [interviewResults, setInterviewResults] = useState([]);
   const rowsPerPage = 6;
@@ -89,8 +88,6 @@ export default function InterviewResultList() {
         </div>
       </div>
 
-      <div>{/* Overall Performance Chip */}</div>
-      {/* Interview Results as Cards */}
       {isLoading ? (
         <div className='flex justify-center'>
           <Spinner />
