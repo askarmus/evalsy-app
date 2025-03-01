@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import JobListItemSkeleton from "./components/job.listItem.skeleton";
 import ConfirmDialog from "@/components/ConfirmDialog"; // Import your confirmation dialog component
 import DateFormatter from "@/app/utils/DateFormatter";
-import { AiFillEdit, AiOutlineDelete, AiOutlineUserAdd } from "react-icons/ai";
+import { AiFillEdit, AiOutlineDelete, AiOutlinePlus, AiOutlineUserAdd } from "react-icons/ai";
 
 export default function Jobs() {
   const [page, setPage] = useState(1);
@@ -115,8 +115,8 @@ export default function Jobs() {
           />
         </div>
         <div className='flex flex-row gap-3.5 flex-wrap'>
-          <Button color='primary' onPress={() => router.push("/jobs/add")}>
-            Add New Job
+          <Button color='primary' onPress={() => router.push("/jobs/add")} endContent={<AiOutlinePlus />}>
+            Add New
           </Button>
         </div>
       </div>

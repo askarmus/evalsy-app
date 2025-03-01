@@ -5,6 +5,7 @@ import { deleteInterviewer, getAllInterviewers } from "@/services/interviwers.se
 import { AddInterviewer } from "@/components/interviwers/add.interviewer";
 import { Breadcrumb } from "@/components/bread.crumb";
 import ConfirmDialog from "@/components/ConfirmDialog";
+import { AiOutlinePlus } from "react-icons/ai";
 
 export default function InterviewerManagement() {
   const [page, setPage] = useState(1);
@@ -111,8 +112,8 @@ export default function InterviewerManagement() {
           />
         </div>
         <div className='flex flex-row gap-3.5 flex-wrap'>
-          <Button onPress={handleAddClick} color='primary'>
-            Add Interviewer
+          <Button onPress={handleAddClick} color='primary' endContent={<AiOutlinePlus />}>
+            Add New
           </Button>
         </div>
       </div>

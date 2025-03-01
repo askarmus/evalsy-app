@@ -27,7 +27,9 @@ export const NavbarWrapper = ({ children }: Props) => {
         }}>
         <NavbarContent className='pr-3' justify='center'>
           <NavbarBrand>
-            <Logo />
+            <Link className='flex items-center text-default-800 hover:text-gray-800 gap-2' href='/dashboard'>
+              <Logo />
+            </Link>
           </NavbarBrand>
         </NavbarContent>
 

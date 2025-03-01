@@ -20,7 +20,7 @@ const InterviewCard: React.FC<InterviewCardProps> = ({ invitationDetails, onStar
           <CardHeader className='justify-between mb-10'>
             <div className='flex gap-5'>
               <div className='flex flex-col gap-1 items-start justify-center'>
-                <h4 className='text-small font-semibold leading-none text-default-600'>
+                <h4 className='text-small font-semibold leading-none text-default-400'>
                   <span className='text-small tracking-tight text-default-400'>Hello,</span> {invitationDetails.candidateName}
                 </h4>
                 <h5 className='text-small tracking-tight text-default-400'>{invitationDetails.candidateEmail}</h5>

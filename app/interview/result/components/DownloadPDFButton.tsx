@@ -23,15 +23,29 @@ const DownloadAndEmailPDF = ({ result: result }: { result: any }) => {
     fetchDownloadLink();
   }, [interviewResultId]);
 
-  const sendOrDownloadResultPDF = async () => {
+  const downloadResultPDF = async () => {
     setLoading(true);
     try {
-      const uploadedUrl = await sendResultEmail({
-        interviewResultId,
-        sendEmail,
-        emails: null,
-      });
-      setPdfUrl(uploadedUrl);
+      if (!pdfUrl) {
+        const uploadedUrl = await sendResultEmail({
+          interviewResultId,
+          sendEmail,
+          emails: null,
+        });
+        setPdfUrl(uploadedUrl);
+      }
+
+      // Create a hidden link element
+      const link = document.createElement("a");
+      link.target = "_blank";
+      link.href = pdfUrl || "";
+
+      // Append to the DOM and trigger click
+      document.body.appendChild(link);
+      link.click();
+
+      // Cleanup
+      document.body.removeChild(link);
     } catch (error) {
       console.error("Error generating/uploading PDF:", error);
     } finally {
@@ -44,7 +58,7 @@ const DownloadAndEmailPDF = ({ result: result }: { result: any }) => {
     setSendEmail(true);
     if (!pdfUrl) {
       setLoading(true);
-      await sendOrDownloadResultPDF();
+      await downloadResultPDF();
       setLoading(false);
     }
 
@@ -67,19 +81,9 @@ const DownloadAndEmailPDF = ({ result: result }: { result: any }) => {
   return (
     <div className='w-full'>
       <div className='flex flex-row gap-4'>
-        {!pdfUrl && (
-          <Button onPress={sendOrDownloadResultPDF} color='primary' variant='solid' isLoading={loading}>
-            <AiOutlineDownload />
-          </Button>
-        )}
-
-        {pdfUrl && (
-          <a href={pdfUrl} target='_blank'>
-            <Button color='success'>
-              <AiOutlineDownload /> Download Result
-            </Button>
-          </a>
-        )}
+        <Button onPress={downloadResultPDF} color='primary' variant='solid' isLoading={loading}>
+          <AiOutlineDownload />
+        </Button>
 
         <Input type='email' placeholder='Enter email to send result' value={email} onChange={(e) => setEmail(e.target.value)} className='w-full' />
 
