@@ -19,6 +19,7 @@ const VideoRecorder: React.FC<VideoRecorderProps> = ({ invitationId }) => {
     onStop: () => {
       if (videoRef.current) {
         videoRef.current.srcObject = null;
+        videoRef.current.srcObject = null;
         videoRef.current.src = mediaBlobUrl || "";
       }
     },
