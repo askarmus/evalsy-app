@@ -1,13 +1,33 @@
+import { ViewResultDrawer } from "@/app/interview/result/components/view.result.drawer";
 import DateFormatter from "@/app/utils/DateFormatter";
 import { getColorByInitial } from "@/app/utils/getColorByInitial";
 import { getInitials } from "@/app/utils/getInitials";
 import { get10InterviewResult } from "@/services/dashboard.service";
-import { Card, CardBody, Skeleton, User } from "@heroui/react";
+import { getInterviewResultById } from "@/services/interview.service";
+import { Button, Card, CardBody, Skeleton, Spinner, User } from "@heroui/react";
 import React, { useEffect, useState } from "react";
+import { AiFillEye } from "react-icons/ai";
 
 export const RecentInterviews = () => {
   const [results, setResults] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isDrawerOpen, setDrawerOpen] = useState(false);
+  const [selectedInterviewerData, setSelectedInterviewerData] = useState<any>(null);
+  const [loadingResults, setLoadingResults] = useState<{ [key: string]: boolean }>({});
+
+  const handleViewDetails = async (resultId: string) => {
+    setLoadingResults((prev) => ({ ...prev, [resultId]: true })); // Set loading for the specific result
+
+    try {
+      const data = await getInterviewResultById(resultId);
+      setSelectedInterviewerData(data);
+      setDrawerOpen(true);
+    } catch (error) {
+      console.error("Error fetching interviewer data:", error);
+    }
+
+    setLoadingResults((prev) => ({ ...prev, [resultId]: false })); // Reset loading after fetch
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -59,7 +79,7 @@ export const RecentInterviews = () => {
                 </div>
               ))
             : results.map((item) => (
-                <div key={item.id} className='grid grid-cols-[2fr_1fr_1fr] w-full py-2'>
+                <div key={item.id} className='bg-green grid grid-cols-[3fr_1fr_1fr_auto] w-full py-2 items-center'>
                   {/* First Column: User Information */}
                   <div className='w-full'>
                     <User
@@ -74,17 +94,25 @@ export const RecentInterviews = () => {
 
                   {/* Second Column: Status */}
                   <div className='flex items-center flex-col'>
-                    <span className='text-success text-xs'>Weight</span>
-                    <span className='text-xs'>{item.overallWeight != null ? item.overallWeight : "Unknown"}</span>
+                    <span className='text-success text-xs mb-1'>Score</span>
+                    <span className='text-xs'>{item.overallWeight}</span>
                   </div>
 
                   {/* Third Column: Date */}
                   <div className='flex items-center'>
-                    <span className='text-default-500 text-xs'>{DateFormatter.formatDate(item.invitation.statusUpdateAt)}</span>
+                    <span className='text-default-500 text-xs'>{DateFormatter.timeAgo(item.invitation.statusUpdateAt)}</span>
+                  </div>
+
+                  {/* Fourth Column: Button - Align to Right */}
+                  <div className='flex items-center justify-self-end ml-auto'>
+                    <Button color='primary' isIconOnly={true} isLoading={loadingResults[item.id]} onPress={() => handleViewDetails(item.id)} radius='full' size='sm' variant='flat'>
+                      {loadingResults[item.id] ? <Spinner size='sm' /> : <AiFillEye />}
+                    </Button>
                   </div>
                 </div>
               ))}
         </div>
+        <ViewResultDrawer isOpen={isDrawerOpen} onClose={() => setDrawerOpen(false)} interviewerData={selectedInterviewerData} />
       </CardBody>
     </Card>
   );

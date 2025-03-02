@@ -1,5 +1,5 @@
 import { format, toZonedTime } from "date-fns-tz";
-
+import { formatDistanceToNow } from "date-fns";
 class DateFormatter {
   private static readonly DEFAULT_FORMAT = "MMM dd, yyyy HH:mm"; // Consistent format with time
   private static readonly DATE_ONLY_FORMAT = "MMM dd, yyyy"; // Format without time
@@ -24,6 +24,12 @@ class DateFormatter {
 
     // Format the date consistently
     return format(zonedDate, formatString, { timeZone });
+  }
+
+  public static timeAgo(date: Date | string | number): string {
+    if (!date) return "";
+
+    return formatDistanceToNow(new Date(date), { addSuffix: true });
   }
 }
 
