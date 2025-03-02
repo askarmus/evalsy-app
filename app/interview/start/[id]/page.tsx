@@ -18,6 +18,7 @@ import InterviewCard from "./component/interview.card";
 import { upload as upload } from "@/services/company.service";
 import CandidateInfoCard from "./component/candidate.info.card";
 import VideoRecorder from "./component/video.card";
+import { ToastContainer } from "react-toastify";
 
 export interface Question {
   id: string;
@@ -73,7 +74,7 @@ export default function InterviewPage() {
     setAboutCompanyReading(true);
     const audio = new Audio(invitationDetails.company.aboutCompanyAudioUrl);
     audio.play().catch((error) => {
-      console.error("Error playing audio:", error);
+      console.error("Error playing audio ss:", error);
     });
 
     audio.addEventListener("ended", () => {
@@ -226,6 +227,7 @@ export default function InterviewPage() {
                   </div>
                 </div>
               </Card>
+              <ToastContainer />
             </main>
           </div>
         </>
