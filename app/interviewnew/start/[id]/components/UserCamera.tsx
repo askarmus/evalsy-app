@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { useInterviewStore } from "../stores/useInterviewStore";
+import { Card, CardBody, CardFooter, CardHeader } from "@heroui/react";
 
 const UserCamera: React.FC = () => {
   const { isCameraOn, toggleCamera, uploadScreenshot, screenshotInterval } = useInterviewStore();
@@ -42,6 +43,7 @@ const UserCamera: React.FC = () => {
         canvas.width = videoRef.current.videoWidth;
         canvas.height = videoRef.current.videoHeight;
         ctx.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
+
         canvas.toBlob((blob) => {
           if (blob) uploadScreenshot(blob, interviewId);
         }, "image/png");
@@ -53,40 +55,19 @@ const UserCamera: React.FC = () => {
   }, [screenshotInterval]);
 
   return (
-    <div style={{ width: "100%", maxWidth: "400px", position: "relative", textAlign: "center" }}>
-      <h3>User Camera</h3>
+    <Card className='py-4' shadow='sm'>
+      <CardHeader className='pb-0 pt-2 px-4 flex-col items-start'>
+        <p className='text-tiny uppercase font-bold'>Video</p>
+      </CardHeader>
+      <CardBody>
+        {isCameraOn ? <video ref={videoRef} autoPlay playsInline className='w-full aspect-video bg-black rounded-lg' /> : <img src='https://kohansazandegan.com/Content/img/video-placeholder.png' alt='Camera Off' className='w-full aspect-video bg-black rounded-lg' />}
 
-      {isCameraOn ? (
-        <video
-          ref={videoRef}
-          autoPlay
-          playsInline
-          style={{
-            width: "100%",
-            maxHeight: "300px",
-            objectFit: "cover",
-            borderRadius: "10px",
-          }}
-        />
-      ) : (
-        <img
-          src='https://kohansazandegan.com/Content/img/video-placeholder.png' // ✅ Replace with actual placeholder image
-          alt='Camera Off'
-          style={{
-            width: "100%",
-            maxHeight: "300px",
-            objectFit: "cover",
-            borderRadius: "10px",
-            backgroundColor: "#eee",
-          }}
-        />
-      )}
-
-      <canvas ref={canvasRef} style={{ display: "none" }} />
-      <button onClick={toggleCamera} style={{ marginTop: "10px" }}>
-        {isCameraOn ? "Turn Camera Off" : "Turn Camera On"}
-      </button>
-    </div>
+        <canvas ref={canvasRef} style={{ display: "none" }} />
+      </CardBody>
+      <CardFooter>
+        <button onClick={toggleCamera}>{isCameraOn ? "Turn Camera Off" : "Turn Camera On"}</button>
+      </CardFooter>
+    </Card>
   );
 };
 

@@ -11,18 +11,14 @@ const InterviewTimer: React.FC = () => {
       setTimeLeft(timeLeft - 1);
     }, 1000);
 
-    if (timeLeft === Math.floor(duration * 0.2)) {
-      alert("⚠️ 80% of your interview time is completed!");
-    }
-
     return () => clearInterval(timer);
   }, [timeLeft, phase, setTimeLeft, duration]);
 
   return (
-    <div>
-      <h3>
-        Time Left: {Math.floor(timeLeft / 60)}:{String(timeLeft % 60).padStart(2, "0")}
-      </h3>
+    <div className='p-4 whitespace-nowrap'>
+      <span className='text-1xl font-semibold  font-mono tabular-nums text-right inline-block align-middle'>
+        {Math.floor(timeLeft / 60)}:{String(timeLeft % 60).padStart(2, "0")}
+      </span>
     </div>
   );
 };

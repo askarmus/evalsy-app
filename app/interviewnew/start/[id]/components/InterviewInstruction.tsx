@@ -2,12 +2,9 @@ import { Button, Card, CardBody, CardFooter, CardHeader, Checkbox, Navbar, Navba
 import React, { useState } from "react";
 import Image from "next/image";
 import { useInterviewStore } from "../stores/useInterviewStore";
+import CandidateInfo from "./CandidateInfo";
 
-type InterviewInstructionProps = {
-  invitationId: string;
-};
-
-const InterviewInstruction: React.FC<InterviewInstructionProps> = ({ invitationId }) => {
+const InterviewInstruction: React.FC<any> = () => {
   const [isChecked, setIsChecked] = useState(false);
   const { startInterview, duration, isLoading, company, candidate, job, questions } = useInterviewStore();
 
@@ -18,22 +15,7 @@ const InterviewInstruction: React.FC<InterviewInstructionProps> = ({ invitationI
       </Navbar>
       <main className='max-w-7xl mx-auto px-6 py-8'>
         <Card className='p-8' shadow='none'>
-          <CardHeader className='justify-between mb-10'>
-            <div className='flex gap-5'>
-              <div className='flex flex-col gap-1 items-start justify-center'>
-                <h4 className='text-small font-semibold leading-none text-default-400'>
-                  <span className='text-small tracking-tight text-default-400'>Hello,</span> {candidate.candidateName}
-                </h4>
-                <h5 className='text-small tracking-tight text-default-400'>{candidate.candidateEmail}</h5>
-              </div>
-            </div>
-            <div>
-              <h3 className='text-xl font-semibold'>
-                <span className='text-gray-400  font-semibold '>Intterviwing Position:</span> {job.jobTitle}
-              </h3>
-              <p className='text-gray-500'> {company.name}</p>
-            </div>
-          </CardHeader>
+          <CandidateInfo candidate={candidate} company={company} job={job} />
 
           <CardBody>
             <div className='mb-5'>
@@ -79,7 +61,7 @@ const InterviewInstruction: React.FC<InterviewInstructionProps> = ({ invitationI
           </CardBody>
           <CardFooter>
             <div className='flex flex-col items-start space-y-2'>
-              <Button onPress={() => startInterview(invitationId)} isDisabled={!isChecked} color='primary' isLoading={isLoading}>
+              <Button onPress={() => startInterview()} isDisabled={!isChecked} color='primary' isLoading={isLoading}>
                 Start Interview
               </Button>
 
