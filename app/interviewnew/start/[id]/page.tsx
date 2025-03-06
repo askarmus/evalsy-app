@@ -8,7 +8,7 @@ import { ToastContainer } from "react-toastify";
 
 const App: React.FC = () => {
   const { id } = useParams();
-  const { setPhase, loadInterview, candidate, company, job } = useInterviewStore();
+  const { loadInterview } = useInterviewStore();
 
   useEffect(() => {
     if (id) {

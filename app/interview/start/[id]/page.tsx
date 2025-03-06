@@ -159,8 +159,6 @@ export default function InterviewPage() {
         invitationId: id as string,
         questionId: questions[currentQuestionIndex]?.id,
         recordedUrl,
-        startTime,
-        endTime,
       });
 
       handleRecordingComplete(questions[currentQuestionIndex]?.id);

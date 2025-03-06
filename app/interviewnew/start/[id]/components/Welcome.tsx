@@ -50,8 +50,8 @@ const Welcome: React.FC = () => {
               <CardBody className='overflow-visible py-2'>
                 <div className='p-6 text-gray-800 rounded-lg max-w-3xl mx-auto'>
                   <h2 className='text-2xl font-bold mb-4 text-center'>Welcome to the Interview!</h2>
+                  <p>{company.aboutCompany}</p>
                   <p className='text-lg leading-relaxed text-gray-700 mt-4'>
-                    <p>{company.aboutCompany}</p>
                     {company?.timestamps?.map((item, index) => (
                       <span
                         key={index}
