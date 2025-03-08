@@ -77,9 +77,15 @@ export const useInterviewStore = create<InterviewState>()(
         if (get().isLoaded || get().phase === "completed") return;
 
         try {
-          set({ phase: "skeleton-loading", isLoaded: true }); // Set isLoaded before making API call
+          set({ phase: "skeleton-loading", isLoaded: false }); // Set isLoaded before making API call
 
           const data = await getInvitationDetails(id as string);
+
+          if (data?.status === "expired") {
+            set({ phase: "expired", isLoading: false });
+            return;
+          }
+
           set({ invitationId: id });
           set({
             phase: "not-started",
