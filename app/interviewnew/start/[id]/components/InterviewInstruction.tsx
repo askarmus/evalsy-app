@@ -1,8 +1,9 @@
-import { Button, Card, CardBody, CardFooter, CardHeader, Checkbox, Navbar, NavbarBrand } from "@heroui/react";
+import { Button, Card, CardBody, CardFooter, Checkbox, Navbar, NavbarBrand, NavbarContent, NavbarItem } from "@heroui/react";
 import React, { useState } from "react";
 import Image from "next/image";
 import { useInterviewStore } from "../stores/useInterviewStore";
 import CandidateInfo from "./CandidateInfo";
+import { DarkModeSwitch } from "@/components/navbar/darkmodeswitch";
 
 const InterviewInstruction: React.FC<any> = () => {
   const [isChecked, setIsChecked] = useState(false);
@@ -10,8 +11,13 @@ const InterviewInstruction: React.FC<any> = () => {
 
   return (
     <div className='min-h-screen bg-gray-100'>
-      <Navbar maxWidth='full'>
-        <NavbarBrand>{company?.logo ? <Image src={company?.logo} width={100} height={50} alt={`${company.name} Logo`} /> : <p className='font-bold text-inherit'>{company.name}</p>}</NavbarBrand>
+      <Navbar position='static' isBordered className='w-full' classNames={{ wrapper: "w-full max-w-full color-line" }}>
+        <NavbarBrand>{company.logo ? <Image src={company.logo} alt={`${company.name} Logo`} width={100} height={40} className='w-auto min-h-[30px] max-h-[40px] object-contain' /> : <p className='font-bold text-inherit'>{company.name}</p>}</NavbarBrand>
+        <NavbarContent justify='end'>
+          <NavbarItem>
+            <DarkModeSwitch />
+          </NavbarItem>
+        </NavbarContent>
       </Navbar>
       <main className='max-w-7xl mx-auto px-6 py-8'>
         <Card className='p-8' shadow='none'>

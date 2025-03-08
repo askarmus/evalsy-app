@@ -10,7 +10,7 @@ const InterviewNavbar: React.FC<any> = ({ company }) => {
 
   return (
     <Navbar position='static' isBordered className='w-full' classNames={{ wrapper: "w-full max-w-full color-line" }}>
-      <NavbarBrand>{company.logo ? <Image src={company.logo} alt={`${company.name} Logo`} width={100} height={40} className='w-auto min-h-[30px] max-h-[40px] object-contain' /> : <p className='font-bold text-inherit'>{company.name}</p>}</NavbarBrand>
+      <NavbarBrand>{company?.logo ? <Image src={company?.logo} alt={`${company?.name} Logo`} width={100} height={40} className='w-auto min-h-[30px] max-h-[40px] object-contain' /> : <p className='font-bold text-inherit'>{company?.name}</p>}</NavbarBrand>
       <NavbarContent justify='end'>
         <NavbarItem className='hidden lg:flex'>
           <InterviewTimer />

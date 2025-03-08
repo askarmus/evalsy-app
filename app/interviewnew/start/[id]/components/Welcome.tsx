@@ -32,11 +32,10 @@ const Welcome: React.FC = () => {
   }, []);
 
   const handleAudioEnd = () => {
-    setInterval(() => {
+    setTimeout(() => {
       setPhase("in-progress");
-    }, 2000);
+    }, 2000); // Ensuring a smooth transition
   };
-
   return (
     <>
       <InterviewNavbar company={company} />

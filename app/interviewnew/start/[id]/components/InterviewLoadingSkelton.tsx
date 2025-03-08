@@ -3,7 +3,7 @@ import React, { useState } from "react";
 
 export default function InterviewLoadingSkelton() {
   return (
-    <div className='min-h-screen bg-gray-100'>
+    <div className='min-h-screen'>
       <Navbar maxWidth='full'>
         <NavbarBrand>
           <div className='max-w-[300px] w-full flex items-center gap-3'>

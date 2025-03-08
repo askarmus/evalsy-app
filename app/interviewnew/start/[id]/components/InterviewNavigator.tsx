@@ -9,30 +9,50 @@ import Interviewer from "./Interviewer";
 
 const InterviewNavigator: React.FC = () => {
   const { questions, interviewer, candidate, company, job, currentQuestion, isAudioCompleted, setAudioCompleted, isRecording, setRecording } = useInterviewStore();
+
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const reminderAudioRef = useRef<HTMLAudioElement | null>(null);
   const [reminderInterval, setReminderInterval] = useState<NodeJS.Timeout | null>(null);
-  const [isReplayingAudio, setIsReplayingAudio] = useState(false); // ✅ Track replay state
+  const [isReplayingAudio, setIsReplayingAudio] = useState(false);
+  const [isRefreshed, setIsRefreshed] = useState(false);
+  const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
+  const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(null);
 
   const question = questions[currentQuestion];
+
+  useEffect(() => {
+    const isRefreshed = localStorage.getItem("pageRefreshed");
+
+    if (isRefreshed) {
+      localStorage.removeItem("pageRefreshed");
+      setIsRefreshed(false);
+    }
+
+    localStorage.setItem("pageRefreshed", "true");
+    setIsRefreshed(true);
+  }, []);
 
   useEffect(() => {
     const playQuestionAudio = async () => {
       if (audioRef.current) {
         try {
-          await audioRef.current.play();
+          audioRef.current.load();
+          const playPromise = audioRef.current.play();
+          if (playPromise !== undefined) {
+            await playPromise.catch((error) => console.warn("Autoplay blocked:", error));
+          }
         } catch (error) {
           console.error("Audio play failed:", error);
         }
       }
     };
 
-    playQuestionAudio(); // ✅ Auto-play question on refresh
-  }, [currentQuestion]); // ✅ Runs every time the question changes
+    playQuestionAudio();
+  }, [currentQuestion]);
 
   const handleQuestionAudioEnd = () => {
     setAudioCompleted(true);
-    playReminderAudio(); // ✅ Start reminder after question audio ends
+    playReminderAudio();
   };
 
   const handleStartRecording = () => {
@@ -52,7 +72,7 @@ const InterviewNavigator: React.FC = () => {
 
   const handleReplayAudio = () => {
     if (audioRef.current) {
-      setIsReplayingAudio(true); // ✅ Mark replay as active
+      setIsReplayingAudio(true);
       audioRef.current.play();
     }
   };
@@ -61,8 +81,14 @@ const InterviewNavigator: React.FC = () => {
     if (audioRef.current) {
       audioRef.current.pause();
       audioRef.current.currentTime = 0;
-      setIsReplayingAudio(false); // ✅ Reset replay state
     }
+    setIsReplayingAudio(false);
+    setAudioCompleted(true); // Re-enable buttons after replay
+  };
+
+  const handleReplayAudioEnded = () => {
+    setIsReplayingAudio(false);
+    setAudioCompleted(true);
   };
 
   const handleStopRecording = () => {
@@ -88,53 +114,63 @@ const InterviewNavigator: React.FC = () => {
       <InterviewNavbar company={company} />
       <div className='min-h-screen'>
         <main className='max-w-7xl mx-auto px-6 py-8'>
-          <Card className='py-4' shadow='sm'>
-            <CardHeader className='pb-0 pt-2 px-4 flex-col items-start'>Question {currentQuestion + 1}:</CardHeader>
-            <CardBody className='overflow-visible py-2'>
-              <div className='p-6 text-gray-700'>
-                <h2>Interview Question</h2>
-                <p className='text-lg leading-relaxed mt-4'>{question?.text || "No Questions Available"}</p>
+          <Card className='p-8' shadow='sm'>
+            <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
+              <Card className='py-4' shadow='sm'>
+                <CardHeader className='pb-0 pt-2 px-4 flex-col items-start'></CardHeader>
+                <CardBody className='overflow-visible py-2'>
+                  <div className='p-6 text-gray-700'>
+                    <p className='text-sm'>Interview Question</p>
+                    <p className='text-lg leading-relaxed mt-4'>{question?.text || "No Questions Available"}</p>
+
+                    {/* ✅ Question Audio */}
+                    <audio ref={audioRef} onEnded={handleQuestionAudioEnd} onPlay={() => setIsReplayingAudio(true)} onPause={handleReplayAudioEnded}>
+                      <source src={question?.audioUrl} type='audio/mp3' />
+                      Your browser does not support the audio element.
+                    </audio>
+
+                    {/* ✅ Reminder Audio */}
+                    <audio ref={reminderAudioRef}>
+                      <source src='https://storage.googleapis.com/evalsy-storage/uploads/tts-audio-1741421013584.mp3' type='audio/mp3' />
+                      Your browser does not support the audio element.
+                    </audio>
+                  </div>
+                </CardBody>
+                <CardFooter className='absolute bottom-0 z-10 border-t-1 dark:border-t-gray-800'>
+                  <div className='flex flex-grow gap-2 items-center'>
+                    {/* ✅ Record Button (Enabled if isRefreshed is true) */}
+                    <Button
+                      color='danger'
+                      isDisabled={!isRefreshed || isReplayingAudio || isRecording} // Only disable if isRefreshed is false or if replaying
+                      onPress={handleStartRecording}>
+                      Record Audio
+                    </Button>
+
+                    {/* ✅ Replay Audio Button (Enabled if isRefreshed is true) */}
+                    {!isReplayingAudio ? (
+                      <Button
+                        color='secondary'
+                        isDisabled={!isRefreshed || isRecording} // Only disable if isRefreshed is false or if recording
+                        onPress={handleReplayAudio}>
+                        Replay Audio
+                      </Button>
+                    ) : (
+                      <Button color='warning' onPress={handleStopReplayAudio}>
+                        🛑 Stop Replay
+                      </Button>
+                    )}
+
+                    {/* ✅ Stop Recording Button */}
+                    {isRecording && <Button onPress={handleStopRecording}>🛑 Stop Recording</Button>}
+                  </div>
+                </CardFooter>
+              </Card>
+              <div className='flex flex-col gap-6'>
+                <UserCamera />
+                <Interviewer data={interviewer} />
               </div>
-
-              {/* ✅ Question Audio */}
-              <audio ref={audioRef} onEnded={handleQuestionAudioEnd}>
-                <source src={question?.audioUrl} type='audio/mp3' />
-                Your browser does not support the audio element.
-              </audio>
-
-              {/* ✅ Reminder Audio */}
-              <audio ref={reminderAudioRef}>
-                <source src='https://storage.googleapis.com/evalsy-storage/uploads/tts-audio-1740563598643.mp3' type='audio/mp3' />
-                Your browser does not support the audio element.
-              </audio>
-            </CardBody>
-            <CardFooter className='absolute bottom-0 z-10 border-t-1 dark:border-t-gray-800'>
-              <div className='flex flex-grow gap-2 items-center'>
-                {/* ✅ Record Button */}
-                <Button color='danger' isDisabled={!isAudioCompleted || isReplayingAudio} onPress={handleStartRecording}>
-                  Record Audio
-                </Button>
-
-                {/* ✅ Replay Button - Hidden while replaying */}
-                {!isReplayingAudio && (
-                  <Button color='secondary' isDisabled={isRecording} onPress={handleReplayAudio}>
-                    Replay Audio
-                  </Button>
-                )}
-
-                {/* ✅ Stop Replay Button - Shown while replaying */}
-                {isReplayingAudio && (
-                  <Button color='secondary' onPress={handleStopReplayAudio}>
-                    Stop Replay
-                  </Button>
-                )}
-
-                {/* ✅ Stop Recording Button */}
-                {isRecording && <Button onPress={handleStopRecording}>🛑 Stop Recording</Button>}
-              </div>
-            </CardFooter>
+            </div>
           </Card>
-
           <ToastContainer />
         </main>
       </div>

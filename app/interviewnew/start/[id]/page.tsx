@@ -9,9 +9,10 @@ import { ToastContainer } from "react-toastify";
 const App: React.FC = () => {
   const { id } = useParams();
   const { loadInterview } = useInterviewStore();
-
   useEffect(() => {
     if (id) {
+      console.log("xxxxxxxxxxxxx", id);
+
       loadInterview(id as string);
     }
   }, [id, loadInterview]);

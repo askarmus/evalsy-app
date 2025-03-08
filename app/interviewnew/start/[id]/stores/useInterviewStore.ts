@@ -33,10 +33,10 @@ interface InterviewState {
   isLoading: boolean;
   isSkeletonLoading: boolean;
   invitationId: string;
+  isLoaded: boolean;
 
   startInterview: () => void;
   completeInterview: () => void;
-  nextQuestion: () => void;
   stopRecordingAndNextQuestion: () => void;
   setTimeLeft: (time: number) => void;
   setPhase: (phase: Phase) => void;
@@ -70,28 +70,28 @@ export const useInterviewStore = create<InterviewState>()(
       interviewer: null,
       isSkeletonLoading: false,
       invitationId: "",
+      isLoaded: false,
 
       loadInterview: async (id: string) => {
+        if (get().isLoaded || get().phase === "completed") return;
+
         try {
-          if (get().phase == "init") {
-            set({
-              phase: "skeleton-loading",
-            });
-            const data = await getInvitationDetails(id as string);
-            set({ invitationId: id });
-            set({
-              phase: "not-started",
-              questions: data.job.questions || [],
-              currentQuestion: 0,
-              duration: data.duration * 60,
-              timeLeft: data.duration * 60,
-              company: data.company || {},
-              job: data.job || {},
-              candidate: data.candidate || {},
-              interviewer: data.interviewer || {},
-              isLoading: false,
-            });
-          }
+          set({ phase: "skeleton-loading", isLoaded: true }); // Set isLoaded before making API call
+
+          const data = await getInvitationDetails(id as string);
+          set({ invitationId: id });
+          set({
+            phase: "not-started",
+            questions: data.job.questions || [],
+            currentQuestion: 0,
+            duration: data.duration * 60,
+            timeLeft: data.duration * 60,
+            company: data.company || {},
+            job: data.job || {},
+            candidate: data.candidate || {},
+            interviewer: data.interviewer || {},
+            isLoading: false,
+          });
         } catch (error) {}
       },
 
@@ -133,26 +133,23 @@ export const useInterviewStore = create<InterviewState>()(
 
       endInterview: () => {
         if (window.confirm("Are you sure you want to end the interview?")) {
-          set({ phase: "completed" });
+          set({ phase: "completed", isLoaded: false });
+          setTimeout(() => {
+            localStorage.removeItem("interview-storage");
+            localStorage.removeItem("pageRefreshed");
+            useInterviewStore.persist.clearStorage();
+          }, 100);
         }
       },
 
       completeInterview: () => {
-        localStorage.removeItem("interview-storage");
-        set({ phase: "completed" });
-      },
+        set({ phase: "completed", isLoaded: false });
+        setTimeout(() => {
+          localStorage.removeItem("interview-storage");
+          localStorage.removeItem("pageRefreshed");
 
-      nextQuestion: () => {
-        const state = get();
-        if (state.currentQuestion < state.questions.length - 1) {
-          set({
-            currentQuestion: state.currentQuestion + 1,
-            isAudioCompleted: false,
-            isRecording: false,
-          });
-        } else {
-          set({ phase: "completed" });
-        }
+          useInterviewStore.persist.clearStorage();
+        }, 100);
       },
 
       stopRecordingAndNextQuestion: () => {
@@ -164,7 +161,13 @@ export const useInterviewStore = create<InterviewState>()(
             isRecording: false,
           });
         } else {
-          set({ phase: "completed" });
+          set({ phase: "completed", isLoaded: false });
+          setTimeout(() => {
+            localStorage.removeItem("interview-storage");
+            localStorage.removeItem("pageRefreshed");
+
+            useInterviewStore.persist.clearStorage();
+          }, 100);
         }
       },
       setInvitationId: (id: string) => set({ invitationId: id }),
@@ -207,6 +210,7 @@ export const useInterviewStore = create<InterviewState>()(
         interviewer: state.interviewer,
         job: state.job,
         currentQuestion: state.currentQuestion,
+        isLoaded: state.isLoaded,
       }),
     }
   )
