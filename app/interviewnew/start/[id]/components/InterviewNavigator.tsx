@@ -3,17 +3,17 @@ import { useInterviewStore } from "../stores/useInterviewStore";
 import UserCamera from "./UserCamera";
 import InterviewNavbar from "./InterviewNavbar";
 import { Button, Card, CardBody, CardFooter, CardHeader } from "@heroui/react";
-import CandidateInfo from "./CandidateInfo";
 import { ToastContainer } from "react-toastify";
 import Interviewer from "./Interviewer";
 
 const InterviewNavigator: React.FC = () => {
-  const { questions, interviewer, candidate, company, job, currentQuestion, isAudioCompleted, setAudioCompleted, isRecording, setRecording } = useInterviewStore();
+  const { questions, interviewer, company, uploadRecording, currentQuestion, setAudioCompleted, isRecording, setRecording } = useInterviewStore();
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const reminderAudioRef = useRef<HTMLAudioElement | null>(null);
   const [reminderInterval, setReminderInterval] = useState<NodeJS.Timeout | null>(null);
   const [isReplayingAudio, setIsReplayingAudio] = useState(false);
+  const [isAudioUploading, setIsAudioUploading] = useState(false);
   const [isRefreshed, setIsRefreshed] = useState(false);
   const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
   const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(null);
@@ -55,7 +55,7 @@ const InterviewNavigator: React.FC = () => {
     playReminderAudio();
   };
 
-  const handleStartRecording = () => {
+  const handleStartRecording = async () => {
     setRecording(true);
     setAudioCompleted(false);
 
@@ -68,6 +68,26 @@ const InterviewNavigator: React.FC = () => {
       audioRef.current.pause();
       audioRef.current.currentTime = 0;
     }
+
+    const mediaConstraints = { audio: true };
+    const stream = await navigator.mediaDevices.getUserMedia(mediaConstraints);
+
+    const recorder = new MediaRecorder(stream);
+    let audioChunks: BlobPart[] = [];
+
+    recorder.ondataavailable = (event) => {
+      if (event.data.size > 0) {
+        audioChunks.push(event.data);
+      }
+    };
+
+    recorder.onstop = () => {
+      const recordedAudio = new Blob(audioChunks, { type: "audio/mp3" });
+      setAudioBlob(recordedAudio);
+    };
+
+    recorder.start();
+    setMediaRecorder(recorder);
   };
 
   const handleReplayAudio = () => {
@@ -91,8 +111,16 @@ const InterviewNavigator: React.FC = () => {
     setAudioCompleted(true);
   };
 
-  const handleStopRecording = () => {
-    setRecording(false);
+  const handleStopRecording = async () => {
+    if (mediaRecorder) {
+      mediaRecorder.stop();
+    }
+    if (audioBlob) {
+      setIsAudioUploading(true);
+      await uploadRecording(audioBlob);
+      setIsAudioUploading(false);
+      setRecording(false);
+    }
   };
 
   const playReminderAudio = () => {
@@ -141,7 +169,7 @@ const InterviewNavigator: React.FC = () => {
                     {/* ✅ Record Button (Enabled if isRefreshed is true) */}
                     <Button
                       color='danger'
-                      isDisabled={!isRefreshed || isReplayingAudio || isRecording} // Only disable if isRefreshed is false or if replaying
+                      isDisabled={!isRefreshed || isReplayingAudio || isRecording || isAudioUploading} // Only disable if isRefreshed is false or if replaying
                       onPress={handleStartRecording}>
                       Record Audio
                     </Button>
@@ -161,7 +189,11 @@ const InterviewNavigator: React.FC = () => {
                     )}
 
                     {/* ✅ Stop Recording Button */}
-                    {isRecording && <Button onPress={handleStopRecording}>🛑 Stop Recording</Button>}
+                    {isRecording && (
+                      <Button isDisabled={isAudioUploading} onPress={handleStopRecording}>
+                        {isAudioUploading ? "Uploading..." : "🛑 Stop Recording"}
+                      </Button>
+                    )}
                   </div>
                 </CardFooter>
               </Card>

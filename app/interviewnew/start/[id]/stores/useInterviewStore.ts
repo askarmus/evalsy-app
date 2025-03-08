@@ -1,7 +1,7 @@
 "use client";
 import { showToast } from "@/app/utils/toastUtils";
 import { upload } from "@/services/company.service";
-import { startInterview, updateQuestion } from "@/services/interview.service";
+import { startInterview, updateQuestion, updateScreeshot } from "@/services/interview.service";
 import { getInvitationDetails } from "@/services/invitation.service";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
@@ -44,6 +44,7 @@ interface InterviewState {
   setRecording: (status: boolean) => void;
   toggleCamera: () => void;
   uploadScreenshot: (imageBlob: Blob, questionId: string) => Promise<void>;
+  uploadRecording: (audioBlob: Blob) => Promise<void>;
   endInterview: () => void;
   setInvitationId: (id: string) => void;
   loadInterview: (interviewId: string) => Promise<void>;
@@ -121,12 +122,28 @@ export const useInterviewStore = create<InterviewState>()(
           }
           const file = new File([imageBlob], `screenshot_${interviewId}_${Date.now()}.png`, { type: "image/png" });
           const recordedUrl = await upload(file);
+
+          await updateScreeshot({
+            invitationId: invitationId,
+            fileName: recordedUrl.url,
+          });
+        } catch (error) {}
+      },
+
+      uploadRecording: async (audioBlob) => {
+        try {
+          const invitationId = get().invitationId;
+          if (!invitationId) {
+            throw new Error("Interview ID not found.");
+          }
+          const file = new File([audioBlob], `answer_audio${invitationId}_${Date.now()}.mp3`, { type: "image/png" });
+          const recordedData = await upload(file);
           const state = get();
 
           await updateQuestion({
             invitationId: invitationId,
             questionId: state.questions[state.currentQuestion].id,
-            recordedUrl,
+            recordedUrl: recordedData.url,
           });
         } catch (error) {}
       },
