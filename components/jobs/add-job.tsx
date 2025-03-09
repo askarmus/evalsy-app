@@ -226,7 +226,7 @@ export const AddJob = () => {
                                         </TableCell>
 
                                         <TableCell>
-                                          <Select defaultSelectedKeys={"2"} onChange={(e) => setFieldValue(`questions[${index}].expectedScore`, e.target.value)}>
+                                          <Select defaultSelectedKeys={["2"]} onChange={(e) => setFieldValue(`questions[${index}].expectedScore`, e.target.value)}>
                                             <SelectItem key={1}>15/30</SelectItem>
                                             <SelectItem key={2}>25/30</SelectItem>
                                             <SelectItem key={3}>30/30</SelectItem>
