@@ -1,12 +1,31 @@
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import { DarkModeSwitch } from "@/components/navbar/darkmodeswitch";
 import { Button, Navbar, NavbarBrand, NavbarContent, NavbarItem } from "@heroui/react";
 import InterviewTimer from "./InterviewTimer";
 import { useInterviewStore } from "../stores/useInterviewStore";
+import ConfirmDialog from "@/components/ConfirmDialog";
 
 const InterviewNavbar: React.FC<any> = ({ company }) => {
-  const { phase, endInterview } = useInterviewStore();
+  const { phase, endInterview, isLoading } = useInterviewStore();
+  const [isConfirmDialogOpen, setConfirmDialogOpen] = useState(false);
+
+  const handleEndClick = () => {
+    setConfirmDialogOpen(true);
+  };
+
+  const handleConfirmEnd = async () => {
+    try {
+      await endInterview();
+      setConfirmDialogOpen(false);
+    } catch (error) {
+      console.error("Error ending interview", error);
+    }
+  };
+
+  const handleCancelEnd = () => {
+    setConfirmDialogOpen(false);
+  };
 
   return (
     <Navbar position='static' isBordered className='w-full' classNames={{ wrapper: "w-full max-w-full color-line" }}>
@@ -17,7 +36,7 @@ const InterviewNavbar: React.FC<any> = ({ company }) => {
         </NavbarItem>
         <NavbarItem className='hidden lg:flex'>
           {phase === "in-progress" && (
-            <Button onPress={endInterview} color='danger' size='sm' variant='flat'>
+            <Button onPress={handleEndClick} isDisabled={isLoading} isLoading={isLoading} color='danger' size='sm' variant='flat'>
               End Interview
             </Button>
           )}
@@ -26,6 +45,7 @@ const InterviewNavbar: React.FC<any> = ({ company }) => {
           <DarkModeSwitch />
         </NavbarItem>
       </NavbarContent>
+      <ConfirmDialog isOpen={isConfirmDialogOpen} onClose={handleCancelEnd} title='End Interview' description='Are you sure you want to end the interview?' onConfirm={handleConfirmEnd} confirmButtonText='End' cancelButtonText='Cancel' />
     </Navbar>
   );
 };

@@ -64,7 +64,7 @@ const Welcome: React.FC = () => {
                   </p>
                 </div>
                 <audio ref={audioRef} onEnded={handleAudioEnd}>
-                  <source src={company.aboutCompanyAudioUrl} type='audio/mp3' />
+                  <source src={company.aboutCompanyAudioUrl} type='audio/wav' />
                   Your browser does not support the audio element.
                 </audio>
               </CardBody>

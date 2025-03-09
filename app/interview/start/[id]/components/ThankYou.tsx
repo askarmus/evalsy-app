@@ -51,7 +51,7 @@ const ThankYou: React.FC = () => {
                   <h2 className='text-2xl font-bold mb-4 text-center'>Thank You for Completing the AI Interview!</h2>
                   {/* ✅ Fixed <p> Nesting Issue */}
                   <div className='text-lg leading-relaxed  mt-4'>
-                    <p>Your responses have been successfully recorded and are now being evaluated. We will review your results and get back to you if you successfully move to the next stage of the interview process.</p>
+                    <p>{company.thankYouMessage}</p>
 
                     {/* ✅ Check if `company?.timestamps` exists before mapping */}
                     {company?.timestamps?.map((item, index) => (
@@ -67,7 +67,7 @@ const ThankYou: React.FC = () => {
                   </div>
                 </div>
                 <audio ref={audioRef} onEnded={handleAudioEnd}>
-                  <source src='https://storage.googleapis.com/evalsy-storage/uploads/tts-audio-1740563598643.mp3' type='audio/mp3' />
+                  <source src={company.thankYouAudioUrl} type='audio/wav' />
                   Your browser does not support the audio element.
                 </audio>
               </CardBody>

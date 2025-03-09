@@ -1,7 +1,7 @@
 "use client";
 import { showToast } from "@/app/utils/toastUtils";
 import { upload } from "@/services/company.service";
-import { startInterview, updateQuestion, updateScreeshot } from "@/services/interview.service";
+import { endInterview, startInterview, updateQuestion, updateScreeshot } from "@/services/interview.service";
 import { getInvitationDetails } from "@/services/invitation.service";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
@@ -147,13 +147,18 @@ export const useInterviewStore = create<InterviewState>()((set, get) => ({
     } catch (error) {}
   },
 
-  endInterview: () => {
-    if (window.confirm("Are you sure you want to end the interview?")) {
+  endInterview: async () => {
+    try {
+      const invitationId = get().invitationId;
+      set({ isLoading: true });
+      await endInterview({ invitationId });
       set({ phase: "completed" });
-      setTimeout(() => {
-        localStorage.removeItem("interview-storage");
-        localStorage.removeItem("pageRefreshed");
-      }, 100);
+    } catch (error) {
+      showToast.error("Error ending the interview");
+    } finally {
+      set({
+        isLoading: false,
+      });
     }
   },
 

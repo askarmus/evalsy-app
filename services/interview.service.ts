@@ -15,6 +15,11 @@ export const startInterview = async (payload: { invitationId: string }) => {
   return response.data.data;
 };
 
+export const endInterview = async (payload: { invitationId: string }) => {
+  const response = await apiClient.post("/interview/endInterview/", payload);
+  return response.data.data;
+};
+
 export const sendResultEmail = async (payload: { interviewResultId: string; sendEmail: boolean; emails: string[] | null }) => {
   const response = await apiClient.post("/interview/result/sendemail", payload);
   return response.data.data.uploadedFileUrl;

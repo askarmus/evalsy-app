@@ -6,6 +6,7 @@ import { Button, Card, CardBody, CardFooter, CardHeader } from "@heroui/react";
 import { ToastContainer } from "react-toastify";
 import Interviewer from "./Interviewer";
 import CandidateInfo from "./CandidateInfo";
+import { FaMicrophoneAlt, FaStopCircle } from "react-icons/fa";
 
 const InterviewNavigator: React.FC = () => {
   const { questions, interviewer, candidate, job, company, uploadRecording, currentQuestion, setAudioCompleted, isRecording, setRecording } = useInterviewStore();
@@ -155,13 +156,13 @@ const InterviewNavigator: React.FC = () => {
 
                     {/* ✅ Question Audio */}
                     <audio ref={audioRef} onEnded={handleQuestionAudioEnd} onPlay={() => setIsReplayingAudio(true)} onPause={handleReplayAudioEnded}>
-                      <source src={question?.audioUrl} type='audio/mp3' />
+                      <source src={question?.audioUrl} type='audio/wav' />
                       Your browser does not support the audio element.
                     </audio>
 
                     {/* ✅ Reminder Audio */}
                     <audio ref={reminderAudioRef}>
-                      <source src='https://storage.googleapis.com/evalsy-storage/uploads/tts-audio-1741421013584.mp3' type='audio/mp3' />
+                      <source src='https://storage.googleapis.com/evalsy-storage/uploads/tts-audio-1741421013584.mp3' type='audio/wav' />
                       Your browser does not support the audio element.
                     </audio>
                   </div>
@@ -171,9 +172,10 @@ const InterviewNavigator: React.FC = () => {
                     {/* ✅ Record Button (Enabled if isRefreshed is true) */}
                     <Button
                       color='danger'
+                      startContent={<FaMicrophoneAlt />}
                       isDisabled={!isRefreshed || isReplayingAudio || isRecording || isAudioUploading} // Only disable if isRefreshed is false or if replaying
                       onPress={handleStartRecording}>
-                      Record Audio
+                      Answer
                     </Button>
 
                     {/* ✅ Replay Audio Button (Enabled if isRefreshed is true) */}
@@ -185,15 +187,15 @@ const InterviewNavigator: React.FC = () => {
                         Replay Audio
                       </Button>
                     ) : (
-                      <Button color='warning' onPress={handleStopReplayAudio}>
-                        🛑 Stop Replay
+                      <Button startContent={<FaStopCircle />} color='warning' onPress={handleStopReplayAudio}>
+                        Stop Replay
                       </Button>
                     )}
 
                     {/* ✅ Stop Recording Button */}
                     {isRecording && (
                       <Button isDisabled={isAudioUploading} onPress={handleStopRecording}>
-                        {isAudioUploading ? "Uploading..." : "🛑 Stop Recording"}
+                        {isAudioUploading ? "Uploading..." : "Stop Recording"}
                       </Button>
                     )}
                   </div>
