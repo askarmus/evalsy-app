@@ -16,8 +16,8 @@ const InterviewTimer: React.FC = () => {
 
   return (
     <div className='p-4 whitespace-nowrap'>
-      <span className='text-1xl font-semibold  font-mono tabular-nums text-right inline-block align-middle'>
-        {Math.floor(timeLeft / 60)}:{String(timeLeft % 60).padStart(2, "0")}
+      <span className='text-1xl font-semibold font-mono tabular-nums text-right inline-block align-middle'>
+        {Math.floor(Math.max(0, Math.round(timeLeft) / 60))}:{String(Math.max(0, Math.round(timeLeft) % 60)).padStart(2, "0")}
       </span>
     </div>
   );

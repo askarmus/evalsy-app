@@ -10,7 +10,7 @@ const InterviewInstruction: React.FC<any> = () => {
   const { startInterview, duration, isLoading, company, candidate, job, questions } = useInterviewStore();
 
   return (
-    <div className='min-h-screen bg-gray-100'>
+    <div className='min-h-screen  '>
       <Navbar position='static' isBordered className='w-full' classNames={{ wrapper: "w-full max-w-full color-line" }}>
         <NavbarBrand>{company.logo ? <Image src={company.logo} alt={`${company.name} Logo`} width={100} height={40} className='w-auto min-h-[30px] max-h-[40px] object-contain' /> : <p className='font-bold text-inherit'>{company.name}</p>}</NavbarBrand>
         <NavbarContent justify='end'>
@@ -20,14 +20,14 @@ const InterviewInstruction: React.FC<any> = () => {
         </NavbarContent>
       </Navbar>
       <main className='max-w-7xl mx-auto px-6 py-8'>
-        <Card className='p-8' shadow='none'>
+        <Card className='p-8'>
           <CandidateInfo candidate={candidate} company={company} job={job} />
 
           <CardBody>
             <div className='mb-5'>
               <div className='text-tiny uppercase font-bold mb-5'>Interview Information</div>
 
-              <ul className='list-disc list-inside text-gray-700 space-y-1'>
+              <ul className='list-disc list-inside   space-y-1'>
                 <li>
                   <strong>Duration:</strong> {duration} minutes
                 </li>
@@ -38,7 +38,7 @@ const InterviewInstruction: React.FC<any> = () => {
             </div>
 
             <div className='text-tiny uppercase font-bold mb-5'>Interview instruction</div>
-            <ul className='list-decimal pl-6 space-y-1 text-gray-700'>
+            <ul className='list-decimal pl-6 space-y-1 '>
               <li>
                 <strong>Enable Your Microphone and Camera:</strong> Ensure your microphone and camera are active before starting the session.
               </li>

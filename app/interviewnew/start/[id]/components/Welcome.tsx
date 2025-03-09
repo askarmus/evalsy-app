@@ -41,16 +41,16 @@ const Welcome: React.FC = () => {
       <InterviewNavbar company={company} />
       <div className='min-h-screen'>
         <main className='max-w-7xl mx-auto px-6 py-8'>
-          <Card className='p-8' shadow='sm'>
+          <Card className='p-8'>
             <CardHeader>
               <CandidateInfo candidate={candidate} company={company} job={job} />
             </CardHeader>
             <Card className='py-4' shadow='sm'>
               <CardBody className='overflow-visible py-2'>
-                <div className='p-6 text-gray-800 rounded-lg max-w-3xl mx-auto'>
+                <div className='p-6   rounded-lg max-w-3xl mx-auto'>
                   <h2 className='text-2xl font-bold mb-4 text-center'>Welcome to the Interview!</h2>
                   <p>{company.aboutCompany}</p>
-                  <p className='text-lg leading-relaxed text-gray-700 mt-4'>
+                  <p className='text-lg leading-relaxed mt-4'>
                     {company?.timestamps?.map((item, index) => (
                       <span
                         key={index}

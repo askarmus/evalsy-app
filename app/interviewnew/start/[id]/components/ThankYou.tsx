@@ -47,10 +47,10 @@ const ThankYou: React.FC = () => {
             </CardHeader>
             <Card className='py-4' shadow='sm'>
               <CardBody className='overflow-visible py-2'>
-                <div className='p-6 text-gray-800 rounded-lg max-w-3xl mx-auto'>
+                <div className='p-6   rounded-lg max-w-3xl mx-auto'>
                   <h2 className='text-2xl font-bold mb-4 text-center'>Thank You for Completing the AI Interview!</h2>
                   {/* ✅ Fixed <p> Nesting Issue */}
-                  <div className='text-lg leading-relaxed text-gray-700 mt-4'>
+                  <div className='text-lg leading-relaxed  mt-4'>
                     <p>Your responses have been successfully recorded and are now being evaluated. We will review your results and get back to you if you successfully move to the next stage of the interview process.</p>
 
                     {/* ✅ Check if `company?.timestamps` exists before mapping */}

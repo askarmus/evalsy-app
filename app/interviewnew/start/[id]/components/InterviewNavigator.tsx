@@ -5,9 +5,10 @@ import InterviewNavbar from "./InterviewNavbar";
 import { Button, Card, CardBody, CardFooter, CardHeader } from "@heroui/react";
 import { ToastContainer } from "react-toastify";
 import Interviewer from "./Interviewer";
+import CandidateInfo from "./CandidateInfo";
 
 const InterviewNavigator: React.FC = () => {
-  const { questions, interviewer, company, uploadRecording, currentQuestion, setAudioCompleted, isRecording, setRecording } = useInterviewStore();
+  const { questions, interviewer, candidate, job, company, uploadRecording, currentQuestion, setAudioCompleted, isRecording, setRecording } = useInterviewStore();
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const reminderAudioRef = useRef<HTMLAudioElement | null>(null);
@@ -143,11 +144,12 @@ const InterviewNavigator: React.FC = () => {
       <div className='min-h-screen'>
         <main className='max-w-7xl mx-auto px-6 py-8'>
           <Card className='p-8' shadow='sm'>
+            <CandidateInfo candidate={candidate} company={company} job={job} />
+
             <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
               <Card className='py-4' shadow='sm'>
-                <CardHeader className='pb-0 pt-2 px-4 flex-col items-start'></CardHeader>
                 <CardBody className='overflow-visible py-2'>
-                  <div className='p-6 text-gray-700'>
+                  <div className='p-6'>
                     <p className='text-sm'>Interview Question</p>
                     <p className='text-lg leading-relaxed mt-4'>{question?.text || "No Questions Available"}</p>
 
