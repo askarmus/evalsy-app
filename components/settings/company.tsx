@@ -14,6 +14,7 @@ export type CompanySettingsFormValues = {
   name: string;
   address?: string;
   aboutCompany?: string;
+  thankYouMessage?: string;
   website?: string;
   linkedin?: string;
   facebook?: string;
@@ -29,6 +30,7 @@ const CompanySettings = () => {
     name: "",
     address: "",
     aboutCompany: "",
+    thankYouMessage: "",
     website: "",
     linkedin: "",
     facebook: "",
@@ -82,6 +84,7 @@ const CompanySettings = () => {
                     <Input label='Company Name' name='name' value={values.name || ""} onChange={handleChange} isInvalid={!!errors.name && !!touched.name} errorMessage={errors.name} />
                     <Textarea label='Address' name='address' value={values.address || ""} onChange={handleChange} isInvalid={!!errors.address && !!touched.address} errorMessage={errors.address} />
                     <Textarea label='About Company' name='aboutCompany' value={values.aboutCompany || ""} onChange={handleChange} isInvalid={!!errors.aboutCompany && !!touched.aboutCompany} errorMessage={errors.aboutCompany} />
+                    <Textarea label='Thank you message' name='thankYouMessage' value={values.thankYouMessage || ""} onChange={handleChange} isInvalid={!!errors.thankYouMessage && !!touched.thankYouMessage} errorMessage={errors.thankYouMessage} />
                     <div className='grid grid-cols-2 gap-4'>
                       <Input label='Website' name='website' value={values.website || ""} onChange={handleChange} isInvalid={!!errors.website && !!touched.website} errorMessage={errors.website} />
                       <Input label='LinkedIn' name='linkedin' value={values.linkedin || ""} onChange={handleChange} isInvalid={!!errors.linkedin && !!touched.linkedin} errorMessage={errors.linkedin} />

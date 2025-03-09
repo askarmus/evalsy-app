@@ -32,7 +32,6 @@ export const Features = () => {
 
   return (
     <section id='features' aria-label='Features for running your books' className='relative overflow-hidden bg-blue-600 pt-20 pb-28 sm:py-32'>
-      {/* Background Image */}
       <img alt='' loading='lazy' width={2245} height={1636} decoding='async' className='absolute top-1/2 left-1/2 max-w-none translate-x-[-44%] translate-y-[-42%]' src='/background-features.5f7a9ac9.jpg' style={{ color: "transparent" }} />
 
       <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative'>
