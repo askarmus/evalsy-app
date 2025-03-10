@@ -66,7 +66,7 @@ export const Register = () => {
                 <Input variant='bordered' label='Confirm password' type='password' value={values.confirmPassword} isInvalid={!!errors.confirmPassword && !!touched.confirmPassword} errorMessage={errors.confirmPassword} onChange={handleChange("confirmPassword")} />
 
                 <Button onPress={() => handleSubmit()} radius='full' color='primary' isLoading={isSubmitting}>
-                  Register
+                  Sign up
                 </Button>
               </div>
             </>
