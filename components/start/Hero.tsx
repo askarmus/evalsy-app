@@ -15,51 +15,13 @@ export const Hero: React.FC = () => {
         with AI automation.
       </h1>
       <p className='mx-auto mt-6 max-w-2xl text-lg tracking-tight text-slate-700 dark:text-white'>Most hiring tools require too much effort. We make the opposite trade-off—AI streamlines everything, making hiring effortless.</p>
-      <div className='mt-10 flex justify-center gap-x-6'>
+      <div className='mt-10 mb-20 flex justify-center gap-x-6'>
         <a className='group inline-flex ring-1 items-center justify-center rounded-full py-2 px-4 text-sm focus:outline-hidden ring-slate-200 text-slate-700 hover:text-slate-900 hover:ring-slate-300 active:bg-slate-100 active:text-slate-600 focus-visible:outline-blue-600 focus-visible:ring-slate-300' href='https://www.youtube.com/watch?v=dQw4w9WgXcQ'>
           <svg aria-hidden='true' className='h-3 w-3 flex-none fill-blue-600 group-active:fill-current'>
             <path d='m9.997 6.91-7.583 3.447A1 1 0 0 1 1 9.447V2.553a1 1 0 0 1 1.414-.91L9.997 5.09c.782.355.782 1.465 0 1.82Z' />
           </svg>
           <span className='ml-3 dark:text-white'>Watch video</span>
         </a>
-      </div>
-      <div className='mt-36 lg:mt-44'>
-        <p className='font-display text-base text-slate-900'>Trusted by these six companies so far</p>
-        <ul role='list' className='mt-8 flex items-center justify-center gap-x-8 sm:flex-col sm:gap-x-0 sm:gap-y-10 xl:flex-row xl:gap-x-12 xl:gap-y-0'>
-          <li>
-            <ul role='list' className='flex flex-col items-center gap-y-8 sm:flex-row sm:gap-x-12 sm:gap-y-0'>
-              <li className='flex'>
-                <Image
-                  alt='Transistor'
-                  src='/transistor.7274e6c3.svg'
-                  width={158}
-                  height={48}
-                  priority={false} // Equivalent to loading="lazy"
-                  style={{ color: "transparent" }}
-                />
-              </li>
-              <li className='flex'>
-                <Image alt='Tuple' width={105} height={48} src='/tuple.74eb0ae0.svg' style={{ color: "transparent" }} />
-              </li>
-              <li className='flex'>
-                <Image alt='StaticKit' width={127} height={48} src='/statickit.d7937794.svg' style={{ color: "transparent" }} />
-              </li>
-            </ul>
-          </li>
-          <li>
-            <ul role='list' className='flex flex-col items-center gap-y-8 sm:flex-row sm:gap-x-12 sm:gap-y-0'>
-              <li className='flex'>
-                <Image alt='Mirage' width={138} height={48} src='/mirage.18d2ec4e.svg' style={{ color: "transparent" }} />
-              </li>
-              <li className='flex'>
-                <Image alt='Laravel' width={136} height={48} src='/laravel.7deed17e.svg' style={{ color: "transparent" }} />
-              </li>
-              <li className='flex'>
-                <Image alt='Statamic' width={147} height={48} src='/statamic.6da5ebfb.svg' style={{ color: "transparent" }} />
-              </li>
-            </ul>
-          </li>
-        </ul>
       </div>
     </div>
   );

@@ -15,6 +15,7 @@ export type CompanySettingsFormValues = {
   address?: string;
   aboutCompany?: string;
   thankYouMessage?: string;
+  answerQuestionMessage?: string;
   website?: string;
   linkedin?: string;
   facebook?: string;
@@ -31,6 +32,7 @@ const CompanySettings = () => {
     address: "",
     aboutCompany: "",
     thankYouMessage: "",
+    answerQuestionMessage: "",
     website: "",
     linkedin: "",
     facebook: "",
@@ -77,14 +79,15 @@ const CompanySettings = () => {
         <Form>
           <Card className='p-5'>
             <CardBody>
-              <h1 className='text-xl font-semibold mb-4'>Company Settings</h1>
+              <h1 className='text-xl font-semibold mb-4'>Company and Interview Settings</h1>
               <div className='flex gap-4'>
                 <div className='w-4/5'>
                   <div className='grid grid-cols-1 gap-4'>
                     <Input label='Company Name' name='name' value={values.name || ""} onChange={handleChange} isInvalid={!!errors.name && !!touched.name} errorMessage={errors.name} />
                     <Textarea label='Address' name='address' value={values.address || ""} onChange={handleChange} isInvalid={!!errors.address && !!touched.address} errorMessage={errors.address} />
                     <Textarea label='About Company' name='aboutCompany' value={values.aboutCompany || ""} onChange={handleChange} isInvalid={!!errors.aboutCompany && !!touched.aboutCompany} errorMessage={errors.aboutCompany} />
-                    <Textarea label='Thank you message' name='thankYouMessage' value={values.thankYouMessage || ""} onChange={handleChange} isInvalid={!!errors.thankYouMessage && !!touched.thankYouMessage} errorMessage={errors.thankYouMessage} />
+                    <Textarea label='Completion Message' name='thankYouMessage' value={values.thankYouMessage || ""} onChange={handleChange} isInvalid={!!errors.thankYouMessage && !!touched.thankYouMessage} errorMessage={errors.thankYouMessage} />
+                    <Textarea label='Response Confirmation Message' name='answerQuestionMessage' value={values.answerQuestionMessage || ""} onChange={handleChange} isInvalid={!!errors.answerQuestionMessage && !!touched.answerQuestionMessage} errorMessage={errors.answerQuestionMessage} />
                     <div className='grid grid-cols-2 gap-4'>
                       <Input label='Website' name='website' value={values.website || ""} onChange={handleChange} isInvalid={!!errors.website && !!touched.website} errorMessage={errors.website} />
                       <Input label='LinkedIn' name='linkedin' value={values.linkedin || ""} onChange={handleChange} isInvalid={!!errors.linkedin && !!touched.linkedin} errorMessage={errors.linkedin} />

@@ -155,7 +155,7 @@ export const AddJob = () => {
 
                               <div className='flex'>
                                 <div className='flex-1 flex'>
-                                  <RadioGroup value={values.experienceLevel} onValueChange={(value) => setFieldValue("experienceLevel", value)} orientation='horizontal' isInvalid={!!errors.experienceLevel && !!touched.experienceLevel} errorMessage={errors.experienceLevel} label='Generate question using AI'>
+                                  <RadioGroup size='sm' value={values.experienceLevel} onValueChange={(value) => setFieldValue("experienceLevel", value)} orientation='horizontal' isInvalid={!!errors.experienceLevel && !!touched.experienceLevel} errorMessage={errors.experienceLevel} label='Generate question using AI'>
                                     <CustomRadio value='beginner'>Beginner</CustomRadio>
                                     <CustomRadio value='Intermediate'>Intermediate</CustomRadio>
                                     <CustomRadio value='senior'>Senior</CustomRadio>
@@ -199,7 +199,7 @@ export const AddJob = () => {
                                     <TableColumn width={5}>#</TableColumn>
                                     <TableColumn>QUESTIONS</TableColumn>
                                     <TableColumn width={30}>SCORE RANGE</TableColumn>
-                                    <TableColumn width={20}>
+                                    <TableColumn width={20} align='end'>
                                       <Button color='primary' variant='faded' size='sm' onPress={() => setFieldValue("questions", [...values.questions, { id: nanoid(), text: "" }])}>
                                         Add
                                       </Button>
