@@ -106,7 +106,7 @@ export default function InterviewResultList() {
                   <div className='col-span-3 flex justify-end items-start'>
                     <div>
                       <p className='rounded-lg text-sky-500 text-sm py-1 px-3 center'>Score </p>
-                      <p className='rounded-lg text-sky-500 font-bold bg-sky-100 py-1 px-3 text-sm text-center'>{result?.overallWeight}</p>
+                      <p className='rounded-lg text-sky-500 font-bold bg-sky-100 py-1 px-3 text-sm text-center'>{((result?.overallWeight / 30) * 100).toFixed(2)}%</p>
                     </div>
                   </div>
                 </div>
