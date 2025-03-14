@@ -162,7 +162,7 @@ const InterviewNavigator: React.FC = () => {
 
                     {/* ✅ Reminder Audio */}
                     <audio ref={reminderAudioRef}>
-                      <source src='https://storage.googleapis.com/evalsy-storage/uploads/tts-audio-1741421013584.mp3' type='audio/wav' />
+                      <source src={company.answerQuestionAudioUrl} type='audio/wav' />
                       Your browser does not support the audio element.
                     </audio>
                   </div>
