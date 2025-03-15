@@ -194,7 +194,6 @@ export default function JobResumes({ jobId, isOpen, onClose }: { jobId: string; 
               <TableHeader>
                 <TableColumn>{""}</TableColumn>
                 <TableColumn>Name</TableColumn>
-
                 <TableColumn>Experience</TableColumn>
                 <TableColumn>Score</TableColumn>
                 <TableColumn>Invite</TableColumn>
