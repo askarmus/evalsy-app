@@ -177,7 +177,7 @@ export default function Jobs() {
                   </div>
                 </CardHeader>
 
-                <CardFooter className='gap-6 flex-wrap flex justify-between items-center'>
+                <CardFooter className='gap-6 flex-wrap flex justify-between items-center pt-0'>
                   <div className='flex gap-6 flex-wrap items-center'>
                     <div className='flex gap-1'>
                       <Chip size='sm' color='default' variant='flat'>

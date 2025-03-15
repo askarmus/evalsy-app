@@ -3,7 +3,6 @@ import { useInterviewStore } from "../stores/useInterviewStore";
 import UserCamera from "./UserCamera";
 import InterviewNavbar from "./InterviewNavbar";
 import { Button, Card, CardBody, CardFooter, CardHeader } from "@heroui/react";
-import { ToastContainer } from "react-toastify";
 import Interviewer from "./Interviewer";
 import CandidateInfo from "./CandidateInfo";
 import { FaMicrophoneAlt, FaStopCircle } from "react-icons/fa";
@@ -207,7 +206,6 @@ const InterviewNavigator: React.FC = () => {
               </div>
             </div>
           </Card>
-          <ToastContainer />
         </main>
       </div>
     </>

@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { Button, Input, Radio, RadioGroup, Select, SelectItem, Slider, Textarea } from "@heroui/react";
 import { Drawer, DrawerContent, DrawerHeader, DrawerBody, DrawerFooter } from "@heroui/react";
-import { ToastContainer } from "react-toastify";
 import { Formik } from "formik";
 import { getInvitations, sendInvitation } from "@/services/invitation.service";
 import { showToast } from "@/app/utils/toastUtils";
@@ -99,7 +98,7 @@ export const SendInvitationDrawer: React.FC<SendInvitationDrawerProps> = ({ isOp
                   <div className='flex justify-between gap-4  items-center '>
                     <Select placeholder='Choose an interviewer' value={values.interviewerId} onChange={handleChange("interviewerId")} isInvalid={!!errors.interviewerId && !!touched.interviewerId} errorMessage={errors.interviewerId}>
                       {interviewers.map((interviewer: any) => (
-                        <SelectItem key={interviewer.id} value={String(interviewer.id)}>
+                        <SelectItem key={interviewer.id} textValue={String(interviewer.id)}>
                           {interviewer.name}
                         </SelectItem>
                       ))}
@@ -146,7 +145,6 @@ export const SendInvitationDrawer: React.FC<SendInvitationDrawerProps> = ({ isOp
           )}
         </Formik>
       </DrawerContent>
-      <ToastContainer />
     </Drawer>
   );
 };

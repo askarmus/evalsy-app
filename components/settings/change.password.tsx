@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import { Button, CardFooter, Input, Card, CardBody } from "@heroui/react";
 import { Formik, Form } from "formik";
 import { showToast } from "@/app/utils/toastUtils";
-import { ToastContainer } from "react-toastify";
 import { ChangePasswordSchema } from "@/helpers/schemas";
 import { ChangePasswordFormType } from "@/helpers/types";
 import { changePassword } from "@/services/authService";
@@ -55,7 +54,6 @@ const ChangePassword = () => {
                 <Input label='New Password' name='newPassword' type='password' value={values.newPassword} onChange={handleChange} isInvalid={!!errors.newPassword && !!touched.newPassword} errorMessage={errors.newPassword} />
                 <Input label='Confirm New Password' name='confirmPassword' type='password' value={values.confirmPassword} onChange={handleChange} isInvalid={!!errors.confirmPassword && !!touched.confirmPassword} errorMessage={errors.confirmPassword} />
               </div>
-              <ToastContainer />
             </CardBody>
             <CardFooter>
               <Button type='submit' isLoading={isLoading} color='primary'>

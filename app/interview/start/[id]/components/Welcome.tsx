@@ -2,7 +2,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useInterviewStore } from "../stores/useInterviewStore";
 import { Card, CardBody, CardHeader } from "@heroui/react";
-import { ToastContainer } from "react-toastify";
 import InterviewNavbar from "./InterviewNavbar";
 import CandidateInfo from "./CandidateInfo";
 
@@ -34,7 +33,7 @@ const Welcome: React.FC = () => {
   const handleAudioEnd = () => {
     setTimeout(() => {
       setPhase("in-progress");
-    }, 2000); // Ensuring a smooth transition
+    }, 2000);
   };
   return (
     <>
@@ -70,7 +69,6 @@ const Welcome: React.FC = () => {
               </CardBody>
             </Card>
           </Card>
-          <ToastContainer />
         </main>
       </div>
     </>

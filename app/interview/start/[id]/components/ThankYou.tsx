@@ -2,7 +2,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useInterviewStore } from "../stores/useInterviewStore";
 import { Card, CardBody, CardHeader } from "@heroui/react";
-import { ToastContainer } from "react-toastify";
 import CandidateInfo from "./CandidateInfo";
 
 const ThankYou: React.FC = () => {
@@ -73,7 +72,6 @@ const ThankYou: React.FC = () => {
               </CardBody>
             </Card>
           </Card>
-          <ToastContainer />
         </main>
       </div>
     </>

@@ -1,11 +1,10 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
-import { Button, Card, CardBody, CardFooter, Input, Radio, RadioGroup, Select, SelectItem, Slider, Switch, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, Textarea } from "@heroui/react";
+import { Button, Card, CardBody, CardFooter, Input, Radio, RadioGroup, Select, SelectItem, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, Textarea } from "@heroui/react";
 
-import { AiFillDelete, AiOutlinePlusSquare } from "react-icons/ai";
+import { AiFillDelete } from "react-icons/ai";
 import { Formik, FormikErrors } from "formik";
 import { showToast } from "@/app/utils/toastUtils";
-import { ToastContainer } from "react-toastify";
 import { createJob, generateQuestions, getJobById, updateJob } from "@/services/job.service";
 import { AddJobSchema } from "@/helpers/schemas";
 import { Breadcrumb } from "../bread.crumb";
@@ -295,7 +294,6 @@ export const AddJob = () => {
                 </>
               )}
             </Formik>
-            <ToastContainer />
           </div>
         </div>
       </div>

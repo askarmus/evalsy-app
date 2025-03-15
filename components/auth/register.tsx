@@ -8,8 +8,8 @@ import { Formik } from "formik";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
-import { toast } from "react-toastify";
 import { Logo } from "../logo";
+import { showToast } from "@/app/utils/toastUtils";
 
 export const Register = () => {
   const router = useRouter();
@@ -28,8 +28,7 @@ export const Register = () => {
         setSubmitting(true);
 
         await registerUser(values);
-
-        toast.success("Registration successful! Redirecting to login...");
+        showToast.success("Registration successful! Redirecting to login...");
         setTimeout(() => {
           router.replace("/login");
         }, 2000);

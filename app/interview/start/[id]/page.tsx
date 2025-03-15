@@ -4,7 +4,6 @@ import React, { useEffect } from "react";
 import StartInterview from "./components/StartInterview";
 import { useParams } from "next/navigation";
 import { useInterviewStore } from "./stores/useInterviewStore";
-import { ToastContainer } from "react-toastify";
 
 const App: React.FC = () => {
   const { id } = useParams();
@@ -20,7 +19,6 @@ const App: React.FC = () => {
   return (
     <div>
       <StartInterview />
-      <ToastContainer />
     </div>
   );
 };

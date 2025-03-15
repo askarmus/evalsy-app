@@ -1,6 +1,6 @@
+import { addToast } from "@heroui/react";
 import axios from "axios";
 import Cookies from "js-cookie";
-import { toast } from "react-toastify";
 import Router from "next/router";
 
 // Create the Axios instance
@@ -70,7 +70,10 @@ apiClient.interceptors.response.use(
 
     // If the error is from the login endpoint, show an appropriate error message
     if (originalRequest.url?.includes("/auth/login") && status === 401) {
-      toast.error("Invalid email or password. Please try again.");
+      addToast({
+        description: "Invalid email or password. Please try again.",
+        color: "danger",
+      });
       return Promise.reject({ status, message, data: error.response?.data });
     }
 
@@ -88,12 +91,18 @@ apiClient.interceptors.response.use(
         // If refresh fails, log out the user
         Cookies.remove("userAuth");
         Cookies.remove("refreshToken");
-        toast.error("Session expired. Please log in again.");
+
+        addToast({
+          description: "Session expired. Please log in again.",
+          color: "danger",
+        });
         Router.push("/login");
       }
     } else {
-      // For other errors, show toast notification
-      toast.error(message);
+      addToast({
+        description: message,
+        color: "danger",
+      });
     }
 
     return Promise.reject({

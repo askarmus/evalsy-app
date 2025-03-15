@@ -1,52 +1,16 @@
-import { toast } from "react-toastify";
+import { addToast } from "@heroui/react";
 
 export const showToast = {
-  success: (message: string, options = {}) => {
-    toast.success(message, {
-      position: "top-right",
-      autoClose: 3000,
-      hideProgressBar: true,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      ...options,
+  success: (message: string) => {
+    addToast({
+      description: message,
+      color: "success",
     });
   },
-  error: (message: string, options = {}) => {
-    toast.error(message, {
-      position: "top-right",
-      autoClose: 3000,
-      hideProgressBar: true,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      ...options,
-    });
-  },
-  info: (message: string, options = {}) => {
-    toast.info(message, {
-      position: "top-right",
-      autoClose: 3000,
-      hideProgressBar: true,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      ...options,
-    });
-  },
-  warning: (message: string, options = {}) => {
-    toast.warning(message, {
-      position: "top-right",
-      autoClose: 3000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      ...options,
+  error: (message: string) => {
+    addToast({
+      description: message,
+      color: "success",
     });
   },
 };

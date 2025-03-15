@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import { Button, CardFooter, Input, Textarea, Tabs, Tab, Card, CardBody } from "@heroui/react";
 import { Formik, Form } from "formik";
 import { showToast } from "@/app/utils/toastUtils";
-import { ToastContainer } from "react-toastify";
 import { getCompanySettings, saveCompanySettings } from "@/services/company.service";
 import FileUploadWithPreview from "@/components/FileUploadWithPreview";
 import { CompanySettingsSchema } from "@/helpers/schemas";
@@ -123,7 +122,6 @@ const CompanySettings = () => {
                   </div>
                 </div>
               </div>
-              <ToastContainer />
             </CardBody>
             <CardFooter>
               <Button type='submit' isLoading={isLoading} color='primary'>

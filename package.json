@@ -9,9 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@heroui/react": "2.6.14",
-    "@react-pdf/renderer": "^4.2.1",
-    "@vercel/blob": "^0.27.0",
+    "@heroui/react": "^2.7.5",
     "@wavesurfer/react": "^1.0.9",
     "apexcharts": "^3.35.5",
     "axios": "^1.7.9",
@@ -31,9 +29,6 @@
     "react-dropzone": "^14.3.5",
     "react-google-charts": "^5.2.1",
     "react-icons": "^5.4.0",
-    "react-media-recorder": "^1.7.1",
-    "react-timer-hook": "^3.0.8",
-    "react-toastify": "^11.0.2",
     "wavesurfer.js": "^7.9.0",
     "yup": "^1.4.0",
     "zustand": "^5.0.3"

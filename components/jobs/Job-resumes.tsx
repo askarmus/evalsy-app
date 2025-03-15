@@ -4,7 +4,6 @@ import { Button, Drawer, DrawerBody, DrawerContent, DrawerHeader, Spinner, Table
 import { useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { AiOutlineCheck, AiOutlineClose, AiOutlineDelete, AiOutlineExperiment, AiOutlineEye, AiOutlineSend, AiOutlineUpload, AiOutlineUserAdd } from "react-icons/ai";
-import { ToastContainer } from "react-toastify";
 import { SendInvitationDrawer } from "./send-invitation";
 import ResultPopoverContent from "./components/result.poover.content";
 
@@ -271,7 +270,6 @@ export default function JobResumes({ jobId, isOpen, onClose }: { jobId: string; 
           </Button>
         </DrawerFooter>
       </DrawerContent>
-      <ToastContainer />
 
       {selectedSingleResume && <SendInvitationDrawer isOpen={isDrawerOpen} name={selectedSingleResume.analysis?.name} email={selectedSingleResume.analysis?.email} onClose={handleCloseDrawer} jobId={selectedJobId} />}
     </Drawer>

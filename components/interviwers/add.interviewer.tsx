@@ -6,7 +6,6 @@ import { showToast } from "@/app/utils/toastUtils";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import { AddInterviewerSchema } from "@/helpers/schemas";
 import { createInterviewer, getInterviewerById, updateInterviewer } from "@/services/interviwers.service";
-import { ToastContainer } from "react-toastify";
 import FileUploadWithPreview from "../FileUploadWithPreview";
 
 interface AddInterviewerProps {
@@ -120,7 +119,6 @@ export const AddInterviewer: React.FC<AddInterviewerProps> = ({ isOpen, onClose,
           </Formik>
         </DrawerBody>
       </DrawerContent>
-      <ToastContainer />
     </Drawer>
   );
 };
