@@ -1,20 +1,25 @@
 import { showToast } from "@/app/utils/toastUtils";
 import { deleteResume, fetchResumes, processResumeById, uploadResume } from "@/services/resume.service";
-import { Button, getKeyValue, Drawer, DrawerBody, DrawerContent, DrawerHeader, Spinner, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, Input, CheckboxGroup, Checkbox, Card, CardBody, Chip, DrawerFooter, Popover, PopoverTrigger, PopoverContent } from "@heroui/react";
+import { Button, Drawer, DrawerBody, DrawerContent, DrawerHeader, Spinner, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, Input, CheckboxGroup, Checkbox, Card, CardBody, Chip, DrawerFooter, Popover, PopoverTrigger, PopoverContent, Tooltip } from "@heroui/react";
 import { useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
-import { AiOutlineDelete, AiOutlineDownload, AiOutlineExperiment, AiOutlineEye, AiOutlineUpload } from "react-icons/ai";
+import { AiOutlineCheck, AiOutlineClose, AiOutlineDelete, AiOutlineExperiment, AiOutlineEye, AiOutlineSend, AiOutlineUpload, AiOutlineUserAdd } from "react-icons/ai";
 import { ToastContainer } from "react-toastify";
+import { SendInvitationDrawer } from "./send-invitation";
+import ResultPopoverContent from "./components/result.poover.content";
 
 export default function JobResumes({ jobId, isOpen, onClose }: { jobId: string; isOpen: boolean; onClose: () => void }) {
   const [resumes, setResumes] = useState<any[]>([]);
   const [uploading, setUploading] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedResumes, setSelectedResumes] = useState<Set<string>>(new Set());
+  const [selectedSingleResume, setSelectedSingleResume] = useState<any>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [processingRows, setProcessingRows] = useState<{ [key: string]: boolean }>({});
   const [isProcessing, setIsProcessing] = useState(false); // State to disable button
+  const [selectedJobId, setSelectedJobId] = useState<string | null>(null);
+  const [isDrawerOpen, setDrawerOpen] = useState(false);
 
   // Define score categories with colors
   const SCORE_CATEGORIES = [
@@ -64,7 +69,7 @@ export default function JobResumes({ jobId, isOpen, onClose }: { jobId: string; 
         : null,
     }));
 
-    setIsLoading(true);
+    setIsLoading(false);
     setResumes(cleanedData);
   };
 
@@ -74,10 +79,20 @@ export default function JobResumes({ jobId, isOpen, onClose }: { jobId: string; 
       const updatedResumes = await uploadResume(jobId, acceptedFiles[0]);
       setResumes(updatedResumes);
     } catch (error) {
-      console.error("Upload failed:", error);
     } finally {
       setUploading(false);
     }
+  };
+
+  const handleInviteClick = (jobId: string, resume: any) => {
+    setSelectedJobId(jobId);
+    setSelectedSingleResume(resume);
+    setDrawerOpen(true);
+  };
+
+  const handleCloseDrawer = () => {
+    setSelectedJobId(null);
+    setDrawerOpen(false);
   };
 
   const handleDelete = async (resumeId: string) => {
@@ -99,17 +114,15 @@ export default function JobResumes({ jobId, isOpen, onClose }: { jobId: string; 
     setProcessingRows(newProcessingState);
 
     try {
-      const updatedResumes = await Promise.all(
+      await Promise.all(
         Array.from(selectedResumes).map(async (resumeId) => {
           try {
-            const updatedAnalysis = await processResumeById(resumeId, jobId); // Process and get updated analysis
+            const updatedAnalysis = await processResumeById(resumeId, jobId);
 
-            // Update the specific resume's analysis in the state
             setResumes((prevResumes) => prevResumes.map((resume) => (resume.id === resumeId ? { ...resume, analysis: updatedAnalysis } : resume)));
 
             return resumeId;
           } catch (error) {
-            console.error(`Error processing resume ${resumeId}:`, error);
             showToast.error(`Error processing resume: ${resumeId}`);
             return null;
           }
@@ -129,7 +142,7 @@ export default function JobResumes({ jobId, isOpen, onClose }: { jobId: string; 
         return updatedProcessingState;
       });
 
-      setIsProcessing(false); // Re-enable process button
+      setIsProcessing(false);
     }
   };
 
@@ -150,7 +163,7 @@ export default function JobResumes({ jobId, isOpen, onClose }: { jobId: string; 
   return (
     <Drawer size='3xl' isOpen={isOpen} onOpenChange={onClose}>
       <DrawerContent>
-        <DrawerHeader> Resume</DrawerHeader>
+        <DrawerHeader>Manage Resume and Invitation</DrawerHeader>
         <DrawerBody>
           {/* File Upload */}
           <Card>
@@ -184,17 +197,26 @@ export default function JobResumes({ jobId, isOpen, onClose }: { jobId: string; 
 
                 <TableColumn>Experience</TableColumn>
                 <TableColumn>Score</TableColumn>
+                <TableColumn>Invite</TableColumn>
                 <TableColumn align='end'>{""}</TableColumn>
               </TableHeader>
-              <TableBody emptyContent={"No resumes to display."} loadingContent='Loading resumes... '>
+              <TableBody emptyContent={"No resumes to display."} loadingContent='Loading resumes... ' isLoading={isLoading}>
                 {filteredResumes.map((resume) => (
                   <TableRow key={resume.id}>
                     <TableCell>
                       <Checkbox isDisabled={resume.isProcessed} isSelected={selectedResumes.has(resume.id)} onChange={() => handleSelectionChange(resume.id)} />
                     </TableCell>
                     <TableCell>
-                      {resume.analysis && resume.analysis?.name}
-                      {!resume.analysis && resume.name}
+                      {resume.analysis && (
+                        <a href={resume.url} target='_blank' className='text-blue-600'>
+                          {resume.analysis?.name}
+                        </a>
+                      )}
+                      {!resume.analysis && (
+                        <a href={resume.url} target='_blank' className='text-blue-600'>
+                          {resume.name}
+                        </a>
+                      )}
                     </TableCell>
                     <TableCell>{resume.analysis?.total_experience || "--"}</TableCell>
                     <TableCell>
@@ -206,58 +228,32 @@ export default function JobResumes({ jobId, isOpen, onClose }: { jobId: string; 
                         "--"
                       )}
                     </TableCell>
-
+                    <TableCell>{resume.analysis?.isInvite ? <AiOutlineCheck /> : <AiOutlineClose />}</TableCell>
                     <TableCell align='right'>
                       {processingRows[resume.id] ? (
                         <Spinner size='sm' />
                       ) : (
                         <>
                           <div className='flex items-center gap-2'>
-                            <Button onPress={() => handleDelete(resume.id)} isIconOnly={true} color='default' variant='faded' size='sm'>
-                              <AiOutlineDelete />
-                            </Button>
+                            <Tooltip content='Delete resume'>
+                              <Button onPress={() => handleDelete(resume.id)} isIconOnly={true} color='default' variant='faded' size='sm'>
+                                <AiOutlineDelete />
+                              </Button>
+                            </Tooltip>
+                            <Tooltip content='Send invitation'>
+                              <Button onPress={() => handleInviteClick(jobId, resume)} isDisabled={!resume.analysis} isIconOnly={true} color='default' variant='faded' size='sm'>
+                                <AiOutlineUserAdd />
+                              </Button>
+                            </Tooltip>
 
-                            <Button onPress={() => handleDelete(resume.id)} isIconOnly={true} color='default' variant='faded' size='sm'>
-                              <AiOutlineDownload />
-                            </Button>
                             <Popover placement='right'>
                               <PopoverTrigger>
-                                <Button isIconOnly={true} color='default' variant='faded' size='sm'>
+                                <Button isIconOnly={true} color='default' isDisabled={!resume.analysis} variant='faded' size='sm'>
                                   <AiOutlineEye />
                                 </Button>
                               </PopoverTrigger>
                               <PopoverContent>
-                                <div className='px-4 py-3 w-[350px]'>
-                                  <div className='flex justify-between items-center mt-2'>
-                                    <h2 className='text-sm font-bold'>Email:</h2>
-                                    <p className='text-sm text-gray-500'>{resume?.analysis?.email}</p>
-                                  </div>
-
-                                  <div className='flex justify-between items-center mt-2'>
-                                    <h2 className='text-sm font-bold'>Phone:</h2>
-                                    <p className='text-sm text-gray-500'>{resume?.analysis?.phone}</p>
-                                  </div>
-
-                                  <div className='flex justify-between items-center mt-2'>
-                                    <h2 className='text-sm font-bold'>Total Experience:</h2>
-                                    <p className='text-sm text-gray-500'>{resume?.analysis?.total_experience}</p>
-                                  </div>
-
-                                  <div className='flex justify-between items-center mt-2'>
-                                    <h2 className='text-sm font-bold'>Relevant Experience:</h2>
-                                    <p className='text-sm text-gray-500'>{resume?.analysis?.relevant_experience}</p>
-                                  </div>
-
-                                  <hr className='my-2' />
-                                  <h2 className='text-lg font-bold'>Skills:</h2>
-                                  <div className='text-xs flex flex-wrap gap-1'>
-                                    {resume?.analysis?.skills?.map((skill, index) => (
-                                      <span key={index} className='bg-gray-200 text-gray-700 px-2 py-1 rounded-md'>
-                                        {skill}
-                                      </span>
-                                    ))}
-                                  </div>
-                                </div>
+                                <ResultPopoverContent resume={resume} />
                               </PopoverContent>
                             </Popover>
                           </div>
@@ -277,6 +273,8 @@ export default function JobResumes({ jobId, isOpen, onClose }: { jobId: string; 
         </DrawerFooter>
       </DrawerContent>
       <ToastContainer />
+
+      {selectedSingleResume && <SendInvitationDrawer isOpen={isDrawerOpen} name={selectedSingleResume.analysis?.name} email={selectedSingleResume.analysis?.email} onClose={handleCloseDrawer} jobId={selectedJobId} />}
     </Drawer>
   );
 }

@@ -1,14 +1,14 @@
 "use client";
-import { Button, Input, Pagination, Chip, Card, CardFooter, CardHeader, Spinner, Tooltip, Avatar } from "@heroui/react";
+import { Button, Input, Pagination, Chip, Card, CardFooter, CardHeader, Tooltip } from "@heroui/react";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { getAllJobs, deleteJob } from "@/services/job.service"; // Make sure deleteJob is implemented in your service
+import { getAllJobs, deleteJob } from "@/services/job.service";
 import { SendInvitationDrawer } from "./send-invitation";
 import { Breadcrumb } from "../bread.crumb";
 import { useRouter } from "next/navigation";
 import JobListItemSkeleton from "./components/job.listItem.skeleton";
-import ConfirmDialog from "@/components/ConfirmDialog"; // Import your confirmation dialog component
+import ConfirmDialog from "@/components/ConfirmDialog";
 import DateFormatter from "@/app/utils/DateFormatter";
-import { AiFillEdit, AiOutlineDelete, AiOutlinePlus, AiOutlineUpload, AiOutlineUserAdd } from "react-icons/ai";
+import { AiFillEdit, AiOutlineDelete, AiOutlineDiff, AiOutlinePlus, AiOutlineUserAdd } from "react-icons/ai";
 import JobResumes from "./Job-resumes";
 
 export default function Jobs() {
@@ -60,20 +60,19 @@ export default function Jobs() {
     setPage(1);
   }, []);
 
-  // Invite drawer handlers
   const handleInviteClick = (jobId: string) => {
     setSelectedJobId(jobId);
     setDrawerOpen(true);
   };
 
-  const handleManageResumeClick = (jobId: string) => {
-    setSelectedJobId(jobId);
-    setIsManageResumeDrawerOpen(true);
-  };
-
   const handleCloseDrawer = () => {
     setSelectedJobId(null);
     setDrawerOpen(false);
+  };
+
+  const handleManageResumeClick = (jobId: string) => {
+    setSelectedJobId(jobId);
+    setIsManageResumeDrawerOpen(true);
   };
 
   const handleManageResumeCloseDrawer = () => {
@@ -160,7 +159,7 @@ export default function Jobs() {
                       </Tooltip>
                       <Tooltip content='Manage Resume'>
                         <Button isIconOnly aria-label='manage' onPress={() => handleManageResumeClick(job.id)} size='sm' color='default' variant='faded'>
-                          <AiOutlineUpload />
+                          <AiOutlineDiff />
                         </Button>
                       </Tooltip>
                       <Tooltip content='Edit job'>
@@ -175,36 +174,28 @@ export default function Jobs() {
                         </Button>
                       </Tooltip>
                     </div>
-
-                    {/* Invitation Status */}
                   </div>
                 </CardHeader>
 
-                {/* Card Footer with Metadata */}
                 <CardFooter className='gap-6 flex-wrap flex justify-between items-center'>
-                  {/* Left Section: Experience, Applications, Created Date */}
                   <div className='flex gap-6 flex-wrap items-center'>
-                    {/* Experience Level */}
                     <div className='flex gap-1'>
                       <Chip size='sm' color='default' variant='flat'>
                         {job.experienceLevel.toUpperCase()}
                       </Chip>
                     </div>
 
-                    {/* Application Count */}
                     <div className='flex gap-1'>
                       <p className='font-semibold text-default-400 text-sm'>{job.totalInvitations}</p>
                       <p className='text-default-400 text-sm'>Invitations</p>
                     </div>
 
-                    {/* Created Date */}
                     <div className='flex gap-1'>
                       <p className='text-default-400 text-sm'>Created</p>
                       <p className='font-semibold text-default-400 text-sm'>{DateFormatter.formatDate(job.createdAt)}</p>
                     </div>
                   </div>
 
-                  {/* Right Section: Status Count */}
                   <div className='mt-2 ml-auto'>
                     <ul className='flex gap-4 flex-wrap'>
                       {job.invitationStatusCount?.map((item, index) => (
