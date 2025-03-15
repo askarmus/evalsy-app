@@ -116,7 +116,7 @@ export default function TrendAnalyticsChart() {
     },
     yaxis: {
       title: {
-        text: "Average Weight",
+        text: "Average Score",
         style: {
           fontSize: "14px",
           fontWeight: "600",

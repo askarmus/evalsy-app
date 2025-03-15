@@ -8,7 +8,8 @@ import { useRouter } from "next/navigation";
 import JobListItemSkeleton from "./components/job.listItem.skeleton";
 import ConfirmDialog from "@/components/ConfirmDialog"; // Import your confirmation dialog component
 import DateFormatter from "@/app/utils/DateFormatter";
-import { AiFillEdit, AiOutlineDelete, AiOutlinePlus, AiOutlineUserAdd } from "react-icons/ai";
+import { AiFillEdit, AiOutlineDelete, AiOutlinePlus, AiOutlineUpload, AiOutlineUserAdd } from "react-icons/ai";
+import JobResumes from "./Job-resumes";
 
 export default function Jobs() {
   const [page, setPage] = useState(1);
@@ -18,6 +19,7 @@ export default function Jobs() {
   const rowsPerPage = 5;
   const [selectedJobId, setSelectedJobId] = useState<string | null>(null);
   const [isDrawerOpen, setDrawerOpen] = useState(false);
+  const [isManageResumeDrawerOpen, setIsManageResumeDrawerOpen] = useState(false);
   const [jobToDelete, setJobToDelete] = useState<string | null>(null);
   const [isConfirmDialogOpen, setConfirmDialogOpen] = useState(false);
   const router = useRouter();
@@ -64,9 +66,19 @@ export default function Jobs() {
     setDrawerOpen(true);
   };
 
+  const handleManageResumeClick = (jobId: string) => {
+    setSelectedJobId(jobId);
+    setIsManageResumeDrawerOpen(true);
+  };
+
   const handleCloseDrawer = () => {
     setSelectedJobId(null);
     setDrawerOpen(false);
+  };
+
+  const handleManageResumeCloseDrawer = () => {
+    setSelectedJobId(null);
+    setIsManageResumeDrawerOpen(false);
   };
 
   // Delete handlers
@@ -142,19 +154,23 @@ export default function Jobs() {
                     {/* Action Buttons */}
                     <div className='flex gap-1'>
                       <Tooltip content='Send invitation'>
-                        <Button isIconOnly aria-label='Edit' onPress={() => handleInviteClick(job.id)} size='sm' color='primary'>
+                        <Button isIconOnly aria-label='Edit' onPress={() => handleInviteClick(job.id)} size='sm' color='default' variant='faded'>
                           <AiOutlineUserAdd />
                         </Button>
                       </Tooltip>
-
+                      <Tooltip content='Manage Resume'>
+                        <Button isIconOnly aria-label='manage' onPress={() => handleManageResumeClick(job.id)} size='sm' color='default' variant='faded'>
+                          <AiOutlineUpload />
+                        </Button>
+                      </Tooltip>
                       <Tooltip content='Edit job'>
-                        <Button isIconOnly aria-label='Edit' onPress={() => router.push(`/jobs/edit/${job.id}`)} size='sm' color='secondary'>
+                        <Button isIconOnly aria-label='Edit' onPress={() => router.push(`/jobs/edit/${job.id}`)} size='sm' color='default' variant='faded'>
                           <AiFillEdit />
                         </Button>
                       </Tooltip>
 
                       <Tooltip content='Delete job'>
-                        <Button isIconOnly aria-label='Delete' onPress={() => handleDeleteClick(job.id)} size='sm' color='danger'>
+                        <Button isIconOnly aria-label='Delete' onPress={() => handleDeleteClick(job.id)} size='sm' color='default' variant='faded'>
                           <AiOutlineDelete />
                         </Button>
                       </Tooltip>
@@ -206,11 +222,11 @@ export default function Jobs() {
             <Pagination color='primary' isCompact showControls showShadow page={page} total={pages} onChange={(page) => setPage(page)} />
 
             <SendInvitationDrawer isOpen={isDrawerOpen} onClose={handleCloseDrawer} jobId={selectedJobId} />
+            {isManageResumeDrawerOpen && selectedJobId && <JobResumes isOpen={isManageResumeDrawerOpen} onClose={handleManageResumeCloseDrawer} jobId={selectedJobId} />}
           </div>
         )}
       </div>
 
-      {/* Confirm Deletion Dialog */}
       <ConfirmDialog isOpen={isConfirmDialogOpen} onClose={handleCancelDelete} title='Confirm Deletion' description='Are you sure you want to delete this job?' onConfirm={handleConfirmDelete} confirmButtonText='Delete' cancelButtonText='Cancel' />
     </div>
   );
