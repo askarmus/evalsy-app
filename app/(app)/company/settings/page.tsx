@@ -4,6 +4,7 @@ import { Tabs, Tab } from "@heroui/react";
 import { Breadcrumb } from "@/components/bread.crumb";
 import CompanySettings from "@/components/settings/company";
 import ChangePassword from "@/components/settings/change.password";
+import SubscribePage from "@/components/settings/subscription";
 
 export type CompanySettingsFormValues = {
   name: string;
@@ -35,6 +36,9 @@ const CompanySettingsPage = () => {
           </Tab>
           <Tab key='changePassword' title='Change Password'>
             <ChangePassword />
+          </Tab>
+          <Tab key='subscription' title='Subscription'>
+            <SubscribePage />
           </Tab>
         </Tabs>
       </div>
