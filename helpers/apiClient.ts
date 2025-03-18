@@ -1,6 +1,6 @@
 import { addToast } from "@heroui/react";
 import axios from "axios";
-import Cookies from "js-cookie";
+import Cookies from "js-cookie"; // ✅ Needed to clear cookies on logout
 import Router from "next/router";
 
 // Create the Axios instance
@@ -8,67 +8,44 @@ const apiClient = axios.create({
   baseURL: process.env.NEXT_PUBLIC_BASE_API_URL,
   timeout: 60000,
   headers: { "Content-Type": "application/json" },
+  withCredentials: true, // ✅ Ensures authentication cookies are sent
 });
 
-// Helper function to refresh the access token
+// ✅ Helper function to refresh the access token
 const refreshAccessToken = async () => {
   try {
-    const refreshToken = Cookies.get("refreshToken"); // Get the refresh token from cookies
-
-    if (!refreshToken) {
-      throw new Error("No refresh token available");
-    }
-
-    // Make a request to refresh the access token
-    const response = await axios.post(
-      `${process.env.NEXT_PUBLIC_BASE_API_URL}/auth/refresh-token`,
-      {},
-      {
-        headers: {
-          Authorization: `Bearer ${refreshToken}`,
-        },
-      }
-    );
-
-    const newAccessToken = response.data.token;
-    Cookies.set("userAuth", newAccessToken); // Update the access token in cookies
-
-    return newAccessToken;
+    await axios.post(`${process.env.NEXT_PUBLIC_BASE_API_URL}/auth/refresh-token`, {}, { withCredentials: true });
+    return true; // ✅ Indicates successful refresh
   } catch (error) {
-    // Handle errors in refreshing token
     console.error("Failed to refresh token:", error);
-    return null;
+
+    // ✅ Clear cookies on refresh token failure
+    Cookies.remove("accessToken");
+    Cookies.remove("refreshToken");
+
+    return false; // ❌ Refresh failed
   }
 };
 
-// Add a request interceptor to include the bearer token
+// ✅ Add a request interceptor to include headers dynamically
 apiClient.interceptors.request.use(
   (config) => {
-    const token = Cookies.get("userAuth");
     const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-
-    config.headers.timeZone = userTimeZone;
-
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-
+    config.headers["timezone"] = userTimeZone; // ✅ Attach timezone to every request
     return config;
   },
-  (error) => {
-    return Promise.reject(error);
-  }
+  (error) => Promise.reject(error)
 );
 
-// Add a response interceptor to handle errors and refresh token logic
+// ✅ Add a response interceptor to handle errors & refresh token logic
 apiClient.interceptors.response.use(
-  (response) => response,
+  (response) => response, // ✅ Return response if successful
   async (error) => {
     const originalRequest = error.config;
     const status = error.response?.status || 500;
     const message = error.response?.data?.error || "An unexpected error occurred.";
 
-    // If the error is from the login endpoint, show an appropriate error message
+    // ✅ Handle login errors separately
     if (originalRequest.url?.includes("/auth/login") && status === 401) {
       addToast({
         description: "Invalid email or password. Please try again.",
@@ -77,25 +54,23 @@ apiClient.interceptors.response.use(
       return Promise.reject({ status, message, data: error.response?.data });
     }
 
-    // Handle 401 Unauthorized error (session expired)
+    // ✅ Handle expired session (401 Unauthorized)
     if (status === 401 && !originalRequest._retry) {
-      originalRequest._retry = true; // Avoid infinite loop
+      originalRequest._retry = true; // Prevent infinite loops
 
-      const newAccessToken = await refreshAccessToken();
-
-      if (newAccessToken) {
-        // Retry the original request with the new token
-        originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
-        return apiClient(originalRequest);
+      const success = await refreshAccessToken();
+      if (success) {
+        return apiClient(originalRequest); // ✅ Retry the failed request
       } else {
-        // If refresh fails, log out the user
-        Cookies.remove("userAuth");
-        Cookies.remove("refreshToken");
-
+        // ❌ Logout if refresh fails
         addToast({
           description: "Session expired. Please log in again.",
           color: "danger",
         });
+
+        Cookies.remove("accessToken");
+        Cookies.remove("refreshToken");
+
         Router.push("/login");
       }
     } else {
@@ -105,11 +80,7 @@ apiClient.interceptors.response.use(
       });
     }
 
-    return Promise.reject({
-      status,
-      message,
-      data: error.response?.data,
-    });
+    return Promise.reject({ status, message, data: error.response?.data });
   }
 );
 

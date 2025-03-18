@@ -22,16 +22,9 @@ export const resetPassword = async (values: ResetPasswordFormType) => {
   return response.data;
 };
 export const loginUser = async (values: LoginFormType) => {
-  const response = await apiClient.post("/auth/login", values);
-
-  if (response.data?.token) {
-    // Store the token in cookies for secure storage
-    Cookies.set("userAuth", response.data.token, {
-      expires: 1, // 1 day expiration
-      secure: process.env.NODE_ENV === "production", // Use secure cookies in production
-      sameSite: "Strict", // Prevent CSRF attacks
-    });
-  }
+  const response = await apiClient.post("/auth/login", values, {
+    withCredentials: true, // ✅ Ensures cookies are included
+  });
 
   return response.data;
 };

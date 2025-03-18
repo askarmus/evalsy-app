@@ -25,10 +25,16 @@ export const Login = () => {
         setSubmitting(true);
 
         const response = await loginUser(values);
-        if (response) {
-          router.replace("/");
+
+        if (response?.user) {
+          // ✅ Ensure user exists before redirecting
+          console.log("Login successful, redirecting to dashboard...");
+          router.replace("/dashboard"); // ✅ Redirect to `/dashboard`
+        } else {
+          console.error("Login failed: No user data received");
         }
       } catch (error: any) {
+        console.error("Login failed:", error);
       } finally {
         setSubmitting(false);
       }
