@@ -17,8 +17,8 @@ export async function POST(req: Request) {
       customer: customer.id,
       payment_method_types: ["card"], // ✅ This is allowed in `checkout.sessions.create()`
       mode: "subscription", // ✅ Ensures recurring payments
-      success_url: `${process.env.NEXT_PUBLIC_BASE_URL}/success?session_id={CHECKOUT_SESSION_ID}&tab=subscriptions&status=success`, // Redirect to success page
-      cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL}//company/settings?tab=subscriptions&status=cancelled`,
+      success_url: `${process.env.NEXT_PUBLIC_BASE_URL}/company/settings?session_id={CHECKOUT_SESSION_ID}&tab=subscriptions&status=success`, // Redirect to success page
+      cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL}/company/settings?tab=subscriptions&status=cancelled`,
       line_items: [
         { price: "price_1R3bqQPcvZoiNWtPoBO6mxyS", quantity: 1 }, // Base Plan ($20/month)
         { price: "price_1R3btRPcvZoiNWtPkOZJUzCu" }, // Metered Billing ($0.10 per invite)
