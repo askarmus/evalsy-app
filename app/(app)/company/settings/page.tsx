@@ -1,15 +1,22 @@
 "use client";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Tabs, Tab } from "@heroui/react";
 import { Breadcrumb } from "@/components/bread.crumb";
 import CompanySettings from "@/components/settings/company";
 import ChangePassword from "@/components/settings/change.password";
 import SubscribePage from "@/components/settings/subscription";
-import { useSearchParams } from "next/navigation";
 
 const CompanySettingsPage = () => {
-  const searchParams = useSearchParams();
-  const activeTab = searchParams.get("tab") || "settings"; // Default to 'settings' if no tab is specified
+  const [activeTab, setActiveTab] = useState("settings");
+
+  useEffect(() => {
+    // Extract tab parameter from URL manually
+    const params = new URLSearchParams(window.location.search);
+    const tab = params.get("tab");
+    if (tab) {
+      setActiveTab(tab);
+    }
+  }, []);
 
   const breadcrumbItems = [
     { name: "Dashboard", link: "/" },
@@ -23,7 +30,7 @@ const CompanySettingsPage = () => {
       <h3 className='text-xl font-semibold'>Settings</h3>
 
       <div className='max-w-[90rem] mx-auto w-full'>
-        <Tabs aria-label='Options' defaultSelectedKey={activeTab}>
+        <Tabs aria-label='Options' selectedKey={activeTab}>
           <Tab key='settings' title='Settings'>
             <CompanySettings />
           </Tab>
