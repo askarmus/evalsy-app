@@ -5,7 +5,9 @@ import { NextResponse } from "next/server";
 
 export async function GET() {
   const cookieStore = await cookies();
-  console.log(cookieStore);
+  const secret = process.env.JWT_SECRET || "";
+  console.log("secret", secret);
+  console.log("cookieStore", cookieStore);
   const token = cookieStore.get(COOKIE_NAME);
 
   if (!token) {
@@ -13,8 +15,6 @@ export async function GET() {
   }
 
   const { value } = token;
-
-  const secret = process.env.JWT_SECRET || "";
 
   try {
     const decoded = verify(value, secret) as { name: string; email: string; id: string };
