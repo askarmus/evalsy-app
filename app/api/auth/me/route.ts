@@ -13,6 +13,11 @@ export async function GET() {
   console.log("cookieStore", cookieStore);
   const token = cookieStore.get(COOKIE_NAME);
 
+  console.log("📦 Incoming Cookies:");
+  cookieStore.getAll().forEach((cookie) => {
+    console.log(`🔑 ${cookie.name} = ${cookie.value}`);
+  });
+
   if (!token) {
     return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
   }
