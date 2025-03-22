@@ -40,7 +40,7 @@ const Welcome: React.FC = () => {
       <InterviewNavbar company={company} />
       <div className='min-h-screen'>
         <main className='max-w-7xl mx-auto px-6 py-8'>
-          <Card className='p-8'>
+          <Card shadow='sm' className='p-8'>
             <CardHeader>
               <CandidateInfo candidate={candidate} company={company} job={job} />
             </CardHeader>

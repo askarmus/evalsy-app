@@ -147,7 +147,7 @@ export const AddJob = () => {
                   <div className='flex gap-4'>
                     <div className='w-3/5'>
                       <div>
-                        <Card className='p-5'>
+                        <Card shadow='sm' className='p-5'>
                           <CardBody>
                             <div className='grid grid-cols-1 gap-4'>
                               <Input label='Title' variant='bordered' value={values.jobTitle} isInvalid={!!errors.jobTitle && !!touched.jobTitle} errorMessage={errors.jobTitle} onChange={handleChange("jobTitle")} />

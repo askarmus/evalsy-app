@@ -165,7 +165,7 @@ export default function JobResumes({ jobId, isOpen, onClose }: { jobId: string; 
         <DrawerHeader>Manage Resume and Invitation</DrawerHeader>
         <DrawerBody>
           {/* File Upload */}
-          <Card className='cursor-pointer hover:bg-gray-100 transition'>
+          <Card shadow='sm' className='cursor-pointer hover:bg-gray-100 transition'>
             <CardBody>
               <div {...getRootProps()} className='flex flex-col items-center'>
                 {!uploading && <AiOutlineUpload className='h-6 w-6' />}

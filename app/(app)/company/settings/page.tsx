@@ -10,11 +10,10 @@ const CompanySettingsPage = () => {
   const [activeTab, setActiveTab] = useState("settings");
 
   useEffect(() => {
-    // Extract tab parameter from URL manually
     const params = new URLSearchParams(window.location.search);
     const tab = params.get("tab");
     if (tab) {
-      setActiveTab(tab);
+      setActiveTab("subscriptions");
     }
   }, []);
 
@@ -26,11 +25,9 @@ const CompanySettingsPage = () => {
   return (
     <div className='my-10 px-4 lg:px-6 max-w-[90rem] mx-auto w-full flex flex-col gap-4'>
       <Breadcrumb items={breadcrumbItems} />
-
       <h3 className='text-xl font-semibold'>Settings</h3>
-
       <div className='max-w-[90rem] mx-auto w-full'>
-        <Tabs aria-label='Options' selectedKey={activeTab}>
+        <Tabs aria-label='Options' selectedKey={activeTab} onSelectionChange={(key) => setActiveTab(key as string)}>
           <Tab key='settings' title='Settings'>
             <CompanySettings />
           </Tab>

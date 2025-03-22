@@ -30,7 +30,7 @@ const EvaluationChart = ({ data }) => {
   };
 
   return (
-    <Card className='p-2 mb-6'>
+    <Card shadow='sm' className='p-2 mb-6'>
       <CardBody>
         <Bar
           data={chartData}

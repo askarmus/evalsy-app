@@ -1,35 +1,30 @@
 import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, NavbarItem, User } from "@heroui/react";
 import React, { useCallback, useEffect, useState } from "react";
-import Cookies from "js-cookie";
 import apiClient from "@/helpers/apiClient";
+import { getUser } from "@/services/authService";
 
 export const UserDropdown = () => {
   const [user, setUser] = useState({ name: "", initials: "" });
 
   useEffect(() => {
-    // Assuming the JWT token is stored in cookies under 'userAuth'
-    const token = Cookies.get("userAuth");
+    const fetchUser = async () => {
+      const data = await getUser();
 
-    if (token) {
-      const payload = JSON.parse(atob(token.split(".")[1]));
-      const name = payload.name || "";
-
-      // Extract initials from the name
-      const initials = name
+      // Assuming `user.user.name` exists and you want initials
+      const initials = data.user.name
         .split(" ")
-        .map((word) => word[0])
+        .map((n) => n[0])
         .join("")
         .toUpperCase();
 
-      setUser({ name, initials });
-    }
-  }, []);
+      setUser({ name: data.user.name || "", initials });
+    };
 
+    fetchUser();
+  }, []);
   const handleLogout = useCallback(async () => {
     try {
       await apiClient.post("/auth/logout", {}, { withCredentials: true });
-
-      // Redirect after logout
       window.location.href = "/login";
     } catch (error) {
       console.error("Logout failed", error);

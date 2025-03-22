@@ -1,150 +1,108 @@
 "use client";
-import { Button, Card, CardBody, CardFooter } from "@heroui/react";
+
+import { cancelSubscription, createSubscription, getSubscriptionStatus } from "@/services/subscription.service";
+import { Button, Card, CardBody, CardFooter, CardHeader, Tooltip } from "@heroui/react";
 import { useEffect, useState } from "react";
-import { AiOutlineCheckCircle } from "react-icons/ai";
-import UsagePage from "./componetns/usage";
+import { AiOutlineReload } from "react-icons/ai";
+import ConfirmDialog from "../ConfirmDialog";
+import SubscriptionUsageCard from "./components/subscription.usage.card";
+import SubscriptionCard from "./components/subscription.card";
+import SubscriptionDetailsCard from "./components/subscription.details.card";
 
 const SubscribePage = () => {
-  const [loading, setLoading] = useState(false);
-  const [isSubscribed, setIsSubscribed] = useState(false);
-  const [cancelAtPeriodEnd, setCancelAtPeriodEnd] = useState(false);
-  const [subscriptionId, setSubscriptionId] = useState<string | null>(null);
-  const customerId = "cus_xxxxxxx"; // Replace with the actual Stripe customer ID
+  const [subscription, setSubscription] = useState<{ status: string; currentPeriodEnd: string; cancelAtPeriodEnd: boolean } | null>(null);
+  const [loadingSubscription, setLoadingSubscription] = useState(true);
+  const [loadingSubscribe, setLoadingSubscribe] = useState(false);
+  const [loadingCancel, setLoadingCancel] = useState(false);
+  const [isConfirmDialogOpen, setConfirmDialogOpen] = useState(false);
 
   useEffect(() => {
-    const fetchSubscriptionStatus = async () => {
-      try {
-        const res = await fetch("/api/get-subscription", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ customerId }),
-        });
-        const data = await res.json();
-        setIsSubscribed(data.isSubscribed);
-        setSubscriptionId(data.subscriptionId || null);
-        setCancelAtPeriodEnd(data.cancelAtPeriodEnd || false);
-      } catch (error) {
-        console.error("Failed to fetch subscription status:", error);
-      }
-      setLoading(false);
-    };
-
-    fetchSubscriptionStatus();
+    fetchSubscriptionDetails();
   }, []);
 
-  const handleCancelSubscription = async () => {
-    setLoading(true);
+  const fetchSubscriptionDetails = async () => {
     try {
-      const res = await fetch("/api/cancel-subscription", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ subscriptionId }),
-      });
+      setLoadingSubscription(true);
 
-      const data = await res.json();
-      if (data.success) {
-        alert("Subscription cancellation scheduled.");
-        setCancelAtPeriodEnd(true);
+      const data = await getSubscriptionStatus();
+
+      if (data.date.status === "no-subscription") {
+        return setSubscription(null);
       }
+      setSubscription({
+        status: data.date.status,
+        currentPeriodEnd: new Date(data.date.current_period_end * 1000).toLocaleDateString(),
+        cancelAtPeriodEnd: data.date.cancel_at_period_end,
+      });
     } catch (error) {
-      console.error("Failed to cancel subscription:", error);
+      console.error("Error fetching subscription details:", error);
+    } finally {
+      setLoadingSubscription(false);
     }
-    setLoading(false);
   };
 
   const handleSubscribe = async () => {
-    setLoading(true);
+    setLoadingSubscribe(true);
     try {
-      const res = await fetch("/api/subscribe", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: "user@example.com" }), // Replace with actual user email
-      });
-
-      const data = await res.json();
-      if (data.url) {
-        window.location.href = data.url; // Redirect to Stripe Checkout
-      }
+      const res = await createSubscription();
+      console.log("Subscription response:", res);
+      window.location.href = res.data;
     } catch (error) {
       console.error("Subscription error:", error);
-      setLoading(false);
+      setLoadingSubscribe(false);
+    }
+  };
+
+  const handleCancelSubscription = async () => {
+    setLoadingCancel(true);
+    try {
+      setConfirmDialogOpen(false);
+      await cancelSubscription();
+      fetchSubscriptionDetails();
+    } catch (error) {
+      console.error("Error canceling subscription:", error);
+    } finally {
+      setLoadingCancel(false);
     }
   };
 
   return (
-    <Card className='p-5'>
+    <Card shadow='sm' className='p-4 mb-4'>
       <CardBody>
-        <section id='pricing' aria-label='Pricing' className=' '>
-          <div className='mx-auto max-w-7xl '>
-            <div className=' '>
-              <h2 className='font-display text-2xl tracking-tight  '>
-                <span className='relative whitespace-nowrap'>
-                  <span className='relative'>Simple, Transparent Pricing </span>
-                </span>
-              </h2>
-              <p className='mt-4'>
-                Start for just <span className='font-bold'>$20/month</span> – Unlimited Jobs &amp; Flexible Invitations!
-              </p>
-            </div>
+        <CardHeader className='flex flex justify-end'>
+          <Tooltip content='Refresh Subscription Details'>
+            <Button onPress={fetchSubscriptionDetails} color='default' size='sm' isIconOnly={true}>
+              <AiOutlineReload className='h-6 w-6 flex-none' />
+            </Button>
+          </Tooltip>
+        </CardHeader>
 
-            <div className=' mt-5 '>
-              <ul role='list' className='order-last mt-10 flex flex-col gap-y-3 text-sm  '>
-                <li className='flex'>
-                  <AiOutlineCheckCircle className='h-6 w-6 flex-none fill-current stroke-current' />
-                  <span className='ml-4'>
-                    <strong>Unlimited</strong> Job Postings
-                  </span>
-                </li>
-                <li className='flex'>
-                  <AiOutlineCheckCircle className='h-6 w-6 flex-none fill-current stroke-current  ' />
-                  <span className='ml-4'>
-                    <strong>50 Free Invitations</strong> per month
-                  </span>
-                </li>
-                <li className='flex'>
-                  <AiOutlineCheckCircle className='h-6 w-6 flex-none fill-current stroke-current  ' />
-                  <span className='ml-4'>Secure Stripe Billing</span>
-                </li>
-                <li className='flex'>
-                  <AiOutlineCheckCircle className='h-6 w-6 flex-none fill-current stroke-current ' />
-                  <span className='ml-4'>
-                    <strong>$0.10 per extra invite</strong> beyond 50
-                  </span>
-                </li>
-                <li className='flex'>
-                  <AiOutlineCheckCircle className='h-6 w-6 flex-none fill-current stroke-current  ' />
-                  <span className='ml-4'>Auto-billed at the end of the month</span>
-                </li>
-                <li className='flex'>
-                  <AiOutlineCheckCircle className='h-6 w-6 flex-none fill-current stroke-current  ' />
-                  <span className='ml-4'>Cancel Anytime</span>
-                </li>
-              </ul>
+        <div className='grid grid-cols-1 md:grid-cols-3 gap-4'>
+          <SubscriptionCard subscription={!subscription?.cancelAtPeriodEnd} loadingSubscribe={loadingSubscribe} handleSubscribe={handleSubscribe} />
+          <SubscriptionDetailsCard subscription={subscription} loadingSubscription={loadingSubscription} />
+          <SubscriptionUsageCard />
+        </div>
+        {!subscription?.cancelAtPeriodEnd && (
+          <CardFooter className='mt-4'>
+            <div className='flex justify-end w-full'>
+              <Button onPress={() => setConfirmDialogOpen(true)} isLoading={loadingCancel} color='danger' variant='flat' size='sm'>
+                {loadingCancel ? "Processing..." : "Cancel Subscription"}
+              </Button>
             </div>
-          </div>
-        </section>
-        <UsagePage />
-      </CardBody>
-      <CardFooter>
-        {loading ? (
-          <p>Loading...</p>
-        ) : isSubscribed ? (
-          <div>
-            <p className='text-green-600 mb-4'>You are subscribed.</p>
-            {cancelAtPeriodEnd ? (
-              <p className='text-orange-600 mb-4'>Your subscription will end at the end of the billing period.</p>
-            ) : (
-              <button onClick={handleCancelSubscription} className='bg-red-600 text-white px-6 py-3 rounded-md' disabled={loading}>
-                {loading ? "Processing..." : "Cancel Subscription"}
-              </button>
-            )}
-          </div>
-        ) : (
-          <Button type='submit' onPress={handleSubscribe} color='primary' isLoading={loading}>
-            {loading ? "Redirecting..." : "Subscribe Now"}
-          </Button>
+          </CardFooter>
         )}
-      </CardFooter>
+      </CardBody>
+      <ConfirmDialog
+        isOpen={isConfirmDialogOpen}
+        onClose={() => {
+          setConfirmDialogOpen(false);
+        }}
+        title='Cancel Subscription'
+        description='Are you sure you want to cancel the subscription?'
+        onConfirm={handleCancelSubscription}
+        confirmButtonText='Cancel Subscription'
+        cancelButtonText='Cancel'
+      />
     </Card>
   );
 };

@@ -95,7 +95,7 @@ export default function InterviewResultList() {
       ) : (
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
           {items.map((result: any) => (
-            <Card key={result.id} className={`rounded-xl shadow-md    w-full border-2 ${getBorderColor(result.overallWeight)}`}>
+            <Card shadow='sm' key={result.id} className={`rounded-xl shadow-md    w-full border-2 ${getBorderColor(result.overallWeight)}`}>
               <CardBody className='p-0 w-full'>
                 <FeaturedBadge weight={result?.overallWeight} />
                 <div className='grid grid-cols-12 gap-4 p-5 w-full'>

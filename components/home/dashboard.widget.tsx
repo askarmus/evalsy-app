@@ -2,7 +2,7 @@ import React from "react";
 import { Card, CardBody } from "@heroui/react";
 export const DashboardWidjet: React.FC<any> = ({ data }) => {
   return (
-    <Card className={`xl:max-w-sm ${data.bgColor} rounded-xl shadow-md px-3 w-full`}>
+    <Card shadow='sm' className={`xl:max-w-sm ${data.bgColor} rounded-xl shadow-md px-3 w-full`}>
       <CardBody className='py-5'>
         <div className='flex gap-2.5'>
           {data.icon}

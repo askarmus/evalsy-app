@@ -45,7 +45,7 @@ const InterviewInstruction: React.FC<any> = () => {
       </Navbar>
 
       <main className='max-w-7xl mx-auto px-6 py-8'>
-        <Card className='p-8'>
+        <Card shadow='sm' className='p-8'>
           <CandidateInfo candidate={candidate} company={company} job={job} />
 
           <CardBody>

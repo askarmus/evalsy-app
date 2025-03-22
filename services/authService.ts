@@ -1,6 +1,6 @@
 import apiClient from "@/helpers/apiClient";
 import { ResetPasswordFormType, ChangePasswordFormType, ForgetPasswordFormType, LoginFormType, RegisterFormType } from "@/helpers/types";
-import Cookies from "js-cookie";
+import axios, { AxiosError } from "axios";
 
 export const registerUser = async (values: RegisterFormType) => {
   const response = await apiClient.post("/auth/register", values);
@@ -27,4 +27,22 @@ export const loginUser = async (values: LoginFormType) => {
   });
 
   return response.data;
+};
+
+export const getUser = async () => {
+  try {
+    const { data } = await axios.get("/api/auth/me");
+
+    return {
+      user: data,
+      error: null,
+    };
+  } catch (e) {
+    const error = e as AxiosError;
+
+    return {
+      user: null,
+      error,
+    };
+  }
 };

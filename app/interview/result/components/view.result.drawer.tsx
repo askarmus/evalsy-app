@@ -14,7 +14,7 @@ export const ViewResultDrawer: React.FC<{ isOpen: boolean; onClose: () => void; 
     <Drawer isOpen={isOpen} onOpenChange={onClose} size='3xl'>
       <DrawerContent>
         <DrawerHeader className='w-full'>
-          <Card className='w-full'>
+          <Card shadow='sm' className='w-full'>
             <CardBody className='p-0 w-full'>
               <FeaturedBadge weight={interviewerData?.overallWeight} />
               <div className='grid grid-cols-12 gap-4 p-5 w-full'>
@@ -38,7 +38,7 @@ export const ViewResultDrawer: React.FC<{ isOpen: boolean; onClose: () => void; 
             <Tab key='overallresult' title='Overall Result'>
               <EvaluationChart data={interviewerData}></EvaluationChart>
               <EvaluationTable data={interviewerData} />
-              <Card className='p-2 mt-6 w-full'>
+              <Card shadow='sm' className='p-2 mt-6 w-full'>
                 <CardHeader className='text-sm font-semibold'>Feedabck</CardHeader>
                 <CardBody className='  w-full'>
                   <ul className='list-disc list-inside space-y-2'>
