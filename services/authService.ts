@@ -31,7 +31,9 @@ export const loginUser = async (values: LoginFormType) => {
 
 export const getUser = async () => {
   try {
-    const { data } = await axios.get("/api/auth/me");
+    const { data } = await axios.get("/api/auth/me", {
+      withCredentials: true, // ✅ This tells Axios to include cookies!
+    });
 
     return {
       user: data,
