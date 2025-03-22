@@ -28,23 +28,11 @@ export const loginUser = async (values: LoginFormType) => {
 
   return response.data;
 };
-
 export const getUser = async () => {
   try {
-    const { data } = await axios.get("/api/auth/me", {
-      withCredentials: true, // ✅ This tells Axios to include cookies!
-    });
-
-    return {
-      user: data,
-      error: null,
-    };
-  } catch (e) {
-    const error = e as AxiosError;
-
-    return {
-      user: null,
-      error,
-    };
+    const { data } = await apiClient.get(`/auth/authme`);
+    return { user: data, error: null };
+  } catch (error) {
+    return { user: null, error };
   }
 };
