@@ -1,3 +1,5 @@
+export const runtime = "nodejs";
+
 import { COOKIE_NAME } from "@/constant";
 import { verify } from "jsonwebtoken";
 import { cookies } from "next/headers";
@@ -5,6 +7,7 @@ import { NextResponse } from "next/server";
 
 export async function GET() {
   const cookieStore = await cookies();
+
   const secret = process.env.JWT_SECRET || "";
   console.log("secret", secret);
   console.log("cookieStore", cookieStore);
