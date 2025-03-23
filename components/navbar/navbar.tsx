@@ -27,7 +27,7 @@ export const NavbarWrapper = ({ children }: Props) => {
         }}>
         <NavbarContent className='pr-3' justify='center'>
           <NavbarBrand>
-            <Link className='flex items-center text-default-800 hover:text-gray-800 gap-2' href='/dashboard'>
+            <Link className='flex items-center text-default-800 hover:text-blue-900 gap-2' href='/dashboard'>
               <Logo />
             </Link>
           </NavbarBrand>
@@ -35,35 +35,35 @@ export const NavbarWrapper = ({ children }: Props) => {
 
         <NavbarContent className='hidden sm:flex gap-4' justify='center'>
           <NavbarItem isActive={currentPath === "/dashboard"}>
-            <Link className='flex items-center text-sm text-default-800 hover:text-gray-800 gap-2' href='/dashboard'>
+            <Link className='flex items-center text-sm text-default-800 hover:text-blue-900 gap-2' href='/dashboard'>
               <AiOutlineHome />
               Dashboard
             </Link>
           </NavbarItem>
 
           <NavbarItem isActive={currentPath === "/jobs/list"}>
-            <Link className='flex items-center text-sm text-default-800 hover:text-gray-800 gap-2' href='/jobs/list'>
+            <Link className='flex items-center text-sm text-default-800 hover:text-blue-900 gap-2' href='/jobs/list'>
               <AiOutlineShopping />
               Job
             </Link>
           </NavbarItem>
 
           <NavbarItem isActive={currentPath === "/interview/result"}>
-            <Link className='flex items-center text-sm text-default-800 hover:text-gray-800 gap-2' href='/interview/result'>
+            <Link className='flex items-center text-sm text-default-800 hover:text-blue-900 gap-2' href='/interview/result'>
               <AiOutlineNotification />
               Result
             </Link>
           </NavbarItem>
 
           <NavbarItem isActive={currentPath === "/company/settings"}>
-            <Link className='flex items-center text-sm text-default-800 hover:text-gray-800 gap-2' href='/company/settings'>
+            <Link className='flex items-center text-sm text-default-800 hover:text-blue-900 gap-2' href='/company/settings'>
               <AiOutlineSetting />
               Settings
             </Link>
           </NavbarItem>
 
           <NavbarItem isActive={currentPath === "/jobs/interviwers"}>
-            <Link className='flex items-center text-sm text-default-800 hover:text-blue-800 gap-2' href='/jobs/interviwers'>
+            <Link className='flex items-center text-sm text-default-800 hover:text-blue-900 gap-2' href='/jobs/interviwers'>
               <AiOutlineUser />
               Interviewers
             </Link>
