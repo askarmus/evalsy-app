@@ -104,7 +104,7 @@ const InterviewNavigator: React.FC = () => {
       audioRef.current.currentTime = 0;
     }
     setIsReplayingAudio(false);
-    setAudioCompleted(true); // Re-enable buttons after replay
+    setAudioCompleted(true);
   };
 
   const handleReplayAudioEnded = () => {
@@ -141,73 +141,72 @@ const InterviewNavigator: React.FC = () => {
   return (
     <>
       <InterviewNavbar company={company} />
-      <div className='min-h-screen'>
-        <main className='max-w-7xl mx-auto px-6 py-8'>
-          <Card className='p-8' shadow='sm'>
-            <CandidateInfo candidate={candidate} company={company} job={job} />
 
-            <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
-              <Card className='py-4' shadow='sm'>
-                <CardBody className='overflow-visible py-2'>
-                  <div className='p-6'>
-                    <p className='text-sm'>Interview Question</p>
-                    <p className='text-lg leading-relaxed mt-4'>{question?.text || "No Questions Available"}</p>
+      <main className='max-w-7xl mx-auto px-6 py-8'>
+        <Card className='p-8' shadow='sm'>
+          <CandidateInfo candidate={candidate} company={company} job={job} />
 
-                    {/* ✅ Question Audio */}
-                    <audio ref={audioRef} onEnded={handleQuestionAudioEnd} onPlay={() => setIsReplayingAudio(true)} onPause={handleReplayAudioEnded}>
-                      <source src={question?.audioUrl} type='audio/wav' />
-                      Your browser does not support the audio element.
-                    </audio>
+          <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
+            <Card className='py-4' shadow='sm'>
+              <CardBody className='overflow-visible py-2'>
+                <div className='p-6'>
+                  <p className='text-sm'>Interview Question</p>
+                  <p className='text-lg leading-relaxed mt-4'>{question?.text || "No Questions Available"}</p>
 
-                    {/* ✅ Reminder Audio */}
-                    <audio ref={reminderAudioRef}>
-                      <source src={company.answerQuestionAudioUrl} type='audio/wav' />
-                      Your browser does not support the audio element.
-                    </audio>
-                  </div>
-                </CardBody>
-                <CardFooter className='absolute bottom-0 z-10 border-t-1 dark:border-t-gray-800'>
-                  <div className='flex flex-grow gap-2 items-center'>
-                    {/* ✅ Record Button (Enabled if isRefreshed is true) */}
+                  {/* ✅ Question Audio */}
+                  <audio ref={audioRef} onEnded={handleQuestionAudioEnd} onPlay={() => setIsReplayingAudio(true)} onPause={handleReplayAudioEnded}>
+                    <source src={question?.audioUrl} type='audio/wav' />
+                    Your browser does not support the audio element.
+                  </audio>
+
+                  {/* ✅ Reminder Audio */}
+                  <audio ref={reminderAudioRef}>
+                    <source src={company.answerQuestionAudioUrl} type='audio/wav' />
+                    Your browser does not support the audio element.
+                  </audio>
+                </div>
+              </CardBody>
+              <CardFooter className='absolute bottom-0 z-10 border-t-1 dark:border-t-gray-800'>
+                <div className='flex flex-grow gap-2 items-center'>
+                  {/* ✅ Record Button (Enabled if isRefreshed is true) */}
+                  <Button
+                    color='danger'
+                    startContent={<FaMicrophoneAlt />}
+                    isDisabled={!isRefreshed || isReplayingAudio || isRecording || isAudioUploading} // Only disable if isRefreshed is false or if replaying
+                    onPress={handleStartRecording}>
+                    Answer
+                  </Button>
+
+                  {/* ✅ Replay Audio Button (Enabled if isRefreshed is true) */}
+                  {!isReplayingAudio ? (
                     <Button
-                      color='danger'
-                      startContent={<FaMicrophoneAlt />}
-                      isDisabled={!isRefreshed || isReplayingAudio || isRecording || isAudioUploading} // Only disable if isRefreshed is false or if replaying
-                      onPress={handleStartRecording}>
-                      Answer
+                      color='secondary'
+                      isDisabled={!isRefreshed || isRecording} // Only disable if isRefreshed is false or if recording
+                      onPress={handleReplayAudio}>
+                      Replay Audio
                     </Button>
+                  ) : (
+                    <Button startContent={<FaStopCircle />} color='warning' onPress={handleStopReplayAudio}>
+                      Stop Replay
+                    </Button>
+                  )}
 
-                    {/* ✅ Replay Audio Button (Enabled if isRefreshed is true) */}
-                    {!isReplayingAudio ? (
-                      <Button
-                        color='secondary'
-                        isDisabled={!isRefreshed || isRecording} // Only disable if isRefreshed is false or if recording
-                        onPress={handleReplayAudio}>
-                        Replay Audio
-                      </Button>
-                    ) : (
-                      <Button startContent={<FaStopCircle />} color='warning' onPress={handleStopReplayAudio}>
-                        Stop Replay
-                      </Button>
-                    )}
-
-                    {/* ✅ Stop Recording Button */}
-                    {isRecording && (
-                      <Button isDisabled={isAudioUploading} onPress={handleStopRecording}>
-                        {isAudioUploading ? "Uploading..." : "Stop Recording"}
-                      </Button>
-                    )}
-                  </div>
-                </CardFooter>
-              </Card>
-              <div className='flex flex-col gap-6'>
-                <UserCamera />
-                <Interviewer data={interviewer} />
-              </div>
+                  {/* ✅ Stop Recording Button */}
+                  {isRecording && (
+                    <Button isDisabled={isAudioUploading} onPress={handleStopRecording}>
+                      {isAudioUploading ? "Uploading..." : "Stop Recording"}
+                    </Button>
+                  )}
+                </div>
+              </CardFooter>
+            </Card>
+            <div className='flex flex-col gap-6'>
+              <UserCamera />
+              <Interviewer data={interviewer} />
             </div>
-          </Card>
-        </main>
-      </div>
+          </div>
+        </Card>
+      </main>
     </>
   );
 };
