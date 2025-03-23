@@ -46,7 +46,7 @@ export const Register = () => {
         <div className='flex'>
           <Logo />
         </div>
-        <h2 className='mt-20 text-lg font-semibold text-gray-900'>Sign up for a new account.</h2>
+        <h2 className='mt-20 text-lg font-semibold  '>Sign up for a new account.</h2>
 
         <div className='mt-2 text-sm  '>
           Already have an account ?{" "}

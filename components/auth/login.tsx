@@ -27,9 +27,7 @@ export const Login = () => {
         const response = await loginUser(values);
 
         if (response?.user) {
-          // ✅ Ensure user exists before redirecting
-          console.log("Login successful, redirecting to dashboard...");
-          router.replace("/dashboard"); // ✅ Redirect to `/dashboard`
+          router.replace("/dashboard");
         } else {
           console.error("Login failed: No user data received");
         }
@@ -48,8 +46,8 @@ export const Login = () => {
         <div className='flex'>
           <Logo />
         </div>
-        <h2 className='mt-20 text-lg font-semibold text-gray-900'>Sign in to your account</h2>
-        <p className='mt-2 text-sm text-gray-700'>
+        <h2 className='mt-20 text-lg font-semibold '>Sign in to your account</h2>
+        <p className='mt-2 text-sm  '>
           Don’t have an account?{" "}
           <Link href='/register' className='font-medium text-blue-600 hover:underline'>
             Register here
