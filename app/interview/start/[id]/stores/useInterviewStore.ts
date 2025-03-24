@@ -4,7 +4,6 @@ import { upload } from "@/services/company.service";
 import { endInterview, startInterview, updateQuestion, updateScreeshot } from "@/services/interview.service";
 import { getInvitationDetails } from "@/services/invitation.service";
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
 
 type Phase = "init" | "not-started" | "welcome" | "in-progress" | "completed" | "time-up" | "expired" | "skeleton-loading";
 
@@ -35,7 +34,6 @@ interface InterviewState {
   invitationId: string;
 
   startInterview: () => void;
-  completeInterview: () => void;
   stopRecordingAndNextQuestion: () => void;
   setTimeLeft: (time: number) => void;
   setPhase: (phase: Phase) => void;
@@ -60,7 +58,7 @@ export const useInterviewStore = create<InterviewState>()((set, get) => ({
   isAudioCompleted: false,
   isRecording: false,
   isCameraOn: true,
-  screenshotInterval: 300000,
+  screenshotInterval: 40000,
   isLoading: false,
   company: null,
   job: null,
@@ -71,7 +69,7 @@ export const useInterviewStore = create<InterviewState>()((set, get) => ({
 
   loadInterview: async (id: string) => {
     try {
-      set({ phase: "skeleton-loading" }); // Set isLoaded before making API call
+      set({ phase: "skeleton-loading" });
 
       const data = await getInvitationDetails(id as string);
 
@@ -159,18 +157,14 @@ export const useInterviewStore = create<InterviewState>()((set, get) => ({
       set({
         isLoading: false,
       });
+
+      setTimeout(() => {
+        localStorage.removeItem("pageRefreshed");
+      }, 100);
     }
   },
 
-  completeInterview: () => {
-    set({ phase: "completed" });
-    setTimeout(() => {
-      localStorage.removeItem("interview-storage");
-      localStorage.removeItem("pageRefreshed");
-    }, 100);
-  },
-
-  stopRecordingAndNextQuestion: () => {
+  stopRecordingAndNextQuestion: async () => {
     const state = get();
     if (state.currentQuestion < state.questions.length - 1) {
       set({
@@ -179,7 +173,7 @@ export const useInterviewStore = create<InterviewState>()((set, get) => ({
         isRecording: false,
       });
     } else {
-      set({ phase: "completed" });
+      await state.endInterview();
       setTimeout(() => {
         localStorage.removeItem("pageRefreshed");
       }, 100);

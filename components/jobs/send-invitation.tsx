@@ -98,7 +98,7 @@ export const SendInvitationDrawer: React.FC<SendInvitationDrawerProps> = ({ isOp
                   <div className='flex justify-between gap-4  items-center '>
                     <Select placeholder='Choose an interviewer' value={values.interviewerId} onChange={handleChange("interviewerId")} isInvalid={!!errors.interviewerId && !!touched.interviewerId} errorMessage={errors.interviewerId}>
                       {interviewers.map((interviewer: any) => (
-                        <SelectItem key={interviewer.id} textValue={String(interviewer.id)}>
+                        <SelectItem key={interviewer.id} textValue={String(interviewer.name)}>
                           {interviewer.name}
                         </SelectItem>
                       ))}

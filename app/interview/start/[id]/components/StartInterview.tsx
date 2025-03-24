@@ -6,8 +6,8 @@ import Welcome from "./Welcome";
 import InterviewNavigator from "./InterviewNavigator";
 import ThankYou from "./ThankYou";
 import InterviewInstruction from "./InterviewInstruction";
-import LinkExpired from "./LinkExpired";
 import InterviewLoadingSkelton from "./InterviewLoadingSkelton";
+import NotFound from "@/app/not-found";
 
 const StartInterview: React.FC = () => {
   const { phase } = useInterviewStore();
@@ -18,7 +18,7 @@ const StartInterview: React.FC = () => {
       {phase === "welcome" && <Welcome />}
       {phase === "in-progress" && <InterviewNavigator />}
       {(phase === "completed" || phase === "time-up") && <ThankYou />}
-      {phase === "expired" && <LinkExpired />}
+      {phase === "expired" && <NotFound />}
     </div>
   );
 };

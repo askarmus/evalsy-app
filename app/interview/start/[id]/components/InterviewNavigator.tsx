@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useInterviewStore } from "../stores/useInterviewStore";
 import UserCamera from "./UserCamera";
 import InterviewNavbar from "./InterviewNavbar";
-import { Button, Card, CardBody, CardFooter, CardHeader } from "@heroui/react";
+import { Button, Card, CardBody, CardFooter } from "@heroui/react";
 import Interviewer from "./Interviewer";
 import CandidateInfo from "./CandidateInfo";
 import { FaMicrophoneAlt, FaStopCircle } from "react-icons/fa";
@@ -141,7 +141,6 @@ const InterviewNavigator: React.FC = () => {
   return (
     <>
       <InterviewNavbar company={company} />
-
       <main className='max-w-7xl mx-auto px-6 py-8'>
         <Card className='p-8' shadow='sm'>
           <CandidateInfo candidate={candidate} company={company} job={job} />

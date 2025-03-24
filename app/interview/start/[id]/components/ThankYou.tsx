@@ -44,15 +44,12 @@ const ThankYou: React.FC = () => {
             <CardHeader>
               <CandidateInfo candidate={candidate} company={company} job={job} />
             </CardHeader>
-            <Card className='py-4' shadow='sm'>
+            <Card className='py-4 text-center' shadow='sm'>
               <CardBody className='overflow-visible py-2'>
                 <div className='p-6   rounded-lg max-w-3xl mx-auto'>
                   <h2 className='text-2xl font-bold mb-4 text-center'>Thank You for Completing the AI Interview!</h2>
-                  {/* ✅ Fixed <p> Nesting Issue */}
-                  <div className='text-lg leading-relaxed  mt-4'>
+                  <div className='text-lg leading-relaxed  text-center  mt-4'>
                     <p>{company.thankYouMessage}</p>
-
-                    {/* ✅ Check if `company?.timestamps` exists before mapping */}
                     {company?.timestamps?.map((item, index) => (
                       <span
                         key={index}

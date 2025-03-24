@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import { useInterviewStore } from "../stores/useInterviewStore";
 import { Card, CardBody, CardFooter, CardHeader, Switch } from "@heroui/react";
-import { AiOutlineClose, AiOutlineVideoCamera } from "react-icons/ai";
+import { AiOutlineClose } from "react-icons/ai";
 
 const UserCamera: React.FC = () => {
   const { isCameraOn, toggleCamera, uploadScreenshot, screenshotInterval } = useInterviewStore();
