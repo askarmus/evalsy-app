@@ -29,41 +29,36 @@ const EvaluationChart = ({ data }) => {
     ],
   };
 
+  const getScoreBarColor = (score: number) => {
+    if (score >= 4) return "bg-green-500";
+    if (score >= 3) return "bg-blue-500";
+    if (score >= 2) return "bg-yellow-500";
+    return "bg-red-500";
+  };
+
+  const evaluationScores = {
+    relevance: 3,
+    completeness: 2,
+    clarity: 4,
+    grammar_language: 5,
+    technical_accuracy: 2,
+  };
   return (
     <Card shadow='sm' className='p-2 mb-6'>
       <CardBody>
-        <Bar
-          data={chartData}
-          options={{
-            responsive: true,
-            scales: {
-              x: {
-                grid: { display: true }, // Removes vertical grid lines
-                ticks: { font: { size: 8 } }, // Reduces font size of X-axis labels
-              },
-              y: {
-                beginAtZero: false,
-                min: 2.5, // Start from 2.5
-                max: 5,
-                grid: { display: false }, // Removes horizontal grid lines
-                ticks: { font: { size: 8 } }, // Reduces font size of Y-axis labels
-              },
-            },
-            plugins: {
-              legend: {
-                display: false,
-                labels: {
-                  font: { size: 12 }, // Reduces font size of the legend
-                },
-              },
-              title: {
-                display: false,
-                text: "Evaluation Chart", // Custom chart title
-                font: { size: 14 }, // Reduces title font size
-              },
-            },
-          }}
-        />
+        <div className='space-y-2'>
+          {Object.entries(evaluationScores).map(([key, value]) => (
+            <div key={key} className='grid grid-cols-12 gap-2 items-center'>
+              <span className='col-span-5 text-xs capitalize text-gray-600'>{key.replace("_", " ")}:</span>
+              <div className='col-span-5'>
+                <div className='h-2 w-full rounded-full bg-gray-200'>
+                  <div className={`h-2 rounded-full ${getScoreBarColor(value)}`} style={{ width: `${(value / 5) * 100}%` }}></div>
+                </div>
+              </div>
+              <span className='col-span-2 text-right text-xs font-medium text-gray-700'>{value}/5</span>
+            </div>
+          ))}
+        </div>
       </CardBody>
     </Card>
   );

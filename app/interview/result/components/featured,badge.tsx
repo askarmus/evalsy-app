@@ -1,3 +1,4 @@
+import { Chip } from "@heroui/react";
 import React from "react";
 
 const getBadgeStyle = (weight) => {
@@ -16,7 +17,17 @@ const getBadgeStyle = (weight) => {
 const FeaturedBadge = ({ weight }) => {
   const { bgColor, text } = getBadgeStyle(weight);
 
-  return <p className={`px-4 py-1 text-sm text-white rounded-tl-lg rounded-br-xl w-fit ${bgColor}`}>{text}</p>;
+  return (
+    <Chip
+      color='primary'
+      classNames={{
+        base: `${bgColor} text-white font-sm`,
+      }}
+      size='sm'
+      variant='flat'>
+      {text}
+    </Chip>
+  );
 };
 
 export default FeaturedBadge;

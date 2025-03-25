@@ -1,12 +1,13 @@
 "use client";
 import React, { useState, useMemo, useEffect, useCallback } from "react";
-import { Card, CardBody, Button, Input, Pagination, Spinner, CardFooter } from "@heroui/react";
+import { Card, CardBody, Button, Input, Pagination, Spinner, CardFooter, CardHeader, Divider } from "@heroui/react";
 import { Breadcrumb } from "@/components/bread.crumb";
 import { getAllInterviewResult, getInterviewResultById } from "@/services/interview.service";
 import { ViewResultDrawer } from "./components/view.result.drawer";
-import DateFormatter from "@/app/utils/DateFormatter";
 import RatingLegend from "./components/RatingLegend";
 import FeaturedBadge from "./components/featured,badge";
+import { AiOutlineRight } from "react-icons/ai";
+import DateFormatter from "@/app/utils/DateFormatter";
 
 export default function InterviewResultList() {
   const [page, setPage] = useState(1);
@@ -95,30 +96,33 @@ export default function InterviewResultList() {
       ) : (
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
           {items.map((result: any) => (
-            <Card shadow='sm' key={result.id} className={`rounded-xl shadow-md    w-full border-2 ${getBorderColor(result.overallWeight)}`}>
-              <CardBody className='p-0 w-full'>
-                <FeaturedBadge weight={result?.overallWeight} />
-                <div className='grid grid-cols-12 gap-4 p-5 w-full'>
-                  <div className='col-span-9'>
-                    <p className='text-sm font-semibold'>{result?.name}</p>
-                    <p className='text-sm text-gray-400'>{result?.jobTitle}</p>
+            <Card shadow='sm' key={result.id} className={`rounded-xl shadow-md p-3 w-full border-1 ${getBorderColor(result.overallWeight)}`}>
+              <CardHeader>
+                <div className='flex items-start justify-between w-full'>
+                  <div>
+                    <FeaturedBadge weight={result?.overallWeight} />
                   </div>
-                  <div className='col-span-3 flex justify-end items-start'>
-                    <div>
-                      <p className='rounded-lg text-sky-500 text-sm py-1 px-3 center'>Score </p>
-                      <p className='rounded-lg text-sky-500 font-bold bg-sky-100 py-1 px-3 text-sm text-center'>{((result?.overallWeight / 30) * 100).toFixed(2)}%</p>
-                    </div>
+                  <div className='text-right'>
+                    <p className='text-sm text-gray-500'>
+                      Score : <span className={`text-sm font-medium  text-black`}>{((result?.overallWeight / 30) * 100).toFixed(2)}%</span>{" "}
+                    </p>
                   </div>
                 </div>
+              </CardHeader>
+              <Divider />
+              <CardBody>
+                <h3 className='text-lg font-semibold text-gray-800'>{result?.name}</h3>
+                <p className='text-sm text-gray-500'>{result?.jobTitle}</p>
               </CardBody>
-              <CardFooter className='gap-3'>
-                <div className='flex justify-between gap-5 w-full'>
-                  <div className='flex flex-col gap-1 items-start justify-center'>
-                    <p className='font-semibold text-default-400 text-small'> {DateFormatter.formatDate(result.statusUpdateAt)}</p>
+
+              <CardFooter>
+                <div className='flex items-start justify-between w-full'>
+                  <div className='text-sm'>{DateFormatter.formatDate(result.statusUpdateAt)}</div>
+                  <div className='text-right'>
+                    <Button color='primary' endContent={<AiOutlineRight />} isLoading={loadingResults[result.id]} onPress={() => handleViewDetails(result.id)} radius='full' size='sm'>
+                      {loadingResults[result.id] ? "Loading.." : "View Result"}
+                    </Button>
                   </div>
-                  <Button color='primary' isLoading={loadingResults[result.id]} onPress={() => handleViewDetails(result.id)} radius='full' size='sm' variant='flat'>
-                    {loadingResults[result.id] ? "Loading.." : "View"}
-                  </Button>
                 </div>
               </CardFooter>
             </Card>
