@@ -74,10 +74,11 @@ apiClient.interceptors.response.use(
         Router.push("/login");
       }
     } else {
-      addToast({
-        description: message,
-        color: "danger",
-      });
+      console.log("Error", message);
+      // addToast({
+      //   description: message,
+      //   color: "danger",
+      // });
     }
 
     return Promise.reject({ status, message, data: error.response?.data });

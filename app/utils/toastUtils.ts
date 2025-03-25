@@ -10,7 +10,7 @@ export const showToast = {
   error: (message: string) => {
     addToast({
       description: message,
-      color: "success",
+      color: "danger",
     });
   },
 };
