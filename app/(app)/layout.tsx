@@ -1,4 +1,5 @@
 "use client";
+
 import { Layout } from "@/components/layout/layout";
 import "@/styles/globals.css";
 import { useState, useEffect } from "react";
@@ -17,10 +18,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       if (error) {
         push("/");
         return;
-      } else {
+      }
+
+      setIsSuccess(true);
+
+      // Optional: only redirect if on the root page
+      if (typeof window !== "undefined" && window.location.pathname === "/") {
         push("/dashboard");
       }
-      setIsSuccess(true);
     })();
   }, [push]);
 
