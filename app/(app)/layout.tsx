@@ -17,6 +17,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       if (error) {
         push("/");
         return;
+      } else {
+        push("/dashboard");
       }
       setIsSuccess(true);
     })();
