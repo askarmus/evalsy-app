@@ -6,27 +6,39 @@ import { getUser } from "@/services/authService";
 import { Logo } from "@/components/logo";
 
 export function AuthGuard({ children }: { children: React.ReactNode }) {
-  const [isSuccess, setIsSuccess] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const { push } = useRouter();
 
   useEffect(() => {
-    (async () => {
+    const checkAuth = async () => {
       const { user, error } = await getUser();
 
-      if (error) {
-        push("/");
+      const publicRoutes = ["/login", "/signup", "/forgot-password", "/reset-password"];
+      const currentPath = window.location.pathname;
+
+      if (error || !user) {
+        if (!publicRoutes.includes(currentPath)) {
+          push("/login"); // 🚫 User not logged in, send to login if on protected route
+        }
+        setIsLoading(false);
         return;
       }
 
-      setIsSuccess(true);
+      // ✅ User is logged in
+      setIsAuthenticated(true);
 
-      if (typeof window !== "undefined" && window.location.pathname === "/") {
-        push("/dashboard");
+      if (publicRoutes.includes(currentPath)) {
+        push("/dashboard"); // 🚀 Logged-in users shouldn't stay on login/signup/etc.
       }
-    })();
+
+      setIsLoading(false);
+    };
+
+    checkAuth();
   }, [push]);
 
-  if (!isSuccess) {
+  if (isLoading) {
     return (
       <div className='fixed inset-0 flex items-center justify-center bg-white z-50'>
         <div className='flex flex-col items-center'>
