@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { Providers } from "./providers";
 import { fontSans } from "@/config/fonts";
 import clsx from "clsx";
-import { AuthGuard } from "@/components/auth-guard"; // 👈 import your guard
+import { AuthGuard } from "@/components/auth-guard";
 
 export const metadata: Metadata = {
   title: "Evelsy - Simplified Evaluation for Smarter Hiring",
@@ -14,9 +14,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang='en' suppressHydrationWarning>
       <body className={clsx("font-sans antialiased", fontSans.className)}>
-        <Providers>
-          <AuthGuard>{children}</AuthGuard> {/* 👈 Wrap in guard */}
-        </Providers>
+        <AuthGuard>
+          <Providers>{children}</Providers>
+        </AuthGuard>
       </body>
     </html>
   );

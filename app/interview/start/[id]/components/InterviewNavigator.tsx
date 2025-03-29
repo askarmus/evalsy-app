@@ -82,13 +82,24 @@ const InterviewNavigator: React.FC = () => {
       }
     };
 
-    recorder.onstop = () => {
+    recorder.onstop = async () => {
       const recordedAudio = new Blob(audioChunks, { type: "audio/mp3" });
-      setAudioBlob(recordedAudio);
+      setIsAudioUploading(true);
+      await uploadRecording(recordedAudio);
+      setIsAudioUploading(false);
+      setRecording(false);
     };
 
     recorder.start();
     setMediaRecorder(recorder);
+  };
+
+  const handleStopRecording = async () => {
+    if (mediaRecorder) {
+      mediaRecorder.stop();
+      // Stop all tracks in the stream
+      mediaRecorder.stream.getTracks().forEach((track) => track.stop());
+    }
   };
 
   const handleReplayAudio = () => {
@@ -110,18 +121,6 @@ const InterviewNavigator: React.FC = () => {
   const handleReplayAudioEnded = () => {
     setIsReplayingAudio(false);
     setAudioCompleted(true);
-  };
-
-  const handleStopRecording = async () => {
-    if (mediaRecorder) {
-      mediaRecorder.stop();
-    }
-    if (audioBlob) {
-      setIsAudioUploading(true);
-      await uploadRecording(audioBlob);
-      setIsAudioUploading(false);
-      setRecording(false);
-    }
   };
 
   const playReminderAudio = () => {

@@ -1,11 +1,11 @@
 "use client";
 import React, { useState, useMemo, useEffect, useCallback } from "react";
-import { Button, Input, Pagination, Spinner, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, Chip, User } from "@heroui/react";
+import { Button, Input, Pagination, Spinner, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, Chip, User, Tooltip } from "@heroui/react";
 import { deleteInterviewer, getAllInterviewers } from "@/services/interviwers.service";
 import { AddInterviewer } from "@/components/interviwers/add.interviewer";
 import { Breadcrumb } from "@/components/bread.crumb";
 import ConfirmDialog from "@/components/ConfirmDialog";
-import { AiOutlinePlus } from "react-icons/ai";
+import { AiFillEdit, AiOutlineDelete, AiOutlinePlus } from "react-icons/ai";
 
 export default function InterviewerManagement() {
   const [page, setPage] = useState(1);
@@ -146,13 +146,20 @@ export default function InterviewerManagement() {
                   </TableCell>
                   <TableCell>{item.jobTitle}</TableCell>
 
-                  <TableCell>
-                    <Button color='primary' variant='flat' size='sm' className='mr-2' onPress={() => handleEditClick(item.id)}>
-                      Edit
-                    </Button>
-                    <Button color='danger' variant='flat' size='sm' onPress={() => handleDeleteClick(item.id)}>
-                      Delete
-                    </Button>
+                  <TableCell align='right'>
+                    <div className='  gap-1'>
+                      <Tooltip content='Edit'>
+                        <Button isIconOnly aria-label='Edit' onPress={() => handleEditClick(item.id)} size='sm' color='default' variant='faded' className='mr-1'>
+                          <AiFillEdit />
+                        </Button>
+                      </Tooltip>
+
+                      <Tooltip content='Delete'>
+                        <Button isIconOnly aria-label='Delete' onPress={() => handleDeleteClick(item.id)} size='sm' color='default' variant='faded'>
+                          <AiOutlineDelete />
+                        </Button>
+                      </Tooltip>
+                    </div>
                   </TableCell>
                 </TableRow>
               )}

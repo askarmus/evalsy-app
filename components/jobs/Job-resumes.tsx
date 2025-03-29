@@ -3,11 +3,11 @@ import { deleteResume, fetchResumes, processResumeById, uploadResume } from "@/s
 import { Button, Drawer, DrawerBody, DrawerContent, DrawerHeader, Spinner, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, Input, CheckboxGroup, Checkbox, Card, CardBody, Chip, DrawerFooter, Popover, PopoverTrigger, PopoverContent, Tooltip } from "@heroui/react";
 import { useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
-import { AiOutlineCheck, AiOutlineClose, AiOutlineDelete, AiOutlineExperiment, AiOutlineEye, AiOutlineSend, AiOutlineUpload, AiOutlineUserAdd } from "react-icons/ai";
+import { AiOutlineDelete, AiOutlineExperiment, AiOutlineEye, AiOutlineUpload, AiOutlineUserAdd } from "react-icons/ai";
 import { SendInvitationDrawer } from "./send-invitation";
 import ResultPopoverContent from "./components/result.poover.content";
 
-export default function JobResumes({ jobId, isOpen, onClose }: { jobId: string; isOpen: boolean; onClose: () => void }) {
+export default function JobResumes({ jobId, isOpen, onClose, jobTitle }: { jobId: string; isOpen: boolean; onClose: () => void; jobTitle }) {
   const [resumes, setResumes] = useState<any[]>([]);
   const [uploading, setUploading] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -162,7 +162,7 @@ export default function JobResumes({ jobId, isOpen, onClose }: { jobId: string; 
   return (
     <Drawer size='3xl' isOpen={isOpen} onOpenChange={onClose}>
       <DrawerContent>
-        <DrawerHeader>Manage Resume and Invitation</DrawerHeader>
+        <DrawerHeader>Manage Resume and Invitation - {jobTitle}</DrawerHeader>
         <DrawerBody>
           {/* File Upload */}
           <Card shadow='sm' className='cursor-pointer hover:bg-gray-100 transition'>
@@ -195,10 +195,10 @@ export default function JobResumes({ jobId, isOpen, onClose }: { jobId: string; 
                 <TableColumn>Name</TableColumn>
                 <TableColumn>Experience</TableColumn>
                 <TableColumn>Score</TableColumn>
-                <TableColumn>Invite</TableColumn>
+                <TableColumn>Invited</TableColumn>
                 <TableColumn align='end'>{""}</TableColumn>
               </TableHeader>
-              <TableBody emptyContent={"No resumes to display."} loadingContent='Loading resumes... ' isLoading={isLoading}>
+              <TableBody emptyContent={"No resumes to display."} loadingContent={<Spinner color='primary' label='Loading...' labelColor='primary' />} isLoading={isLoading}>
                 {filteredResumes.map((resume) => (
                   <TableRow key={resume.id}>
                     <TableCell>
@@ -226,20 +226,20 @@ export default function JobResumes({ jobId, isOpen, onClose }: { jobId: string; 
                         "--"
                       )}
                     </TableCell>
-                    <TableCell>{resume.analysis?.isInvite ? <AiOutlineCheck /> : <AiOutlineClose />}</TableCell>
+                    <TableCell className='text-sm'>{resume.analysis?.isInvite ? "Yes" : "No"}</TableCell>
                     <TableCell align='right'>
                       {processingRows[resume.id] ? (
                         <Spinner size='sm' />
                       ) : (
                         <>
-                          <div className='flex items-center gap-2'>
+                          <div className=' '>
                             <Tooltip content='Delete resume'>
-                              <Button onPress={() => handleDelete(resume.id)} isIconOnly={true} color='default' variant='faded' size='sm'>
+                              <Button onPress={() => handleDelete(resume.id)} isIconOnly={true} color='default' variant='faded' size='sm' className='mr-1'>
                                 <AiOutlineDelete />
                               </Button>
                             </Tooltip>
                             <Tooltip content='Send invitation'>
-                              <Button onPress={() => handleInviteClick(jobId, resume)} isDisabled={!resume.analysis} isIconOnly={true} color='default' variant='faded' size='sm'>
+                              <Button onPress={() => handleInviteClick(jobId, resume)} isDisabled={!resume.analysis} isIconOnly={true} color='default' variant='faded' size='sm' className='mr-1'>
                                 <AiOutlineUserAdd />
                               </Button>
                             </Tooltip>

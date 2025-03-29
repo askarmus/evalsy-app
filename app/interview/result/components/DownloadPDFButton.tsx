@@ -72,6 +72,7 @@ const DownloadAndEmailPDF = ({ result: result }: { result: any }) => {
         emails,
       });
       showToast.success("Email sent successfully!");
+      setEmail("");
     } catch (error) {
     } finally {
       setSending(false);

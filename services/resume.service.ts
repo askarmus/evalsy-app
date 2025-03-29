@@ -1,7 +1,7 @@
 import apiClient from "@/helpers/apiClient";
 
 export const fetchResumes = async (jobId: string) => {
-  const response = await apiClient.get(`/job/get-resumes/${jobId}`);
+  const response = await apiClient.get(`/resume/get-resumes/${jobId}`);
   return response.data.resumes || [];
 };
 

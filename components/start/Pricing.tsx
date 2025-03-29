@@ -15,12 +15,12 @@ export const Pricing = () => {
             Start for just <span className='font-bold'>$20/month</span> – Unlimited Jobs &amp; Flexible Invitations!
           </p>
         </div>
-        <div className='-mx-4 mt-16 grid max-w-2xl grid-cols-1 gap-y-10 sm:mx-auto lg:-mx-8 lg:max-w-none lg:grid-cols-2 xl:mx-0 xl:gap-x-8'>
+        <div className='-mx-4 mt-16 grid max-w-2xl grid-cols-1 gap-y-10 sm:mx-auto lg:-mx-8 lg:max-w-none lg:grid-cols-3 xl:mx-0 xl:gap-x-8'>
           {/* Professional Plan */}
           <section className='flex flex-col rounded-3xl px-6 sm:px-8 order-first bg-blue-600 py-8 lg:order-none'>
             <h3 className='mt-5 font-display text-lg text-white'>Subscription</h3>
             <p className='mt-2 text-base text-blue-50'>Ideal for growing businesses</p>
-            <p className='order-first font-display text-5xl font-light tracking-tight text-white'>$20/m</p>
+            <p className='order-first font-display text-3xl font-light tracking-tight text-white'>$20/m</p>
 
             <ul role='list' className='order-last mt-10 flex flex-col gap-y-3 text-sm text-blue-50'>
               <li className='flex'>
@@ -37,7 +37,41 @@ export const Pricing = () => {
               </li>
               <li className='flex'>
                 <AiOutlineCheckCircle className='h-6 w-6 flex-none fill-current stroke-current text-blue-200' />
+                <span className='ml-4'>
+                  <strong>50 AI Resume Screening</strong> per month
+                </span>
+              </li>
+              <li className='flex'>
+                <AiOutlineCheckCircle className='h-6 w-6 flex-none fill-current stroke-current text-blue-200' />
                 <span className='ml-4'>Secure Stripe Billing</span>
+              </li>
+              <li className='flex'>
+                <AiOutlineCheckCircle className='h-6 w-6 flex-none fill-current stroke-current text-blue-200' />
+                <span className='ml-4'>Cancel Anytime</span>
+              </li>
+            </ul>
+          </section>
+
+          {/* Professional Plan */}
+          <section className='flex flex-col rounded-3xl px-6 sm:px-8 order-first boarder-1px-solid border border-gray-300  py-8 lg:order-none'>
+            <h3 className='mt-5 font-display text-lg text-white'>SAAS</h3>
+            <p className='mt-2 text-base text-blue-50'>Ideal for growing businesses</p>
+            <p className='order-first font-display text-3xl font-light tracking-tight text-white'>Invitation</p>
+
+            <ul role='list' className='order-last mt-10 flex flex-col gap-y-3 text-sm text-blue-50'>
+              <li className='flex'>
+                <AiOutlineCheckCircle className='h-6 w-6 flex-none fill-current stroke-current text-blue-200' />
+                <span className='ml-4'>
+                  <strong>$0.10 per extra invite</strong> beyond 50
+                </span>
+              </li>
+              <li className='flex'>
+                <AiOutlineCheckCircle className='h-6 w-6 flex-none fill-current stroke-current text-blue-200' />
+                <span className='ml-4'>Auto-billed at the end of the month</span>
+              </li>
+              <li className='flex'>
+                <AiOutlineCheckCircle className='h-6 w-6 flex-none fill-current stroke-current text-blue-200' />
+                <span className='ml-4'>Usage-based pricing for flexibility</span>
               </li>
               <li className='flex'>
                 <AiOutlineCheckCircle className='h-6 w-6 flex-none fill-current stroke-current text-blue-200' />
@@ -50,13 +84,13 @@ export const Pricing = () => {
           <section className='flex flex-col rounded-3xl px-6 sm:px-8 order-first bg-blue-600 py-8 lg:order-none'>
             <h3 className='mt-5 font-display text-lg text-white'>SAAS</h3>
             <p className='mt-2 text-base text-blue-50'>Ideal for growing businesses</p>
-            <p className='order-first font-display text-5xl font-light tracking-tight text-white'>Charges</p>
+            <p className='order-first font-display text-3xl font-light tracking-tight text-white'>Resume Screening</p>
 
             <ul role='list' className='order-last mt-10 flex flex-col gap-y-3 text-sm text-blue-50'>
               <li className='flex'>
                 <AiOutlineCheckCircle className='h-6 w-6 flex-none fill-current stroke-current text-blue-200' />
                 <span className='ml-4'>
-                  <strong>$0.10 per extra invite</strong> beyond 50
+                  <strong>$0.10 per extra resume screening</strong> beyond 50
                 </span>
               </li>
               <li className='flex'>
@@ -82,7 +116,7 @@ export const Pricing = () => {
         </div>
 
         {/* FAQ Section */}
-        <div className='mt-12 text-left   shadow-md rounded-lg p-6'>
+        <div className='mt-12 text-left shadow-md rounded-lg p-6'>
           <h2 className='text-2xl font-semibold text-white'>FAQ</h2>
 
           <div className='mt-4 space-y-4'>

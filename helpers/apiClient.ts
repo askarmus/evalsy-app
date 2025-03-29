@@ -1,6 +1,5 @@
 import { addToast } from "@heroui/react";
 import axios from "axios";
-import Cookies from "js-cookie"; // ✅ Needed to clear cookies on logout
 import Router from "next/router";
 
 // Create the Axios instance
@@ -8,44 +7,53 @@ const apiClient = axios.create({
   baseURL: process.env.NEXT_PUBLIC_BASE_API_URL,
   timeout: 60000,
   headers: { "Content-Type": "application/json" },
-  withCredentials: true, // ✅ Ensures authentication cookies are sent
+  withCredentials: true, // ✅ Important for cookie-based auth
 });
 
-// ✅ Helper function to refresh the access token
-const refreshAccessToken = async () => {
+// ✅ Helper to refresh access token
+export const refreshAccessToken = async () => {
   try {
     await axios.post(`${process.env.NEXT_PUBLIC_BASE_API_URL}/auth/refresh-token`, {}, { withCredentials: true });
-    return true; // ✅ Indicates successful refresh
-  } catch (error) {
-    console.error("Failed to refresh token:", error);
+    return true; // Token refresh succeeded
+  } catch (error: any) {
+    // ✅ Gracefully handle expected 401/403 errors
+    if (axios.isAxiosError(error)) {
+      if (error.response?.status === 401 || error.response?.status === 403) {
+        console.warn("Refresh token expired or invalid.");
+        return false; // This will trigger logout
+      }
 
-    // ✅ Clear cookies on refresh token failure
-    Cookies.remove("accessToken");
-    Cookies.remove("refreshToken");
+      console.error("Unexpected Axios error during refresh:", {
+        status: error.response?.status,
+        data: error.response?.data,
+      });
+    } else {
+      console.error("Unknown error during token refresh:", error);
+    }
 
-    return false; // ❌ Refresh failed
+    return false;
   }
 };
 
-// ✅ Add a request interceptor to include headers dynamically
+// ✅ Add timezone to every request
 apiClient.interceptors.request.use(
   (config) => {
     const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    config.headers["timezone"] = userTimeZone; // ✅ Attach timezone to every request
+    config.headers["timezone"] = userTimeZone;
     return config;
   },
   (error) => Promise.reject(error)
 );
 
-// ✅ Add a response interceptor to handle errors & refresh token logic
+// ✅ Handle responses globally
 apiClient.interceptors.response.use(
-  (response) => response, // ✅ Return response if successful
+  (response) => response,
   async (error) => {
     const originalRequest = error.config;
     const status = error.response?.status || 500;
     const message = error.response?.data?.error || "An unexpected error occurred.";
 
-    // ✅ Handle login errors separately
+    // ✅ Special case for login failure
     if (originalRequest.url?.includes("/auth/login") && status === 401) {
       addToast({
         description: "Invalid email or password. Please try again.",
@@ -54,32 +62,18 @@ apiClient.interceptors.response.use(
       return Promise.reject({ status, message, data: error.response?.data });
     }
 
-    // ✅ Handle expired session (401 Unauthorized)
+    // ✅ Refresh token on 401 error
     if (status === 401 && !originalRequest._retry) {
-      originalRequest._retry = true; // Prevent infinite loops
-
+      originalRequest._retry = true;
       const success = await refreshAccessToken();
+
       if (success) {
-        return apiClient(originalRequest); // ✅ Retry the failed request
-      } else {
-        // ❌ Logout if refresh fails
-        addToast({
-          description: "Session expired. Please log in again.",
-          color: "danger",
-        });
-
-        Cookies.remove("accessToken");
-        Cookies.remove("refreshToken");
-
-        Router.push("/login");
+        return apiClient(originalRequest);
       }
-    } else {
-      console.log("Error", message);
-      // addToast({
-      //   description: message,
-      //   color: "danger",
-      // });
     }
+
+    // Optional: handle other error globally
+    // addToast({ description: message, color: "danger" });
 
     return Promise.reject({ status, message, data: error.response?.data });
   }

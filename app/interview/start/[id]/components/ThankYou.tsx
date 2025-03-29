@@ -47,7 +47,7 @@ const ThankYou: React.FC = () => {
             <Card className='py-4 text-center' shadow='sm'>
               <CardBody className='overflow-visible py-2'>
                 <div className='p-6   rounded-lg max-w-3xl mx-auto'>
-                  <h2 className='text-2xl font-bold mb-4 text-center'>Thank You for Completing the AI Interview!</h2>
+                  <h2 className='text-2xl font-semibold mb-4 text-center'>Thank You for Completing the AI Interview!</h2>
                   <div className='text-lg leading-relaxed  text-center  mt-4'>
                     <p>{company.thankYouMessage}</p>
                     {company?.timestamps?.map((item, index) => (
