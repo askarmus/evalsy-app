@@ -5,7 +5,7 @@ import { Breadcrumb } from "@/components/bread.crumb";
 import { getAllInterviewResult, getInterviewResultById } from "@/services/interview.service";
 import { ViewResultDrawer } from "./components/view.result.drawer";
 import RatingLegend from "./components/RatingLegend";
-import FeaturedBadge from "./components/featured,badge";
+import RatingBadge from "./components/rating,badge";
 import { AiOutlineRight } from "react-icons/ai";
 import DateFormatter from "@/app/utils/DateFormatter";
 
@@ -66,12 +66,13 @@ export default function InterviewResultList() {
   }, [page, filteredResults]);
 
   // Define card background based on `overallWeight`
-  const getBorderColor = (weight: number) => {
-    if (weight >= 1 && weight <= 7.5) return "border-orange-500"; // Below Average
-    if (weight >= 7.6 && weight <= 15) return "border-yellow-600"; // Average
-    if (weight >= 15.1 && weight <= 22.5) return "border-blue-600"; // Good
-    if (weight >= 22.6 && weight <= 30) return "border-green-600"; // Excellent
-    return "border-gray-500"; // Fallback (if weight is out of range)
+  const getBorderColor = (percent: number) => {
+    if (percent >= 0 && percent <= 25) return "border-orange-500"; // Below Average
+    if (percent > 25 && percent <= 50) return "border-yellow-600"; // Average
+    if (percent > 50 && percent <= 75) return "border-blue-600"; // Good
+    if (percent > 75 && percent <= 100) return "border-green-600"; // Excellent
+
+    return "border-gray-500"; // Fallback
   };
 
   return (
@@ -100,19 +101,19 @@ export default function InterviewResultList() {
               <CardHeader>
                 <div className='flex items-start justify-between w-full'>
                   <div>
-                    <FeaturedBadge weight={result?.overallWeight} />
+                    <RatingBadge weight={result?.overallWeight} />
                   </div>
                   <div className='text-right'>
-                    <p className='text-sm text-gray-500'>
-                      Score : <span className={`text-sm font-medium  text-black`}>{((result?.overallWeight / 30) * 100).toFixed(2)}%</span>{" "}
+                    <p className='text-sm  '>
+                      Score : <span className={`text-sm font-medium`}>{((result?.overallWeight / 30) * 100).toFixed(2)}%</span>{" "}
                     </p>
                   </div>
                 </div>
               </CardHeader>
               <Divider />
               <CardBody>
-                <h3 className='text-lg font-semibold text-gray-800'>{result?.name}</h3>
-                <p className='text-sm text-gray-500'>{result?.jobTitle}</p>
+                <h3 className='text-lg font-semibold  '>{result?.name}</h3>
+                <p className='text-sm '>{result?.jobTitle}</p>
               </CardBody>
 
               <CardFooter>

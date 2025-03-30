@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
-import { Button, Card, CardBody, CardFooter, Input, Radio, RadioGroup, Select, SelectItem, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, Textarea } from "@heroui/react";
-
+import { Button, Card, CardBody, CardFooter, Input, Radio, RadioGroup, Select, SelectItem, Tab, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, Tabs, Textarea } from "@heroui/react";
 import { AiFillDelete } from "react-icons/ai";
 import { Formik, FormikErrors } from "formik";
 import { showToast } from "@/app/utils/toastUtils";
@@ -132,166 +131,161 @@ export const AddJob = () => {
   ];
   return (
     <div>
-      <div className='my-10 px-4 lg:px-6 max-w-[90rem] mx-auto w-full flex flex-col gap-4'>
+      <div className='my-10 px-4 lg:px-6 max-w-[70rem] mx-auto w-full flex flex-col gap-4'>
         <Breadcrumb items={breadcrumbItems} />
 
         <h3 className='text-xl font-semibold'>Add Job</h3>
         <div className='flex justify-between flex-wrap gap-4 items-center'>
           <div className='flex flex-row gap-3.5 flex-wrap'></div>
         </div>
-        <div className='max-w-[90rem] mx-auto w-full'>
+        <div className='max-w-[70rem] mx-auto w-full'>
           <div className=' w-full flex flex-col gap-4'>
             <Formik<AddJobFormValues> innerRef={formRef} enableReinitialize={true} initialValues={initialValues} onSubmit={handleSubmit} validationSchema={AddJobSchema}>
               {({ values, errors, touched, handleChange, setFieldValue, validateForm }) => (
-                <>
-                  <div className='flex gap-4'>
-                    <div className='w-3/5'>
-                      <div>
-                        <Card shadow='sm' className='p-5'>
-                          <CardBody>
-                            <div className='grid grid-cols-1 gap-4'>
-                              <Input label='Title' variant='bordered' value={values.jobTitle} isInvalid={!!errors.jobTitle && !!touched.jobTitle} errorMessage={errors.jobTitle} onChange={handleChange("jobTitle")} />
+                <Tabs aria-label='Options'>
+                  <Tab key='job' title='Job'>
+                    <Card shadow='sm' className='p-5'>
+                      <CardBody>
+                        <div className='grid grid-cols-1 gap-4'>
+                          <Input label='Title' variant='bordered' value={values.jobTitle} isInvalid={!!errors.jobTitle && !!touched.jobTitle} errorMessage={errors.jobTitle} onChange={handleChange("jobTitle")} />
 
-                              <div className='flex'>
-                                <div className='flex-1 flex'>
-                                  <RadioGroup size='sm' value={values.experienceLevel} onValueChange={(value) => setFieldValue("experienceLevel", value)} orientation='horizontal' isInvalid={!!errors.experienceLevel && !!touched.experienceLevel} errorMessage={errors.experienceLevel} label='Generate question using AI'>
-                                    <CustomRadio value='beginner'>Beginner</CustomRadio>
-                                    <CustomRadio value='Intermediate'>Intermediate</CustomRadio>
-                                    <CustomRadio value='senior'>Senior</CustomRadio>
-                                    <CustomRadio value='expert'>Expert</CustomRadio>
-                                  </RadioGroup>
-                                </div>
-                              </div>
-                              <div className='flex gap-4'>
-                                <div className='flex-1 flex'>
-                                  <Textarea
-                                    placeholder='Prompt'
-                                    minRows={1}
-                                    disableAutosize
-                                    value={prompt}
-                                    onChange={(e) => setPrompt(e.target.value)}
-                                    classNames={{
-                                      base: "w-full",
-                                      input: "resize-y min-h-[20px]",
-                                    }}
-                                  />
-                                </div>
-
-                                <div className='flex items-center justify-center  gap-4'>
-                                  <Input placeholder='Total' type='number' min='1' defaultValue={totalQuestions.toString()} onChange={(e) => setTotalQuestions(Number(e.target.value))} className='max-w-[60px]' />
-
-                                  <Button
-                                    color='danger'
-                                    isLoading={isGenerating}
-                                    variant='flat'
-                                    onPress={async () => {
-                                      handleGenerateQuestions(validateForm, values, setFieldValue, prompt, totalQuestions);
-                                    }}>
-                                    Generate
-                                  </Button>
-                                </div>
-                              </div>
-
-                              <div className='flex w-full flex-wrap md:flex-nowrap gap-4'>
-                                <Table aria-label='Example static collection table'>
-                                  <TableHeader>
-                                    <TableColumn width={5}>#</TableColumn>
-                                    <TableColumn>QUESTIONS</TableColumn>
-                                    <TableColumn width={30}>SCORE RANGE</TableColumn>
-                                    <TableColumn width={20} align='end'>
-                                      <Button color='primary' variant='faded' size='sm' onPress={() => setFieldValue("questions", [...values.questions, { id: nanoid(), text: "" }])}>
-                                        Add
-                                      </Button>
-                                    </TableColumn>
-                                  </TableHeader>
-                                  <TableBody>
-                                    {values.questions.map((question, index) => (
-                                      <TableRow key={question.id}>
-                                        <TableCell>{index + 1}</TableCell>
-                                        <TableCell>
-                                          <Textarea
-                                            disableAnimation
-                                            disableAutosize
-                                            classNames={{
-                                              base: "w-full",
-                                              input: "resize-y min-h-[20px]",
-                                            }}
-                                            variant='bordered'
-                                            value={question.text}
-                                            isInvalid={!!(errors.questions?.[index] as FormikErrors<Question>)?.text && touched.questions?.[index]?.text}
-                                            errorMessage={(errors.questions?.[index] as FormikErrors<Question>)?.text || ""}
-                                            onChange={(e) => setFieldValue(`questions[${index}].text`, e.target.value)}
-                                          />
-                                        </TableCell>
-
-                                        <TableCell>
-                                          <Select defaultSelectedKeys={["2"]} onChange={(e) => setFieldValue(`questions[${index}].expectedScore`, e.target.value)}>
-                                            <SelectItem key={1}>15/30</SelectItem>
-                                            <SelectItem key={2}>25/30</SelectItem>
-                                            <SelectItem key={3}>30/30</SelectItem>
-                                          </Select>
-                                        </TableCell>
-                                        <TableCell align='right'>
-                                          <Button
-                                            isIconOnly
-                                            aria-label='Remove question'
-                                            color='warning'
-                                            size='sm'
-                                            variant='faded'
-                                            onPress={() =>
-                                              setFieldValue(
-                                                "questions",
-                                                values.questions.filter((q) => q.id !== question.id)
-                                              )
-                                            }>
-                                            <AiFillDelete />
-                                          </Button>
-                                        </TableCell>
-                                      </TableRow>
-                                    ))}
-                                  </TableBody>
-                                </Table>
-                              </div>
+                          <div className='flex'>
+                            <div className='flex-1 flex'>
+                              <RadioGroup size='sm' value={values.experienceLevel} onValueChange={(value) => setFieldValue("experienceLevel", value)} orientation='horizontal' isInvalid={!!errors.experienceLevel && !!touched.experienceLevel} errorMessage={errors.experienceLevel} label='Generate question using AI'>
+                                <CustomRadio value='beginner'>Beginner</CustomRadio>
+                                <CustomRadio value='intermediate'>Intermediate</CustomRadio>
+                                <CustomRadio value='senior'>Senior</CustomRadio>
+                                <CustomRadio value='expert'>Expert</CustomRadio>
+                              </RadioGroup>
                             </div>
-                          </CardBody>
-                          <CardFooter>
-                            <div className='flex gap-2'>
+                          </div>
+                          <div className='flex gap-4'>
+                            <div className='flex-1 flex'>
+                              <Textarea
+                                placeholder='Prompt'
+                                minRows={1}
+                                disableAutosize
+                                value={prompt}
+                                onChange={(e) => setPrompt(e.target.value)}
+                                classNames={{
+                                  base: "w-full",
+                                  input: "resize-y min-h-[20px]",
+                                }}
+                              />
+                            </div>
+
+                            <div className='flex items-center justify-center  gap-4'>
+                              <Input placeholder='Total' type='number' min='1' defaultValue={totalQuestions.toString()} onChange={(e) => setTotalQuestions(Number(e.target.value))} className='max-w-[60px]' />
+
                               <Button
-                                type='submit'
-                                color='primary'
-                                isLoading={loading}
-                                onPress={() => {
-                                  formRef.current?.handleSubmit();
+                                color='danger'
+                                isLoading={isGenerating}
+                                variant='flat'
+                                onPress={async () => {
+                                  handleGenerateQuestions(validateForm, values, setFieldValue, prompt, totalQuestions);
                                 }}>
-                                Subbmit
+                                AI Generate
                               </Button>
                             </div>
-                          </CardFooter>
-                        </Card>
-                      </div>
-                    </div>
-                    <div className='w-2/5'>
-                      <h3 className='text-xl1'>Evaluation Criteria</h3>
-                      <p className='text-sm mb-5'>For each question, score the candidate’s response based on key factors:</p>
-                      <Table aria-label='Analysis Criteria Table mb-5'>
-                        <TableHeader>
-                          <TableColumn>Criteria</TableColumn>
-                          <TableColumn>Description</TableColumn>
-                          <TableColumn>Score Range</TableColumn>
-                        </TableHeader>
-                        <TableBody>
-                          {evaluationCriteria.map((criterion, index) => (
-                            <TableRow key={criterion.id}>
-                              <TableCell>{criterion.name}</TableCell>
-                              <TableCell>{criterion.description}</TableCell>
-                              <TableCell>{criterion.scoreRange}</TableCell>
-                            </TableRow>
-                          ))}
-                        </TableBody>
-                      </Table>
-                    </div>
-                  </div>
-                </>
+                          </div>
+
+                          <div className='flex w-full flex-wrap md:flex-nowrap gap-4'>
+                            <Table aria-label='Example static collection table'>
+                              <TableHeader>
+                                <TableColumn width={5}>#</TableColumn>
+                                <TableColumn>QUESTIONS</TableColumn>
+                                <TableColumn width={100}>SCORE RANGES</TableColumn>
+                                <TableColumn width={30} align='end'>
+                                  <Button color='primary' variant='faded' size='sm' onPress={() => setFieldValue("questions", [...values.questions, { id: nanoid(), text: "" }])}>
+                                    Add
+                                  </Button>
+                                </TableColumn>
+                              </TableHeader>
+                              <TableBody>
+                                {values.questions.map((question, index) => (
+                                  <TableRow key={question.id}>
+                                    <TableCell>{index + 1}</TableCell>
+                                    <TableCell>
+                                      <Textarea
+                                        disableAnimation
+                                        disableAutosize
+                                        classNames={{
+                                          base: "w-full",
+                                          input: "resize-y min-h-[20px]",
+                                        }}
+                                        variant='bordered'
+                                        value={question.text}
+                                        isInvalid={!!(errors.questions?.[index] as FormikErrors<Question>)?.text && touched.questions?.[index]?.text}
+                                        errorMessage={(errors.questions?.[index] as FormikErrors<Question>)?.text || ""}
+                                        onChange={(e) => setFieldValue(`questions[${index}].text`, e.target.value)}
+                                      />
+                                    </TableCell>
+
+                                    <TableCell>
+                                      <Select defaultSelectedKeys={["2"]} onChange={(e) => setFieldValue(`questions[${index}].expectedScore`, e.target.value)}>
+                                        <SelectItem key={1}>15/30</SelectItem>
+                                        <SelectItem key={2}>25/30</SelectItem>
+                                        <SelectItem key={3}>30/30</SelectItem>
+                                      </Select>
+                                    </TableCell>
+                                    <TableCell align='right'>
+                                      <Button
+                                        isIconOnly
+                                        aria-label='Remove question'
+                                        color='warning'
+                                        size='sm'
+                                        variant='faded'
+                                        onPress={() =>
+                                          setFieldValue(
+                                            "questions",
+                                            values.questions.filter((q) => q.id !== question.id)
+                                          )
+                                        }>
+                                        <AiFillDelete />
+                                      </Button>
+                                    </TableCell>
+                                  </TableRow>
+                                ))}
+                              </TableBody>
+                            </Table>
+                          </div>
+                        </div>
+                      </CardBody>
+                      <CardFooter>
+                        <div className='flex gap-2'>
+                          <Button
+                            type='submit'
+                            color='primary'
+                            isLoading={loading}
+                            onPress={() => {
+                              formRef.current?.handleSubmit();
+                            }}>
+                            Subbmit
+                          </Button>
+                        </div>
+                      </CardFooter>
+                    </Card>
+                  </Tab>
+                  <Tab key='criteria' title='Evaluation Criteria'>
+                    <p className='text-sm mb-5'>For each question, score the candidate’s response based on key factors:</p>
+                    <Table aria-label='Analysis Criteria Table mb-5'>
+                      <TableHeader>
+                        <TableColumn>Criteria</TableColumn>
+                        <TableColumn>Description</TableColumn>
+                        <TableColumn>Score Range</TableColumn>
+                      </TableHeader>
+                      <TableBody>
+                        {evaluationCriteria.map((criterion, index) => (
+                          <TableRow key={criterion.id}>
+                            <TableCell>{criterion.name}</TableCell>
+                            <TableCell>{criterion.description}</TableCell>
+                            <TableCell>{criterion.scoreRange}</TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </Tab>
+                </Tabs>
               )}
             </Formik>
           </div>

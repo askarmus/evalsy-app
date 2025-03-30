@@ -1,20 +1,22 @@
 import { Chip } from "@heroui/react";
 import React from "react";
 
-const getBadgeStyle = (weight) => {
-  if (weight >= 1 && weight <= 7.5) {
+const getBadgeStyle = (percent: number) => {
+  console.log("percent", percent);
+  if (percent >= 0 && percent <= 25) {
     return { bgColor: "bg-orange-500", text: "Below Average" };
-  } else if (weight >= 7.6 && weight <= 15) {
+  } else if (percent > 25 && percent <= 50) {
     return { bgColor: "bg-yellow-500", text: "Average" };
-  } else if (weight >= 15.1 && weight <= 22.5) {
+  } else if (percent > 50 && percent <= 75) {
     return { bgColor: "bg-blue-500", text: "Good" };
-  } else if (weight >= 22.6 && weight <= 30) {
+  } else if (percent > 75 && percent <= 100) {
     return { bgColor: "bg-green-500", text: "Excellent" };
   }
-  return { bgColor: "bg-gray-500", text: "Unknown" }; // Default case
+
+  return { bgColor: "bg-gray-500", text: "Unknown" };
 };
 
-const FeaturedBadge = ({ weight }) => {
+const RatingBadge = ({ weight }) => {
   const { bgColor, text } = getBadgeStyle(weight);
 
   return (
@@ -30,4 +32,4 @@ const FeaturedBadge = ({ weight }) => {
   );
 };
 
-export default FeaturedBadge;
+export default RatingBadge;

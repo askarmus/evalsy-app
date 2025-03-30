@@ -5,13 +5,26 @@ import { useRouter, usePathname } from "next/navigation";
 import { getUser } from "@/services/authService";
 import { Logo } from "@/components/logo";
 
-const publicRoutes = ["/", "/login", "/signup", "/forgot-password", "/reset-password"];
+// Define route patterns that are publicly accessible
+const publicRoutePatterns = [
+  /^\/$/, // Home
+  /^\/login$/,
+  /^\/signup$/,
+  /^\/forgot-password$/,
+  /^\/reset-password$/,
+  /^\/interview\/start(\/.*)?$/, // Matches /interview/start and all its subpaths
+];
+
+// Helper to check if a path matches any public route pattern
+const isPublicRoute = (path: string) => {
+  return publicRoutePatterns.some((pattern) => pattern.test(path));
+};
 
 export function AuthGuard({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
   const [canRenderChildren, setCanRenderChildren] = useState(false);
   const router = useRouter();
-  const pathname = usePathname(); // This is the correct way to get the path in Next.js
+  const pathname = usePathname();
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -20,14 +33,14 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
 
         if (error || !user) {
           // 🛑 Unauthenticated
-          if (pathname && !publicRoutes.includes(pathname)) {
+          if (pathname && !isPublicRoute(pathname)) {
             router.push("/login");
           } else {
             setCanRenderChildren(true);
           }
         } else {
           // ✅ Authenticated
-          if (pathname && publicRoutes.includes(pathname)) {
+          if (pathname && isPublicRoute(pathname)) {
             router.push("/dashboard");
           } else {
             setCanRenderChildren(true);
@@ -35,7 +48,7 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
         }
       } catch (err) {
         console.error("Auth check failed:", err);
-        if (pathname && !publicRoutes.includes(pathname)) {
+        if (pathname && !isPublicRoute(pathname)) {
           router.push("/login");
         }
       } finally {
@@ -44,7 +57,7 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
     };
 
     checkAuth();
-  }, [router, pathname]); // Add pathname to dependencies
+  }, [router, pathname]);
 
   if (isLoading || !canRenderChildren) {
     return (

@@ -18,7 +18,7 @@ const EvaluationTable = ({ data }) => {
         <div className='overflow-x-auto'>
           <table className='w-full  '>
             <thead>
-              <tr className='bg-gray-100 uppercase text-xs font-semibold'>
+              <tr className='  uppercase text-xs font-semibold'>
                 <th className='px-2 h-8 align-middle bg-default-100 whitespace-nowrap text-foreground-500 text-[10px] font-semibold first:rounded-s-lg last:rounded-e-lg'>QUESTION</th>
                 <th className='px-2 bg-default-100 whitespace-nowrap text-foreground-500 text-[10px] font-semibold'>Rel.</th>
                 <th className='px-2 h-8 align-middle bg-default-100 whitespace-nowrap text-foreground-500 text-[10px] font-semibold first:rounded-s-lg last:rounded-e-lg'>Comp.</th>
@@ -37,7 +37,7 @@ const EvaluationTable = ({ data }) => {
 
                 return (
                   <React.Fragment key={answer.id || `question-${index}`}>
-                    <tr key={`row-${answer.id || index}`} className='hover:bg-gray-50'>
+                    <tr key={`row-${answer.id || index}`}>
                       <td className='py-2 px-3 text-[12px]'>{answer.text}</td>
                       <td className='py-2 px-3 text-[12px]'>{scores.relevance || 0}</td>
                       <td className='py-2 px-3 text-[12px]'>{scores.completeness || 0}</td>
@@ -56,7 +56,7 @@ const EvaluationTable = ({ data }) => {
                         {" "}
                         {/* ✅ Unique key for expanded row */}
                         <td colSpan={8} className='p-3'>
-                          <p className='text-gray-700 text-small'>
+                          <p className='  text-small'>
                             <strong>Answer:</strong> {answer.transcription || "No transcription available."}
                           </p>
                           {answer.recordedUrl && (

@@ -49,13 +49,13 @@ const EvaluationChart = ({ data }) => {
         <div className='space-y-2'>
           {Object.entries(evaluationScores).map(([key, value]) => (
             <div key={key} className='grid grid-cols-12 gap-2 items-center'>
-              <span className='col-span-5 text-xs capitalize text-gray-600'>{key.replace("_", " ")}:</span>
+              <span className='col-span-5 text-xs capitalize  '>{key.replace("_", " ")}:</span>
               <div className='col-span-5'>
-                <div className='h-2 w-full rounded-full bg-gray-200'>
+                <div className='h-2 w-full rounded-full  '>
                   <div className={`h-2 rounded-full ${getScoreBarColor(value)}`} style={{ width: `${(value / 5) * 100}%` }}></div>
                 </div>
               </div>
-              <span className='col-span-2 text-right text-xs font-medium text-gray-700'>{value}/5</span>
+              <span className='col-span-2 text-right text-xs font-medium  '>{value}/5</span>
             </div>
           ))}
         </div>

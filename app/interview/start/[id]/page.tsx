@@ -10,8 +10,6 @@ const App: React.FC = () => {
   const { loadInterview } = useInterviewStore();
   useEffect(() => {
     if (id) {
-      console.log("xxxxxxxxxxxxx", id);
-
       loadInterview(id as string);
     }
   }, [id, loadInterview]);
