@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang='en' suppressHydrationWarning>
-      <body className={clsx("font-sans antialiased", fontSans.className)}>
+      <body className={clsx("font-sans antialiased", fontSans.className, "scroll-smooth")}>
         <AuthGuard>
           <Providers>{children}</Providers>
         </AuthGuard>

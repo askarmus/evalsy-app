@@ -2,28 +2,19 @@
 import React, { useState } from "react";
 const featureList = [
   {
-    title: "Setup",
-    description: "Upload the job description, select the interview language, and fine-tune AI-generated questions to perfectly match your hiring requirements.",
+    title: "AI-Powered Interview Experience",
+    description: "AI interview platform with video response, live questions, reviewer insights, and seamless, modern UI for evaluations.",
     image: "/feature-screen/post.png",
-    time: "⏱️ ~2 minutes",
   },
   {
-    title: "Outreach",
-    description: "Generate a unique interview link and effortlessly share it on job boards, social media, or via email. Attract top candidates without the extra work.",
-    image: "/invite-candidates.webp",
-    time: "⏱️ ~5 minutes",
+    title: "Instant Interview Invite",
+    description: "Quickly send interview invites with name, email, duration, expiry, and interviewer—simple, fast, and efficient.",
+    image: "/feature-screen/invitation.png",
   },
   {
-    title: "Interviews",
-    description: "Our AI-driven system conducts unbiased, 24/7 interviews with every applicant, ensuring consistency and saving you countless hours of manual effort.",
-    image: "/automated-interview.webp",
-    time: "⚡ Fully Automated",
-  },
-  {
-    title: "Shortlist",
-    description: "Receive a refined list of the most qualified candidates. Our advanced algorithms analyze each interview, ranking talent based on skills and potential.",
-    image: "/shortlist-candidates.webp",
-    time: "⚡ Fully Automated",
+    title: "AI Resume Screening",
+    description: "Effortlessly screen resumes using AI—auto-score candidates, filter by experience, and manage invitations in one place.",
+    image: "/feature-screen/resume-screening.png",
   },
 ];
 
@@ -37,8 +28,8 @@ export const Features = () => {
       <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative'>
         {/* Header */}
         <div className='max-w-2xl md:mx-auto md:text-center xl:max-w-none'>
-          <h2 className='font-display text-3xl tracking-tight text-white sm:text-4xl md:text-5xl'>Everything you need to run your books.</h2>
-          <p className='mt-6 text-lg tracking-tight text-blue-100'>Well, everything you need if you aren’t that picky about minor details like tax compliance.</p>
+          <h2 className='font-display text-3xl tracking-tight text-white sm:text-4xl md:text-5xl'>Simplify Your Hiring Workflow.</h2>
+          <p className='mt-6 text-lg tracking-tight text-blue-100'>Manage hiring with ease—automated interviews, quick invites, and AI screening to skip repetitive tasks.</p>
         </div>
 
         <div className='mt-16 grid grid-cols-1 items-center gap-y-2 pt-10 sm:gap-y-6 md:mt-20 lg:grid-cols-12 lg:pt-0'>

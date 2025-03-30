@@ -11,7 +11,9 @@ body {
 * {
   box-sizing: border-box;
 }
-
+html {
+  scroll-behavior: smooth;
+}
 .recording {
   color: firebrick;
   display: inline-block;

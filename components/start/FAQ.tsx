@@ -2,7 +2,7 @@ import React from "react";
 
 export const FAQ = () => {
   return (
-    <section id='faq' aria-labelledby='faq-title' className='relative overflow-hidden bg-slate-50 py-20 sm:py-32'>
+    <section id='testimonials' aria-labelledby='faq-title' className='relative overflow-hidden bg-slate-50 py-20 sm:py-32'>
       <img alt='' loading='lazy' width={1558} height={946} decoding='async' data-nimg={1} className='absolute top-0 left-1/2 max-w-none -translate-y-1/4 translate-x-[-30%]' src='/background-faqs.55d2e36a.jpg' style={{ color: "transparent" }} />
       <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative'>
         <div className='mx-auto max-w-2xl lg:mx-0'>
