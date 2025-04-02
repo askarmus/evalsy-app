@@ -43,7 +43,7 @@ apiClient.interceptors.request.use(
 );
 
 // ✅ Retry config
-const MAX_RETRIES = 3;
+const MAX_RETRIES = 0;
 
 // ✅ Global response handling with retry
 apiClient.interceptors.response.use(

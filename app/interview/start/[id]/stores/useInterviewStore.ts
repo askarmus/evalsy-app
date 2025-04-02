@@ -118,7 +118,7 @@ export const useInterviewStore = create<InterviewState>()((set, get) => ({
         throw new Error("Interview ID not found.");
       }
       const file = new File([imageBlob], `screenshot_${interviewId}_${Date.now()}.png`, { type: "image/png" });
-      const recordedUrl = await upload(file);
+      const recordedUrl = await upload(file, "image/png");
 
       await updateScreeshot({
         invitationId: invitationId,

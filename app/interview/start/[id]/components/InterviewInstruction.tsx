@@ -51,7 +51,7 @@ const InterviewInstruction: React.FC<any> = () => {
           <CardBody>
             <div className='mb-5'>
               <div className='text-tiny uppercase font-bold mb-5'>Interview Information</div>
-              <ul className='list-disc list-inside space-y-1'>
+              <ul className='list-disc list-inside space-y-2'>
                 <li>
                   <strong>Duration:</strong> {duration / 60} minutes
                 </li>
@@ -62,7 +62,7 @@ const InterviewInstruction: React.FC<any> = () => {
             </div>
 
             <div className='text-tiny uppercase font-bold mb-5'>Interview Instructions</div>
-            <ul className='list-decimal pl-6 space-y-1'>
+            <ul className='list-decimal pl-6 space-y-2'>
               <li>
                 <strong>Enable Your Microphone and Camera:</strong> Ensure your microphone and camera are active before starting the session.
               </li>
@@ -89,7 +89,7 @@ const InterviewInstruction: React.FC<any> = () => {
                 isSelected={permissionGranted}
                 onValueChange={requestPermissions}
                 color='primary'
-                size='lg'
+                size='sm'
                 isDisabled={isChecking} // Disable switch while checking
               />
               <span className='text-sm font-medium'>{permissionGranted ? "Camera & Microphone Enabled" : "Enable Camera & Microphone"}</span>

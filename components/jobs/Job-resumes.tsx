@@ -22,11 +22,11 @@ export default function JobResumes({ jobId, isOpen, onClose, jobTitle }: { jobId
 
   // Define score categories with colors
   const SCORE_CATEGORIES = [
-    { label: "❌ Poor", value: "poor", min: 0, max: 59, color: "bg-red-500 text-white" },
-    { label: "🟠 Fair", value: "fair", min: 60, max: 74, color: "bg-orange-400 text-white" },
-    { label: "🟡 Good", value: "good", min: 75, max: 84, color: "bg-yellow-400 text-black" },
-    { label: "🔵 V Good", value: "very-good", min: 85, max: 94, color: "bg-blue-500 text-white" },
-    { label: "🟢 Excellent", value: "excellent", min: 95, max: 100, color: "bg-green-500 text-white" },
+    { label: "Poor", value: "poor", min: 0, max: 59, color: "bg-red-500 text-white" },
+    { label: "Fair", value: "fair", min: 60, max: 74, color: "bg-orange-400 text-white" },
+    { label: "Good", value: "good", min: 75, max: 84, color: "bg-yellow-400 text-black" },
+    { label: "Very Good", value: "very-good", min: 85, max: 94, color: "bg-blue-500 text-white" },
+    { label: "Excellent", value: "excellent", min: 95, max: 100, color: "bg-green-500 text-white" },
   ];
 
   // Function to determine if a score matches the selected category
@@ -104,13 +104,15 @@ export default function JobResumes({ jobId, isOpen, onClose, jobTitle }: { jobId
   };
 
   const processSelectedResumes = async () => {
-    setIsProcessing(true); // Disable process button
+    setIsProcessing(true);
 
     const newProcessingState = { ...processingRows };
     selectedResumes.forEach((resumeId) => {
       newProcessingState[resumeId] = true;
     });
     setProcessingRows(newProcessingState);
+
+    const failedResumes: string[] = [];
 
     try {
       await Promise.all(
@@ -119,18 +121,20 @@ export default function JobResumes({ jobId, isOpen, onClose, jobTitle }: { jobId
             const updatedAnalysis = await processResumeById(resumeId, jobId);
 
             setResumes((prevResumes) => prevResumes.map((resume) => (resume.id === resumeId ? { ...resume, analysis: updatedAnalysis } : resume)));
-
-            return resumeId;
           } catch (error) {
+            failedResumes.push(resumeId);
             showToast.error(`Error processing resume: ${resumeId}`);
-            return null;
           }
         })
       );
 
-      showToast.success("Selected resumes processed successfully!");
+      if (failedResumes.length === 0) {
+        showToast.success("Selected resumes processed successfully!");
+      } else {
+        showToast.warning(`Some resumes failed to process: ${failedResumes.join(", ")}`);
+      }
     } catch (error) {
-      showToast.error("An error occurred while processing resumes.");
+      showToast.error("An unexpected error occurred while processing resumes.");
     } finally {
       // Reset processing state
       setProcessingRows((prevState) => {
@@ -160,7 +164,7 @@ export default function JobResumes({ jobId, isOpen, onClose, jobTitle }: { jobId
   const { getRootProps, getInputProps } = useDropzone({ onDrop });
 
   return (
-    <Drawer size='3xl' isOpen={isOpen} onOpenChange={onClose}>
+    <Drawer size='4xl' isOpen={isOpen} onOpenChange={onClose}>
       <DrawerContent>
         <DrawerHeader>Manage Resume and Invitation - {jobTitle}</DrawerHeader>
         <DrawerBody>

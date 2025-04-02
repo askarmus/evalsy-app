@@ -10,14 +10,15 @@ export const saveCompanySettings = async (payload: any) => {
   return response.data.data;
 };
 
-export const upload = async (file: File) => {
+export const upload = async (file: File, contentType: string = "audio/mpeg") => {
   const formData = new FormData();
   formData.append("file", file);
+  formData.append("contentType", contentType);
 
   const response = await apiClient.post("/upload", formData, {
     headers: {
       "Content-Type": "multipart/form-data",
     },
   });
-  return response.data; // Return the uploaded file URL
+  return response.data;
 };

@@ -1,4 +1,4 @@
-import { array, object, ref, string } from "yup";
+import { array, boolean, number, object, ref, string } from "yup";
 
 export const LoginSchema = object().shape({
   email: string().email("This field must be an email").required("Email is required"),
@@ -19,15 +19,40 @@ export const ForgetPasswordSchema = object().shape({
 });
 export const AddJobSchema = object().shape({
   jobTitle: string().required("Title is required"),
-  experienceLevel: string().required("Please select a experience Level"),
+
+  totalRandomQuestion: number(),
+
+  description: string().required("Job description is required"),
+
+  experienceLevel: string().required("Please select an experience level"),
 
   questions: array()
     .of(
       object().shape({
+        id: string().required(),
         text: string().required("Question is required"),
+        expectedScore: number().required(),
+        isRandom: boolean().required(),
       })
     )
-    .min(1, "At least one question is required"),
+    .min(1, "At least one question is required")
+    .test({
+      name: "random-question-limit",
+      message: "Total random question should not exceed available random questions",
+      test(questions) {
+        const { totalRandomQuestion } = this.parent;
+        const randomCount = questions?.filter((q) => q.isRandom).length || 0;
+
+        if (totalRandomQuestion > randomCount) {
+          return this.createError({
+            path: "totalRandomQuestion",
+            message: "Total random question should not exceed available random questions",
+          });
+        }
+
+        return true;
+      },
+    }),
 });
 
 export const SendInvitationSchema = object().shape({

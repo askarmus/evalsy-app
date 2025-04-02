@@ -13,4 +13,10 @@ export const showToast = {
       color: "danger",
     });
   },
+  warning: (message: string) => {
+    addToast({
+      description: message,
+      color: "warning",
+    });
+  },
 };
