@@ -2,10 +2,10 @@ import React, { useEffect, useRef, useState } from "react";
 import { useInterviewStore } from "../stores/useInterviewStore";
 import UserCamera from "./UserCamera";
 import InterviewNavbar from "./InterviewNavbar";
-import { Button, Card, CardBody, CardFooter } from "@heroui/react";
+import { Button, Card, CardBody, CardFooter, Chip } from "@heroui/react";
 import Interviewer from "./Interviewer";
 import CandidateInfo from "./CandidateInfo";
-import { FaMicrophoneAlt, FaStopCircle } from "react-icons/fa";
+import { FaMicrophone, FaMicrophoneAlt, FaReply, FaStopCircle } from "react-icons/fa";
 
 const InterviewNavigator: React.FC = () => {
   const { questions, interviewer, candidate, job, company, uploadRecording, currentQuestion, setAudioCompleted, isRecording, setRecording } = useInterviewStore();
@@ -16,7 +16,6 @@ const InterviewNavigator: React.FC = () => {
   const [isReplayingAudio, setIsReplayingAudio] = useState(false);
   const [isAudioUploading, setIsAudioUploading] = useState(false);
   const [isRefreshed, setIsRefreshed] = useState(false);
-  const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
   const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(null);
 
   const question = questions[currentQuestion];
@@ -148,7 +147,13 @@ const InterviewNavigator: React.FC = () => {
             <Card className='py-4' shadow='sm'>
               <CardBody className='overflow-visible py-2'>
                 <div className='p-6'>
-                  <p className='text-sm'>Interview Question</p>
+                  <p className='text-sm'>
+                    Interview Question{" "}
+                    <Chip size='sm'>
+                      {" "}
+                      {questions.length} of {currentQuestion + 1}
+                    </Chip>
+                  </p>
                   <p className='text-lg leading-relaxed mt-4'>{question?.text || "No Questions Available"}</p>
 
                   {/* ✅ Question Audio */}
@@ -167,34 +172,45 @@ const InterviewNavigator: React.FC = () => {
               <CardFooter className='absolute bottom-0 z-10 border-t-1 dark:border-t-gray-800'>
                 <div className='flex flex-grow gap-2 items-center'>
                   {/* ✅ Record Button (Enabled if isRefreshed is true) */}
-                  <Button
-                    color='danger'
-                    startContent={<FaMicrophoneAlt />}
-                    isDisabled={!isRefreshed || isReplayingAudio || isRecording || isAudioUploading} // Only disable if isRefreshed is false or if replaying
-                    onPress={handleStartRecording}>
-                    Answer
-                  </Button>
+
+                  {!isRecording && (
+                    <Button
+                      color='danger'
+                      size='md'
+                      radius='full'
+                      variant='bordered'
+                      startContent={<FaMicrophoneAlt />}
+                      isDisabled={!isRefreshed || isReplayingAudio || isRecording || isAudioUploading} // Only disable if isRefreshed is false or if replaying
+                      onPress={handleStartRecording}>
+                      Record Answer
+                    </Button>
+                  )}
+
+                  {isRecording && (
+                    <Button startContent={<FaMicrophone />} isDisabled={isAudioUploading} onPress={handleStopRecording} color='danger' size='md' radius='full' variant='bordered'>
+                      {isAudioUploading ? "Next Question..." : "Stop Recording"}
+                    </Button>
+                  )}
 
                   {/* ✅ Replay Audio Button (Enabled if isRefreshed is true) */}
                   {!isReplayingAudio ? (
                     <Button
+                      size='md'
+                      variant='bordered'
+                      radius='full'
                       color='secondary'
+                      startContent={<FaReply />}
                       isDisabled={!isRefreshed || isRecording} // Only disable if isRefreshed is false or if recording
                       onPress={handleReplayAudio}>
                       Replay Audio
                     </Button>
                   ) : (
-                    <Button startContent={<FaStopCircle />} color='warning' onPress={handleStopReplayAudio}>
+                    <Button size='md' variant='bordered' radius='full' startContent={<FaStopCircle />} color='warning' onPress={handleStopReplayAudio}>
                       Stop Replay
                     </Button>
                   )}
 
                   {/* ✅ Stop Recording Button */}
-                  {isRecording && (
-                    <Button isDisabled={isAudioUploading} onPress={handleStopRecording}>
-                      {isAudioUploading ? "Uploading..." : "Stop Recording"}
-                    </Button>
-                  )}
                 </div>
               </CardFooter>
             </Card>

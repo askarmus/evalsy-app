@@ -56,7 +56,7 @@ const InterviewInstruction: React.FC<any> = () => {
                   <strong>Duration:</strong> {duration / 60} minutes
                 </li>
                 <li>
-                  <strong>Total Questions:</strong> {questions.length}
+                  <strong>Total Questions:</strong> {job.totalQuestions}
                 </li>
               </ul>
             </div>

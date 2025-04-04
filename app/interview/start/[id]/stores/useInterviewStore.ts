@@ -81,7 +81,7 @@ export const useInterviewStore = create<InterviewState>()((set, get) => ({
       set({ invitationId: id });
       set({
         phase: data.phase,
-        questions: data.job.questions || [],
+        questions: [],
         currentQuestion: 0,
         duration: data.duration * 60,
         timeLeft: data.timeLeft * 60,
@@ -98,8 +98,8 @@ export const useInterviewStore = create<InterviewState>()((set, get) => ({
       const invitationId = get().invitationId;
 
       set({ isLoading: true });
-      await startInterview({ invitationId });
-      set({ phase: "welcome" });
+      var resposne = await startInterview({ invitationId });
+      set({ phase: "welcome", questions: resposne.questions });
     } catch (error) {
       showToast.error("Error starting the interview");
     } finally {

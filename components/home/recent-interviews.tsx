@@ -2,6 +2,7 @@ import { ViewResultDrawer } from "@/app/interview/result/components/view.result.
 import DateFormatter from "@/app/utils/DateFormatter";
 import { getColorByInitial } from "@/app/utils/getColorByInitial";
 import { getInitials } from "@/app/utils/getInitials";
+import { truncateText } from "@/app/utils/truncate.text";
 import { get10InterviewResult } from "@/services/dashboard.service";
 import { getInterviewResultById } from "@/services/interview.service";
 import { Button, Card, CardBody, Skeleton, Spinner, User } from "@heroui/react";
@@ -87,8 +88,8 @@ export const RecentInterviews = () => {
                         name: getInitials(item.invitation.name),
                         className: getColorByInitial(item.invitation.name),
                       }}
-                      description={item.job.jobTitle}
-                      name={item.invitation.name}
+                      description={truncateText(item.job.jobTitle, 30, { wordBoundary: true })}
+                      name={truncateText(item.invitation.name, 30, { wordBoundary: true })}
                     />
                   </div>
 

@@ -5,7 +5,7 @@ import { AiOutlineBank, AiOutlineMail, AiOutlineUser } from "react-icons/ai";
 const CandidateInfo: React.FC<any> = ({ candidate, job, company }) => {
   return (
     <div className='w-full mb-10 px-4 sm:px-6'>
-      <Card>
+      <Card shadow='none'>
         <CardBody>
           <dl className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6'>
             {/* Candidate Info */}
