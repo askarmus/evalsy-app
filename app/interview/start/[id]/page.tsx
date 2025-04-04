@@ -6,7 +6,8 @@ import { useParams } from "next/navigation";
 import { useInterviewStore } from "./stores/useInterviewStore";
 
 const App: React.FC = () => {
-  const { id } = useParams();
+  const { id } = useParams() as { id: string };
+
   const { loadInterview } = useInterviewStore();
   useEffect(() => {
     if (id) {

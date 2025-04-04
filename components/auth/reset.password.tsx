@@ -15,7 +15,7 @@ export const ResetPassword = () => {
   const [isSubmitting, setSubmitting] = useState(false);
   const [isSuccess, setSuccess] = useState(false);
 
-  const token = params.token as string; // This will get the value from the URL
+  const { token } = useParams() as { token: string };
 
   const initialValues: ResetPasswordFormType = {
     newPassword: "",
