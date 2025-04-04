@@ -10,6 +10,7 @@
     "dev-https": "next dev --experimental-https"
   },
   "dependencies": {
+    "@google-cloud/storage": "^7.16.0",
     "@heroui/react": "^2.7.5",
     "@stripe/react-stripe-js": "^3.4.0",
     "@stripe/stripe-js": "^6.0.0",

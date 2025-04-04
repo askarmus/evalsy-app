@@ -31,7 +31,7 @@ export interface Criteria {
 
 export const AddJob = () => {
   const router = useRouter();
-  const { id } = useParams();
+  // const { id } = useParams();
 
   const [isGenerating, setGenerated] = useState(false);
   const formRef = useRef<any | null>(null);
@@ -46,12 +46,12 @@ export const AddJob = () => {
     description: "",
   });
 
-  const isEditMode = Boolean(id);
+  const isEditMode = Boolean(1);
 
   useEffect(() => {
     if (isEditMode) {
       const fetchJob = async () => {
-        const jobData = await getJobById(id as string);
+        const jobData = await getJobById("1" as string);
         setInitialValues(jobData);
       };
       fetchJob();
