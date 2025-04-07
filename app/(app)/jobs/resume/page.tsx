@@ -1,18 +1,25 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useDropzone } from "react-dropzone";
 import axios from "axios";
+import { v4 as uuidv4 } from "uuid";
+import { doc, onSnapshot, getFirestore } from "firebase/firestore";
+import { app } from "@/config/firebase.config";
 
 type UploadStatus = "idle" | "uploading" | "success" | "error";
+type ProcessStatus = "queued" | "processing" | "processed" | "failed";
 
 type UploadFile = {
   file: File;
   name: string;
   progress: number;
   status: UploadStatus;
-  response?: any;
+  processStatus: ProcessStatus;
+  resumeId: string;
 };
+
+const db = getFirestore(app);
 
 export default function ResumeUploader() {
   const [files, setFiles] = useState<UploadFile[]>([]);
@@ -29,17 +36,23 @@ export default function ResumeUploader() {
       name: file.name,
       progress: 0,
       status: "idle",
+      processStatus: "queued",
+      resumeId: uuidv4(),
     }));
 
     const startIndex = files.length;
     setFiles((prev) => [...prev, ...newUploads]);
 
-    newUploads.forEach((f, i) => uploadFile(f, startIndex + i));
+    newUploads.forEach((f, i) => {
+      uploadFile(f, startIndex + i);
+      listenToProcessingStatus(f.resumeId, startIndex + i);
+    });
   };
 
   const uploadFile = async (fileObj: UploadFile, index: number) => {
     const formData = new FormData();
     formData.append("file", fileObj.file);
+    formData.append("resumeId", fileObj.resumeId);
 
     setFiles((prev) => {
       const updated = [...prev];
@@ -48,10 +61,9 @@ export default function ResumeUploader() {
     });
 
     try {
-      const res = await axios.post("/api/upload", formData, {
+      await axios.post("/api/upload", formData, {
         onUploadProgress: (event) => {
           const percent = Math.round((event.loaded / event.total!) * 100);
-
           setFiles((prev) => {
             const updated = [...prev];
             updated[index].progress = percent;
@@ -64,7 +76,6 @@ export default function ResumeUploader() {
         const updated = [...prev];
         updated[index].status = "success";
         updated[index].progress = 100;
-        updated[index].response = res.data;
         return updated;
       });
     } catch (err) {
@@ -77,16 +88,26 @@ export default function ResumeUploader() {
     }
   };
 
+  const listenToProcessingStatus = (resumeId: string, index: number) => {
+    const unsub = onSnapshot(doc(db, "resume-status", resumeId), (docSnap) => {
+      if (docSnap.exists()) {
+        const { status } = docSnap.data();
+        setFiles((prev) => {
+          const updated = [...prev];
+          updated[index].processStatus = status;
+          return updated;
+        });
+      }
+    });
+
+    return unsub;
+  };
+
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
     accept: acceptedTypes,
     multiple: true,
   });
-
-  // ✅ Compute overall progress based on completed files
-  const totalFiles = files.length;
-  const completedFiles = files.filter((f) => f.status === "success").length;
-  const overallProgress = totalFiles > 0 ? (completedFiles / totalFiles) * 100 : 0;
 
   return (
     <div className='p-6 border rounded-md bg-white'>
@@ -97,31 +118,24 @@ export default function ResumeUploader() {
       </div>
 
       {files.length > 0 && (
-        <>
-          {/* ✅ Overall Progress */}
-          <div className='mt-6'>
-            <div className='text-sm font-medium mb-1'>Overall Progress</div>
-            <div className='w-full bg-gray-200 h-2 rounded'>
-              <div className='h-2 bg-blue-600 rounded' style={{ width: `${overallProgress}%` }}></div>
-            </div>
-            <div className='text-xs text-right mt-1 text-gray-600'>{Math.round(overallProgress)}%</div>
-          </div>
-
-          {/* ✅ Per-File Progress */}
-          <div className='mt-6 space-y-4'>
-            {files.map((f, i) => (
-              <div key={i} className='p-3 border rounded shadow-sm bg-gray-50'>
-                <div className='flex justify-between items-center text-sm font-medium'>
-                  <span>{f.name}</span>
-                  <span className='capitalize text-xs text-gray-600'>Status: {f.status}</span>
-                </div>
-                <div className='w-full bg-gray-200 h-2 rounded mt-2'>
-                  <div className={`h-2 rounded ${f.status === "error" ? "bg-red-500" : f.status === "success" ? "bg-green-500" : "bg-blue-500"}`} style={{ width: `${f.progress}%` }}></div>
-                </div>
+        <div className='mt-6 space-y-4'>
+          {files.map((f, i) => (
+            <div key={i} className='p-3 border rounded shadow-sm bg-gray-50'>
+              <div className='flex justify-between text-sm font-medium'>
+                <span>{f.name}</span>
+                <span className='capitalize text-xs text-gray-600'>Upload: {f.status}</span>
               </div>
-            ))}
-          </div>
-        </>
+
+              <div className='w-full bg-gray-200 h-2 rounded mt-2'>
+                <div className={`h-2 rounded ${f.status === "error" ? "bg-red-500" : f.status === "success" ? "bg-green-500" : "bg-blue-500"}`} style={{ width: `${f.progress}%` }}></div>
+              </div>
+
+              <div className='mt-1 text-xs text-gray-600'>
+                Processing: <span className={f.processStatus === "processed" ? "text-green-600" : f.processStatus === "processing" ? "text-blue-600" : f.processStatus === "failed" ? "text-red-500" : "text-gray-500"}>{f.processStatus}</span>
+              </div>
+            </div>
+          ))}
+        </div>
       )}
     </div>
   );

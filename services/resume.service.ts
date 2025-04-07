@@ -1,7 +1,7 @@
 import apiClient from "@/helpers/apiClient";
 
 export const fetchResumes = async (jobId: string) => {
-  const response = await apiClient.get(`/resume/get-resumes/${jobId}`);
+  const response = await apiClient.get(`/resume/get/${jobId}`);
   return response.data.resumes || [];
 };
 
@@ -16,8 +16,13 @@ export const uploadResume = async (jobId: string, file: File) => {
   return response.data.resumes;
 };
 
+export const createResume = async (payload) => {
+  const response = await apiClient.post("/resume/create", payload);
+  return response.data;
+};
+
 export const deleteResume = async (jobId: string, resumeId: string) => {
-  const response = await apiClient.delete(`/resume/delete-resume/${jobId}/${resumeId}`);
+  const response = await apiClient.delete(`/resume/delete/${jobId}/${resumeId}`);
   return response.data.resumes;
 };
 

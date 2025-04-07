@@ -1,9 +1,8 @@
-// pages/api/upload.ts
 import type { NextApiRequest, NextApiResponse } from "next";
 import { Storage } from "@google-cloud/storage";
 import Busboy from "busboy";
 import path from "path";
-import axios from "axios";
+import { createResume } from "@/services/resume.service";
 
 export const config = {
   api: {
@@ -66,12 +65,11 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
 
     writeStream.on("finish", async () => {
       try {
-        // await axios.post(`${process.env.NODE_API_BASE}/api/resumes`, {
-        //   jobId: "job-abc123",
-        //   filename: actualFilename,
-        //   fileUrl: gcsPath,
-        //   uploadedBy: "user-xyz",
-        // });
+        await createResume({
+          jobId: "67ea52245810764c349cff77",
+          name: actualFilename,
+          url: gcsPath,
+        });
 
         if (!hasResponded) {
           res.status(200).json({ success: true, gcsPath });
