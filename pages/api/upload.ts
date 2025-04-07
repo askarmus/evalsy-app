@@ -29,6 +29,14 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
   let hasResponded = false;
   let fileUploaded = false;
 
+  let resumeId: string | undefined;
+
+  busboy.on("field", (fieldname, value) => {
+    if (fieldname === "resumeId") {
+      resumeId = value;
+    }
+  });
+
   busboy.on("file", (fieldname, file, info) => {
     fileUploaded = true;
 
@@ -65,11 +73,15 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
 
     writeStream.on("finish", async () => {
       try {
-        await createResume({
-          jobId: "67ea52245810764c349cff77",
-          name: actualFilename,
-          url: gcsPath,
-        });
+        await createResume(
+          {
+            resumeId: resumeId!,
+            jobId: "67ea52245810764c349cff77",
+            name: actualFilename,
+            url: gcsPath,
+          },
+          req.headers.cookie
+        );
 
         if (!hasResponded) {
           res.status(200).json({ success: true, gcsPath });

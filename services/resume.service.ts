@@ -16,9 +16,23 @@ export const uploadResume = async (jobId: string, file: File) => {
   return response.data.resumes;
 };
 
-export const createResume = async (payload) => {
-  const response = await apiClient.post("/resume/create", payload);
-  return response.data;
+export const createResume = async (payload: { resumeId: string; jobId: string; name: string; url: string }, cookie?: string) => {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/resume/create`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+      ...(cookie ? { Cookie: cookie } : {}),
+    },
+    body: JSON.stringify(payload),
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.error || "Failed to create resume");
+  }
+
+  return await response.json();
 };
 
 export const deleteResume = async (jobId: string, resumeId: string) => {
