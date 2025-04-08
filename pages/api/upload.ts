@@ -24,6 +24,8 @@ const storage = new Storage({ credentials });
 const bucket = storage.bucket("evalsy-storage");
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
+  console.log("Received method:", req.method); // ✅ Add this
+
   // ✅ Add this block at the top
   if (req.method === "OPTIONS") {
     res.setHeader("Access-Control-Allow-Origin", "*");
