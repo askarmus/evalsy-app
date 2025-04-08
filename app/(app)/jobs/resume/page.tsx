@@ -4,8 +4,6 @@ import { useRef, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
-import { doc, onSnapshot, getFirestore } from "firebase/firestore";
-import { app } from "@/config/firebase.config";
 
 type UploadStatus = "idle" | "uploading" | "success" | "error";
 type ProcessStatus = "queued" | "processing" | "processed" | "failed";
@@ -19,8 +17,6 @@ type UploadFile = {
   processStatus: ProcessStatus;
   resumeId: string;
 };
-
-const db = getFirestore(app);
 
 export default function ResumeUploader() {
   const [files, setFiles] = useState<UploadFile[]>([]);
@@ -55,7 +51,6 @@ export default function ResumeUploader() {
 
     newUploads.forEach((f, i) => {
       uploadFile(f, startIndex + i);
-      listenToProcessingStatus(f.resumeId, startIndex + i);
     });
   };
 
@@ -112,21 +107,6 @@ export default function ResumeUploader() {
     }
   };
 
-  const listenToProcessingStatus = (resumeId: string, index: number) => {
-    const unsub = onSnapshot(doc(db, "resume-status", resumeId), (docSnap) => {
-      if (docSnap.exists()) {
-        const { status } = docSnap.data();
-        setFiles((prev) => {
-          const updated = [...prev];
-          updated[index].processStatus = status;
-          return updated;
-        });
-      }
-    });
-
-    return unsub;
-  };
-
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
     accept: acceptedTypes,
@@ -137,7 +117,7 @@ export default function ResumeUploader() {
   const displayedOverallProgress = isComplete ? 100 : Math.min(overallProgress, 99.5);
 
   return (
-    <div className='p-6 border rounded-md bg-white'>
+    <div className='my-10 px-4 lg:px-6 max-w-[90rem] mx-auto w-full flex flex-col gap-4'>
       <div {...getRootProps()} className='border-2 border-dashed border-gray-300 p-8 rounded-lg cursor-pointer text-center hover:bg-gray-50 transition'>
         <input {...getInputProps()} />
         <p className='text-gray-700 font-medium'>Drag & drop resumes here, or click to select files</p>
