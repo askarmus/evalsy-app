@@ -88,15 +88,12 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
 
     writeStream.on("finish", async () => {
       try {
-        await createResume(
-          {
-            resumeId: resumeId!,
-            jobId: "67ea52245810764c349cff77",
-            name: actualFilename,
-            url: publicUrl,
-          },
-          req.headers.cookie
-        );
+        await createResume({
+          resumeId: resumeId!,
+          jobId: "67ea52245810764c349cff77",
+          name: actualFilename,
+          url: publicUrl,
+        });
 
         if (!hasResponded) {
           res.status(200).json({ success: true, publicUrl });

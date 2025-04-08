@@ -1,5 +1,4 @@
 import apiClient from "@/helpers/apiClient";
-import cookie from "cookie";
 
 export const fetchResumes = async (jobId: string) => {
   const response = await apiClient.get(`/resume/get/${jobId}`);
@@ -17,22 +16,15 @@ export const uploadResume = async (jobId: string, file: File) => {
   return response.data.resumes;
 };
 
-export const createResume = async (payload: { resumeId: string; jobId: string; name: string; url: string }, cookieHeader?: string) => {
-  let accessToken: string | undefined;
-
-  if (cookieHeader) {
-    const parsed = cookie.parse(cookieHeader);
-    accessToken = parsed.accessToken; // ✅ only extract accessToken
-  }
-
+export const createResume = async (payload: { resumeId: string; jobId: string; name: string; url: string }) => {
   const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/resume/create`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json",
-      ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
     },
     body: JSON.stringify(payload),
+    credentials: "include", // ✅ sends cookies (including accessToken)
   });
 
   if (!response.ok) {
