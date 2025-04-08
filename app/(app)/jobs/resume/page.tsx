@@ -4,6 +4,8 @@ import { useRef, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
+import { doc, onSnapshot, getFirestore } from "firebase/firestore";
+import { app } from "@/config/firebase.config";
 
 type UploadStatus = "idle" | "uploading" | "success" | "error";
 type ProcessStatus = "queued" | "processing" | "processed" | "failed";
@@ -17,6 +19,8 @@ type UploadFile = {
   processStatus: ProcessStatus;
   resumeId: string;
 };
+
+const db = getFirestore(app);
 
 export default function ResumeUploader() {
   const [files, setFiles] = useState<UploadFile[]>([]);
@@ -49,7 +53,10 @@ export default function ResumeUploader() {
     const startIndex = files.length;
     setFiles((prev) => [...prev, ...newUploads]);
 
-    newUploads.forEach((f, i) => uploadFile(f, startIndex + i));
+    newUploads.forEach((f, i) => {
+      uploadFile(f, startIndex + i);
+      listenToProcessingStatus(f.resumeId, startIndex + i);
+    });
   };
 
   const uploadFile = async (fileObj: UploadFile, index: number) => {
@@ -105,6 +112,21 @@ export default function ResumeUploader() {
     }
   };
 
+  const listenToProcessingStatus = (resumeId: string, index: number) => {
+    const unsub = onSnapshot(doc(db, "resume-status", resumeId), (docSnap) => {
+      if (docSnap.exists()) {
+        const { status } = docSnap.data();
+        setFiles((prev) => {
+          const updated = [...prev];
+          updated[index].processStatus = status;
+          return updated;
+        });
+      }
+    });
+
+    return unsub;
+  };
+
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
     accept: acceptedTypes,
@@ -143,6 +165,9 @@ export default function ResumeUploader() {
                 </div>
                 <div className='w-full bg-gray-200 h-2 rounded mt-2'>
                   <div className={`h-2 rounded ${f.status === "error" ? "bg-red-500" : f.status === "success" ? "bg-green-500" : "bg-blue-500"}`} style={{ width: `${f.progress}%` }}></div>
+                </div>
+                <div className='mt-1 text-xs text-gray-600'>
+                  Processing: <span className={f.processStatus === "processed" ? "text-green-600" : f.processStatus === "processing" ? "text-blue-600" : f.processStatus === "failed" ? "text-red-500" : "text-gray-500"}>{f.processStatus}</span>
                 </div>
               </div>
             ))}

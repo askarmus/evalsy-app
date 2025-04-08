@@ -3,6 +3,8 @@ import { Storage } from "@google-cloud/storage";
 import Busboy from "busboy";
 import path from "path";
 import { createResume } from "@/services/resume.service";
+import { nanoid } from "nanoid";
+import sanitize from "sanitize-filename";
 
 export const config = {
   api: {
@@ -52,9 +54,12 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       return;
     }
 
-    const key = `uploads/${now}-${actualFilename}`;
+    const baseName = path.basename(actualFilename, ext);
+    const safeBaseName = sanitize(baseName).replace(/\s+/g, "-");
+    const uniqueFilename = `${safeBaseName}-${nanoid(8)}${ext}`;
+    const key = `uploads/${uniqueFilename}`;
     const gcsFile = bucket.file(key);
-    const gcsPath = `gs://${bucket.name}/${key}`;
+    const publicUrl = `https://storage.googleapis.com/${bucket.name}/${key}`;
 
     const writeStream = gcsFile.createWriteStream({
       metadata: { contentType: info.mimeType || "application/octet-stream" },
@@ -78,13 +83,13 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
             resumeId: resumeId!,
             jobId: "67ea52245810764c349cff77",
             name: actualFilename,
-            url: gcsPath,
+            url: publicUrl,
           },
           req.headers.cookie
         );
 
         if (!hasResponded) {
-          res.status(200).json({ success: true, gcsPath });
+          res.status(200).json({ success: true, publicUrl });
           hasResponded = true;
         }
       } catch (err) {
