@@ -22,7 +22,7 @@ export default function UploadFiles() {
   const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
-    const socketInstance = io("http://localhost:5000", {
+    const socketInstance = io(process.env.NEXT_PUBLIC_BASE_API_URL, {
       transports: ["websocket"],
       withCredentials: true,
     });
@@ -101,7 +101,7 @@ export default function UploadFiles() {
     });
 
     try {
-      await axios.post("http://localhost:5000/resume/upload", formData, {
+      await axios.post(`${process.env.NEXT_PUBLIC_BASE_API_URL}/resume/upload`, formData, {
         headers: { "x-socket-id": socketId },
         withCredentials: true,
       });
