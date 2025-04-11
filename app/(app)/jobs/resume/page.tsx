@@ -10,13 +10,17 @@ import { AiFillFileUnknown, AiOutlineCloudUpload, AiOutlineFilePdf, AiOutlineFil
 
 type FileProgress = {
   file: File;
-  progress: number;
+  progress: number; // final mapped progress (0-100)
+  sourceProgress?: {
+    axios: number; // 0–100 from axios
+    socket: number; // 0–100 from socket
+  };
   status: "pending" | "uploading" | "finishing" | "complete" | "error";
 };
 
 const allowedTypes = ["application/pdf", "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"];
 
-const PAGE_SIZE = 5;
+const PAGE_SIZE = 20;
 
 export default function UploadFiles() {
   const [files, setFiles] = useState<FileProgress[]>([]);
@@ -25,7 +29,7 @@ export default function UploadFiles() {
   const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
-    const socketInstance = io(process.env.NEXT_PUBLIC_BASE_API_URL, {
+    const socketInstance = io(process.env.NEXT_PUBLIC_BASE_API_URL!, {
       transports: ["websocket"],
       withCredentials: true,
     });
@@ -36,14 +40,22 @@ export default function UploadFiles() {
       console.log("✅ Connected to socket:", socketInstance.id);
     });
 
+    // GCS Streaming progress: 50–100%
     socketInstance.on("upload-progress", ({ file, progress }) => {
+      const mapped = 50 + Math.floor(progress * 0.5); // 50–100%
+
       setFiles((prev) =>
         prev.map((f) =>
           f.file.name === file
             ? {
                 ...f,
-                progress,
-                status: progress >= 100 && f.status !== "complete" ? "finishing" : "uploading",
+                progress: Math.max(f.progress, mapped), // prevent regress
+                sourceProgress: {
+                  ...f.sourceProgress,
+                  axios: f.sourceProgress?.axios ?? 0,
+                  socket: progress,
+                },
+                status: mapped >= 100 ? "finishing" : "uploading",
               }
             : f
         )
@@ -51,9 +63,7 @@ export default function UploadFiles() {
     });
 
     socketInstance.on("upload-complete", ({ file }) => {
-      setTimeout(() => {
-        setFiles((prev) => prev.map((f) => (f.file.name === file ? { ...f, progress: 100, status: "complete" } : f)));
-      }, 300);
+      setFiles((prev) => prev.map((f) => (f.file.name === file ? { ...f, progress: 100, status: "complete" } : f)));
     });
 
     return () => {
@@ -82,9 +92,8 @@ export default function UploadFiles() {
   const uploadFiles = async (incoming: File[] | File) => {
     const filesToUpload = Array.isArray(incoming) ? incoming : [incoming];
     const socketId = await waitForSocketConnection();
-    const formData = new FormData();
-    filesToUpload.forEach((f) => formData.append("files", f));
 
+    // Add files to UI
     setFiles((prev) => {
       const updated = [...prev];
       for (const file of filesToUpload) {
@@ -98,15 +107,44 @@ export default function UploadFiles() {
       return updated;
     });
 
-    try {
-      await axios.post(`${process.env.NEXT_PUBLIC_BASE_API_URL}/resume/upload`, formData, {
-        headers: { "x-socket-id": socketId },
-        withCredentials: true,
-      });
-    } catch (err) {
-      console.error("Upload error", err);
-      setFiles((prev) => prev.map((f) => (filesToUpload.some((ft) => ft.name === f.file.name) ? { ...f, status: "error" } : f)));
-    }
+    // Upload files in parallel
+    await Promise.all(
+      filesToUpload.map((file) => {
+        const formData = new FormData();
+        formData.append("files", file);
+
+        return axios
+          .post(`${process.env.NEXT_PUBLIC_BASE_API_URL}/resume/upload`, formData, {
+            headers: { "x-socket-id": socketId },
+            withCredentials: true,
+            onUploadProgress: (event) => {
+              const percent = Math.round((event.loaded * 100) / (event.total || 1));
+              const mapped = Math.floor(percent * 0.5); // 0–50%
+
+              setFiles((prev) =>
+                prev.map((f) =>
+                  f.file.name === file.name
+                    ? {
+                        ...f,
+                        progress: Math.max(f.progress, mapped), // prevent backward
+                        sourceProgress: {
+                          ...f.sourceProgress,
+                          axios: percent,
+                          socket: f.sourceProgress?.socket ?? 0,
+                        },
+                        status: "uploading",
+                      }
+                    : f
+                )
+              );
+            },
+          })
+          .catch((err) => {
+            console.error("Upload error", err);
+            setFiles((prev) => prev.map((f) => (f.file.name === file.name ? { ...f, status: "error" } : f)));
+          });
+      })
+    );
   };
 
   const onDrop = useCallback(
@@ -156,12 +194,10 @@ export default function UploadFiles() {
       <Breadcrumb items={breadcrumbItems} />
       <h3 className='text-xl font-semibold'>Resume Analyzer - Senior Software Engineer</h3>
 
-      <div {...getRootProps()} className={`border-2 border-dashed p-8 rounded-md text-center cursor-pointer ${isDragActive ? "border-blue-600 bg-blue-50" : "border-gray-400"}`}>
+      <div {...getRootProps()} className={`border-2 border-dashed p-4 rounded-md text-center cursor-pointer ${isDragActive ? "border-blue-600 bg-blue-50" : "border-gray-400"}`}>
         <input {...getInputProps()} />
-
         <div className='flex flex-col items-center justify-center gap-2'>
           <AiOutlineCloudUpload className='h-10 w-10 text-muted-foreground' />
-
           <h3 className='text-lg font-medium'>{isDragActive ? "Drop your resumes here..." : "Drag & drop resumes here, or click to select"}</h3>
           <p className='text-sm text-muted-foreground'>Only .pdf, .doc, .docx allowed</p>
         </div>
@@ -183,60 +219,49 @@ export default function UploadFiles() {
           />
         </div>
       )}
+
       <div className='flex justify-between flex-wrap gap-4 items-center'>
-        <div className='flex items-center gap-3 flex-wrap md:flex-nowrap'>
-          <Input
-            value={search}
-            onChange={(e) => {
-              setSearch(e.target.value);
-              setCurrentPage(1);
-            }}
-            classNames={{
-              input: "w-full",
-              mainWrapper: "w-full",
-            }}
-            placeholder='Search files...'
-          />
-        </div>
-        <div className='flex flex-row gap-3.5 flex-wrap'>
-          <Tabs key={"photos"} aria-label='Tabs variants' variant='solid'>
-            <Tab key='poor' title='Poor' />
-            <Tab key='average' title='Average' />
-            <Tab key='good' title='Good' />
-            <Tab key='verygood' title='Very Good' />
-          </Tabs>
-        </div>
+        <Input
+          value={search}
+          onChange={(e) => {
+            setSearch(e.target.value);
+            setCurrentPage(1);
+          }}
+          placeholder='Search files...'
+          classNames={{ input: "w-full", mainWrapper: "w-full" }}
+        />
+        <Tabs variant='solid'>
+          <Tab key='poor' title='Poor' />
+          <Tab key='average' title='Average' />
+          <Tab key='good' title='Good' />
+          <Tab key='verygood' title='Very Good' />
+        </Tabs>
       </div>
-      <div className='max-w-[90rem] mx-auto w-full'>
-        <div className=' w-full flex flex-col gap-4'>
-          <Table
-            aria-label='Example table with client-side pagination'
-            bottomContent={
-              <div className='flex w-full justify-center'>
-                <Pagination isCompact showControls showShadow color='primary' page={currentPage} total={totalPages} onChange={setCurrentPage} />
-              </div>
-            }
-            classNames={{
-              wrapper: "min-h-[222px]",
-            }}>
-            <TableHeader>
-              <TableColumn key='name'>FILE</TableColumn>
-              <TableColumn key='jobTitle'>SIZE</TableColumn>
-            </TableHeader>
-            <TableBody emptyContent={"No resume found"}>
-              {paginatedFiles.map(({ file, status, progress }, i) => (
-                <TableRow key={i} className={`border-t`}>
-                  <TableCell className='px-4 py-2 whitespace-nowrap font-medium flex items-center gap-2'>
-                    {getIcon(file.type)}
-                    {file.name}
-                  </TableCell>
-                  <TableCell className='px-4 py-2'>{formatSize(file.size)} </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
-      </div>
+
+      <Table
+        aria-label='Uploaded resumes'
+        bottomContent={
+          <div className='flex w-full justify-center'>
+            <Pagination isCompact showControls showShadow color='primary' page={currentPage} total={totalPages} onChange={setCurrentPage} />
+          </div>
+        }
+        classNames={{ wrapper: "min-h-[222px]" }}>
+        <TableHeader>
+          <TableColumn>FILE</TableColumn>
+          <TableColumn>SIZE</TableColumn>
+        </TableHeader>
+        <TableBody emptyContent={"No resumes found"}>
+          {paginatedFiles.map(({ file }, i) => (
+            <TableRow key={i}>
+              <TableCell className='flex items-center gap-2 font-medium'>
+                {getIcon(file.type)}
+                {file.name}
+              </TableCell>
+              <TableCell>{formatSize(file.size)}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
 
       {uploadingQueue.length > 0 && (
         <div className='fixed bottom-4 right-4 z-50 w-[360px] bg-white border shadow-xl rounded-xl overflow-hidden'>
@@ -252,8 +277,6 @@ export default function UploadFiles() {
                     </button>
                   )}
                 </div>
-
-                {/* ✅ Replaced with NextUI Progress */}
                 <Progress value={progress} showValueLabel size='sm' radius='sm' label={status === "pending" ? "⏳ Waiting" : status === "uploading" ? "🚀 Uploading" : status === "finishing" ? "📦 Finishing..." : status === "error" ? "❌ Failed" : ""} />
               </div>
             ))}
