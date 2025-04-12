@@ -9,7 +9,6 @@ import JobListItemSkeleton from "./components/job.listItem.skeleton";
 import ConfirmDialog from "@/components/ConfirmDialog";
 import DateFormatter from "@/app/utils/DateFormatter";
 import { AiFillEdit, AiOutlineDelete, AiOutlineDiff, AiOutlinePlus, AiOutlineUserAdd } from "react-icons/ai";
-import JobResumes from "./Job-resumes";
 
 export default function Jobs() {
   const [page, setPage] = useState(1);
@@ -18,9 +17,7 @@ export default function Jobs() {
   const [jobs, setJobs] = useState([]);
   const rowsPerPage = 5;
   const [selectedJobId, setSelectedJobId] = useState<string | null>(null);
-  const [selectedJobTitle, setSelectedJobTitle] = useState<string | null>(null);
   const [isDrawerOpen, setDrawerOpen] = useState(false);
-  const [isManageResumeDrawerOpen, setIsManageResumeDrawerOpen] = useState(false);
   const [jobToDelete, setJobToDelete] = useState<string | null>(null);
   const [isConfirmDialogOpen, setConfirmDialogOpen] = useState(false);
   const router = useRouter();
@@ -71,15 +68,9 @@ export default function Jobs() {
     setDrawerOpen(false);
   };
 
-  const handleManageResumeClick = (jobId: string, jobTitle: string) => {
+  const handleManageResumeClick = (jobId: string) => {
     setSelectedJobId(jobId);
-    setSelectedJobTitle(jobTitle);
-    setIsManageResumeDrawerOpen(true);
-  };
-
-  const handleManageResumeCloseDrawer = () => {
-    setSelectedJobId(null);
-    setIsManageResumeDrawerOpen(false);
+    router.push(`/jobs/resume/${jobId}`);
   };
 
   // Delete handlers
@@ -160,7 +151,7 @@ export default function Jobs() {
                         </Button>
                       </Tooltip>
                       <Tooltip content='Manage Resume'>
-                        <Button isIconOnly aria-label='manage' onPress={() => handleManageResumeClick(job.id, job.jobTitle)} size='sm' color='default' variant='faded'>
+                        <Button isIconOnly aria-label='manage' onPress={() => handleManageResumeClick(job.id)} size='sm' color='default' variant='faded'>
                           <AiOutlineDiff />
                         </Button>
                       </Tooltip>
@@ -215,7 +206,6 @@ export default function Jobs() {
             <Pagination color='primary' isCompact showControls showShadow page={page} total={pages} onChange={(page) => setPage(page)} />
 
             <SendInvitationDrawer isOpen={isDrawerOpen} onClose={handleCloseDrawer} jobId={selectedJobId} />
-            {isManageResumeDrawerOpen && selectedJobId && <JobResumes isOpen={isManageResumeDrawerOpen} jobTitle={selectedJobTitle} onClose={handleManageResumeCloseDrawer} jobId={selectedJobId} />}
           </div>
         )}
       </div>

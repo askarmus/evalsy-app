@@ -76,6 +76,7 @@ export const NavbarWrapper = ({ children }: Props) => {
 
         <NavbarContent justify='end' className='w-fit data-[justify=end]:flex-grow-0'>
           <NavbarContent>
+            <NotificationsDropdown />
             <DarkModeSwitch />
             <UserDropdown />
           </NavbarContent>

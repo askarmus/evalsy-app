@@ -20,12 +20,3 @@ export const deleteResume = async (jobId: string, resumeId: string) => {
   const response = await apiClient.delete(`/resume/delete/${jobId}/${resumeId}`);
   return response.data.resumes;
 };
-
-export const processResumeById = async (resumeId: string, jobId: string) => {
-  const response = await apiClient.post("/resume/process-resume", {
-    resumeId,
-    jobId,
-  });
-
-  return response.data.analysis;
-};

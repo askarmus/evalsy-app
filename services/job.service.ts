@@ -34,8 +34,3 @@ export const getJobById = async (jobId: string) => {
   const response = await apiClient.get(`/job/${jobId}`);
   return response.data.data;
 };
-
-export const fetchResumes = async (jobId: string) => {
-  const response = await apiClient.get(`/job/get-resumes/${jobId}`);
-  return response.data.resumes || [];
-};

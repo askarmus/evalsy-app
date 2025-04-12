@@ -7,26 +7,47 @@ import axios from "axios";
 import { Input, Pagination, Progress, Tab, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, Tabs } from "@heroui/react";
 import { Breadcrumb } from "@/components/bread.crumb";
 import { AiFillFileUnknown, AiOutlineCloudUpload, AiOutlineFilePdf, AiOutlineFileWord } from "react-icons/ai";
+import { nanoid } from "nanoid";
+import { useParams } from "next/navigation";
+import { fetchResumes } from "@/services/resume.service";
+import DateFormatter from "@/app/utils/DateFormatter";
+import { truncateText } from "@/app/utils/truncate.text";
 
 type FileProgress = {
   file: File;
-  progress: number; // final mapped progress (0-100)
+  progress: number;
   sourceProgress?: {
-    axios: number; // 0–100 from axios
-    socket: number; // 0–100 from socket
+    axios: number;
+    socket: number;
   };
   status: "pending" | "uploading" | "finishing" | "complete" | "error";
+  url?: string;
+  resumeId?: string;
 };
 
 const allowedTypes = ["application/pdf", "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"];
 
-const PAGE_SIZE = 20;
+const PAGE_SIZE = 10;
 
 export default function UploadFiles() {
   const [files, setFiles] = useState<FileProgress[]>([]);
   const [socket, setSocket] = useState<Socket | null>(null);
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [uploadedResumes, setUploadedResumes] = useState<any[]>([]);
+
+  const { id } = useParams() as { id: string };
+
+  const loadResumes = useCallback(async () => {
+    const result = await fetchResumes(id);
+    setUploadedResumes(result);
+  }, [id]);
+
+  useEffect(() => {
+    if (id) {
+      loadResumes();
+    }
+  }, [id, loadResumes]);
 
   useEffect(() => {
     const socketInstance = io(process.env.NEXT_PUBLIC_BASE_API_URL!, {
@@ -93,25 +114,39 @@ export default function UploadFiles() {
     const filesToUpload = Array.isArray(incoming) ? incoming : [incoming];
     const socketId = await waitForSocketConnection();
 
-    // Add files to UI
+    // Create a file + resumeId pair for each file
+    const filesWithIds = filesToUpload.map((file) => ({
+      file,
+      resumeId: nanoid(),
+    }));
+
+    // Add files to UI with resumeId
     setFiles((prev) => {
       const updated = [...prev];
-      for (const file of filesToUpload) {
+      for (const { file, resumeId } of filesWithIds) {
         const index = updated.findIndex((f) => f.file.name === file.name);
+        const entry: FileProgress = {
+          file,
+          resumeId,
+          progress: 0,
+          status: "uploading",
+        };
         if (index > -1) {
-          updated[index] = { file, progress: 0, status: "uploading" };
+          updated[index] = entry;
         } else {
-          updated.push({ file, progress: 0, status: "uploading" });
+          updated.push(entry);
         }
       }
       return updated;
     });
 
-    // Upload files in parallel
+    // Upload files
     await Promise.all(
-      filesToUpload.map((file) => {
+      filesWithIds.map(({ file, resumeId }) => {
         const formData = new FormData();
         formData.append("files", file);
+        formData.append("resumeId", resumeId);
+        formData.append("jobId", id);
 
         return axios
           .post(`${process.env.NEXT_PUBLIC_BASE_API_URL}/resume/upload`, formData, {
@@ -119,16 +154,15 @@ export default function UploadFiles() {
             withCredentials: true,
             onUploadProgress: (event) => {
               const percent = Math.round((event.loaded * 100) / (event.total || 1));
-              const mapped = Math.floor(percent * 0.5); // 0–50%
+              const mapped = Math.floor(percent * 0.5);
 
               setFiles((prev) =>
                 prev.map((f) =>
-                  f.file.name === file.name
+                  f.resumeId === resumeId
                     ? {
                         ...f,
-                        progress: Math.max(f.progress, mapped), // prevent backward
+                        progress: Math.max(f.progress, mapped),
                         sourceProgress: {
-                          ...f.sourceProgress,
                           axios: percent,
                           socket: f.sourceProgress?.socket ?? 0,
                         },
@@ -139,9 +173,26 @@ export default function UploadFiles() {
               );
             },
           })
+          .then((response) => {
+            const uploadedFile = response.data?.files?.find((f: any) => f.resumeId === resumeId);
+            if (uploadedFile) {
+              setFiles((prev) =>
+                prev.map((f) =>
+                  f.resumeId === resumeId
+                    ? {
+                        ...f,
+                        progress: 100,
+                        status: "complete",
+                        url: uploadedFile.ur,
+                      }
+                    : f
+                )
+              );
+            }
+          })
           .catch((err) => {
             console.error("Upload error", err);
-            setFiles((prev) => prev.map((f) => (f.file.name === file.name ? { ...f, status: "error" } : f)));
+            setFiles((prev) => prev.map((f) => (f.resumeId === resumeId ? { ...f, status: "error" } : f)));
           });
       })
     );
@@ -169,18 +220,42 @@ export default function UploadFiles() {
 
   const uploadingQueue = files.filter((f) => ["pending", "uploading", "finishing", "error"].includes(f.status));
 
-  const filteredFiles = useMemo(() => files.filter((f) => f.status === "complete").filter((f) => f.file.name.toLowerCase().includes(search.toLowerCase())), [files, search]);
+  // Combine uploaded resumes and completed file uploads
+  const combinedResumes = useMemo(() => {
+    const completedUploads = files
+      .filter((f) => f.status === "complete")
+      .map((f) => ({
+        id: nanoid(),
+        resumeId: f.resumeId,
+        jobId: id,
+        name: f.file.name,
+        url: f.url || "", // ✅ This enables download link
+        analysisResults: null,
+        status: "UPLOADED",
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        userId: "",
+      }));
 
-  const paginatedFiles = useMemo(() => {
+    return [...completedUploads, ...uploadedResumes];
+  }, [files, uploadedResumes, id]);
+
+  // Filter combined resumes based on search
+  const filteredResumes = useMemo(() => {
+    return combinedResumes.filter((resume) => resume.name.toLowerCase().includes(search.toLowerCase()));
+  }, [combinedResumes, search]);
+
+  // Paginate filtered resumes
+  const paginatedResumes = useMemo(() => {
     const start = (currentPage - 1) * PAGE_SIZE;
-    return filteredFiles.slice(start, start + PAGE_SIZE);
-  }, [filteredFiles, currentPage]);
+    return filteredResumes.slice(start, start + PAGE_SIZE);
+  }, [filteredResumes, currentPage]);
 
-  const totalPages = Math.ceil(filteredFiles.length / PAGE_SIZE);
+  const totalPages = Math.ceil(filteredResumes.length / PAGE_SIZE);
   const breadcrumbItems = [
     { name: "Dashboard", link: "/" },
-    { name: "Job", link: "" },
-    { name: "Analyzer", link: "" },
+    { name: "Job", link: "/jobs/list" },
+    { name: "Analyzer", link: null },
   ];
 
   const overallProgress = useMemo(() => {
@@ -221,21 +296,25 @@ export default function UploadFiles() {
       )}
 
       <div className='flex justify-between flex-wrap gap-4 items-center'>
-        <Input
-          value={search}
-          onChange={(e) => {
-            setSearch(e.target.value);
-            setCurrentPage(1);
-          }}
-          placeholder='Search files...'
-          classNames={{ input: "w-full", mainWrapper: "w-full" }}
-        />
-        <Tabs variant='solid'>
-          <Tab key='poor' title='Poor' />
-          <Tab key='average' title='Average' />
-          <Tab key='good' title='Good' />
-          <Tab key='verygood' title='Very Good' />
-        </Tabs>
+        <div className='flex flex-row gap-3.5 flex-wrap'>
+          <Input
+            value={search}
+            onChange={(e) => {
+              setSearch(e.target.value);
+              setCurrentPage(1);
+            }}
+            placeholder='Search files...'
+            className='w-full'
+          />
+        </div>
+        <div className='flex flex-row gap-3.5 flex-wrap'>
+          <Tabs variant='solid'>
+            <Tab key='poor' title='Poor' />
+            <Tab key='average' title='Average' />
+            <Tab key='good' title='Good' />
+            <Tab key='verygood' title='Very Good' />
+          </Tabs>
+        </div>
       </div>
 
       <Table
@@ -249,15 +328,28 @@ export default function UploadFiles() {
         <TableHeader>
           <TableColumn>FILE</TableColumn>
           <TableColumn>SIZE</TableColumn>
+          <TableColumn>CREATED ON</TableColumn>
+          <TableColumn>STATUS</TableColumn>
         </TableHeader>
         <TableBody emptyContent={"No resumes found"}>
-          {paginatedFiles.map(({ file }, i) => (
+          {paginatedResumes.map((resume, i) => (
             <TableRow key={i}>
               <TableCell className='flex items-center gap-2 font-medium'>
-                {getIcon(file.type)}
-                {file.name}
+                {getIcon(resume.name.includes(".pdf") ? "application/pdf" : resume.name.includes(".doc") ? "application/msword" : "")}
+                <a
+                  href={resume.url} // Make sure `resume.url` is the direct path to the file
+                  download={resume.name}
+                  className='text-blue-600 hover:underline'>
+                  {truncateText(resume.name, 40)}
+                </a>
               </TableCell>
-              <TableCell>{formatSize(file.size)}</TableCell>
+              <TableCell>
+                {/* Size isn't available in the resume data, you might need to add it to your API response */}
+                N/A
+              </TableCell>
+              <TableCell>{DateFormatter.formatDate(resume.createdAt)}</TableCell>
+
+              <TableCell>{resume.status === "UPLOADED" ? "Uploaded" : resume.status}</TableCell>
             </TableRow>
           ))}
         </TableBody>
