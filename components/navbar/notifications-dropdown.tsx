@@ -1,97 +1,121 @@
 "use client";
 
-import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownSection, DropdownTrigger, NavbarItem } from "@heroui/react";
+import { Dropdown, DropdownItem, DropdownMenu, DropdownSection, DropdownTrigger, NavbarItem } from "@heroui/react";
+import { collection, doc, getDocs, onSnapshot, orderBy, query, updateDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
-import { collection, query, where, onSnapshot, orderBy, getDocs, serverTimestamp, addDoc } from "firebase/firestore";
 import { NotificationIcon } from "../icons/navbar/notificationicon";
 import { db } from "@/config/firebase.config";
 
+type Notification = {
+  id: string;
+  title: string;
+  description: string;
+  read: boolean;
+  createdAt: any;
+};
+
 export const NotificationsDropdown = () => {
-  const [notifications, setNotifications] = useState<any[]>([]);
+  const [notifications, setNotifications] = useState<Notification[]>([]);
   const [animate, setAnimate] = useState(false);
   const [prevCount, setPrevCount] = useState(0);
 
-  const handleAdd = async () => {
-    const notification = {
-      title: "✅ Resume Uploaded",
-      description: "We received your resume and started analysis.",
-      createdAt: serverTimestamp(),
-      read: false,
-      uid: "test-user",
-    };
+  // 🔁 Group unread by title + description
+  const groupedUnread = Object.values(
+    notifications
+      .filter((n) => !n.read)
+      .reduce((acc, curr) => {
+        const key = `${curr.title}-${curr.description}`;
+        if (!acc[key]) {
+          acc[key] = { ...curr, count: 1 };
+        } else {
+          acc[key].count++;
+        }
+        return acc;
+      }, {} as Record<string, Notification & { count: number }>)
+  );
 
-    try {
-      console.log("Trying to insert...");
-      const ref = await addDoc(collection(db, "notifications"), notification);
-      console.log("Document inserted with ID:", ref.id);
-    } catch (error) {
-      console.error("🔥 Firestore error:", error);
+  // 🔔 Badge should show number of groups
+  const unreadGroupCount = groupedUnread.length;
+
+  const markAllAsRead = async () => {
+    const unread = notifications.filter((n) => !n.read);
+    for (const n of unread) {
+      const docRef = doc(db, "resume-process-status", n.id);
+      await updateDoc(docRef, { read: true });
     }
   };
+
   useEffect(() => {
     const fetchData = async () => {
-      const q = collection(db, "notifications"); // no orderBy
+      const q = query(collection(db, "resume-process-status"), orderBy("createdAt", "desc"));
 
-      const snap = await getDocs(q);
-      const items = snap.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-      console.log("Fetched:", items);
-      setNotifications(items);
+      const snapshot = await getDocs(q);
+      const count = snapshot.size;
+
+      console.log("Document count:", count);
+
+      const unsub = onSnapshot(q, (snapshot) => {
+        const newItems = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        })) as Notification[];
+
+        if (newItems.length > prevCount) {
+          setAnimate(true);
+          setTimeout(() => setAnimate(false), 1000);
+        }
+
+        setNotifications(newItems);
+        setPrevCount(newItems.length);
+      });
+
+      return () => unsub();
     };
 
     fetchData();
-  }, []);
-
-  useEffect(() => {
-    // const user = auth.currentUser;
-    // if (!user) return;
-
-    const q = query(collection(db, "notifications"), orderBy("createdAt", "desc"));
-
-    const unsub = onSnapshot(q, (snapshot) => {
-      const newItems = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-
-      if (newItems.length > prevCount) {
-        setAnimate(true);
-        setTimeout(() => setAnimate(false), 1000); // Reset
-      }
-
-      setNotifications(newItems);
-      setPrevCount(newItems.length);
-    });
-
-    return () => unsub();
   }, [prevCount]);
 
   return (
-    <Dropdown placement='bottom-end'>
+    <Dropdown
+      placement='bottom-end'
+      onOpenChange={(open) => {
+        if (open) markAllAsRead();
+      }}>
       <DropdownTrigger>
         <NavbarItem>
-          <NotificationIcon count={notifications.length} animate={animate} />
+          <NotificationIcon count={unreadGroupCount} animate={animate} />
         </NavbarItem>
       </DropdownTrigger>
+
       <DropdownMenu className='w-80' aria-label='User Notifications'>
         <DropdownSection title='Notifications'>
-          {notifications.length > 0 ? (
-            notifications.map((n) => (
-              <DropdownItem
-                key={n.id}
-                classNames={{
-                  base: "py-2",
-                  title: "text-base font-semibold",
-                }}
-                description={n.description}>
-                {n.title}
-              </DropdownItem>
-            ))
-          ) : (
+          {groupedUnread.length === 0 ? (
             <DropdownItem key='none'>
-              <Button color='primary' onPress={handleAdd}>
-                Add Sample Notification
-              </Button>
+              <div className='flex items-center justify-center w-full h-20 text-sm text-gray-500'>No new notifications</div>
             </DropdownItem>
+          ) : (
+            <>
+              {groupedUnread.map((n) => (
+                <DropdownItem
+                  key={`${n.title}-${n.description}`}
+                  classNames={{
+                    base: "py-2",
+                    title: "text-base font-semibold",
+                  }}
+                  description={n.description}>
+                  {n.count > 1 ? `${n.count} ${n.title}s` : n.title}
+                </DropdownItem>
+              ))}
+
+              <DropdownItem
+                key='viewAll'
+                className='text-center text-primary font-medium hover:underline cursor-pointer'
+                onClick={() => {
+                  console.log("Navigate to /notifications or open modal");
+                }}>
+                View All
+              </DropdownItem>
+            </>
           )}
         </DropdownSection>
       </DropdownMenu>
