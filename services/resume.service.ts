@@ -20,3 +20,8 @@ export const deleteResume = async (jobId: string, resumeId: string) => {
   const response = await apiClient.delete(`/resume/delete/${jobId}/${resumeId}`);
   return response.data.resumes;
 };
+
+export const getResume = async (jobId: string, resumeId: string) => {
+  const response = await apiClient.get(`/resume/get/${jobId}/${resumeId}`);
+  return response.data.resume;
+};

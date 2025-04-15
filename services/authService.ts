@@ -1,6 +1,6 @@
-import apiClient, { refreshAccessToken } from "@/helpers/apiClient";
+import apiClient from "@/helpers/apiClient";
+
 import { ResetPasswordFormType, ChangePasswordFormType, ForgetPasswordFormType, LoginFormType, RegisterFormType } from "@/helpers/types";
-import axios, { AxiosError } from "axios";
 
 export const registerUser = async (values: RegisterFormType) => {
   const response = await apiClient.post("/auth/register", values);
@@ -28,24 +28,7 @@ export const loginUser = async (values: LoginFormType) => {
 
   return response.data;
 };
-export const getUser = async () => {
-  try {
-    const { data } = await apiClient.get(`/auth/authme`);
-    return { user: data, error: null };
-  } catch (error: any) {
-    // If token expired, try refreshing
-    if (error?.status === 401) {
-      const refreshed = await refreshAccessToken();
-      if (refreshed) {
-        try {
-          const { data } = await apiClient.get(`/auth/authme`);
-          return { user: data, error: null };
-        } catch (err) {
-          return { user: null, error: err };
-        }
-      }
-    }
-
-    return { user: null, error };
-  }
+export const getCurrentUser = async () => {
+  const res = await apiClient.get("/auth/me");
+  return res.data;
 };

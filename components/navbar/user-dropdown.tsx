@@ -1,27 +1,15 @@
+"use client";
+
 import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, NavbarItem, User } from "@heroui/react";
-import React, { useCallback, useEffect, useState } from "react";
+import { useCallback } from "react";
+import { useAuth } from "@/hooks/useAuth";
 import apiClient from "@/helpers/apiClient";
-import { getUser } from "@/services/authService";
+import { truncateText } from "@/app/utils/truncate.text";
 
 export const UserDropdown = () => {
-  const [user, setUser] = useState({ name: "", initials: "" });
+  const { user, loading } = useAuth();
+  console.log("UserDropdown", user, loading);
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      const data = await getUser();
-
-      // Assuming `user.user.name` exists and you want initials
-      const initials = data.user.name
-        .split(" ")
-        .map((n) => n[0])
-        .join("")
-        .toUpperCase();
-
-      setUser({ name: data.user.name || "", initials });
-    };
-
-    fetchUser();
-  }, []);
   const handleLogout = useCallback(async () => {
     try {
       await apiClient.post("/auth/logout", {}, { withCredentials: true });
@@ -31,6 +19,15 @@ export const UserDropdown = () => {
     }
   }, []);
 
+  const getInitials = (name: string | undefined | null): string => {
+    if (!name) return "U";
+    return name
+      .split(" ")
+      .map((n) => n[0])
+      .join("")
+      .toUpperCase();
+  };
+
   return (
     <Dropdown>
       <NavbarItem>
@@ -38,15 +35,15 @@ export const UserDropdown = () => {
           <User
             className='cursor-pointer'
             avatarProps={{
-              name: user.initials,
+              name: getInitials(user?.name),
               color: "primary",
             }}
             description='Signed in as'
-            name={user.name || "User"}
+            name={!loading ? truncateText(user?.name || "", 15) || "User" : "Loading user......"}
           />
         </DropdownTrigger>
       </NavbarItem>
-      <DropdownMenu aria-label='User menu actions' onAction={(actionKey) => console.log({ actionKey })}>
+      <DropdownMenu aria-label='User menu actions'>
         <DropdownItem key='logout' color='danger' className='text-danger' onPress={handleLogout}>
           Log Out
         </DropdownItem>

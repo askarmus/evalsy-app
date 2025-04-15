@@ -2,7 +2,7 @@
 
 import { LoginSchema } from "@/helpers/schemas";
 import { LoginFormType } from "@/helpers/types";
-import { loginUser } from "@/services/authService";
+import { getCurrentUser, loginUser } from "@/services/authService";
 import { Button, Input } from "@heroui/react";
 import { Formik } from "formik";
 import Link from "next/link";
@@ -26,13 +26,21 @@ export const Login = () => {
 
         const response = await loginUser(values);
 
-        if (response?.user) {
+        // Optional: Check for access/refresh token existence
+        const hasRefreshToken = typeof document !== "undefined" ? document.cookie.includes("refreshToken") : true;
+
+        if (response?.user && hasRefreshToken) {
+          await new Promise((r) => setTimeout(r, 100)); // slight wait for cookie propagation
+
+          await getCurrentUser();
+
           router.replace("/dashboard");
         } else {
-          console.error("Login failed: No user data received");
+          console.error("Login failed: Incomplete token or user data.");
         }
       } catch (error: any) {
-        console.error("Login failed:", error);
+        const message = error?.response?.data?.message || "Login failed. Please try again.";
+        console.error("Login error:", message);
       } finally {
         setSubmitting(false);
       }

@@ -14,7 +14,7 @@ export function Providers({ children, themeProps }: ProvidersProps) {
   return (
     <HeroUIProvider>
       <NextThemesProvider defaultTheme='system' attribute='class' {...themeProps}>
-        <ToastProvider />
+        <ToastProvider placement='top-right' />
 
         {children}
       </NextThemesProvider>

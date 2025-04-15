@@ -1,37 +1,74 @@
-// ✅ FULL COMPONENT: UploadFiles with Retry, Upload Summary, and Row Priority
-
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { io, Socket } from "socket.io-client";
 import axios from "axios";
-import { Button, Card, CardBody, CardHeader, CircularProgress, Input, Pagination, Progress, Tab, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, Tabs } from "@heroui/react";
+import { Button, Input, Pagination, Progress, Tab, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, Tabs, Tooltip } from "@heroui/react";
 import { Breadcrumb } from "@/components/bread.crumb";
-import { AiFillFileUnknown, AiOutlineCloudUpload, AiOutlineFilePdf, AiOutlineFileWord } from "react-icons/ai";
+import { AiFillFileUnknown, AiOutlineCloudUpload, AiOutlineDelete, AiOutlineFilePdf, AiOutlineFileWord, AiOutlineRight } from "react-icons/ai";
 import { nanoid } from "nanoid";
 import { useParams } from "next/navigation";
-import { fetchResumes } from "@/services/resume.service";
+import { deleteResume, fetchResumes, getResume } from "@/services/resume.service";
 import DateFormatter from "@/app/utils/DateFormatter";
 import { truncateText } from "@/app/utils/truncate.text";
 import { useResumeStatus } from "@/context/ResumeStatusContext";
-
+import ResumeStatsGrid from "../components/stats.card";
+import ConfirmDialog from "@/components/ConfirmDialog";
+import { showToast } from "@/app/utils/toastUtils";
+import { FaSearch } from "react-icons/fa";
+import { ResumeAnalyseDrawer } from "../components/resume.analyse.drawer";
+import { getInterviewResultById } from "@/services/interview.service";
 const allowedTypes = ["application/pdf", "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"];
 const PAGE_SIZE = 10;
 
 export default function UploadFiles() {
   const [files, setFiles] = useState<any[]>([]);
+  const [loadingResults, setLoadingResults] = useState<{ [key: string]: boolean }>({});
+  const [selectedResumeData, setSelectedResumeData] = useState<any>(null);
+  const [isDrawerOpen, setDrawerOpen] = useState(false);
   const [socket, setSocket] = useState<Socket | null>(null);
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [uploadedResumes, setUploadedResumes] = useState<any[]>([]);
   const { notifications } = useResumeStatus();
   const { id } = useParams() as { id: string };
+  const [isConfirmDialogOpen, setConfirmDialogOpen] = useState(false);
+  const [jobTitle, setJobTitle] = useState("");
+  const [resumeToDelete, setResumeToDelete] = useState<string | null>(null);
+  const [resumeStats, setResumeStats] = useState({ totalCandidates: 0, avgMatchScore: 0, topCandidatesPercent: 0, rejectedCandidates: 0 });
 
   const loadResumes = useCallback(async () => {
     const result = await fetchResumes(id);
-    setUploadedResumes(result);
+    setUploadedResumes(result.resumes);
+    setResumeStats(result.stats);
+    setJobTitle(result.jobTitle);
   }, [id]);
+
+  const handleDeleteClick = (id: string) => {
+    setResumeToDelete(id);
+    setConfirmDialogOpen(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (resumeToDelete) {
+      try {
+        await deleteResume(id, resumeToDelete);
+        setConfirmDialogOpen(false);
+        setResumeToDelete(null);
+        showToast.success("Resume deleted successfully.");
+        await loadResumes();
+      } catch (error) {
+        console.error("Error deleting interviewer:", error);
+        showToast.error("Failed to delete the resume. Please try again.");
+      }
+    }
+  };
+
+  const handleCancelDelete = () => {
+    setConfirmDialogOpen(false);
+    setResumeToDelete(null);
+  };
 
   useEffect(() => {
     if (notifications.length === 0) return;
@@ -82,7 +119,6 @@ export default function UploadFiles() {
       setUploadedResumes((prev) => prev.map((r) => (r.name === file ? { ...r, progress: 100, status: "uploaded" } : r)));
     });
 
-    // ✅ Proper cleanup function
     return () => {
       socketInstance.disconnect();
     };
@@ -164,15 +200,35 @@ export default function UploadFiles() {
     (accepted: File[]) => {
       const valid = accepted.filter((f) => allowedTypes.includes(f.type));
       const rejected = accepted.filter((f) => !allowedTypes.includes(f.type));
+
       if (rejected.length) alert("❌ Only .pdf, .doc, .docx allowed.");
+
+      const totalAfterUpload = uploadedResumes.length + valid.length;
+      if (totalAfterUpload > 20) {
+        showToast.error("You can upload a maximum of 20 resumes.");
+        return;
+      }
+
       if (valid.length) uploadFiles(valid);
     },
-    [socket]
+    [socket, uploadedResumes]
   );
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop, accept: { "application/pdf": [".pdf"], "application/msword": [".doc"], "application/vnd.openxmlformats-officedocument.wordprocessingml.document": [".docx"] }, multiple: true });
-
   const uploadingResumes = uploadedResumes.filter((r) => r.status === "uploading");
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop,
+    onDropRejected: () => {
+      showToast.error("Only .pdf, .doc, .docx files are allowed.");
+    },
+    accept: {
+      "application/pdf": [".pdf"],
+      "application/msword": [".doc"],
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document": [".docx"],
+    },
+    multiple: true,
+    maxFiles: 20,
+    disabled: uploadedResumes.length >= 20,
+  });
 
   const overallProgress = useMemo(() => {
     if (uploadingResumes.length === 0) return 0;
@@ -181,7 +237,11 @@ export default function UploadFiles() {
   }, [uploadingResumes]);
 
   const filteredResumes = useMemo(() => {
-    return uploadedResumes.filter((resume) => resume.name.toLowerCase().includes(search.toLowerCase()));
+    return uploadedResumes.filter((resume) => {
+      const lowerSearch = search.toLowerCase();
+
+      return resume.name?.toLowerCase().includes(lowerSearch) || resume.analysisResults?.name?.toLowerCase().includes(lowerSearch) || resume.analysisResults?.email?.toLowerCase().includes(lowerSearch) || resume.analysisResults?.phone?.toLowerCase().includes(lowerSearch) || resume.analysisResults?.total_experience?.toString().toLowerCase().includes(lowerSearch) || resume.analysisResults?.relevant_experience?.toString().toLowerCase().includes(lowerSearch) || resume.analysisResults?.match_score?.toString().toLowerCase().includes(lowerSearch) || resume.analysisResults?.education?.degree?.toLowerCase().includes(lowerSearch);
+    });
   }, [uploadedResumes, search]);
 
   const sortedResumes = useMemo(() => {
@@ -201,6 +261,21 @@ export default function UploadFiles() {
 
   const totalPages = Math.ceil(filteredResumes.length / PAGE_SIZE);
 
+  const handleViewDetails = async (resumeId: string) => {
+    setLoadingResults((prev) => ({ ...prev, [resumeId]: true }));
+
+    try {
+      const data = await getResume(id, resumeId);
+      console.log("Resume data:", data);
+      setSelectedResumeData(data);
+      setDrawerOpen(true);
+    } catch (error) {
+      console.error("Error fetching interviewer data:", error);
+    }
+
+    setLoadingResults((prev) => ({ ...prev, [resumeId]: false }));
+  };
+
   return (
     <div className='my-10 px-4 lg:px-6 max-w-[90rem] mx-auto w-full flex flex-col gap-4'>
       <Breadcrumb
@@ -210,68 +285,17 @@ export default function UploadFiles() {
           { name: "Analyzer", link: null },
         ]}
       />
-      <h3 className='text-xl font-semibold'>Resume Analyzer - Senior Software Engineer</h3>
+      <h3 className='text-xl font-semibold mb-5'>Resume Analyzer - {jobTitle}</h3>
+      <ResumeStatsGrid resumeStats={resumeStats} />
 
-      <div className='grid gap-4 md:grid-cols-2 lg:grid-cols-4'>
-        <Card>
-          <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
-            <h1 className='text-sm font-medium'>Total Candidates</h1>
-            <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' className='h-4 w-4 text-muted-foreground'>
-              <path d='M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2' />
-              <circle cx='9' cy='7' r='4' />
-              <path d='M22 21v-2a4 4 0 0 0-3-3.87' />
-              <path d='M16 3.13a4 4 0 0 1 0 7.75' />
-            </svg>
-          </CardHeader>
-          <CardBody>
-            <div className='text-2xl font-bold'>245</div>
-            <p className='text-xs text-muted-foreground'>35% match score or below</p>
-          </CardBody>
-        </Card>
+      <Input value={search} onChange={(e) => setSearch(e.target.value)} labelPlacement='outside' placeholder='Search by name, email, phone, degree...' startContent={<FaSearch className='h-4 w-4 text-muted-foreground' />} type='search' />
 
-        <Card>
-          <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
-            <h1 className='text-sm font-medium'>Average Match Score</h1>
-            <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' className='h-4 w-4 text-muted-foreground'>
-              <path d='M22 12h-4l-3 9L9 3l-3 9H2' />
-            </svg>
-          </CardHeader>
-          <CardBody>
-            <div className='text-2xl font-bold'>72%</div>
-            <p className='text-xs text-muted-foreground'>35% match score or below</p>
-          </CardBody>
-        </Card>
-        <Card>
-          <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
-            <h1 className='text-sm font-medium'>Top Candidates</h1>
-            <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' className='h-4 w-4 text-muted-foreground'>
-              <path d='M22 12h-4l-3 9L9 3l-3 9H2' />
-            </svg>
-          </CardHeader>
-          <CardBody>
-            <div className='text-2xl font-bold'>72%</div>
-            <p className='text-xs text-muted-foreground'>35% match score or below</p>
-          </CardBody>
-        </Card>
-        <Card>
-          <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
-            <h1 className='text-sm font-medium'>Rejected Candidates</h1>
-            <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' className='h-4 w-4 text-muted-foreground'>
-              <path d='M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6' />
-            </svg>
-          </CardHeader>
-          <CardBody>
-            <div className='text-2xl font-bold'>12</div>
-            <p className='text-xs text-muted-foreground'>35% match score or below</p>
-          </CardBody>
-        </Card>
-      </div>
-      <div {...getRootProps()} className={`border-2 border-dashed p-4 rounded-xl text-center cursor-pointer ${isDragActive ? "border-blue-600 bg-blue-50" : "border-gray-400"}`}>
-        <input {...getInputProps()} />
+      <div {...getRootProps()} className={`border-2 border-dashed p-4 rounded-xl text-center cursor-pointer transition-all duration-200 ${isDragActive ? "border-blue-600 bg-blue-50" : uploadingResumes.length > 0 ? "border-gray-300 bg-gray-100 opacity-50 cursor-not-allowed" : "border-gray-400"}`}>
+        <input {...getInputProps()} disabled={uploadingResumes.length > 0} />
         <div className='flex items-center gap-4 justify-center'>
           <AiOutlineCloudUpload className='h-10 w-10 text-muted-foreground' />
           <div className='flex flex-col text-center gap-1'>
-            <h3 className='text-lg font-medium'>{isDragActive ? "Drop your resumes here..." : "Drag & drop resumes here, or click to select"}</h3>
+            <h3 className='text-lg font-medium'>{uploadingResumes.length > 0 ? "Upload in progress..." : isDragActive ? "Drop your resumes here..." : "Drag & drop resumes here, or click to select"}</h3>
             <p className='text-sm text-muted-foreground'>Only .pdf, .doc, .docx allowed</p>
           </div>
         </div>
@@ -294,6 +318,9 @@ export default function UploadFiles() {
           <TableColumn>MATCH %</TableColumn>
           <TableColumn>CREATED</TableColumn>
           <TableColumn align='end'>{""}</TableColumn>
+          <TableColumn align='end' width={5}>
+            {""}
+          </TableColumn>
         </TableHeader>
         <TableBody emptyContent={"No resumes found"}>
           {paginatedResumes.map((resume, i) => (
@@ -311,8 +338,8 @@ export default function UploadFiles() {
               <TableCell>{DateFormatter.formatDate(resume.createdAt)}</TableCell>
               <TableCell align='right' style={{ width: "150px", minWidth: "150px" }}>
                 {resume.status === "processed" ? (
-                  <Button size='sm' color='primary' variant='bordered'>
-                    View Analysis
+                  <Button color='primary' endContent={<AiOutlineRight />} isLoading={loadingResults[resume.resumeId]} onPress={() => handleViewDetails(resume.resumeId)} radius='full' size='sm'>
+                    {loadingResults[resume.resumeId] ? "Loading.." : " View Analysis"}
                   </Button>
                 ) : resume.status === "uploading" ? (
                   <Progress value={resume.progress} size='sm' radius='sm' label={`${resume.progress}%`} />
@@ -324,7 +351,7 @@ export default function UploadFiles() {
                   <Button
                     size='sm'
                     variant='flat'
-                    onClick={() => {
+                    onPress={() => {
                       const fileFromList = files.find((f) => f.resumeId === resume.resumeId)?.file;
                       if (fileFromList) uploadFiles(fileFromList);
                     }}>
@@ -334,10 +361,20 @@ export default function UploadFiles() {
                   resume.status
                 )}
               </TableCell>
+              <TableCell>
+                <Tooltip content='Delete Resume'>
+                  <Button isIconOnly aria-label='Delete' onPress={() => handleDeleteClick(resume.resumeId)} size='sm' color='danger' variant='bordered'>
+                    <AiOutlineDelete />
+                  </Button>
+                </Tooltip>
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
+      <ResumeAnalyseDrawer isOpen={isDrawerOpen} onClose={() => setDrawerOpen(false)} resumeData={selectedResumeData} />
+
+      <ConfirmDialog isOpen={isConfirmDialogOpen} onClose={handleCancelDelete} title='Confirm Deletion' description='Are you sure you want to delete this resume?' onConfirm={handleConfirmDelete} confirmButtonText='Delete' cancelButtonText='Cancel' />
     </div>
   );
 }

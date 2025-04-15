@@ -6,6 +6,7 @@ import { AddInterviewer } from "@/components/interviwers/add.interviewer";
 import { Breadcrumb } from "@/components/bread.crumb";
 import ConfirmDialog from "@/components/ConfirmDialog";
 import { AiFillEdit, AiOutlineDelete, AiOutlinePlus } from "react-icons/ai";
+import { showToast } from "@/app/utils/toastUtils";
 
 export default function InterviewerManagement() {
   const [page, setPage] = useState(1);
@@ -44,19 +45,22 @@ export default function InterviewerManagement() {
   };
 
   const handleDeleteClick = (id: string) => {
-    setInterviewerToDelete(id); // Store the selected interviewer ID
-    setConfirmDialogOpen(true); // Open the confirmation dialog
+    setInterviewerToDelete(id);
+    setConfirmDialogOpen(true);
   };
 
   const handleConfirmDelete = async () => {
     if (interviewerToDelete) {
       try {
-        await deleteInterviewer(interviewerToDelete); // Call the delete API
-        setConfirmDialogOpen(false); // Close the dialog after deletion
-        setInterviewerToDelete(null); // Reset the selected interviewer
-        fetchInterviewers(); // Refresh the list
+        await deleteInterviewer(interviewerToDelete);
+        setInterviewerToDelete(null);
+        fetchInterviewers();
+        showToast.success("Interviewer deleted successfully.");
       } catch (error) {
         console.error("Error deleting interviewer:", error);
+        showToast.error("Failed to delete the interviewer. Please try again.");
+      } finally {
+        setConfirmDialogOpen(false);
       }
     }
   };
