@@ -8,7 +8,7 @@ const nextConfig = {
   async rewrites() {
     return [
       {
-        source: "/api/:path*", // 👈 Any call to /api/* on frontend
+        source: "/:path*", // 👈 Any call to /api/* on frontend
         destination: "https://interview-api-production.up.railway.app/:path*", // 👉 will be proxied to Railway
       },
     ];
