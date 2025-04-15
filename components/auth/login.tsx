@@ -26,10 +26,7 @@ export const Login = () => {
 
         const response = await loginUser(values);
 
-        // Optional: Check for access/refresh token existence
-        const hasRefreshToken = typeof document !== "undefined" ? document.cookie.includes("refreshToken") : true;
-
-        if (response?.user && hasRefreshToken) {
+        if (response?.user) {
           await new Promise((r) => setTimeout(r, 100)); // slight wait for cookie propagation
 
           await getCurrentUser();
