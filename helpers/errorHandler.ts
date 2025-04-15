@@ -10,7 +10,7 @@ export const handleError = (error: any) => {
     // Request was made but no response received
     return {
       status: 0,
-      message: "Network error. Please try again.",
+      message: "Network error. Please try again..",
     };
   } else {
     // Something happened during request setup
