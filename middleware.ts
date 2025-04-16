@@ -1,6 +1,6 @@
 // middleware.ts
 import { NextRequest, NextResponse } from "next/server";
-import { useAuth } from "./hooks/useAuth";
+// import { useAuth } from "./hooks/useAuth";
 
 export function middleware(req: NextRequest) {
   // const token = req.cookies.get("accessToken")?.value || req.headers.get("authorization")?.split(" ")[1];
