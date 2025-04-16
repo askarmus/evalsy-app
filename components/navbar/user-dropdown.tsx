@@ -8,7 +8,6 @@ import { truncateText } from "@/app/utils/truncate.text";
 
 export const UserDropdown = () => {
   const { user, loading } = useAuth();
-  console.log("UserDropdown", user, loading);
 
   const handleLogout = useCallback(async () => {
     try {

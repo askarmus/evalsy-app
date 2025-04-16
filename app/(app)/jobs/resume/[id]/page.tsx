@@ -12,13 +12,13 @@ import { useParams } from "next/navigation";
 import { deleteResume, fetchResumes, getResume } from "@/services/resume.service";
 import DateFormatter from "@/app/utils/DateFormatter";
 import { truncateText } from "@/app/utils/truncate.text";
-import { useResumeStatus } from "@/context/ResumeStatusContext";
 import ResumeStatsGrid from "../components/stats.card";
 import ConfirmDialog from "@/components/ConfirmDialog";
 import { showToast } from "@/app/utils/toastUtils";
 import { FaSearch } from "react-icons/fa";
 import { ResumeAnalyseDrawer } from "../components/resume.analyse.drawer";
-import { getInterviewResultById } from "@/services/interview.service";
+import { collection, query, orderBy, onSnapshot, getDocs, where } from "firebase/firestore";
+import { db } from "@/config/firebase.config";
 const allowedTypes = ["application/pdf", "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"];
 const PAGE_SIZE = 10;
 
@@ -31,7 +31,8 @@ export default function UploadFiles() {
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [uploadedResumes, setUploadedResumes] = useState<any[]>([]);
-  const { notifications } = useResumeStatus();
+  const [notifications, setNotifications] = useState<any[]>([]);
+
   const { id } = useParams() as { id: string };
   const [isConfirmDialogOpen, setConfirmDialogOpen] = useState(false);
   const [jobTitle, setJobTitle] = useState("");
@@ -49,6 +50,30 @@ export default function UploadFiles() {
     setResumeToDelete(id);
     setConfirmDialogOpen(true);
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const q = query(collection(db, "resume-process-status"), where("jobId", "==", id), orderBy("createdAt", "desc"));
+
+      const snapshot = await getDocs(q);
+
+      const count = snapshot.size;
+
+      console.log("Document count:", count);
+
+      const unsub = onSnapshot(q, (snapshot) => {
+        const newItems = snapshot.docs.map((doc) => doc.data());
+
+        setNotifications(newItems);
+
+        console.log("New items:", newItems);
+      });
+
+      return () => unsub();
+    };
+
+    fetchData();
+  }, []);
 
   const handleConfirmDelete = async () => {
     if (resumeToDelete) {
@@ -88,7 +113,7 @@ export default function UploadFiles() {
   }, [id, loadResumes]);
 
   useEffect(() => {
-    const socketInstance = io(process.env.NEXT_PUBLIC_BASE_API_URL!, {
+    const socketInstance = io(process.env.NEXT_PUBLIC_API_URL!, {
       transports: ["websocket"],
       withCredentials: true,
     });
@@ -179,7 +204,7 @@ export default function UploadFiles() {
         formData.append("jobId", id);
 
         return axios
-          .post(`${process.env.NEXT_PUBLIC_BASE_API_URL}/resume/upload`, formData, {
+          .post(`${process.env.NEXT_PUBLIC_API_URL}/resume/upload`, formData, {
             headers: { "x-socket-id": socketId },
             withCredentials: true,
             onUploadProgress: (event) => {
