@@ -23,7 +23,7 @@ export const resetPassword = async (values: ResetPasswordFormType) => {
   return response.data;
 };
 export const loginUser = async (values: LoginFormType) => {
-  const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/login`, values, {
+  const response = await apiClient.post("/auth/login", values, {
     withCredentials: true,
   });
 

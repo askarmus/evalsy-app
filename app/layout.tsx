@@ -3,7 +3,6 @@ import type { Metadata } from "next";
 import { Providers } from "./providers";
 import { fontSans } from "@/config/fonts";
 import clsx from "clsx";
-import { TrackingWrapper } from "@/components/tracking-wrapper";
 import { AuthProvider } from "@/context/AuthContext";
 
 export const metadata: Metadata = {
@@ -15,10 +14,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang='en' suppressHydrationWarning>
       <body className={clsx("font-sans antialiased", fontSans.className, "scroll-smooth")}>
-        <TrackingWrapper />
-
         <Providers>
-          {" "}
           <AuthProvider>{children}</AuthProvider>{" "}
         </Providers>
       </body>
