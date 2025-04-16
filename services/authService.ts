@@ -1,6 +1,7 @@
 import apiClient from "@/helpers/apiClient";
 
 import { ResetPasswordFormType, ChangePasswordFormType, ForgetPasswordFormType, LoginFormType, RegisterFormType } from "@/helpers/types";
+import axios from "axios";
 
 export const registerUser = async (values: RegisterFormType) => {
   const response = await apiClient.post("/auth/register", values);
@@ -22,12 +23,13 @@ export const resetPassword = async (values: ResetPasswordFormType) => {
   return response.data;
 };
 export const loginUser = async (values: LoginFormType) => {
-  const response = await apiClient.post("/auth/login", values, {
-    withCredentials: true, // ✅ Ensures cookies are included
+  const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/login`, values, {
+    withCredentials: true,
   });
 
   return response.data;
 };
+
 export const getCurrentUser = async () => {
   const res = await apiClient.get("/auth/me");
   return res.data;
