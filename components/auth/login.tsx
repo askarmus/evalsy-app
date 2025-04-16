@@ -9,6 +9,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
 import { Logo } from "../logo";
+import { showToast } from "@/app/utils/toastUtils";
 
 export const Login = () => {
   const router = useRouter();
@@ -33,11 +34,11 @@ export const Login = () => {
 
           router.replace("/dashboard");
         } else {
-          console.error("Login failed: Incomplete token or user data.");
+          showToast.error("Login failed: Incomplete token or user data.");
         }
       } catch (error: any) {
-        const message = error?.response?.data?.message || "Login failed. Please try again.";
-        console.error("Login error:", message);
+        console.error("Login error:", error); // log full error
+        showToast.error([401, 404].includes(error?.response?.status) ? "Invalid email or password" : error?.response?.data?.error || "Login failed. Please try again.");
       } finally {
         setSubmitting(false);
       }
@@ -51,7 +52,7 @@ export const Login = () => {
         <div className='flex'>
           <Logo />
         </div>
-        <h2 className='mt-20 text-lg font-semibold '>Sign in to your account</h2>
+        <h2 className='mt-20 text-2xl font-semibold '>Sign in to your account</h2>
         <p className='mt-2 text-sm  '>
           Don’t have an account?{" "}
           <Link href='/register' className='font-medium text-blue-600 hover:underline'>

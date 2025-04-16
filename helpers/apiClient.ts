@@ -1,6 +1,6 @@
 // lib/apiClient.ts
 import axios from "axios";
-import Router from "next/router";
+
 const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
 const apiClient = axios.create({
@@ -9,6 +9,7 @@ const apiClient = axios.create({
   headers: { "Content-Type": "application/json", timezone: userTimeZone },
 });
 
+// Add a custom flag to skip retry logic on public API requests
 export const refreshAccessToken = async () => {
   try {
     await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/refresh-token`, {}, { withCredentials: true });
@@ -24,12 +25,15 @@ apiClient.interceptors.response.use(
     const originalRequest = error.config;
     const status = error.response?.status;
 
-    // Handle token expiration
-    if (status === 401 && !originalRequest._retry && originalRequest.url !== "/auth/refresh-token") {
+    const isPublicRequest = originalRequest?.meta?.public === true;
+
+    if (status === 401 && !isPublicRequest && !originalRequest._retry && originalRequest.url !== "/auth/refresh-token") {
       originalRequest._retry = true;
       const success = await refreshAccessToken();
       if (success) return apiClient(originalRequest);
-      Router.push("/login");
+
+      // Don't redirect in API client - throw an error instead
+      return Promise.reject({ isAuthError: true });
     }
 
     return Promise.reject(error);

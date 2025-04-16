@@ -33,6 +33,9 @@ export const Register = () => {
           router.replace("/login");
         }, 2000);
       } catch (error: any) {
+        const message = error?.response?.data?.error || error?.message;
+
+        showToast.error(message || "Something went wrong.");
       } finally {
         setSubmitting(false);
       }
@@ -46,7 +49,7 @@ export const Register = () => {
         <div className='flex'>
           <Logo />
         </div>
-        <h2 className='mt-20 text-lg font-semibold  '>Sign up for a new account.</h2>
+        <h2 className='mt-20 text-2xl font-semibold  '>Sign up for a new account.</h2>
 
         <div className='mt-2 text-sm  '>
           Already have an account ?{" "}
