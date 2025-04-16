@@ -1,4 +1,5 @@
 import { array, boolean, number, object, ref, string } from "yup";
+import zxcvbn from "zxcvbn";
 
 export const LoginSchema = object().shape({
   email: string().email("This field must be an email").required("Email is required"),
@@ -8,12 +9,17 @@ export const LoginSchema = object().shape({
 export const RegisterSchema = object().shape({
   name: string().required("Name is required"),
   email: string().email("This field must be an email").required("Email is required"),
-  password: string().required("Password is required"),
+  password: string()
+    .required("Password is required")
+    .test("password-strength", "Password must be stronger (at least 'Good')", (value) => {
+      if (!value) return false;
+      const result = zxcvbn(value);
+      return result.score >= 3; // Only allow Good (3) and Strong (4)
+    }),
   confirmPassword: string()
     .required("Confirm password is required")
     .oneOf([ref("password")], "Passwords must match"),
 });
-
 export const ForgetPasswordSchema = object().shape({
   email: string().email("This field must be an email").required("Email is required"),
 });

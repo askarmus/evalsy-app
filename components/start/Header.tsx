@@ -4,12 +4,13 @@ import React from "react";
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure } from "@heroui/react";
 import { Logo } from "@/components/logo";
 import { DarkModeSwitch } from "../navbar/darkmodeswitch";
+import Link from "next/link";
 
 export const Header: React.FC = () => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   return (
-    <header className='py-10'>
+    <header className='py-4 h-full w-full bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-purple-900/10 via-transparent to-transparent'>
       <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
         <nav className='relative z-50 flex justify-between'>
           <div className='flex items-center md:gap-x-12'>
@@ -17,29 +18,28 @@ export const Header: React.FC = () => {
               <Logo />
             </a>
             <div className='hidden md:flex md:gap-x-6'>
-              <a className='inline-block rounded-lg px-2 py-1 text-sm text-slate-700 hover:bg-slate-100 hover:text-slate-900 dark:text-white' href='#features'>
+              <a className='inline-block rounded-lg px-2 py-1 text-lg text-slate-700 hover:bg-slate-100 hover:text-slate-900 dark:text-white' href='#features'>
                 Features
               </a>
-              <a className='inline-block rounded-lg px-2 py-1 text-sm text-slate-700 hover:bg-slate-100 hover:text-slate-900 dark:text-white' href='#testimonials'>
+              <a className='inline-block rounded-lg px-2 py-1 text-lg text-slate-700 hover:bg-slate-100 hover:text-slate-900 dark:text-white' href='#testimonials'>
                 Testimonials
               </a>
-              <a className='inline-block rounded-lg px-2 py-1 text-sm text-slate-700 hover:bg-slate-100 hover:text-slate-900 dark:text-white' href='#pricing'>
+              <a className='inline-block rounded-lg px-2 py-1 text-lg text-slate-700 hover:bg-slate-100 hover:text-slate-900 dark:text-white' href='#pricing'>
                 Pricing
               </a>
             </div>
           </div>
           <div className='flex items-center gap-x-5 md:gap-x-8'>
             <div className='hidden md:block'>
-              <a className='inline-block rounded-lg px-2 py-1 text-sm text-slate-700 hover:bg-slate-100 hover:text-slate-900 dark:text-white' href='/login'>
+              <Link className='inline-block rounded-lg px-2 py-1 text-lg text-slate-700 hover:bg-slate-100 hover:text-slate-900 dark:text-white' href='/login'>
                 Sign in
-              </a>
+              </Link>
             </div>
-            <a className='group inline-flex items-center justify-center rounded-full py-2 px-4 text-sm font-semibold focus:outline-hidden focus-visible:outline-2 focus-visible:outline-offset-2 bg-blue-600 text-white hover:text-slate-100 hover:bg-blue-500 active:bg-blue-800 active:text-blue-100 focus-visible:outline-blue-600' href='/register'>
+            <Link className='group inline-flex items-center justify-center rounded-full py-3 px-5 text-sm font-semibold focus:outline-hidden focus-visible:outline-2 focus-visible:outline-offset-2 bg-blue-600 text-white hover:text-slate-100 hover:bg-blue-500 active:bg-blue-800 active:text-blue-100 focus-visible:outline-blue-600' href='/register'>
               <span>
                 Get started <span className='hidden lg:inline'>today</span>
               </span>
-            </a>
-            <DarkModeSwitch />
+            </Link>
 
             <div className='-mr-1 md:hidden'>
               <button onClick={onOpen} className='relative z-10 flex h-8 w-8 items-center justify-center focus:outline-hidden' type='button'>
