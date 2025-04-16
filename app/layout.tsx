@@ -4,6 +4,7 @@ import { Providers } from "./providers";
 import { fontSans } from "@/config/fonts";
 import clsx from "clsx";
 import { AuthProvider } from "@/context/AuthContext";
+import { GoogleAnalytic } from "@/components/GoogleAnalytic";
 
 export const metadata: Metadata = {
   title: "Evelsy - Simplified Evaluation for Smarter Hiring",
@@ -14,6 +15,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang='en' suppressHydrationWarning>
       <body className={clsx("font-sans antialiased", fontSans.className, "scroll-smooth")}>
+        <GoogleAnalytic />
         <Providers>
           <AuthProvider>{children}</AuthProvider>{" "}
         </Providers>
