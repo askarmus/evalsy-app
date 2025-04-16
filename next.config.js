@@ -5,11 +5,20 @@ const nextConfig = {
   images: {
     domains: ["4acbt7lbir1rsx1d.public.blob.vercel-storage.com"],
   },
-  async rewrites() {
+  async headers() {
     return [
       {
-        source: "/:path*", // 👈 Any call to /api/* on frontend
-        destination: "https://interview-api-production.up.railway.app/:path*", // 👉 will be proxied to Railway
+        source: "/(.*)",
+        headers: [
+          {
+            key: "Access-Control-Allow-Credentials",
+            value: "true",
+          },
+          {
+            key: "Access-Control-Allow-Origin",
+            value: "https://www.evalsy.com",
+          },
+        ],
       },
     ];
   },
