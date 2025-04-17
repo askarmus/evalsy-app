@@ -2,36 +2,36 @@
 
 import React from "react";
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure } from "@heroui/react";
-import { Logo } from "@/components/logo";
-import { DarkModeSwitch } from "../navbar/darkmodeswitch";
+import { LogoDark } from "@/components/logo.dark";
+
 import Link from "next/link";
 
 export const Header: React.FC = () => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   return (
-    <header className='py-4 h-full w-full bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-purple-900/10 via-transparent to-transparent'>
+    <header className='py-4' style={{ backgroundColor: "#0f172a" }}>
       <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
         <nav className='relative z-50 flex justify-between'>
           <div className='flex items-center md:gap-x-12'>
             <a aria-label='Home' href='#'>
-              <Logo />
+              <LogoDark />
             </a>
             <div className='hidden md:flex md:gap-x-6'>
-              <a className='inline-block rounded-lg px-2 py-1 text-lg text-slate-700 hover:bg-slate-100 hover:text-slate-900 dark:text-white' href='#features'>
+              <a className='inline-block rounded-lg px-2 py-1 text-lg text-slate-700 text-white' href='#features'>
                 Features
               </a>
-              <a className='inline-block rounded-lg px-2 py-1 text-lg text-slate-700 hover:bg-slate-100 hover:text-slate-900 dark:text-white' href='#testimonials'>
+              <a className='inline-block rounded-lg px-2 py-1 text-lg text-slate-700 text-white' href='#testimonials'>
                 Testimonials
               </a>
-              <a className='inline-block rounded-lg px-2 py-1 text-lg text-slate-700 hover:bg-slate-100 hover:text-slate-900 dark:text-white' href='#pricing'>
+              <a className='inline-block rounded-lg px-2 py-1 text-lg text-white' href='#pricing'>
                 Pricing
               </a>
             </div>
           </div>
           <div className='flex items-center gap-x-5 md:gap-x-8'>
             <div className='hidden md:block'>
-              <Link className='inline-block rounded-lg px-2 py-1 text-lg text-slate-700 hover:bg-slate-100 hover:text-slate-900 dark:text-white' href='/login'>
+              <Link className='inline-block rounded-lg px-2 py-1 text-lg text-slate-700  text-white' href='/login'>
                 Sign in
               </Link>
             </div>
