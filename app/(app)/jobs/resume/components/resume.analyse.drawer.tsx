@@ -11,7 +11,7 @@ export const ResumeAnalyseDrawer: React.FC<{ isOpen: boolean; onClose: () => voi
     <Drawer isOpen={isOpen} onOpenChange={onClose} size='5xl'>
       <DrawerContent>
         <DrawerHeader>
-          <ResumeHeader name={resumeData?.analysisResults.name} email={resumeData?.analysisResults.email} phone={resumeData?.analysisResults.phone} totalExperience={resumeData?.analysisResults.total_experience} relevantExperience={resumeData?.analysisResults.relevant_experience} />
+          <ResumeHeader name={resumeData?.analysisResults?.contact.name} email={resumeData?.analysisResults?.contact.email} phone={resumeData?.analysisResults.phone} totalExperience={resumeData?.analysisResults.total_experience} relevantExperience={resumeData?.analysisResults.relevant_experience} />
         </DrawerHeader>
         <DrawerBody>
           <div className='min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-200'>

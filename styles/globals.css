@@ -6,6 +6,10 @@ html,
 body {
   padding: 0;
   margin: 0;
+  @apply bg-[#fafafa];
+}
+.dark body {
+  @apply bg-gray-900; /* Or keep it default if you don't want to change */
 }
 
 * {

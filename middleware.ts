@@ -1,4 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
+import { jwtVerify } from "jose";
+
+const JWT_SECRET = process.env.JWT_SECRET!;
+const encoder = new TextEncoder();
+
+async function isTokenValid(token: string): Promise<boolean> {
+  try {
+    const { payload } = await jwtVerify(token, encoder.encode(JWT_SECRET));
+
+    return true;
+  } catch (err) {
+    console.error("❌ Token invalid:", err);
+    return false;
+  }
+}
 
 const protectedRoutes = ["/dashboard", "/company", "/jobs", "/interview"];
 const publicRoutes = ["/login", "/register", "/"];
@@ -6,12 +21,13 @@ const publicRoutes = ["/login", "/register", "/"];
 export default async function middleware(req: NextRequest) {
   const path = req.nextUrl.pathname;
   const token = req.cookies.get("accessToken")?.value;
+  const isValid = token ? await isTokenValid(token) : false;
 
   const isProtectedRoute = protectedRoutes.some((route) => path.startsWith(route));
   const isPublicRoute = publicRoutes.includes(path);
 
   // ✅ Redirect to /login if trying to access a protected route without a token
-  if (isProtectedRoute && !token) {
+  if (isProtectedRoute && !isValid) {
     return NextResponse.redirect(new URL("/login", req.nextUrl));
   }
 
@@ -24,5 +40,5 @@ export default async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!api|_next/static|_next/image|.*\\.(png|jpg|jpeg|svg|ico|webp)$).*)"],
+  matcher: ["/((?!api|_next/static|_next/image|.*\\.(?:png|jpg|jpeg|svg|ico|webp)$).*)"],
 };
