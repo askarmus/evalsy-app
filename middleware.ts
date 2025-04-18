@@ -26,11 +26,6 @@ export default async function middleware(req: NextRequest) {
   const isProtectedRoute = protectedRoutes.some((route) => path.startsWith(route));
   const isPublicRoute = publicRoutes.includes(path);
 
-  // ✅ Redirect to /login if trying to access a protected route without a token
-  if (isProtectedRoute && !isValid) {
-    return NextResponse.redirect(new URL("/login", req.nextUrl));
-  }
-
   // ✅ Redirect to /dashboard if authenticated user tries to access a public route
   if (isPublicRoute && token && !path.startsWith("/dashboard")) {
     return NextResponse.redirect(new URL("/dashboard", req.nextUrl));

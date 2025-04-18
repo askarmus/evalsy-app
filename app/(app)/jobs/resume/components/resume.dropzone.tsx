@@ -29,7 +29,7 @@ const ResumeDropzone: FC<ResumeDropzoneProps> = ({ onDrop, uploadingCount, disab
   });
 
   return (
-    <div {...getRootProps()} className={`border-2 border-dashed p-4 rounded-xl text-center cursor-pointer transition-all duration-200 ${isDragActive ? "border-blue-600 bg-blue-50" : uploadingCount > 0 ? "border-gray-300 bg-gray-100 opacity-50 cursor-not-allowed" : "border-gray-400"}`}>
+    <div {...getRootProps()} className={`border-2 border-dashed p-4 bg-white rounded-xl text-center cursor-pointer transition-all duration-200 ${isDragActive ? "border-blue-600 bg-blue-50" : uploadingCount > 0 ? "border-gray-300 bg-gray-100 opacity-50 cursor-not-allowed" : "border-gray-400"}`}>
       <input {...getInputProps()} disabled={disabled} />
       <div className='flex items-center gap-4 justify-center'>
         <AiOutlineCloudUpload className='h-10 w-10 text-muted-foreground' />

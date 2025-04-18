@@ -1,30 +1,15 @@
-// app/features/resume/utils/resumeFilters.ts
-
-export const filterResumes = (resumes: any[], search: string): any[] => {
+export const filterResumes = (resumes: any[], search: string, filterDate?: Date, selectedRecommendations: string[] = []): any[] => {
   const lowerSearch = search.toLowerCase();
 
+  const isSameDay = (d1: Date, d2: Date) => d1.getFullYear() === d2.getFullYear() && d1.getMonth() === d2.getMonth() && d1.getDate() === d2.getDate();
+
   return resumes.filter((resume) => {
-    return resume.name?.toLowerCase().includes(lowerSearch) || resume.analysisResults?.name?.toLowerCase().includes(lowerSearch) || resume.analysisResults?.email?.toLowerCase().includes(lowerSearch) || resume.analysisResults?.phone?.toLowerCase().includes(lowerSearch) || resume.analysisResults?.total_experience?.toString().toLowerCase().includes(lowerSearch) || resume.analysisResults?.relevant_experience?.toString().toLowerCase().includes(lowerSearch) || resume.analysisResults?.match_score?.toString().toLowerCase().includes(lowerSearch) || resume.analysisResults?.education?.degree?.toLowerCase().includes(lowerSearch);
+    const matchesText = resume.name?.toLowerCase().includes(lowerSearch) || resume.analysisResults?.name?.toLowerCase().includes(lowerSearch) || resume.analysisResults?.email?.toLowerCase().includes(lowerSearch) || resume.analysisResults?.phone?.toLowerCase().includes(lowerSearch) || resume.analysisResults?.total_experience?.toString().toLowerCase().includes(lowerSearch) || resume.analysisResults?.relevant_experience?.toString().toLowerCase().includes(lowerSearch) || resume.analysisResults?.match_score?.toString().toLowerCase().includes(lowerSearch) || resume.analysisResults?.education?.degree?.toLowerCase().includes(lowerSearch);
+
+    const matchesDate = filterDate ? isSameDay(new Date(resume.createdAt), filterDate) : true;
+
+    const matchesRecommendation = selectedRecommendations.length === 0 || selectedRecommendations.includes(resume.analysisResults?.hireRecommendation?.toLowerCase());
+
+    return matchesText && matchesDate && matchesRecommendation;
   });
-};
-
-export const sortResumes = (resumes: any[]): any[] => {
-  const priority: Record<string, number> = {
-    uploading: 2,
-    uploaded: 1,
-    processed: 0,
-  };
-
-  return [...resumes].sort((a, b) => {
-    const aPriority = priority[a.status] ?? -1;
-    const bPriority = priority[b.status] ?? -1;
-    if (aPriority !== bPriority) return bPriority - aPriority;
-
-    return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-  });
-};
-
-export const paginateResumes = (resumes: any[], page: number, pageSize: number): any[] => {
-  const start = (page - 1) * pageSize;
-  return resumes.slice(start, start + pageSize);
 };
