@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { useInterviewStore } from "../stores/useInterviewStore";
+import { Button } from "@heroui/react";
 
 const InterviewTimer: React.FC = () => {
   const { timeLeft, setTimeLeft, phase, duration } = useInterviewStore();
@@ -15,11 +16,9 @@ const InterviewTimer: React.FC = () => {
   }, [timeLeft, phase, setTimeLeft, duration]);
 
   return (
-    <div className='p-4 whitespace-nowrap'>
-      <span className='text-1xl font-semibold font-mono tabular-nums text-right inline-block align-middle'>
-        {Math.floor(Math.max(0, Math.round(timeLeft) / 60))}:{String(Math.max(0, Math.round(timeLeft) % 60)).padStart(2, "0")}
-      </span>
-    </div>
+    <Button color='default' radius='full' size='sm' variant='flat' className='flex items-center gap-2'>
+      {Math.floor(Math.max(0, Math.round(timeLeft) / 60))}:{String(Math.max(0, Math.round(timeLeft) % 60)).padStart(2, "0")}{" "}
+    </Button>
   );
 };
 

@@ -1,47 +1,56 @@
-import { Avatar, Card, CardBody } from "@heroui/react";
+import { Avatar, Chip, Progress } from "@heroui/react";
 import React from "react";
-import { AiOutlineBank, AiOutlineMail, AiOutlineUser } from "react-icons/ai";
 
-const CandidateInfo: React.FC<any> = ({ candidate, job, company }) => {
+const CandidateInfo: React.FC<any> = ({ candidate, job, company, questions, currentQuestion }) => {
   return (
-    <div className='w-full mb-10 px-4 sm:px-6'>
-      <Card shadow='none'>
-        <CardBody>
-          <dl className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6'>
-            {/* Candidate Info */}
-            <div className='flex flex-col'>
-              <div className='flex items-center gap-3'>
-                <Avatar name={candidate.name?.charAt(0) || "C"} className='w-12 h-12 text-lg hidden sm:flex' color='primary' />
-                <div>
-                  <h2 className='text-lg font-semibold'>Hello, {candidate.name}</h2>
-                  <div className='flex items-center text-gray-500 text-sm gap-1'>
-                    <AiOutlineMail className='w-4 h-4' />
-                    <span>{candidate.email}</span>
-                  </div>
-                </div>
-              </div>
+    <div className='p-6  border-b'>
+      <div className='flex flex-col md:flex-row md:items-center justify-between gap-3'>
+        <div className='flex items-center gap-4'>
+          <Avatar name={candidate.name?.charAt(0) || "C"} className='w-12 h-12 text-lg hidden sm:flex' color='primary' />
+          <div>
+            <h2 className='text-xl font-semibold'>{candidate.name}</h2>
+            <div className='flex items-center gap-3 mt-1'>
+              <p className='text-sm  flex items-center gap-1'>{candidate.email}</p>
             </div>
+          </div>
+        </div>
 
-            {/* Interviewing Position */}
-            <div className='flex flex-col'>
-              <p className='text-gray-400 text-sm'>Interviewing Position</p>
-              <div className='flex items-center gap-1 font-semibold'>
-                <AiOutlineUser className='w-4 h-4' />
-                <span>{job.jobTitle}</span>
-              </div>
-            </div>
+        <div className='flex flex-col md:flex-row gap-4 md:items-center'>
+          <div className='flex flex-col'>
+            <span className='text-xs  '>Interviewing Position</span>
+            <Chip size='sm' className='mt-2'>
+              {job.jobTitle}
+            </Chip>
+          </div>
 
-            {/* Company Info */}
-            <div className='flex flex-col'>
-              <p className='text-gray-400 text-sm'>Company</p>
-              <div className='flex items-center gap-1 font-semibold'>
-                <AiOutlineBank className='w-4 h-4' />
-                <span>{company.name}</span>
-              </div>
-            </div>
-          </dl>
-        </CardBody>
-      </Card>
+          <div className='flex flex-col'>
+            <span className='text-xs  '>Company</span>
+            <Chip size='sm' className='mt-2'>
+              {company.name}
+            </Chip>
+          </div>
+        </div>
+      </div>
+
+      {questions && (
+        <div className='mt-3'>
+          <Progress
+            className='w-full'
+            color='default'
+            formatOptions={{
+              style: "percent",
+              unit: "percent",
+              unitDisplay: "long",
+            }}
+            label={`${currentQuestion + 1} of ${questions?.length}`}
+            maxValue={questions?.length}
+            showValueLabel={true}
+            size='sm'
+            value={currentQuestion}
+            valueLabel={`${((currentQuestion / questions?.length) * 100).toFixed(0)}% Completed`}
+          />
+        </div>
+      )}
     </div>
   );
 };

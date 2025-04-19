@@ -82,7 +82,7 @@ export const useInterviewStore = create<InterviewState>()((set, get) => ({
       set({
         phase: data.phase,
         questions: data.questions,
-        currentQuestion: 0,
+        currentQuestion: data.currentQuestion,
         duration: data.duration * 60,
         timeLeft: data.timeLeft * 60,
         company: data.company || {},

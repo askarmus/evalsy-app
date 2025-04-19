@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import { useInterviewStore } from "../stores/useInterviewStore";
 import { Card, CardBody, CardFooter, CardHeader, Switch } from "@heroui/react";
+import { FaReply } from "react-icons/fa";
 
 const UserCamera: React.FC = () => {
   const { isCameraOn, toggleCamera, uploadScreenshot, screenshotInterval } = useInterviewStore();
@@ -55,16 +56,24 @@ const UserCamera: React.FC = () => {
   }, [screenshotInterval]);
 
   return (
-    <Card className='py-4' shadow='sm'>
-      <CardHeader className='pb-0 pt-2 px-4 flex-col items-start'>
-        <p className='text-tiny uppercase font-bold'>Video</p>
-      </CardHeader>
-      <CardBody>
-        {isCameraOn ? <video ref={videoRef} autoPlay playsInline className='w-full aspect-video bg-black rounded-lg' /> : <img src='https://kohansazandegan.com/Content/img/video-placeholder.png' alt='Camera Off' className='w-full aspect-video bg-black rounded-lg' />}
+    <>
+      <div className='flex justify-between items-center'>
+        <div className='flex items-center gap-2'>
+          <div className='h-3 w-3 rounded-full bg-red-500 animate-pulse'></div>
+          <h3 className='font-medium text-sm'> RECORDING </h3>
+        </div>
+      </div>
+      <div className='relative aspect-video bg-black rounded-lg overflow-hidden border border-slate-200 shadow-lg'>
+        <video ref={videoRef} autoPlay playsInline className='absolute inset-0 w-full h-full object-cover' />
 
         <canvas ref={canvasRef} style={{ display: "none" }} />
-      </CardBody>
-    </Card>
+
+        <div className='absolute top-3 right-3 bg-red-500 text-white text-xs px-2 py-1 rounded-full flex items-center gap-1'>
+          <span className='h-2 w-2 rounded-full bg-white animate-pulse text-xs'></span>
+          REC
+        </div>
+      </div>
+    </>
   );
 };
 

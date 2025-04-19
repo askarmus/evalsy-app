@@ -37,9 +37,8 @@ const Welcome: React.FC = () => {
   };
   return (
     <>
-      <InterviewNavbar company={company} />
-      <div className='min-h-screen'>
-        <main className='max-w-7xl mx-auto px-6 py-8'>
+      <div className='min-h-screen flex items-center justify-center'>
+        <div className='w-full max-w-screen-xl mx-auto px-6 py-8'>
           <Card shadow='sm' className='p-8'>
             <CardHeader>
               <CandidateInfo candidate={candidate} company={company} job={job} />
@@ -69,7 +68,7 @@ const Welcome: React.FC = () => {
               </CardBody>
             </Card>
           </Card>
-        </main>
+        </div>
       </div>
     </>
   );
