@@ -111,7 +111,7 @@ export default function Jobs() {
   };
 
   return (
-    <div className='my-10 px-4 lg:px-6 max-w-[90rem] mx-auto w-full flex flex-col gap-4'>
+    <div className='min-h-screen my-10 px-4 lg:px-6 max-w-[90rem] mx-auto w-full flex flex-col gap-4'>
       {/* Breadcrumb Navigation */}
       <Breadcrumb items={breadcrumbItems} />
 

@@ -124,6 +124,8 @@ export default function InterviewerManagement() {
       <div className='max-w-[90rem] mx-auto w-full'>
         <div className=' w-full flex flex-col gap-4'>
           <Table
+            shadow='sm'
+            radius='sm'
             aria-label='Example table with client-side pagination'
             bottomContent={
               <div className='flex w-full justify-center'>

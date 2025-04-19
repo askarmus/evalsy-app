@@ -26,7 +26,7 @@ export const ViewResultDrawer: React.FC<{ isOpen: boolean; onClose: () => void; 
           <Tabs aria-label='Options'>
             <Tab key='Overall Result' title='Overall Result'>
               <EvaluationChart data={interviewerData}></EvaluationChart>
-              <Card shadow='sm' className='p-2 mt-6 w-full'>
+              <Card shadow='sm' radius='sm' className='p-2 mt-6 w-full'>
                 <CardHeader className='text-sm font-semibold'>Feedabck</CardHeader>
                 <CardBody className='  w-full'>
                   <ul className='space-y-3'>

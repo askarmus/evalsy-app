@@ -12,7 +12,7 @@ interface SubscriptionCardProps {
 
 const SubscriptionCard: React.FC<SubscriptionCardProps> = ({ subscription, loadingSubscribe, handleSubscribe }) => {
   return (
-    <Card className='p-4' shadow='sm'>
+    <Card className='p-4' shadow='sm' radius='sm'>
       <CardHeader className='flex flex-col items-start'>
         <h2 className='text-lg font-semibold mb-2'>Base Plan</h2>
         <p className='text-sm text-default-500'>

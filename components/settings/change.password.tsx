@@ -45,7 +45,7 @@ const ChangePassword = () => {
     <Formik initialValues={initialValues} validationSchema={ChangePasswordSchema} onSubmit={handleSubmit}>
       {({ values, errors, touched, handleChange }) => (
         <Form>
-          <Card shadow='sm' className='p-5'>
+          <Card radius='sm' shadow='sm' className='p-5'>
             <CardBody>
               <h1 className='text-xl font-semibold mb-1'>Change Password</h1>
               <p className='text-sm mb-6'>Please note, After updating, you will be logged out and need to log in again.</p>

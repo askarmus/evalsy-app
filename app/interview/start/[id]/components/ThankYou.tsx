@@ -42,7 +42,7 @@ const ThankYou: React.FC = () => {
     <>
       <div className='min-h-screen flex items-center justify-center'>
         <div className='w-full max-w-screen-xl mx-auto px-6 py-8'>
-          <Card className='p-8' shadow='sm'>
+          <Card className='p-8' shadow='sm' radius='sm'>
             <Card className='py-4 text-center' shadow='none'>
               <CardBody className='overflow-visible py-2'>
                 <div className='p-4   rounded-lg max-w-3xl mx-auto'>

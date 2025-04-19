@@ -45,7 +45,7 @@ export default function ResumeStatsGrid({ resumeStats }: Props) {
   return (
     <div className='grid gap-4 md:grid-cols-2 lg:grid-cols-4'>
       {cards.map((card, idx) => (
-        <Card key={idx} className='border bg-white dark:bg-gray-950 shadow-sm hover:shadow-md transition-all'>
+        <Card shadow='sm' radius='sm' key={idx} className='border bg-white dark:bg-gray-950 shadow-sm hover:shadow-md transition-all'>
           <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
             <h1 className='text-xl font-medium text-gray-700 dark:text-gray-200'>{card.title}</h1>
             {card.icon}

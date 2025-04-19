@@ -16,7 +16,7 @@ interface Props {
 
 const SubscriptionDetailsCard: React.FC<Props> = ({ subscription, loadingSubscription }) => {
   return (
-    <Card shadow='sm' className='p-4'>
+    <Card shadow='sm' radius='sm' className='p-4'>
       <CardHeader className='flex flex-col items-start'>
         <h2 className='text-lg font-semibold mb-2'>Subscription Status</h2>
         <p className='text-sm text-default-500'>Active period</p>

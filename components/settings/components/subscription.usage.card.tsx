@@ -33,7 +33,7 @@ export default function SubscriptionUsageCard() {
   }
 
   return (
-    <Card shadow='sm' className='p-4'>
+    <Card shadow='sm' radius='sm' className='p-4'>
       <CardHeader className='flex flex-col items-start'>
         <h2 className='text-lg font-semibold mb-2'>Usage Summary</h2>
         <p className='text-sm text-default-500'>

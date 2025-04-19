@@ -67,7 +67,7 @@ const SubscribePage = () => {
   };
 
   return (
-    <Card shadow='sm' className='p-4 mb-4'>
+    <Card radius='sm' shadow='sm' className='p-4 mb-4'>
       <CardBody>
         <CardHeader className='flex flex justify-end'>
           <Tooltip content='Refresh Subscription Details'>

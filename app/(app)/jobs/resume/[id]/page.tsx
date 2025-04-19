@@ -158,8 +158,7 @@ export default function UploadFiles() {
       <ResumeStatsGrid resumeStats={resumeStats} />
 
       <ResumeDropzone onDrop={onDrop} uploadingCount={uploadingResumes.length} disabled={uploadedResumes.length >= 20 || uploadingResumes.length > 0} />
-
-      <Card>
+      <Card shadow='sm' radius='sm'>
         <CardBody>
           <div className='flex flex-col md:flex-row flex-wrap items-center justify-between gap-4'>
             <div className='flex flex-col md:flex-row flex-wrap items-center gap-4 flex-grow'>

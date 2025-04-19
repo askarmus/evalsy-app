@@ -13,7 +13,7 @@ const EvaluationTable = ({ data }) => {
     setExpandedRow(expandedRow === id ? null : id);
   };
   return (
-    <Card shadow='sm'>
+    <Card shadow='sm' radius='sm'>
       <CardBody>
         <div className='overflow-x-auto'>
           <table className='w-full  '>

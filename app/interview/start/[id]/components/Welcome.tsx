@@ -39,11 +39,11 @@ const Welcome: React.FC = () => {
     <>
       <div className='min-h-screen flex items-center justify-center'>
         <div className='w-full max-w-screen-xl mx-auto px-6 py-8'>
-          <Card shadow='sm' className='p-8'>
+          <Card shadow='sm' radius='sm' className='p-8'>
             <CardHeader>
               <CandidateInfo candidate={candidate} company={company} job={job} />
             </CardHeader>
-            <Card className='py-4' shadow='sm'>
+            <Card className='py-4' shadow='sm' radius='sm'>
               <CardBody className='overflow-visible py-2'>
                 <div className='p-6   rounded-lg max-w-3xl mx-auto'>
                   <h2 className='text-2xl font-bold mb-4 text-center'>Welcome to the Interview!</h2>

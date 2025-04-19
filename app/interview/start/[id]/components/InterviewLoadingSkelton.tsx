@@ -5,7 +5,7 @@ export default function InterviewLoadingSkelton() {
   return (
     <div className='min-h-screen flex items-center justify-center'>
       <main className='w-full max-w-screen-xl mx-auto px-6 py-8'>
-        <Card className='p-8' shadow='sm'>
+        <Card className='p-8' shadow='sm' radius='sm'>
           <CardHeader className='justify-between mb-10'>
             <div className='max-w-[300px] w-full flex items-center gap-3'>
               <div className='w-full flex flex-col gap-2'>

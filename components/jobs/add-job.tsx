@@ -136,7 +136,7 @@ export const AddJob = () => {
                 return (
                   <Tabs aria-label='Options'>
                     <Tab key='job' title='Job'>
-                      <Card shadow='sm' className='p-5'>
+                      <Card shadow='sm' radius='sm' className='p-5'>
                         <CardBody>
                           <div className='grid grid-cols-1 gap-4'>
                             <Input label='Title' size='sm' variant='bordered' value={values.jobTitle} isInvalid={!!errors.jobTitle && !!touched.jobTitle} errorMessage={errors.jobTitle} onChange={handleChange("jobTitle")} />
@@ -175,7 +175,7 @@ export const AddJob = () => {
                             </div>
 
                             <div className='flex w-full flex-wrap md:flex-nowrap gap-4'>
-                              <Table aria-label='Example static collection table'>
+                              <Table shadow='sm' radius='sm' aria-label='Example static collection table'>
                                 <TableHeader>
                                   <TableColumn width={5}>#</TableColumn>
                                   <TableColumn>QUESTIONS</TableColumn>
@@ -249,7 +249,7 @@ export const AddJob = () => {
 
                     <Tab key='criteria' title='Evaluation Criteria'>
                       <p className='text-sm mb-5'>For each question, score the candidate’s response based on key factors:</p>
-                      <Table aria-label='Analysis Criteria Table mb-5'>
+                      <Table shadow='sm' radius='sm' aria-label='Analysis Criteria Table mb-5'>
                         <TableHeader>
                           <TableColumn>Criteria</TableColumn>
                           <TableColumn>Description</TableColumn>

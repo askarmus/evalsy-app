@@ -41,7 +41,7 @@ export const SentInvitationsTable: React.FC<SentInvitationsTableProps> = ({ invi
       <Input placeholder='Search invitations...' value={searchValue} onChange={(e) => setSearchValue(e.target.value)} />
 
       {/* Table */}
-      <Table aria-label='Sent Invitations'>
+      <Table shadow='sm' radius='sm' aria-label='Sent Invitations'>
         <TableHeader>
           <TableColumn>#</TableColumn>
           <TableColumn>Name</TableColumn>

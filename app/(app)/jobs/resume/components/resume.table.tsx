@@ -36,7 +36,7 @@ const ResumeTable: FC<ResumeTableProps> = ({ resumes, files, loadingResults, cur
 
   return (
     <>
-      <Table isVirtualized maxTableHeight={500} rowHeight={40} isHeaderSticky aria-label='Uploaded resumes'>
+      <Table shadow='sm' radius='sm' isVirtualized maxTableHeight={500} rowHeight={40} isHeaderSticky aria-label='Uploaded resumes'>
         <TableHeader>
           <TableColumn>CANDIDATE</TableColumn>
           <TableColumn>CURRENT ROLE</TableColumn>
