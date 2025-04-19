@@ -33,18 +33,20 @@ const InterviewNavigator: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    const playQuestionAudio = async () => {
-      if (audioRef.current) {
-        try {
-          audioRef.current.load();
-          const playPromise = audioRef.current.play();
-          if (playPromise !== undefined) {
-            await playPromise.catch((error) => console.warn("Autoplay blocked:", error));
-          }
-        } catch (error) {
-          console.error("Audio play failed:", error);
-        }
-      }
+    const playQuestionAudio = () => {
+      const audio = audioRef.current;
+      if (!audio) return;
+
+      audio.load(); // Reload to make sure it's fresh
+
+      // Optional: log readyState to debug
+      console.log("Audio readyState before play:", audio.readyState); // Should be >= 2 ideally
+
+      setTimeout(() => {
+        audio.play().catch((error) => {
+          console.warn("Autoplay blocked or failed:", error);
+        });
+      }, 100); // You can adjust this delay if needed
     };
 
     playQuestionAudio();

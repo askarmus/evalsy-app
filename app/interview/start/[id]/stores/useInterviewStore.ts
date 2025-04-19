@@ -81,7 +81,7 @@ export const useInterviewStore = create<InterviewState>()((set, get) => ({
       set({ invitationId: id });
       set({
         phase: data.phase,
-        questions: [],
+        questions: data.questions,
         currentQuestion: 0,
         duration: data.duration * 60,
         timeLeft: data.timeLeft * 60,

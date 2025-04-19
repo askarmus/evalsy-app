@@ -1,7 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { useInterviewStore } from "../stores/useInterviewStore";
 import { Card, CardBody, CardFooter, CardHeader, Switch } from "@heroui/react";
-import { AiOutlineClose } from "react-icons/ai";
 
 const UserCamera: React.FC = () => {
   const { isCameraOn, toggleCamera, uploadScreenshot, screenshotInterval } = useInterviewStore();
@@ -65,9 +64,6 @@ const UserCamera: React.FC = () => {
 
         <canvas ref={canvasRef} style={{ display: "none" }} />
       </CardBody>
-      <CardFooter>
-        <Switch isSelected={isCameraOn} color='primary' size='lg' onValueChange={toggleCamera} thumbIcon={({ isSelected }) => (isSelected ? <AiOutlineClose /> : <AiOutlineClose />)} />
-      </CardFooter>
     </Card>
   );
 };

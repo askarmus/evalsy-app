@@ -8,7 +8,7 @@ import { deleteResume, fetchResumes } from "@/services/resume.service";
 import ResumeStatsGrid from "../components/stats.card";
 import ConfirmDialog from "@/components/ConfirmDialog";
 import { showToast } from "@/app/utils/toastUtils";
-import { FaCross, FaDeaf, FaSearch } from "react-icons/fa";
+import { FaCross, FaSearch } from "react-icons/fa";
 import { ResumeAnalyseDrawer } from "../components/resume.analyse.drawer";
 import ResumeTable from "../components/resume.table";
 import ResumeDropzone from "../components/resume.dropzone";
@@ -31,7 +31,7 @@ export default function UploadFiles() {
   const [resumeToDelete, setResumeToDelete] = useState<string | null>(null);
   const [resumeStats, setResumeStats] = useState({ totalCandidates: 0, avgMatchScore: 0, topCandidatesPercent: 0, rejectedCandidates: 0 });
   const { selectedResumeData, isDrawerOpen, handleViewDetails, closeDrawer, loadingResults } = useResumeDetails(id);
-  // const { notifications } = useResumeNotifications(id);
+  const { notifications } = useResumeNotifications(id);
   const [selectedDate, setSelectedDate] = useState<DateValue | null>(null);
   const [selectedRecommendations, setSelectedRecommendations] = useState<string[]>([]);
 
@@ -67,18 +67,18 @@ export default function UploadFiles() {
     setResumeToDelete(null);
   };
 
-  // useEffect(() => {
-  //   if (notifications.length === 0) return;
+  useEffect(() => {
+    if (notifications.length === 0) return;
 
-  //   setUploadedResumes((prev) => {
-  //     const updated = prev.map((r) => {
-  //       const notification = notifications.find((n) => n.resumeId === r.resumeId);
-  //       if (!notification) return r;
-  //       return { ...r, analysisResults: notification.analysisResults, status: "processed" };
-  //     });
-  //     return updated;
-  //   });
-  // }, [notifications]);
+    setUploadedResumes((prev) => {
+      const updated = prev.map((r) => {
+        const notification = notifications.find((n) => n.resumeId === r.resumeId);
+        if (!notification) return r;
+        return { ...r, analysisResults: notification.analysisResults, status: "processed" };
+      });
+      return updated;
+    });
+  }, [notifications]);
 
   useEffect(() => {
     if (id) loadResumes();
@@ -136,9 +136,6 @@ export default function UploadFiles() {
 
     return filterResumes(uploadedResumes, search, jsDate, selectedRecommendations);
   }, [uploadedResumes, search, selectedDate, selectedRecommendations]);
-
-  // const sortedResumes = useMemo(() => sortResumes(filteredResumes), [filteredResumes]);
-  // const paginatedResumes = useMemo(() => paginateResumes(sortedResumes, currentPage, PAGE_SIZE), [sortedResumes, currentPage]);
 
   const overallProgress = useMemo(() => {
     if (uploadingResumes.length === 0) return 0;
