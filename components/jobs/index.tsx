@@ -97,6 +97,19 @@ export default function Jobs() {
     setJobToDelete(null);
   };
 
+  const getExperienceLevelColor = (level: string) => {
+    switch (level) {
+      case "BEGINNER":
+        return "bg-emerald-100 text-emerald-800";
+      case "EXPERT":
+        return "bg-purple-100 text-purple-800";
+      case "SENIOR":
+        return "bg-amber-100 text-amber-800";
+      default:
+        return "bg-gray-100 text-gray-800";
+    }
+  };
+
   return (
     <div className='my-10 px-4 lg:px-6 max-w-[90rem] mx-auto w-full flex flex-col gap-4'>
       {/* Breadcrumb Navigation */}
@@ -132,12 +145,12 @@ export default function Jobs() {
         {!isLoading && (
           <div className='w-full flex flex-col gap-4'>
             {items.map((job: any) => (
-              <Card key={job.id} className='px-3 py-3'>
+              <Card key={job.id} className='px-3 py-3' shadow='sm' radius='sm'>
                 <CardHeader className='flex justify-between items-center'>
                   {/* Job Title */}
                   <div className='flex gap-5'>
                     <div className='flex flex-col gap-1 items-start justify-center'>
-                      <h4 className='text-xl font-semibold leading-none text-default-600'>{job.jobTitle}</h4>
+                      <h4 className='text-xl font-semibold leading-none  '>{job.jobTitle}</h4>
                     </div>
                   </div>
 
@@ -146,25 +159,25 @@ export default function Jobs() {
                     {/* Action Buttons */}
                     <div className='flex gap-1'>
                       <Tooltip content='Send invitation'>
-                        <Button isIconOnly aria-label='Edit' onPress={() => handleInviteClick(job.id)} size='sm' color='default' variant='faded'>
-                          <AiOutlineUserAdd />
-                        </Button>
+                        <button onClick={() => handleInviteClick(job.id)} className='p-1 text-gray-600 hover:text-black rounded-full' aria-label='Send invitation'>
+                          <AiOutlineUserAdd className='h-5 w-5' />
+                        </button>
                       </Tooltip>
                       <Tooltip content='Manage Resume'>
-                        <Button isIconOnly aria-label='manage' onPress={() => handleManageResumeClick(job.id)} size='sm' color='default' variant='faded'>
-                          <AiOutlineDiff />
-                        </Button>
+                        <button aria-label='manage' className='p-1 text-gray-600 hover:text-black rounded-full' onClick={() => handleManageResumeClick(job.id)}>
+                          <AiOutlineDiff className='h-5 w-5' />
+                        </button>
                       </Tooltip>
                       <Tooltip content='Edit job'>
-                        <Button isIconOnly aria-label='Edit' onPress={() => router.push(`/jobs/edit/${job.id}`)} size='sm' color='default' variant='faded'>
-                          <AiFillEdit />
-                        </Button>
+                        <button aria-label='Edit' className='p-1 text-gray-600 hover:text-black rounded-full' onClick={() => router.push(`/jobs/edit/${job.id}`)}>
+                          <AiFillEdit className='h-5 w-5' />
+                        </button>
                       </Tooltip>
 
                       <Tooltip content='Delete job'>
-                        <Button isIconOnly aria-label='Delete' onPress={() => handleDeleteClick(job.id)} size='sm' color='default' variant='faded'>
-                          <AiOutlineDelete />
-                        </Button>
+                        <button aria-label='Delete' className='p-1 text-gray-600 hover:text-black rounded-full' onClick={() => handleDeleteClick(job.id)}>
+                          <AiOutlineDelete className='h-5 w-5' />
+                        </button>
                       </Tooltip>
                     </div>
                   </div>
@@ -173,19 +186,19 @@ export default function Jobs() {
                 <CardFooter className='gap-6 flex-wrap flex justify-between items-center pt-0'>
                   <div className='flex gap-6 flex-wrap items-center'>
                     <div className='flex gap-1'>
-                      <Chip size='sm' color='default' variant='flat'>
+                      <Chip size='sm' color='default' variant='flat' className={`${getExperienceLevelColor(job.experienceLevel.toUpperCase())}`}>
                         {job.experienceLevel.toUpperCase()}
                       </Chip>
                     </div>
 
                     <div className='flex gap-1'>
-                      <p className='font-semibold text-default-400 text-sm'>{job.totalInvitations}</p>
-                      <p className='text-default-400 text-sm'>Invitations</p>
+                      <p className='font-semibold  text-sm'>{job.totalInvitations}</p>
+                      <p className='  text-sm'>Invitations</p>
                     </div>
 
                     <div className='flex gap-1'>
-                      <p className='text-default-400 text-sm'>Created</p>
-                      <p className='font-semibold text-default-400 text-sm'>{DateFormatter.formatDate(job.createdAt)}</p>
+                      <p className='  text-sm'>Created</p>
+                      <p className='font-semibold  text-sm'>{DateFormatter.formatDate(job.createdAt)}</p>
                     </div>
                   </div>
 

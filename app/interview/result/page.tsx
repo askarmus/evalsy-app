@@ -97,7 +97,7 @@ export default function InterviewResultList() {
       ) : (
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
           {items.map((result: any) => (
-            <Card shadow='sm' key={result.id} className={`rounded-xl shadow-md p-3 w-full border-1 ${getBorderColor(result.overallWeight)}`}>
+            <Card shadow='sm' radius='sm' key={result.id} className={`  p-3 w-full border-1 ${getBorderColor(result.overallWeight)}`}>
               <CardHeader>
                 <div className='flex items-start justify-between w-full'>
                   <div>
@@ -112,20 +112,23 @@ export default function InterviewResultList() {
               </CardHeader>
               <Divider />
               <CardBody>
-                <h3 className='text-lg font-semibold  '>{result?.name}</h3>
-                <p className='text-sm '>{result?.jobTitle}</p>
-              </CardBody>
+                <div className='w-full'>
+                  <div className='flex items-start justify-between w-full'>
+                    <h3 className='text-lg font-semibold'>{result?.name}</h3>
+                  </div>
 
-              <CardFooter>
-                <div className='flex items-start justify-between w-full'>
-                  <div className='text-sm'>{DateFormatter.formatDate(result.statusUpdateAt)}</div>
-                  <div className='text-right'>
-                    <Button color='primary' endContent={<AiOutlineRight />} isLoading={loadingResults[result.id]} onPress={() => handleViewDetails(result.id)} radius='full' size='sm'>
-                      {loadingResults[result.id] ? "Loading.." : "View Result"}
-                    </Button>
+                  <p className='text-sm'>{result?.jobTitle}</p>
+
+                  <div className='flex justify-between items-center mt-1'>
+                    <div className='text-xs'>{DateFormatter.formatDate(result.statusUpdateAt)}</div>
+                    <div>
+                      <Button color='primary' endContent={<AiOutlineRight />} isLoading={loadingResults[result.id]} onPress={() => handleViewDetails(result.id)} radius='full' size='sm'>
+                        {loadingResults[result.id] ? "Loading.." : "View Result"}
+                      </Button>
+                    </div>
                   </div>
                 </div>
-              </CardFooter>
+              </CardBody>
             </Card>
           ))}
         </div>
