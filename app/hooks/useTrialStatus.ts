@@ -28,16 +28,17 @@ export function useTrialStatus() {
     setData((prev) => ({ ...prev, loading: true }));
     try {
       const res = await getTrialStatus();
-
+      const trialData = res; // <--- THIS LINE FIXES IT
+      console.log("Trial data:", trialData); // Log the trial data for debugging
       setData({
         loading: false,
-        isTrialActive: res.isTrialActive,
-        subscriptionActive: res.subscriptionActive,
-        cancelAtPeriodEnd: res.cancelAtPeriodEnd,
-        trialEnd: res.trialEnd ? new Date(res.trialEnd) : null,
-        invites: res.invites,
-        resumes: res.resumes,
-        isCanceled: res.isCanceled,
+        isTrialActive: trialData.isTrialActive,
+        subscriptionActive: trialData.subscriptionActive,
+        cancelAtPeriodEnd: trialData.cancelAtPeriodEnd,
+        trialEnd: trialData.trialEnd ? new Date(trialData.trialEnd) : null,
+        invites: trialData.invites,
+        resumes: trialData.resumes,
+        isCanceled: trialData.isCanceled,
       });
     } catch (error) {
       console.error("Failed to fetch trial status:", error);

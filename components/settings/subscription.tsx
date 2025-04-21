@@ -27,15 +27,17 @@ const SubscribePage = () => {
 
   const { loading: trialStatusLoading, isTrialActive, subscriptionActive, isCanceled, refetch } = useTrialStatus();
 
+  console.log("trialStatusLoading", trialStatusLoading);
+  console.log("loadingSubscription", loadingSubscription);
   const fetchSubscriptionData = useCallback(async () => {
     try {
       setLoadingSubscription(true);
 
       const [statusRes, usageRes] = await Promise.all([getSubscriptionStatus(), getSubscriptionUsage()]);
 
-      const subData = statusRes.date;
+      const subData = statusRes?.date;
 
-      if (subData.status === "no-subscription") {
+      if (!subData || subData.status === "no-subscription") {
         setSubscription(null);
       } else {
         setSubscription({
@@ -44,6 +46,7 @@ const SubscribePage = () => {
           cancelAtPeriodEnd: subData.cancel_at_period_end,
         });
       }
+      console.log("statusRes:", statusRes);
 
       setUsage(usageRes);
     } catch (error) {
@@ -54,8 +57,13 @@ const SubscribePage = () => {
   }, []);
 
   useEffect(() => {
-    if (!trialStatusLoading && subscriptionActive && !isTrialActive) {
-      fetchSubscriptionData();
+    if (!trialStatusLoading) {
+      if (subscriptionActive && !isTrialActive) {
+        fetchSubscriptionData();
+      } else {
+        // no need to fetch, but stop spinner
+        setLoadingSubscription(false);
+      }
     }
   }, [trialStatusLoading, subscriptionActive, isTrialActive, fetchSubscriptionData]);
 

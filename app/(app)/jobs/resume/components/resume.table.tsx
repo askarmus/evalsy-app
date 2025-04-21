@@ -5,6 +5,8 @@ import { FC } from "react";
 import { Button, Pagination, Progress, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, Tooltip } from "@heroui/react";
 import { AiOutlineDelete, AiOutlineRight, AiOutlineDownload } from "react-icons/ai";
 import DateFormatter from "@/app/utils/DateFormatter";
+import NoDataTable from "@/components/shared/no.data.table";
+import { FaFile } from "react-icons/fa";
 
 interface ResumeTableProps {
   resumes: any[];
@@ -49,7 +51,7 @@ const ResumeTable: FC<ResumeTableProps> = ({ resumes, files, loadingResults, cur
             {""}
           </TableColumn>
         </TableHeader>
-        <TableBody emptyContent={"No resumes found"}>
+        <TableBody emptyContent={<NoDataTable icon={<FaFile />} title='No resume available' description='Upload a resume to see it listed here. Once uploaded, your file will appear in this section.' />}>
           {resumes.map((resume, i) => (
             <TableRow key={i}>
               <TableCell>{resume.analysisResults?.candidateName ?? "N/A"}</TableCell>

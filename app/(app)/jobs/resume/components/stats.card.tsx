@@ -47,11 +47,11 @@ export default function ResumeStatsGrid({ resumeStats }: Props) {
       {cards.map((card, idx) => (
         <Card shadow='sm' radius='sm' key={idx} className='border bg-white dark:bg-gray-950 shadow-sm hover:shadow-md transition-all'>
           <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
-            <h1 className='text-xl font-medium text-gray-700 dark:text-gray-200'>{card.title}</h1>
+            <h1 className='text-lg font-medium text-gray-700 dark:text-gray-200'>{card.title}</h1>
             {card.icon}
           </CardHeader>
-          <CardBody>
-            <div className={`text-2xl font-bold ${card.valueClass}`}>{card.value}</div>
+          <CardBody className='mt-0'>
+            <div className={`text-1xl font-bold ${card.valueClass}`}>{card.value}</div>
             {card.subtitle && <p className='text-xs text-gray-500 dark:text-gray-400'>{card.subtitle}</p>}
           </CardBody>
         </Card>

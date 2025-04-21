@@ -108,7 +108,7 @@ export default function TrendAnalyticsChart() {
             </div>
             <div className='space-y-2'>
               <h3 className='text-lg font-medium text-gray-700 dark:text-gray-300'>No data available</h3>
-              <p className='text-gray-500 text-sm max-w-md'>There are no records to display in the chart. Add some data to see your visualization.</p>
+              <p className='text-gray-500 text-sm max-w-md'>There are no records to display in the chart.</p>
             </div>
           </div>
         </div>
