@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import type { ApexOptions } from "apexcharts";
 import { trendByJobSeniority } from "@/services/dashboard.service";
+import { FaChartLine } from "react-icons/fa";
 
 // Dynamically import ApexCharts to avoid SSR issues
 const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
@@ -101,7 +102,15 @@ export default function TrendAnalyticsChart() {
         <Chart options={options} series={series} type='bar' height='100%' />
       ) : (
         <div className='flex items-center justify-center h-full'>
-          <p className='text-gray-500 text-lg font-medium'>No records to show chart for</p>
+          <div className='flex flex-col items-center justify-center h-full p-6 text-center space-y-4  '>
+            <div className='rounded-full  '>
+              <FaChartLine className='h-8 w-8 text-gray-400 dark:text-gray-500' />
+            </div>
+            <div className='space-y-2'>
+              <h3 className='text-lg font-medium text-gray-700 dark:text-gray-300'>No data available</h3>
+              <p className='text-gray-500 text-sm max-w-md'>There are no records to display in the chart. Add some data to see your visualization.</p>
+            </div>
+          </div>
         </div>
       )}
     </div>

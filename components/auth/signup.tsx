@@ -12,7 +12,7 @@ import { Logo } from "../logo";
 import { showToast } from "@/app/utils/toastUtils";
 import zxcvbn from "zxcvbn";
 
-export const Register = () => {
+export const Signup = () => {
   const router = useRouter();
   const [isSubmitting, setSubmitting] = useState(false);
 
@@ -28,7 +28,7 @@ export const Register = () => {
       try {
         setSubmitting(true);
         await registerUser(values);
-        showToast.success("Registration successful! Redirecting to login...");
+        showToast.success("Sign up successful! Redirecting to login...");
         setTimeout(() => {
           router.replace("/login");
         }, 2000);

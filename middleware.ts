@@ -16,7 +16,7 @@ async function isTokenValid(token: string): Promise<boolean> {
 }
 
 const protectedRoutes = ["/dashboard", "/company", "/jobs", "/interview"];
-const publicRoutes = ["/login", "/register", "/"];
+const publicRoutes = ["/login", "/signup", "/"];
 
 export default async function middleware(req: NextRequest) {
   const path = req.nextUrl.pathname;

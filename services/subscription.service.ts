@@ -18,6 +18,12 @@ export const cancelSubscription = async () => {
   return response.data.message;
 };
 
+// Cancel an active subscription
+export const reactivateSubscription = async () => {
+  const response = await apiClient.post("/subscription/reactivate");
+  return response.data.message;
+};
+
 // Get the current status of the subscription
 export const getSubscriptionStatus = async () => {
   const response = await apiClient.get("/subscription/getSubscriptionStatus");
@@ -27,5 +33,10 @@ export const getSubscriptionStatus = async () => {
 // Get subscription usage for metered billing items
 export const getSubscriptionUsage = async () => {
   const response = await apiClient.get("/subscription/getUsageSummary");
+  return response.data.data;
+};
+
+export const getTrialStatus = async () => {
+  const response = await apiClient.get("/subscription/trial-status");
   return response.data.data;
 };

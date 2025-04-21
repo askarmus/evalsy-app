@@ -1,3 +1,4 @@
+import Link from "next/link";
 import React from "react";
 import { AiOutlineCheckCircle } from "react-icons/ai";
 
@@ -32,7 +33,7 @@ export const Pricing = () => {
               <li className='flex'>
                 <AiOutlineCheckCircle className='h-6 w-6 flex-none fill-current stroke-current text-blue-200' />
                 <span className='ml-4'>
-                  <strong>50 Free Invitations</strong> per month
+                  <strong>50 Invitations</strong> per month
                 </span>
               </li>
               <li className='flex'>
@@ -110,12 +111,13 @@ export const Pricing = () => {
         </div>
 
         <div className='mt-10 text-center'>
-          <a className='mt-8 inline-flex items-center justify-center rounded-full bg-slate-700 py-4 px-8   font-medium text-white hover:bg-slate-600 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-700' href='/register'>
-            🔥 Get Started for $20/month
-          </a>
+          <Link className='mt-8 inline-flex items-center justify-center rounded-full bg-green-700 py-4 px-8   font-medium text-white hover:bg-slate-600 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-700' href='/signup'>
+            Try for free
+          </Link>
+          <p className='text-white text-sm mt-3'>Free 14-day trial. No credit card required.</p>
         </div>
 
-        {/* FAQ Section */}
+        {/* FAQ Section
         <div className='mt-12 text-left shadow-md rounded-lg p-6'>
           <h2 className='text-2xl font-semibold text-white'>FAQ</h2>
 
@@ -144,7 +146,7 @@ export const Pricing = () => {
               </p>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     </section>
   );

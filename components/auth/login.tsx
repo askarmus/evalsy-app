@@ -55,8 +55,8 @@ export const Login = () => {
         <h2 className='mt-20 text-2xl font-semibold '>Sign in to your account</h2>
         <p className='mt-2 text-sm  '>
           Don’t have an account?{" "}
-          <Link href='/register' className='font-medium text-blue-600 hover:underline'>
-            Register here
+          <Link href='/signup' className='font-medium text-blue-600 hover:underline'>
+            Signup here
           </Link>{" "}
           for a free trial.
         </p>

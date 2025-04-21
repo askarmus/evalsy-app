@@ -3,6 +3,7 @@
 import React from "react";
 import { useLockedBody } from "../hooks/useBodyLock";
 import { NavbarWrapper } from "../navbar/navbar";
+import TrialBanner from "../shared/trial.banner";
 
 interface Props {
   children: React.ReactNode;
@@ -17,8 +18,10 @@ export const Layout = ({ children }: Props) => {
   };
 
   return (
-    <section className="flex">
-      <NavbarWrapper>{children}</NavbarWrapper>
+    <section>
+      <TrialBanner />
+      <NavbarWrapper />
+      {children}
     </section>
   );
 };

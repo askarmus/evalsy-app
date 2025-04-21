@@ -8,6 +8,7 @@ import { getInterviewResultById } from "@/services/interview.service";
 import { Button, Card, CardBody, Skeleton, Spinner, User } from "@heroui/react";
 import React, { useEffect, useState } from "react";
 import { AiFillEye } from "react-icons/ai";
+import { FaInfoCircle } from "react-icons/fa";
 
 export const RecentInterviews = () => {
   const [results, setResults] = useState<any[]>([]);
@@ -46,7 +47,7 @@ export const RecentInterviews = () => {
   }, []);
 
   return (
-    <Card radius='sm' shadow='sm' className='bg-default-50   px-3'>
+    <Card radius='sm' shadow='sm' className='p-4'>
       <CardBody className='py-5 gap-4'>
         <div className='flex gap-2.5 justify-center'>
           <div className='flex flex-col border-dashed border-2 border-divider py-2 px-6 rounded-xl'>
@@ -112,6 +113,20 @@ export const RecentInterviews = () => {
                   </div>
                 </div>
               ))}
+
+          {results.length === 0 && !loading && (
+            <div className='w-full   mx-auto'>
+              <div className='  p-8 mb-4'>
+                <div className='flex justify-center mb-4'>
+                  <div className='bg-gray-100 p-3 rounded-full'>
+                    <FaInfoCircle className='w-6 h-6 text-gray-500' />
+                  </div>
+                </div>
+                <h3 className='text-lg font-medium mb-2'>No interviews yet</h3>
+                <p className='text-sm mb-4'>You havent participated in any interviews recently. Schedule your first interview to get started.</p>
+              </div>
+            </div>
+          )}
         </div>
         <ViewResultDrawer isOpen={isDrawerOpen} onClose={() => setDrawerOpen(false)} interviewerData={selectedInterviewerData} />
       </CardBody>

@@ -35,7 +35,7 @@ export const Header: React.FC = () => {
                 Sign in
               </Link>
             </div>
-            <Link className='group inline-flex items-center justify-center rounded-full py-3 px-5 text-sm font-semibold focus:outline-hidden focus-visible:outline-2 focus-visible:outline-offset-2 bg-blue-600 text-white hover:text-slate-100 hover:bg-blue-500 active:bg-blue-800 active:text-blue-100 focus-visible:outline-blue-600' href='/register'>
+            <Link className='group inline-flex items-center justify-center rounded-full py-3 px-5 text-sm font-semibold focus:outline-hidden focus-visible:outline-2 focus-visible:outline-offset-2 bg-blue-600 text-white hover:text-slate-100 hover:bg-blue-500 active:bg-blue-800 active:text-blue-100 focus-visible:outline-blue-600' href='/signup'>
               <span>
                 Get started <span className='hidden lg:inline'>today</span>
               </span>
@@ -72,7 +72,7 @@ export const Header: React.FC = () => {
                     <a className='inline-block rounded-lg px-2 py-1 text-sm text-slate-700 hover:bg-slate-100 hover:text-slate-900 dark:text-white' href='/login' onClick={onClose}>
                       Sign in
                     </a>
-                    <a className='group inline-flex items-center justify-center rounded-full py-2 px-4 text-sm font-semibold bg-blue-600 text-white hover:text-slate-100 hover:bg-blue-500 active:bg-blue-800 active:text-blue-100' href='/register' onClick={onClose}>
+                    <a className='group inline-flex items-center justify-center rounded-full py-2 px-4 text-sm font-semibold bg-blue-600 text-white hover:text-slate-100 hover:bg-blue-500 active:bg-blue-800 active:text-blue-100' href='/signup' onClick={onClose}>
                       Get started
                     </a>
                   </nav>

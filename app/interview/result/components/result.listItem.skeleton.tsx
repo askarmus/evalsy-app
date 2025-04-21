@@ -1,6 +1,6 @@
 import { Card, CardBody, CardHeader, Skeleton } from "@heroui/react";
 
-const JobListItemSkeleton = () => {
+const ResultListItemSkeleton = () => {
   return (
     <>
       <Card shadow='sm' radius='sm' className='p-4 w-full'>
@@ -43,4 +43,4 @@ const JobListItemSkeleton = () => {
   );
 };
 
-export default JobListItemSkeleton;
+export default ResultListItemSkeleton;

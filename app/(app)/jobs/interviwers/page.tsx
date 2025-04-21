@@ -129,7 +129,7 @@ export default function InterviewerManagement() {
             aria-label='Example table with client-side pagination'
             bottomContent={
               <div className='flex w-full justify-center'>
-                <Pagination isCompact showControls showShadow color='primary' page={page} total={pages} onChange={(page) => setPage(page)} />
+                <Pagination showControls color='default' size='sm' page={page} total={pages} onChange={(page) => setPage(page)} />
               </div>
             }
             classNames={{

@@ -1,66 +1,29 @@
 "use client";
 
-import { Button, Card, CardBody, CardFooter, CardHeader, Divider } from "@heroui/react";
+import { PricingSubscription } from "@/components/start/PricingSubscription";
+import { Button, Card, CardBody, CardFooter, CardHeader } from "@heroui/react";
 import React from "react";
-import { AiOutlineCheckCircle } from "react-icons/ai";
 
 interface SubscriptionCardProps {
-  subscription: boolean;
+  subscription?: boolean;
   loadingSubscribe: boolean;
   handleSubscribe: () => void;
 }
 
-const SubscriptionCard: React.FC<SubscriptionCardProps> = ({ subscription, loadingSubscribe, handleSubscribe }) => {
+const SubscriptionCard: React.FC<SubscriptionCardProps> = ({ loadingSubscribe, handleSubscribe }) => {
   return (
-    <Card className='p-4' shadow='sm' radius='sm'>
+    <Card className='p-4' shadow='none' radius='sm'>
       <CardHeader className='flex flex-col items-start'>
-        <h2 className='text-lg font-semibold mb-2'>Base Plan</h2>
-        <p className='text-sm text-default-500'>
-          Monthly: <strong> 20$</strong>
-        </p>
+        <h2 className='text-lg font-semibold mb-2'>Start for just $20/month – Unlimited Jobs & Flexible Invitations!</h2>
       </CardHeader>
-      <Divider />
-      <Divider />
+
       <CardBody>
-        <ul role='list' className='mt-4 flex flex-col gap-y-3 text-sm'>
-          <li className='flex'>
-            <AiOutlineCheckCircle className='h-6 w-6 flex-none text-green-600' />
-            <span className='ml-4'>
-              <strong>Unlimited</strong> Job Postings
-            </span>
-          </li>
-          <li className='flex'>
-            <AiOutlineCheckCircle className='h-6 w-6 flex-none text-green-600' />
-            <span className='ml-4'>
-              <strong>50 Free Invitations</strong> per month
-            </span>
-          </li>
-          <li className='flex'>
-            <AiOutlineCheckCircle className='h-6 w-6 flex-none text-green-600' />
-            <span className='ml-4'>Secure Stripe Billing</span>
-          </li>
-          <li className='flex'>
-            <AiOutlineCheckCircle className='h-6 w-6 flex-none text-green-600' />
-            <span className='ml-4'>
-              <strong>$0.10 per extra invite</strong> beyond 50
-            </span>
-          </li>
-          <li className='flex'>
-            <AiOutlineCheckCircle className='h-6 w-6 flex-none text-green-600' />
-            <span className='ml-4'>Auto-billed at the end of the month</span>
-          </li>
-          <li className='flex'>
-            <AiOutlineCheckCircle className='h-6 w-6 flex-none text-green-600' />
-            <span className='ml-4'>Cancel Anytime</span>
-          </li>
-        </ul>
+        <PricingSubscription />
       </CardBody>
       <CardFooter>
-        {!subscription && (
-          <Button type='submit' onPress={handleSubscribe} color='primary' isLoading={loadingSubscribe} className='mt-4'>
-            {loadingSubscribe ? "Redirecting..." : "Subscribe Now"}
-          </Button>
-        )}
+        <Button type='submit' onPress={handleSubscribe} color='primary' isLoading={loadingSubscribe} className='mt-4'>
+          {loadingSubscribe ? "Redirecting..." : "Upgrade Now"}
+        </Button>
       </CardFooter>
     </Card>
   );

@@ -2,14 +2,13 @@ import { Chip } from "@heroui/react";
 import React from "react";
 
 const getBadgeStyle = (percent: number) => {
-  console.log("percent", percent);
-  if (percent >= 0 && percent <= 25) {
+  if (percent <= 25) {
     return { bgColor: "bg-orange-500", text: "Below Average" };
   } else if (percent > 25 && percent <= 50) {
     return { bgColor: "bg-yellow-500", text: "Average" };
   } else if (percent > 50 && percent <= 75) {
     return { bgColor: "bg-blue-500", text: "Good" };
-  } else if (percent > 75 && percent <= 100) {
+  } else if (percent > 75) {
     return { bgColor: "bg-green-500", text: "Excellent" };
   }
 
