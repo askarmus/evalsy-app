@@ -4,7 +4,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import axios from "axios";
-import { Logo } from "@/components/logo";
+import { Logo } from "@/components/shared/logo";
 import apiClient from "@/helpers/apiClient";
 
 type ConfirmStatus = "loading" | "success" | "error";

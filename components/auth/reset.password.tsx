@@ -5,7 +5,7 @@ import { resetPassword } from "@/services/authService";
 import { Button, Input } from "@heroui/react";
 import { Formik } from "formik";
 import { useCallback, useState } from "react";
-import { Logo } from "../logo";
+import { Logo } from "../shared/logo";
 import { ResetPasswordFormType } from "@/helpers/types";
 import { useParams, useRouter } from "next/navigation";
 

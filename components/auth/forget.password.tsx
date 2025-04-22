@@ -8,7 +8,7 @@ import { Formik } from "formik";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
-import { Logo } from "../logo";
+import { Logo } from "../shared/logo";
 
 export const ForgetPassword = () => {
   const router = useRouter();

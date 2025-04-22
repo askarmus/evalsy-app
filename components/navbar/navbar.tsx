@@ -5,7 +5,7 @@ import { UserDropdown } from "./user-dropdown";
 import Link from "next/link";
 import { DarkModeSwitch } from "./darkmodeswitch";
 import { AiOutlineHome, AiOutlineNotification, AiOutlineSetting, AiOutlineShopping, AiOutlineUser } from "react-icons/ai";
-import { Logo } from "../logo";
+import { Logo } from "../shared/logo";
 import { usePathname } from "next/navigation";
 
 export const NavbarWrapper = () => {
