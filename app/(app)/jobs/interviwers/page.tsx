@@ -7,6 +7,8 @@ import { Breadcrumb } from "@/components/bread.crumb";
 import ConfirmDialog from "@/components/ConfirmDialog";
 import { AiFillEdit, AiOutlineDelete, AiOutlinePlus } from "react-icons/ai";
 import { showToast } from "@/app/utils/toastUtils";
+import NoDataTable from "@/components/shared/no.data.table";
+import { FaUserAlt } from "react-icons/fa";
 
 export default function InterviewerManagement() {
   const [page, setPage] = useState(1);
@@ -126,7 +128,6 @@ export default function InterviewerManagement() {
           <Table
             shadow='sm'
             radius='sm'
-            aria-label='Example table with client-side pagination'
             bottomContent={
               <div className='flex w-full justify-center'>
                 <Pagination showControls color='default' size='sm' page={page} total={pages} onChange={(page) => setPage(page)} />
@@ -142,7 +143,7 @@ export default function InterviewerManagement() {
                 {""}
               </TableColumn>
             </TableHeader>
-            <TableBody items={items} isLoading={isLoading} loadingContent={<Spinner />} emptyContent={"No interviewers found"}>
+            <TableBody items={items} isLoading={isLoading} loadingContent={<Spinner />} emptyContent={<NoDataTable icon={<FaUserAlt />} title='No interviewers available' description='Add an interviewer to see them listed here.' />}>
               {(item: any) => (
                 <TableRow key={item.key}>
                   <TableCell>

@@ -154,7 +154,7 @@ export default function UploadFiles() {
           { name: "Analyzer", link: null },
         ]}
       />
-      <h3 className='text-xl font-semibold mb-5'>Resume Analyzer - {jobTitle}</h3>
+      <h3 className='text-xl font-semibold mb-3'>Resume Analyzer - {jobTitle}</h3>
       <ResumeStatsGrid resumeStats={resumeStats} />
 
       <ResumeDropzone onDrop={onDrop} uploadingCount={uploadingResumes.length} disabled={uploadedResumes.length >= 20 || uploadingResumes.length > 0} />
