@@ -127,7 +127,7 @@ export default function InterviewResultList() {
               key='below-average'
               title={
                 <>
-                  <span>Below Average</span>
+                  <span>Below Average </span>
                   <Chip size='sm' variant='faded'>
                     {interviewResults.filter((j: any) => j.overallWeight <= 25).length}
                   </Chip>
@@ -138,7 +138,7 @@ export default function InterviewResultList() {
               key='average'
               title={
                 <>
-                  <span>Average</span>
+                  <span>Average </span>
                   <Chip size='sm' variant='faded'>
                     {
                       interviewResults.filter((j: any) => {
@@ -153,7 +153,7 @@ export default function InterviewResultList() {
               key='good'
               title={
                 <>
-                  <span>Good</span>
+                  <span>Good </span>
                   <Chip size='sm' variant='faded'>
                     {
                       interviewResults.filter((j: any) => {
@@ -168,7 +168,7 @@ export default function InterviewResultList() {
               key='excellent'
               title={
                 <>
-                  <span>Excellent</span>
+                  <span>Excellent </span>
                   <Chip size='sm' variant='faded'>
                     {
                       interviewResults.filter((j: any) => {
