@@ -5,12 +5,12 @@ export const Logo = () => (
   <>
     {/* Light Mode Logo */}
     <Link href='/'>
-      <img src='/final.png' className='max-h-[40px] w-auto dark:hidden' alt='evalsy Logo' />
+      <img src='/final.png' className='max-h-[35px] w-auto dark:hidden' alt='evalsy Logo' />
     </Link>
 
     {/* Dark Mode Logo */}
     <Link href='/'>
-      <img src='/final-dark.png' className='max-h-[40px] w-auto hidden dark:block' alt='evalsy logo' />
+      <img src='/final-dark.png' className='max-h-[35px] w-auto hidden dark:block' alt='evalsy logo' />
     </Link>
   </>
 );
