@@ -149,31 +149,6 @@ const InterviewNavigator: React.FC = () => {
                       Your browser does not support the audio element.
                     </audio>
                   </motion.h3>
-
-                  <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }} className='text-gray-600 dark:text-gray-300'>
-                    Please explain your experience with different .NET frameworks and highlight your areas of expertise...
-                  </motion.p>
-
-                  <div className='bg-blue-50 dark:bg-blue-900 rounded-xl p-4 border border-blue-100 dark:border-blue-700'>
-                    <h4 className='text-sm font-semibold text-blue-700 dark:text-blue-300 mb-3 flex items-center gap-2'>
-                      <FaHireAHelper className='h-4 w-4' />
-                      Tips for a Great Answer:
-                    </h4>
-                    <ul className='text-sm text-blue-700 dark:text-blue-200 space-y-2'>
-                      <li className='flex items-start gap-2'>
-                        <div className='h-5 w-5 rounded-full bg-blue-200 dark:bg-blue-600 text-blue-700 dark:text-white flex items-center justify-center mt-0.5'>1</div>
-                        <span>Mention specific versions you’ve worked with.</span>
-                      </li>
-                      <li className='flex items-start gap-2'>
-                        <div className='h-5 w-5 rounded-full bg-blue-200 dark:bg-blue-600 text-blue-700 dark:text-white flex items-center justify-center mt-0.5'>2</div>
-                        <span>Highlight real-world projects.</span>
-                      </li>
-                      <li className='flex items-start gap-2'>
-                        <div className='h-5 w-5 rounded-full bg-blue-200 dark:bg-blue-600 text-blue-700 dark:text-white flex items-center justify-center mt-0.5'>3</div>
-                        <span>Explain framework preferences.</span>
-                      </li>
-                    </ul>
-                  </div>
                 </div>
               </div>
 
