@@ -5,6 +5,7 @@ import { Card, CardBody, CardHeader } from "@heroui/react";
 import CandidateInfo from "./CandidateInfo";
 import { motion } from "framer-motion";
 import { FaCheckCircle } from "react-icons/fa";
+import PoweredBy from "./PoweredBy";
 
 const ThankYou: React.FC = () => {
   const { setPhase, candidate, company, job } = useInterviewStore();
@@ -59,8 +60,8 @@ const ThankYou: React.FC = () => {
                       </div>
                     </motion.h1>
 
-                    <motion.p initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.7, duration: 0.5 }} className='text-slate-600 max-w-xl mx-auto mb-8'>
-                      <div className='text-lg leading-relaxed  text-center  mt-4'>
+                    <motion.p initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.7, duration: 0.5 }} className=' max-w-xl mx-auto mb-8'>
+                      <div className='text-lg    text-center  mt-4'>
                         <div>{company.thankYouMessage}</div>
                       </div>
                     </motion.p>
@@ -75,6 +76,8 @@ const ThankYou: React.FC = () => {
               </CardBody>
             </Card>
           </Card>
+
+          <PoweredBy />
         </div>
       </div>
     </>

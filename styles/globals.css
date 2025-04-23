@@ -5,12 +5,10 @@
 html,
 html,
 body {
-  @apply min-h-screen bg-[#fafafa] text-black m-0 p-0;
 }
 
 .dark html,
 .dark body {
-  @apply bg-gray-900 text-white;
 }
 
 * {

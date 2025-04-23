@@ -184,7 +184,7 @@ export default function Jobs() {
             />
           </Tabs>
 
-          <Button color='primary' onPress={() => router.push("/jobs/add")} endContent={<AiOutlinePlus />}>
+          <Button color='primary' size='sm' onPress={() => router.push("/jobs/add")} endContent={<AiOutlinePlus />}>
             Add New
           </Button>
         </div>
@@ -236,19 +236,19 @@ export default function Jobs() {
                               </Tooltip>
 
                               <Tooltip content='Send invitation'>
-                                <button onClick={() => handleInviteClick(job.id)} className='p-1 text-gray-600 hover:text-black rounded-full' aria-label='Send invitation'>
+                                <button onClick={() => handleInviteClick(job.id)} className='p-1 text-gray-600 hover:text-black rounded-full dark:text-gray-300 dark:hover:text-white' aria-label='Send invitation'>
                                   <AiOutlineUserAdd className='h-5 w-5' />
                                 </button>
                               </Tooltip>
 
                               <Tooltip content='Edit job'>
-                                <button aria-label='Edit' className='p-1 text-gray-600 hover:text-black rounded-full' onClick={() => router.push(`/jobs/edit/${job.id}`)}>
+                                <button aria-label='Edit' className='p-1 text-gray-600 hover:text-black rounded-full dark:text-gray-300 dark:hover:text-white' onClick={() => router.push(`/jobs/edit/${job.id}`)}>
                                   <AiFillEdit className='h-5 w-5' />
                                 </button>
                               </Tooltip>
 
                               <Tooltip content='Delete job'>
-                                <button aria-label='Delete' className='p-1 text-gray-600 hover:text-black rounded-full' onClick={() => handleDeleteClick(job.id)}>
+                                <button aria-label='Delete' className='p-1 text-gray-600 hover:text-black rounded-full dark:text-gray-300 dark:hover:text-white' onClick={() => handleDeleteClick(job.id)}>
                                   <AiOutlineDelete className='h-5 w-5' />
                                 </button>
                               </Tooltip>

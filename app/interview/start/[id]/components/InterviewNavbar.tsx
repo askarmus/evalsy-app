@@ -1,13 +1,10 @@
 import React, { useState } from "react";
-import Image from "next/image";
-import { DarkModeSwitch } from "@/components/navbar/darkmodeswitch";
-import { Button, Divider, Navbar, NavbarBrand, NavbarContent, NavbarItem } from "@heroui/react";
+import { Button, Divider } from "@heroui/react";
 import InterviewTimer from "./InterviewTimer";
 import { useInterviewStore } from "../stores/useInterviewStore";
 import ConfirmDialog from "@/components/ConfirmDialog";
-import { FaChair } from "react-icons/fa";
 
-const InterviewNavbar: React.FC<any> = ({ company }) => {
+const InterviewNavbar: React.FC<any> = ({ company, hideTimer = false }) => {
   const { phase, endInterview, isLoading } = useInterviewStore();
   const [isConfirmDialogOpen, setConfirmDialogOpen] = useState(false);
 
@@ -34,17 +31,19 @@ const InterviewNavbar: React.FC<any> = ({ company }) => {
         <div className=' max-w-[100px] truncate text-xl font-semibold tracking-[-1px]   md:max-w-[200px] mf:text-[34px]/[58px] lg:max-w-[360px]'>{company?.name}</div>
         <Divider orientation='vertical' className='h-8 mr-2 ml-2' />
         <div className=' max-w-md mx-auto'>
-          <h2 className='text-xs font-bold text-gray-800 mb-0'>Round One</h2>
-          <p className='text-sm text-gray-600'>Technical Interview</p>
+          <h2 className='text-xs font-bold  mb-0'>Round One</h2>
+          <p className='text-sm  '>Technical Interview</p>
         </div>
       </div>
 
       <div className='flex items-center gap-2'>
-        <InterviewTimer />
         {phase === "in-progress" && (
-          <Button onPress={handleEndClick} isDisabled={isLoading} isLoading={isLoading} color='danger' size='sm' variant='flat' radius='full'>
-            End Interview
-          </Button>
+          <>
+            <InterviewTimer />
+            <Button onPress={handleEndClick} isDisabled={isLoading} isLoading={isLoading} color='danger' size='sm' variant='flat' radius='full'>
+              End Interview
+            </Button>
+          </>
         )}
       </div>
       <ConfirmDialog isOpen={isConfirmDialogOpen} onClose={handleCancelEnd} title='End Interview' description='Are you sure you want to end the interview?' onConfirm={handleConfirmEnd} confirmButtonText='End' cancelButtonText='Cancel' />

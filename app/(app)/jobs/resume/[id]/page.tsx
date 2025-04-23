@@ -1,14 +1,14 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Button, Card, CardBody, Checkbox, CheckboxGroup, Chip, DatePicker, DateValue, Divider, Input, Progress, Tab, Tabs } from "@heroui/react";
+import { Button, Card, CardBody, Checkbox, CheckboxGroup, DatePicker, DateValue, Input, Progress } from "@heroui/react";
 import { Breadcrumb } from "@/components/bread.crumb";
 import { useParams } from "next/navigation";
 import { deleteResume, fetchResumes } from "@/services/resume.service";
 import ResumeStatsGrid from "../components/stats.card";
 import ConfirmDialog from "@/components/ConfirmDialog";
 import { showToast } from "@/app/utils/toastUtils";
-import { FaCross, FaRegWindowMinimize, FaSearch } from "react-icons/fa";
+import { FaCross, FaSearch } from "react-icons/fa";
 import { ResumeAnalyseDrawer } from "../components/resume.analyse.drawer";
 import ResumeTable from "../components/resume.table";
 import ResumeDropzone from "../components/resume.dropzone";
@@ -34,7 +34,6 @@ export default function UploadFiles() {
   const { notifications } = useResumeNotifications(id);
   const [selectedDate, setSelectedDate] = useState<DateValue | null>(null);
   const [selectedRecommendations, setSelectedRecommendations] = useState<string[]>([]);
-  const [selectedTab, setSelectedTab] = useState<"valid" | "invalid">("valid");
 
   const loadResumes = useCallback(async () => {
     const result = await fetchResumes(id);
@@ -135,16 +134,8 @@ export default function UploadFiles() {
   const filteredResumes = useMemo(() => {
     const jsDate = selectedDate ? new Date(selectedDate.year, selectedDate.month - 1, selectedDate.day) : undefined;
 
-    let filtered = filterResumes(uploadedResumes, search, jsDate, selectedRecommendations);
-
-    if (selectedTab === "valid") {
-      filtered = filtered.filter((r) => r.analysisResults?.validityStatus === true);
-    } else if (selectedTab === "invalid") {
-      filtered = filtered.filter((r) => r.analysisResults?.validityStatus === false);
-    }
-
-    return filtered;
-  }, [uploadedResumes, search, selectedDate, selectedRecommendations, selectedTab]);
+    return filterResumes(uploadedResumes, search, jsDate, selectedRecommendations);
+  }, [uploadedResumes, search, selectedDate, selectedRecommendations]);
 
   const overallProgress = useMemo(() => {
     if (uploadingResumes.length === 0) return 0;
@@ -163,7 +154,7 @@ export default function UploadFiles() {
           { name: "Analyzer", link: null },
         ]}
       />
-      <h3 className='text-xl font-semibold mb-3'>Resume Analyzer - {jobTitle}</h3>
+      <h3 className='text-xl font-semibold mb-5'>Resume Analyzer - {jobTitle}</h3>
       <ResumeStatsGrid resumeStats={resumeStats} />
 
       <ResumeDropzone onDrop={onDrop} uploadingCount={uploadingResumes.length} disabled={uploadedResumes.length >= 20 || uploadingResumes.length > 0} />
@@ -171,68 +162,33 @@ export default function UploadFiles() {
         <CardBody>
           <div className='flex flex-col md:flex-row flex-wrap items-center justify-between gap-4'>
             <div className='flex flex-col md:flex-row flex-wrap items-center gap-4 flex-grow'>
-              <Input size='sm' value={search} onChange={(e) => setSearch(e.target.value)} labelPlacement='outside' placeholder='Search by name, role, hire rec., degree...' startContent={<FaSearch className='h-4 w-4 text-muted-foreground' />} type='search' className='w-64' />
+              <Input value={search} onChange={(e) => setSearch(e.target.value)} labelPlacement='outside' placeholder='Search by name, email, phone, degree...' startContent={<FaSearch className='h-4 w-4 text-muted-foreground' />} type='search' className='w-full md:w-1/3' />
 
               <DatePicker
-                size='sm'
                 endContent={
                   selectedDate && (
                     <Button variant='light' isIconOnly onPress={() => setSelectedDate(null)} aria-label='Clear date'>
-                      x
+                      <FaCross className='w-4 h-4 text-gray-500' />
                     </Button>
                   )
                 }
                 variant='bordered'
                 labelPlacement='outside'
-                className='w-30'
+                className='w-full md:w-1/4'
                 onChange={(date) => setSelectedDate(date)}
                 placeholder='Select a date'
                 value={selectedDate}
               />
 
-              <CheckboxGroup size='sm' value={selectedRecommendations} onValueChange={setSelectedRecommendations} orientation='horizontal' className='flex gap-2'>
+              <CheckboxGroup value={selectedRecommendations} onValueChange={setSelectedRecommendations} orientation='horizontal' className='flex gap-2'>
                 <Checkbox value='strong'>Strong</Checkbox>
                 <Checkbox value='weak'>Weak</Checkbox>
                 <Checkbox value='conditional'>Conditional</Checkbox>
               </CheckboxGroup>
-              <Divider orientation='vertical' className='h-5' />
-              <Tabs
-                key='tabs'
-                aria-label='Tabs sizes'
-                size='sm'
-                selectedKey={selectedTab}
-                onSelectionChange={(key) => {
-                  if (key === "valid" || key === "invalid") {
-                    setSelectedTab(key);
-                  }
-                }}>
-                <Tab
-                  key='valid'
-                  title={
-                    <>
-                      <span>Valid Resume </span>
-                      <Chip size='sm' variant='faded' color='success'>
-                        {uploadedResumes.filter((r) => r.analysisResults?.validityStatus === true).length}
-                      </Chip>
-                    </>
-                  }
-                />
-                <Tab
-                  key='invalid'
-                  title={
-                    <>
-                      <span>Invalid Resume </span>
-                      <Chip size='sm' variant='faded' color='danger'>
-                        {uploadedResumes.filter((r) => r.analysisResults?.validityStatus === false).length}
-                      </Chip>
-                    </>
-                  }
-                />
-              </Tabs>
             </div>
 
             <Button size='sm' variant='ghost' onPress={clearFilters} className='self-start md:self-auto'>
-              Clear
+              Clear Filters
             </Button>
           </div>
         </CardBody>

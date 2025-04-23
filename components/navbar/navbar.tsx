@@ -15,13 +15,13 @@ export const NavbarWrapper = () => {
     <Navbar
       position='sticky'
       isBordered
-      className='w-full'
+      className='w-full bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100'
       classNames={{
-        wrapper: "w-full max-w-full color-line",
+        wrapper: "w-full max-w-full border-b border-gray-200 dark:border-gray-700",
       }}>
       <NavbarContent className='pr-3' justify='center'>
         <NavbarBrand>
-          <Link className='flex items-center text-default-800 hover:text-blue-900 gap-2' href='/dashboard'>
+          <Link className='flex items-center text-default-800 dark:text-gray-100 hover:text-blue-900 dark:hover:text-blue-400 gap-2' href='/dashboard'>
             <Logo />
           </Link>
         </NavbarBrand>
@@ -29,35 +29,35 @@ export const NavbarWrapper = () => {
 
       <NavbarContent className='hidden sm:flex gap-4' justify='center'>
         <NavbarItem isActive={currentPath === "/dashboard"}>
-          <Link className='flex items-center text-md text-default-800 hover:text-blue-900 gap-2' href='/dashboard'>
+          <Link className='flex items-center text-md text-default-800 dark:text-gray-100 hover:text-blue-900 dark:hover:text-blue-400 gap-2' href='/dashboard'>
             <AiOutlineHome />
             Dashboard
           </Link>
         </NavbarItem>
 
         <NavbarItem isActive={currentPath === "/jobs/list"}>
-          <Link className='flex items-center text-md text-default-800 hover:text-blue-900 gap-2' href='/jobs/list'>
+          <Link className='flex items-center text-md text-default-800 dark:text-gray-100 hover:text-blue-900 dark:hover:text-blue-400 gap-2' href='/jobs/list'>
             <AiOutlineShopping />
             Interview
           </Link>
         </NavbarItem>
 
         <NavbarItem isActive={currentPath === "/interview/result"}>
-          <Link className='flex items-center text-md text-default-800 hover:text-blue-900 gap-2' href='/interview/result'>
+          <Link className='flex items-center text-md text-default-800 dark:text-gray-100 hover:text-blue-900 dark:hover:text-blue-400 gap-2' href='/interview/result'>
             <AiOutlineNotification />
             Result
           </Link>
         </NavbarItem>
 
         <NavbarItem isActive={currentPath === "/company/settings"}>
-          <Link className='flex items-center text-md text-default-800 hover:text-blue-900 gap-2' href='/company/settings'>
+          <Link className='flex items-center text-md text-default-800 dark:text-gray-100 hover:text-blue-900 dark:hover:text-blue-400 gap-2' href='/company/settings'>
             <AiOutlineSetting />
             Settings
           </Link>
         </NavbarItem>
 
         <NavbarItem isActive={currentPath === "/jobs/interviwers"}>
-          <Link className='flex items-center text-md text-default-800 hover:text-blue-900 gap-2' href='/jobs/interviwers'>
+          <Link className='flex items-center text-md text-default-800 dark:text-gray-100 hover:text-blue-900 dark:hover:text-blue-400 gap-2' href='/jobs/interviwers'>
             <AiOutlineUser />
             Interviewers
           </Link>
@@ -70,7 +70,6 @@ export const NavbarWrapper = () => {
 
       <NavbarContent justify='end' className='w-fit data-[justify=end]:flex-grow-0'>
         <NavbarContent>
-          {/* <NotificationsDropdown /> */}
           <DarkModeSwitch />
           <UserDropdown />
         </NavbarContent>

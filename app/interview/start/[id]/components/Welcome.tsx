@@ -39,12 +39,12 @@ const Welcome: React.FC = () => {
   return (
     <>
       <div className='min-h-screen flex items-center justify-center'>
-        <div className='w-full max-w-screen-xl mx-auto px-6 py-8'>
+        <div className='w-full max-w-screen-lg mx-auto px-6 py-8'>
           <InterviewNavbar company={company} />
 
-          <Card shadow='sm' radius='sm' className='p-8 mt-6'>
+          <Card shadow='sm' radius='sm' className='p-6 mt-6'>
             <CardHeader>
-              <CandidateInfo candidate={candidate} company={company} job={job} />
+              <CandidateInfo candidate={candidate} company={company} job={job} addTopPadding={false} />
             </CardHeader>
             <Card className='py-4' shadow='none' radius='none'>
               <CardBody className='overflow-visible py-2'>

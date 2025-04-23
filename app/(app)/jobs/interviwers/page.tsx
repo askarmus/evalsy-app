@@ -118,7 +118,7 @@ export default function InterviewerManagement() {
           />
         </div>
         <div className='flex flex-row gap-3.5 flex-wrap'>
-          <Button onPress={handleAddClick} color='primary' endContent={<AiOutlinePlus />}>
+          <Button onPress={handleAddClick} color='primary' size='sm' endContent={<AiOutlinePlus />}>
             Add New
           </Button>
         </div>

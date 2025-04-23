@@ -37,9 +37,9 @@ const InterviewInstruction: React.FC<any> = () => {
 
   return (
     <div className='min-h-screen flex items-center justify-center'>
-      <main className='w-full max-w-screen-xl mx-auto px-6 py-8'>
+      <main className='w-full max-w-screen-lg mx-auto px-6 py-8'>
         <InterviewNavbar company={company} />
-        <Card shadow='sm' radius='sm' className='p-8 mt-6'>
+        <Card shadow='sm' radius='sm' className='p-4 mt-6'>
           <CandidateInfo candidate={candidate} company={company} job={job} addTopPadding={false} />
 
           <CardBody>
@@ -73,16 +73,16 @@ const InterviewInstruction: React.FC<any> = () => {
               </button>
             </div>
 
-            <div className='bg-gray-50 rounded-lg p-4 mt-6'>
+            <div className='bg-gray-50 dark:bg-gray-800 rounded-lg p-4 mt-6'>
               <div className='flex items-center gap-2 mb-3'>
                 <FaCheckCircle className='h-4 w-4 text-green-600' />
-                <h3 className='text-sm font-semibold text-slate-800'>Device Check</h3>
+                <h3 className='text-sm font-semibold text-slate-800 dark:text-slate-100'>Device Check</h3>
               </div>
               <div className='flex items-center justify-between mb-2'>
                 <div className='flex items-center gap-2'>
-                  <FaCamera className={`h-4 w-4 ${permissionGranted ? "text-green-600" : "text-slate-400"}`} />
-                  <FaMicrophone className={`h-4 w-4 ${permissionGranted ? "text-green-600" : "text-slate-400"}`} />
-                  <span className='text-sm font-medium text-slate-700'>Camera & Microphone</span>
+                  <FaCamera className={`h-4 w-4 ${permissionGranted ? "text-green-600" : "text-slate-400 dark:text-slate-500"}`} />
+                  <FaMicrophone className={`h-4 w-4 ${permissionGranted ? "text-green-600" : "text-slate-400 dark:text-slate-500"}`} />
+                  <span className='text-sm font-medium text-slate-700 dark:text-slate-300'>Camera & Microphone</span>
                 </div>
               </div>
             </div>

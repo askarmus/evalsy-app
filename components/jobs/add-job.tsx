@@ -129,7 +129,6 @@ export const AddJob = () => {
           <div className=' w-full flex flex-col gap-4'>
             <Formik<AddJobFormValues> innerRef={formRef} enableReinitialize={true} initialValues={initialValues} onSubmit={handleSubmit} validationSchema={AddJobSchema}>
               {({ values, errors, touched, handleChange, setFieldValue, validateForm }) => {
-                // 🔍 Log validation errors and touched fields during form interaction
                 console.log("Formik Errors:", errors);
                 console.log("Formik Touched:", touched);
 
@@ -163,13 +162,13 @@ export const AddJob = () => {
                                 <Input size='sm' placeholder='Total' type='number' min='1' defaultValue={totalQuestions.toString()} onChange={(e) => setTotalQuestions(Number(e.target.value))} className='max-w-[60px]' />
 
                                 <Button
-                                  color='danger'
+                                  color='primary'
                                   size='sm'
                                   isLoading={isGenerating}
                                   onPress={async () => {
                                     handleGenerateQuestions(validateForm, values, setFieldValue, prompt, totalQuestions);
                                   }}>
-                                  AI Generate
+                                  Generate Questions
                                 </Button>
                               </div>
                             </div>
@@ -200,7 +199,7 @@ export const AddJob = () => {
                                         </Checkbox>
                                       </TableCell>
                                       <TableCell>
-                                        <Select defaultSelectedKeys={["2"]} onChange={(e) => setFieldValue(`questions[${index}].expectedScore`, e.target.value)}>
+                                        <Select label='Score' defaultSelectedKeys={["2"]} onChange={(e) => setFieldValue(`questions[${index}].expectedScore`, e.target.value)}>
                                           <SelectItem key={1}>15/30</SelectItem>
                                           <SelectItem key={2}>25/30</SelectItem>
                                           <SelectItem key={3}>30/30</SelectItem>
