@@ -7,6 +7,7 @@ import Interviewer from "./Interviewer";
 import CandidateInfo from "./CandidateInfo";
 import { FaChair, FaClock, FaCompressAlt, FaHireAHelper, FaMicrophone, FaMicrophoneAlt, FaPlay, FaReply, FaStopCircle, FaThumbsUp } from "react-icons/fa";
 import { AnimatePresence, motion } from "framer-motion";
+import PoweredBy from "./PoweredBy";
 
 const InterviewNavigator: React.FC = () => {
   const { questions, interviewer, candidate, job, company, uploadRecording, currentQuestion, setAudioCompleted, isRecording, setRecording } = useInterviewStore();
@@ -284,10 +285,7 @@ const InterviewNavigator: React.FC = () => {
           </div>
         </div>
 
-        <div className='flex justify-between items-center mt-4 text-sm text-slate-500'>
-          <div className='flex items-center gap-2'></div>
-          <p className='text-xs'>© 2025 Evalsy Interview Platform</p>
-        </div>
+        <PoweredBy />
       </div>
     </div>
   );

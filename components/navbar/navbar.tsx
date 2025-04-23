@@ -38,7 +38,7 @@ export const NavbarWrapper = () => {
         <NavbarItem isActive={currentPath === "/jobs/list"}>
           <Link className='flex items-center text-md text-default-800 hover:text-blue-900 gap-2' href='/jobs/list'>
             <AiOutlineShopping />
-            Job
+            Interview
           </Link>
         </NavbarItem>
 

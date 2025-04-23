@@ -31,7 +31,7 @@ const InterviewNavbar: React.FC<any> = ({ company }) => {
   return (
     <div className='flex justify-between items-center mb-4'>
       <div className='flex items-center gap-2'>
-        {company?.logo ? <Image src={company?.logo} alt={`${company?.name} Logo`} width={80} height={35} className='w-auto min-h-[30px] max-h-[40px] object-contain' /> : <p className='font-bold text-inherit'>{company?.name}</p>}
+        <div className=' max-w-[100px] truncate text-xl font-semibold tracking-[-1px]   md:max-w-[200px] mf:text-[34px]/[58px] lg:max-w-[360px]'>{company?.name}</div>
         <Divider orientation='vertical' className='h-8 mr-2 ml-2' />
         <div className=' max-w-md mx-auto'>
           <h2 className='text-xs font-bold text-gray-800 mb-0'>Round One</h2>
