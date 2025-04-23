@@ -36,7 +36,7 @@ const ThankYou: React.FC = () => {
   }, [company?.timestamps]); // ✅ Add dependency to prevent undefined errors
 
   const handleAudioEnd = () => {
-    //setPhase("in-progress");
+    setPhase("in-progress");
   };
 
   return (
