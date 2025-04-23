@@ -12,7 +12,6 @@ const Interviewer: React.FC<any> = ({ data }) => {
         <div>
           <p className='font-medium'>{data?.name}</p>
           <p className='text-sm text-muted-foreground'>Senior Developer • BCS Technology</p>
-          <p className='text-sm text-muted-foreground'>Bio: {data?.biography}</p>
         </div>
       </div>
     </div>
