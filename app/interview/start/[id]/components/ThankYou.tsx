@@ -33,16 +33,16 @@ const ThankYou: React.FC = () => {
         }
       };
     }
-  }, [company?.timestamps]); // ✅ Add dependency to prevent undefined errors
+  }, [company?.timestamps]);
 
   const handleAudioEnd = () => {
-    setPhase("in-progress");
+    setPhase("completed");
   };
 
   return (
     <>
       <div className='min-h-screen flex items-center justify-center'>
-        <div className='w-full max-w-screen-xl mx-auto px-6 py-8'>
+        <div className='w-full max-w-screen-lg mx-auto px-6 py-8'>
           <Card className='p-8' shadow='sm' radius='sm'>
             <Card className='py-4 text-center' shadow='none'>
               <CardBody className='overflow-visible py-2'>
