@@ -5,8 +5,8 @@ import dynamic from "next/dynamic";
 import type { ApexOptions } from "apexcharts";
 import { trendByJobSeniority } from "@/services/dashboard.service";
 import { FaChartLine } from "react-icons/fa";
+import { useTheme } from "next-themes";
 
-// Dynamically import ApexCharts to avoid SSR issues
 const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
 type TrendItem = {
@@ -18,6 +18,7 @@ export default function TrendAnalyticsChart() {
   const [categories, setCategories] = useState<string[]>([]);
   const [data, setData] = useState<number[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const { theme } = useTheme(); // light | dark | system
 
   useEffect(() => {
     const fetchData = async () => {
@@ -48,31 +49,54 @@ export default function TrendAnalyticsChart() {
     fetchData();
   }, []);
 
+  const isDark = theme === "dark";
+
   const options: ApexOptions = {
     chart: {
       type: "bar",
       toolbar: { show: false },
+      background: "transparent",
+    },
+    theme: {
+      mode: isDark ? "dark" : "light",
     },
     xaxis: {
       categories,
       title: {
         text: "Job Titles",
-        style: { fontSize: "14px", fontWeight: "600" },
+        style: {
+          fontSize: "14px",
+          fontWeight: "600",
+          color: isDark ? "#E5E7EB" : "#111827",
+        },
       },
       labels: {
         rotate: -45,
-        style: { fontSize: "12px" },
+        style: {
+          fontSize: "12px",
+          colors: isDark ? "#9CA3AF" : "#374151",
+        },
       },
     },
     yaxis: {
       title: {
         text: "Average Score (%)",
-        style: { fontSize: "14px", fontWeight: "600" },
+        style: {
+          fontSize: "14px",
+          fontWeight: "600",
+          color: isDark ? "#E5E7EB" : "#111827",
+        },
       },
       max: 100,
+      labels: {
+        style: {
+          colors: isDark ? "#9CA3AF" : "#374151",
+        },
+      },
     },
     dataLabels: { enabled: true },
     tooltip: {
+      theme: isDark ? "dark" : "light",
       y: {
         formatter: (val: number) => `${val.toFixed(2)}%`,
       },
@@ -80,11 +104,14 @@ export default function TrendAnalyticsChart() {
     title: {
       text: "Trend Analytics by Job Title",
       align: "center",
-      style: { fontSize: "18px", fontWeight: "600" },
+      style: {
+        fontSize: "18px",
+        fontWeight: "600",
+        color: isDark ? "#F3F4F6" : "#111827",
+      },
     },
     colors: ["#3b82f6"],
   };
-
   const series = [
     {
       name: "Percentage",
