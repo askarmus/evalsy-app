@@ -19,7 +19,6 @@ interface InterviewState {
   candidate: any;
   company: any;
   job: any;
-  interviewer: any;
   currentQuestion: number;
   duration: number;
   extraTime: number;
@@ -63,7 +62,6 @@ export const useInterviewStore = create<InterviewState>()((set, get) => ({
   company: null,
   job: null,
   candidate: null,
-  interviewer: null,
   isSkeletonLoading: false,
   invitationId: "",
 
@@ -88,7 +86,6 @@ export const useInterviewStore = create<InterviewState>()((set, get) => ({
         company: data.company || {},
         job: data.job || {},
         candidate: data.candidate || {},
-        interviewer: data.interviewer || {},
       });
     } catch (error) {}
   },

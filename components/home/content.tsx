@@ -5,8 +5,6 @@ import { RecentInterviews } from "./recent-interviews";
 import { DashboardWidjet } from "./dashboard.widget";
 import { AiOutlineUserSwitch, AiOutlineFileSearch, AiOutlineCheckCircle } from "react-icons/ai";
 import { hiringPipelineOverview } from "@/services/dashboard.service";
-import { getAllInterviewers } from "@/services/interviwers.service";
-import { Interviwers } from "./Interviwers";
 import { Card, CardBody, Skeleton } from "@heroui/react";
 
 const Chart = dynamic(() => import("../charts/steam"), {
@@ -21,16 +19,14 @@ const widgetConfig = {
 
 export const Content = () => {
   const [widgetData, setWidgetData] = useState([]);
-  const [interviewers, setInterviewers] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [widgetResponse, interviewersResponse] = await Promise.all([hiringPipelineOverview(), getAllInterviewers()]);
+        const [widgetResponse] = await Promise.all([hiringPipelineOverview()]);
 
         setWidgetData(widgetResponse.map((item) => ({ ...widgetConfig[item.title], ...item })));
-        setInterviewers(interviewersResponse);
       } catch (error) {
         console.error("Error fetching data", error);
       } finally {
@@ -65,7 +61,6 @@ export const Content = () => {
         <div className='mt-4 gap-2 flex flex-col xl:max-w-md w-full'>
           <h3 className='text-xl font-semibold mb-3'>Recent Interviwers</h3>
           <div className='flex flex-col justify-center gap-4 flex-wrap md:flex-nowrap md:flex-col'>
-            <Interviwers data={interviewers} loading={loading} />
             <RecentInterviews />
           </div>
         </div>

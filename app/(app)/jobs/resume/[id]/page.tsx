@@ -56,7 +56,7 @@ export default function UploadFiles() {
         showToast.success("Resume deleted successfully.");
         await loadResumes();
       } catch (error) {
-        console.error("Error deleting interviewer:", error);
+        console.error("Error deleting resume:", error);
         showToast.error("Failed to delete the resume. Please try again.");
       }
     }

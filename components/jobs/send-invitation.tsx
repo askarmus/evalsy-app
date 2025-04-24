@@ -1,12 +1,11 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { Button, Input, Radio, RadioGroup, Select, SelectItem, Slider, Textarea } from "@heroui/react";
+import { Button, Input, Radio, RadioGroup, Slider, Textarea } from "@heroui/react";
 import { Drawer, DrawerContent, DrawerHeader, DrawerBody, DrawerFooter } from "@heroui/react";
 import { Formik } from "formik";
 import { getInvitations, sendInvitation } from "@/services/invitation.service";
 import { showToast } from "@/app/utils/toastUtils";
 import { Invitation, SentInvitationsTable } from "./components/SentInvitationsTable";
 import { SendInvitationSchema } from "@/helpers/schemas";
-import { getAllInterviewers } from "@/services/interviwers.service";
 
 interface SendInvitationDrawerProps {
   isOpen: boolean;
@@ -19,7 +18,6 @@ interface SendInvitationDrawerProps {
 export const SendInvitationDrawer: React.FC<SendInvitationDrawerProps> = ({ isOpen, onClose, jobId, email, name }) => {
   const [invitations, setInvitations] = useState<Invitation[]>([]);
   const [loading, setLoading] = useState(false);
-  const [interviewers, setInterviewers] = useState([]);
 
   const fetchInvitations = useCallback(async () => {
     if (jobId) {
@@ -28,17 +26,11 @@ export const SendInvitationDrawer: React.FC<SendInvitationDrawerProps> = ({ isOp
     }
   }, [jobId]);
 
-  const fetchInterviewers = useCallback(async () => {
-    const result = await getAllInterviewers();
-    setInterviewers(result);
-  }, []);
-
   useEffect(() => {
     if (isOpen) {
       fetchInvitations();
-      fetchInterviewers();
     }
-  }, [isOpen, fetchInvitations, fetchInterviewers]);
+  }, [isOpen, fetchInvitations]);
 
   const handleSubmit = async (values: any, { resetForm }: any) => {
     setLoading(true);
@@ -70,7 +62,6 @@ export const SendInvitationDrawer: React.FC<SendInvitationDrawerProps> = ({ isOp
     email: email,
     message: "",
     expires: "",
-    interviewerId: "",
     duration: 15,
   };
   return (
@@ -96,14 +87,6 @@ export const SendInvitationDrawer: React.FC<SendInvitationDrawerProps> = ({ isOp
                     errorMessage={errors.message}
                   />
                   <div className='flex justify-between gap-4  items-center '>
-                    <Select placeholder='Choose an interviewer' value={values.interviewerId} onChange={handleChange("interviewerId")} isInvalid={!!errors.interviewerId && !!touched.interviewerId} errorMessage={errors.interviewerId}>
-                      {interviewers.map((interviewer: any) => (
-                        <SelectItem key={interviewer.id} textValue={String(interviewer.name)}>
-                          {interviewer.name}
-                        </SelectItem>
-                      ))}
-                    </Select>
-
                     <Slider
                       className='max-w-full'
                       defaultValue={30}

@@ -10,7 +10,7 @@ import PoweredBy from "./PoweredBy";
 import InterviewProgress from "./InterviewProgress";
 
 const InterviewNavigator: React.FC = () => {
-  const { questions, setPhase, interviewer, candidate, job, company, uploadRecording, currentQuestion, setAudioCompleted, isRecording, setRecording } = useInterviewStore();
+  const { questions, setPhase, candidate, job, company, uploadRecording, currentQuestion, setAudioCompleted, isRecording, setRecording } = useInterviewStore();
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const reminderAudioRef = useRef<HTMLAudioElement | null>(null);

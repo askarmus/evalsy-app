@@ -55,13 +55,6 @@ export const NavbarWrapper = () => {
             Settings
           </Link>
         </NavbarItem>
-
-        <NavbarItem isActive={currentPath === "/jobs/interviwers"}>
-          <Link className='flex items-center text-md hover:text-blue-100 gap-2' href='/jobs/interviwers'>
-            <AiOutlineUser />
-            Interviewers
-          </Link>
-        </NavbarItem>
       </NavbarContent>
 
       <NavbarContent className='md:hidden'>

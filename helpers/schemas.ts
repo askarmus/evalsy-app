@@ -65,13 +65,6 @@ export const SendInvitationSchema = object().shape({
   name: string().required("Name is required"),
   email: string().email("Invalid email address").required("Email is required"),
   expires: string().required("Expiration date is required"),
-  interviewerId: string().required("Interviewer is required"),
-});
-
-export const AddInterviewerSchema = object().shape({
-  name: string().required("Name is required"),
-  jobTitle: string().required("Job Title is required"),
-  biography: string().required("Biography is required"),
 });
 
 export const CompanySettingsSchema = object().shape({
