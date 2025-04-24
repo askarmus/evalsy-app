@@ -1,7 +1,7 @@
-import { Avatar, Chip, Progress } from "@heroui/react";
+import { Avatar, Chip } from "@heroui/react";
 import React from "react";
 
-const CandidateInfo: React.FC<any> = ({ candidate, job, company, questions, currentQuestion, addTopPadding = true }) => {
+const CandidateInfo: React.FC<any> = ({ candidate, job, addTopPadding = true }) => {
   return (
     <div className={`p-6 ${addTopPadding ? "pt-6" : "pt-0"} border-b border-gray-200 dark:border-gray-700 w-full`}>
       <div className='flex flex-col md:flex-row md:items-center justify-between gap-3'>
@@ -14,7 +14,6 @@ const CandidateInfo: React.FC<any> = ({ candidate, job, company, questions, curr
             </div>
           </div>
         </div>
-
         <div className='flex flex-col md:flex-row gap-4 md:items-center'>
           <div className='flex flex-col'>
             <span className='text-xs text-gray-500 dark:text-gray-400'>Interviewing Position</span>
@@ -24,26 +23,6 @@ const CandidateInfo: React.FC<any> = ({ candidate, job, company, questions, curr
           </div>
         </div>
       </div>
-
-      {questions && (
-        <div className='mt-3'>
-          <Progress
-            className='w-full'
-            color='default'
-            formatOptions={{
-              style: "percent",
-              unit: "percent",
-              unitDisplay: "long",
-            }}
-            label={`${currentQuestion + 1} of ${questions?.length}`}
-            maxValue={questions?.length}
-            showValueLabel={true}
-            size='sm'
-            value={currentQuestion}
-            valueLabel={`${((currentQuestion / questions?.length) * 100).toFixed(0)}% Completed`}
-          />
-        </div>
-      )}
     </div>
   );
 };

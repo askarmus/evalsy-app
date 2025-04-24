@@ -2,12 +2,12 @@ import React, { useEffect, useRef, useState } from "react";
 import { useInterviewStore } from "../stores/useInterviewStore";
 import UserCamera from "./UserCamera";
 import InterviewNavbar from "./InterviewNavbar";
-import { Badge, Button, Card, CardBody, CardFooter, Chip, Divider, Progress, Switch } from "@heroui/react";
-import Interviewer from "./Interviewer";
+import { Button, Card, CardBody } from "@heroui/react";
 import CandidateInfo from "./CandidateInfo";
-import { FaHireAHelper, FaMicrophone, FaMicrophoneAlt, FaPlay, FaStopCircle } from "react-icons/fa";
+import { FaMicrophone, FaMicrophoneAlt, FaPlay, FaStopCircle } from "react-icons/fa";
 import { AnimatePresence, motion } from "framer-motion";
 import PoweredBy from "./PoweredBy";
+import InterviewProgress from "./InterviewProgress";
 
 const InterviewNavigator: React.FC = () => {
   const { questions, setPhase, interviewer, candidate, job, company, uploadRecording, currentQuestion, setAudioCompleted, isRecording, setRecording } = useInterviewStore();
@@ -124,39 +124,30 @@ const InterviewNavigator: React.FC = () => {
     <div className='min-h-screen flex items-center justify-center bg-white dark:bg-gray-900'>
       <div className='w-full max-w-screen-lg mx-auto px-6 py-8'>
         <InterviewNavbar company={company} />
-
-        <Card className='w-full shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-xl shadow-lg'>
-          <CardBody>
+        <Card className='w-full p-0 mt-6  dark:border-gray-700 overflow-hidden bg-white/90 dark:bg-gray-800/90 '>
+          <CardBody className='p-0'>
             <CandidateInfo candidate={candidate} job={job} company={company} questions={questions} currentQuestion={currentQuestion} />
-
             <div className='grid md:grid-cols-5 gap-0'>
-              <div className='md:col-span-3 p-6 bg-white dark:bg-gray-900'>
-                <div className='space-y-5'>
-                  <div className='inline-flex items-center px-4 py-1.5 rounded-full bg-gradient-to-r from-blue-50 to-teal-50 dark:from-blue-900 dark:to-teal-900 text-teal-700 dark:text-teal-300 text-sm font-medium'>
-                    <span className='flex h-2 w-2 rounded-full bg-teal-600 mr-2 animate-pulse'></span>
-                    Interview Question {currentQuestion + 1}
-                  </div>
+              <div className='md:col-span-3 bg-slate-50 dark:bg-slate-800 border-l border-gray-200 dark:border-gray-700'>
+                <div className='p-0'>
+                  <UserCamera />
+                </div>
+              </div>
+              <div className='md:col-span-2 bg-slate-50 dark:bg-slate-800 p-4 border-l border-gray-200 dark:border-gray-700'>
+                <div className=' '>
+                  <InterviewProgress candidate={candidate} job={job} company={company} questions={questions} currentQuestion={currentQuestion} />
 
-                  <motion.h3 initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className='text-2xl font-bold text-gray-800 dark:text-gray-100'>
+                  <motion.h3 initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className='text-md mt-6 text-gray-800 dark:text-gray-100'>
                     {question?.text || "No Questions Available"}
                     <audio ref={audioRef} onEnded={handleQuestionAudioEnd} onPlay={() => setIsReplayingAudio(true)} onPause={handleReplayAudioEnded}>
                       <source src={question?.audioUrl} type='audio/wav' />
                       Your browser does not support the audio element.
                     </audio>
-
                     <audio ref={reminderAudioRef}>
                       <source src={company.answerQuestionAudioUrl} type='audio/wav' />
                       Your browser does not support the audio element.
                     </audio>
                   </motion.h3>
-                </div>
-              </div>
-
-              <div className='md:col-span-2 bg-slate-50 dark:bg-slate-800 p-6 border-l border-gray-200 dark:border-gray-700'>
-                <div className='space-y-4'>
-                  <UserCamera />
-                  <Divider className='my-4' />
-                  <Interviewer data={interviewer} />
                 </div>
               </div>
             </div>
@@ -198,7 +189,6 @@ const InterviewNavigator: React.FC = () => {
             </div>
           </CardBody>
         </Card>
-
         <PoweredBy />
       </div>
     </div>

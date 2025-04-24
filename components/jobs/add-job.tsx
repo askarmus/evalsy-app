@@ -26,7 +26,8 @@ export interface Criteria {
   id: number;
   name: string;
   description: string;
-  scoreRange: string;
+  expectedScore: string;
+  isRandom: boolean;
 }
 
 export const AddJob = () => {
@@ -97,6 +98,8 @@ export const AddJob = () => {
         const newQuestions = result.data.map((text) => ({
           id: nanoid(),
           text,
+          expectedScore: 3,
+          isRandom: true,
         }));
 
         setFieldValue("questions", [...values.questions, ...newQuestions]);
@@ -181,7 +184,7 @@ export const AddJob = () => {
                                   <TableColumn width={30}>RANDOMIZE</TableColumn>
                                   <TableColumn width={100}>MINIMUM SCORE</TableColumn>
                                   <TableColumn width={30} align='end'>
-                                    <Button color='primary' variant='faded' size='sm' onPress={() => setFieldValue("questions", [...values.questions, { id: nanoid(), text: "", isRandom: false, expectedScore: 20 }])}>
+                                    <Button color='primary' variant='faded' size='sm' onPress={() => setFieldValue("questions", [...values.questions, { id: nanoid(), text: "", isRandom: true, expectedScore: 20 }])}>
                                       Add
                                     </Button>
                                   </TableColumn>

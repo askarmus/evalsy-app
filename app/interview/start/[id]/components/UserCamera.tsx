@@ -57,13 +57,7 @@ const UserCamera: React.FC = () => {
 
   return (
     <>
-      <div className='flex justify-between items-center'>
-        <div className='flex items-center gap-2'>
-          <div className='h-3 w-3 rounded-full bg-red-500 animate-pulse'></div>
-          <h3 className='font-medium text-sm'> RECORDING </h3>
-        </div>
-      </div>
-      <div className='relative aspect-video bg-black rounded-lg overflow-hidden border border-slate-200 shadow-lg'>
+      <div className='relative aspect-video   overflow-hidden    '>
         <video ref={videoRef} autoPlay playsInline className='absolute inset-0 w-full h-full object-cover' />
 
         <canvas ref={canvasRef} style={{ display: "none" }} />
