@@ -5,6 +5,7 @@ import { useCallback, useContext } from "react";
 import apiClient from "@/helpers/apiClient";
 import { truncateText } from "@/app/utils/truncate.text";
 import { AuthContext } from "@/context/AuthContext";
+import { DarkModeSwitch } from "./darkmodeswitch";
 
 export const UserDropdown = () => {
   const { user, loading } = useContext(AuthContext); // 👈 use the context here
@@ -43,7 +44,10 @@ export const UserDropdown = () => {
         </DropdownTrigger>
       </NavbarItem>
       <DropdownMenu aria-label='User menu actions'>
-        <DropdownItem key='logout' color='danger' className='text-danger' onPress={handleLogout}>
+        <DropdownItem key='logout' color='primary' onPress={handleLogout}>
+          <DarkModeSwitch />
+        </DropdownItem>
+        <DropdownItem key='logout' color='primary' onPress={handleLogout}>
           Log Out
         </DropdownItem>
       </DropdownMenu>

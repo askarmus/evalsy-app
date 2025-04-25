@@ -18,20 +18,20 @@ export const Header: React.FC = () => {
               <LogoDark />
             </a>
             <div className='hidden md:flex md:gap-x-6'>
-              <a className='inline-block rounded-lg px-2 py-1 text-lg text-slate-700 text-white' href='#features'>
+              <a className='inline-block rounded-lg px-2 py-1 text-md text-slate-700 text-white' href='#features'>
                 Features
               </a>
-              <a className='inline-block rounded-lg px-2 py-1 text-lg text-slate-700 text-white' href='#testimonials'>
+              <a className='inline-block rounded-lg px-2 py-1 text-md text-slate-700 text-white' href='#testimonials'>
                 Testimonials
               </a>
-              <a className='inline-block rounded-lg px-2 py-1 text-lg text-white' href='#pricing'>
+              <a className='inline-block rounded-lg px-2 py-1 text-md text-white' href='#pricing'>
                 Pricing
               </a>
             </div>
           </div>
           <div className='flex items-center gap-x-5 md:gap-x-8'>
             <div className='hidden md:block'>
-              <Link className='inline-block rounded-lg px-2 py-1 text-lg text-slate-700  text-white' href='/login'>
+              <Link className='inline-block rounded-lg px-2 py-1 text-md text-slate-700  text-white' href='/login'>
                 Sign in
               </Link>
             </div>
@@ -60,19 +60,19 @@ export const Header: React.FC = () => {
                 <ModalHeader className='flex justify-between items-center'></ModalHeader>
                 <ModalBody>
                   <nav className='flex flex-col gap-y-4'>
-                    <a className='inline-block rounded-lg px-2 py-1 text-sm text-slate-700 hover:bg-slate-100 hover:text-slate-900 dark:text-white' href='#features' onClick={onClose}>
+                    <a className='inline-block rounded-lg px-2 py-1 text-sm text-slate-700 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white' href='#features' onClick={onClose}>
                       Features
                     </a>
-                    <a className='inline-block rounded-lg px-2 py-1 text-sm text-slate-700 hover:bg-slate-100 hover:text-slate-900 dark:text-white' href='#testimonials' onClick={onClose}>
+                    <a className='inline-block rounded-lg px-2 py-1 text-sm text-slate-700 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white' href='#testimonials' onClick={onClose}>
                       Testimonials
                     </a>
-                    <a className='inline-block rounded-lg px-2 py-1 text-sm text-slate-700 hover:bg-slate-100 hover:text-slate-900 dark:text-white' href='#pricing' onClick={onClose}>
+                    <a className='inline-block rounded-lg px-2 py-1 text-sm text-slate-700 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white' href='#pricing' onClick={onClose}>
                       Pricing
                     </a>
-                    <a className='inline-block rounded-lg px-2 py-1 text-sm text-slate-700 hover:bg-slate-100 hover:text-slate-900 dark:text-white' href='/login' onClick={onClose}>
+                    <a className='inline-block rounded-lg px-2 py-1 text-sm text-slate-700 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white' href='/login' onClick={onClose}>
                       Sign in
                     </a>
-                    <a className='group inline-flex items-center justify-center rounded-full py-2 px-4 text-sm font-semibold bg-blue-600 text-white hover:text-slate-100 hover:bg-blue-500 active:bg-blue-800 active:text-blue-100' href='/signup' onClick={onClose}>
+                    <a className='group inline-flex items-center justify-center rounded-full py-2 px-4 text-sm font-semibold bg-blue-600 text-white hover:text-slate-100 hover:bg-blue-500 active:bg-blue-800 active:text-blue-100 dark:bg-blue-500 dark:hover:bg-blue-400 dark:active:bg-blue-700' href='/signup' onClick={onClose}>
                       Get started
                     </a>
                   </nav>

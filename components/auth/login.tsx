@@ -37,7 +37,7 @@ export const Login = () => {
           showToast.error("Login failed: Incomplete token or user data.");
         }
       } catch (error: any) {
-        console.error("Login error:", error); // log full error
+        console.error("Login error:", error);
         showToast.error([401, 404].includes(error?.response?.status) ? "Invalid email or password" : error?.response?.data?.error || "Login failed. Please try again.");
       } finally {
         setSubmitting(false);

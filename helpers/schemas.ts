@@ -11,10 +11,10 @@ export const RegisterSchema = object().shape({
   email: string().email("This field must be an email").required("Email is required"),
   password: string()
     .required("Password is required")
-    .test("password-strength", "Password must be stronger (at least 'Good')", (value) => {
+    .test("password-strength", "Password must be stronger (at least 'Fair')", (value) => {
       if (!value) return false;
       const result = zxcvbn(value);
-      return result.score >= 3; // Only allow Good (3) and Strong (4)
+      return result.score >= 2; // Only allow Good (3) and Strong (4)
     }),
   confirmPassword: string()
     .required("Confirm password is required")

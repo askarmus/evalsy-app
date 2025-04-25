@@ -28,9 +28,8 @@ export const Signup = () => {
       try {
         setSubmitting(true);
         await registerUser(values);
-        showToast.success("Sign up successful! Redirecting to login...");
         setTimeout(() => {
-          router.replace("/login");
+          router.push(`/confirm-message?email=${values.email}`);
         }, 2000);
       } catch (error: any) {
         const message = error?.response?.data?.error || error?.message;
@@ -75,7 +74,7 @@ export const Signup = () => {
 
                 {values.password && (
                   <div className='mt-2'>
-                    <div className='w-full h-2 rounded bg-gray-200'>
+                    <div className='w-full h-1 rounded bg-gray-200'>
                       <div className={`h-1 rounded transition-all duration-300 ${strengthColors[strength]}`} style={{ width: `${(strength + 1) * 20}%` }}></div>
                     </div>
                     <p className={`mt-1 text-xs font-medium ${labelColors[strength]}`}>Strength: {strengthLabels[strength]}</p>
