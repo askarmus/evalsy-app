@@ -44,8 +44,8 @@ export const NavbarWrapper = () => {
           </Link>
         </NavbarItem>
 
-        <NavbarItem isActive={currentPath === "/interview/result"}>
-          <Link className='flex items-center text-md hover:text-blue-100 gap-2' href='/interview/result'>
+        <NavbarItem isActive={currentPath === "/result"}>
+          <Link className='flex items-center text-md hover:text-blue-100 gap-2' href='/result'>
             <AiOutlineNotification />
             Result
           </Link>
@@ -79,7 +79,7 @@ export const NavbarWrapper = () => {
           </Link>
         </NavbarMenuItem>
         <NavbarMenuItem>
-          <Link href='/interview/result' className='w-full'>
+          <Link href='/result' className='w-full'>
             Result
           </Link>
         </NavbarMenuItem>

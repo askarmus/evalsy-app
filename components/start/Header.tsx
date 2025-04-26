@@ -5,9 +5,11 @@ import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDi
 import { LogoDark } from "@/components/logo.dark";
 
 import Link from "next/link";
+import { useAuth } from "@/hooks/useAuth";
 
 export const Header: React.FC = () => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const { user, loading } = useAuth();
 
   return (
     <header className='py-4' style={{ backgroundColor: "#0f172a" }}>
@@ -30,16 +32,24 @@ export const Header: React.FC = () => {
             </div>
           </div>
           <div className='flex items-center gap-x-5 md:gap-x-8'>
-            <div className='hidden md:block'>
-              <Link className='inline-block rounded-lg px-2 py-1 text-md text-slate-700  text-white' href='/login'>
-                Sign in
+            {!loading && user ? (
+              <Link className='group inline-flex items-center justify-center rounded-full py-3 px-5 text-sm font-semibold focus:outline-hidden focus-visible:outline-2 focus-visible:outline-offset-2 bg-green-600 text-white hover:text-slate-100 hover:bg-green-500 active:bg-green-800 active:text-green-100 focus-visible:outline-green-600' href='/dashboard'>
+                Go to Dashboard
               </Link>
-            </div>
-            <Link className='group inline-flex items-center justify-center rounded-full py-3 px-5 text-sm font-semibold focus:outline-hidden focus-visible:outline-2 focus-visible:outline-offset-2 bg-blue-600 text-white hover:text-slate-100 hover:bg-blue-500 active:bg-blue-800 active:text-blue-100 focus-visible:outline-blue-600' href='/signup'>
-              <span>
-                Get started <span className='hidden lg:inline'>today</span>
-              </span>
-            </Link>
+            ) : (
+              <>
+                <div className='hidden md:block'>
+                  <Link className='inline-block rounded-lg px-2 py-1 text-md text-white' href='/login'>
+                    Sign in
+                  </Link>
+                </div>
+                <Link className='group inline-flex items-center justify-center rounded-full py-3 px-5 text-sm font-semibold focus:outline-hidden focus-visible:outline-2 focus-visible:outline-offset-2 bg-blue-600 text-white hover:text-slate-100 hover:bg-blue-500 active:bg-blue-800 active:text-blue-100 focus-visible:outline-blue-600' href='/signup'>
+                  <span>
+                    Get started <span className='hidden lg:inline'>today</span>
+                  </span>
+                </Link>
+              </>
+            )}
 
             <div className='-mr-1 md:hidden'>
               <button onClick={onOpen} className='relative z-10 flex h-8 w-8 items-center justify-center focus:outline-hidden' type='button'>

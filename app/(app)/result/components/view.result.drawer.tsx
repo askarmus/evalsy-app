@@ -29,14 +29,18 @@ export const ViewResultDrawer: React.FC<{ isOpen: boolean; onClose: () => void; 
               <Card shadow='sm' radius='sm' className='p-2 mt-6 w-full'>
                 <CardHeader className='text-sm font-semibold'>Feedabck</CardHeader>
                 <CardBody className='  w-full'>
-                  <ul className='space-y-3'>
-                    {interviewerData?.notes?.summary?.map((item, index) => (
-                      <li key={index} className='flex items-start gap-2'>
-                        <span className='mt-2 w-2 h-2 rounded-full bg-blue-500 shrink-0' />
-                        <span className='text-sm text-gray-800 leading-relaxed'>{item}</span>
-                      </li>
-                    ))}
-                  </ul>
+                  {Array.isArray(interviewerData?.notes?.summary) && interviewerData.notes.summary.filter((item) => item.trim() !== "").length > 0 && (
+                    <ul className='space-y-3'>
+                      {interviewerData.notes.summary
+                        .filter((item) => item.trim() !== "") // Filter out empty or whitespace-only strings
+                        .map((item, index) => (
+                          <li key={index} className='flex items-start gap-2'>
+                            <span className='mt-2 w-2 h-2 rounded-full bg-blue-500 shrink-0' />
+                            <span className='text-sm text-gray-800 leading-relaxed'>{item}</span>
+                          </li>
+                        ))}
+                    </ul>
+                  )}
                 </CardBody>
               </Card>
             </Tab>

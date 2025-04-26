@@ -6,7 +6,7 @@ import { getAllInterviewResult, getInterviewResultById } from "@/services/interv
 import { ViewResultDrawer } from "./components/view.result.drawer";
 import RatingBadge from "./components/rating,badge";
 import DateFormatter from "@/app/utils/DateFormatter";
-import { FaAccessibleIcon, FaChevronRight, FaSearch } from "react-icons/fa";
+import { FaAccessibleIcon, FaArrowDown, FaArrowUp, FaCheckCircle, FaChevronRight, FaEquals, FaExclamationCircle, FaMinusCircle, FaSearch, FaStar, FaSyncAlt } from "react-icons/fa";
 import ResultListItemSkeleton from "./components/result.listItem.skeleton";
 import EmptyStateCards from "@/components/shared/empty-state-cards";
 
@@ -87,10 +87,11 @@ export default function InterviewResultList() {
     return filteredResults.slice(start, end);
   }, [page, filteredResults]);
 
-  const getTrendIcon = (score: number) => {
-    if (score > 150) return <FaAccessibleIcon className='h-4 w-4 text-emerald-500' />;
-    if (score < 100) return <FaAccessibleIcon className='h-4 w-4 text-red-500' />;
-    return <FaAccessibleIcon className='h-4 w-4 text-amber-500' />;
+  const getPerformanceIcon = (score: number) => {
+    if (score <= 25) return <FaExclamationCircle className='h-4 w-4 text-red-500' />;
+    if (score > 25 && score <= 50) return <FaMinusCircle className='h-4 w-4 text-amber-500' />;
+    if (score > 50 && score <= 75) return <FaCheckCircle className='h-4 w-4 text-blue-500' />;
+    return <FaStar className='h-4 w-4 text-green-500' />;
   };
 
   return (
@@ -180,6 +181,19 @@ export default function InterviewResultList() {
               }
             />
           </Tabs>
+          <Button
+            className='ml-3'
+            isIconOnly
+            variant='ghost'
+            size='sm'
+            isLoading={isLoading}
+            color='default'
+            onPress={() => {
+              setIsLoading(true);
+              fetchInterviewResult();
+            }}>
+            <FaSyncAlt />
+          </Button>
         </div>
       </div>
 
@@ -229,7 +243,7 @@ export default function InterviewResultList() {
                       <div className='flex items-center space-x-6'>
                         <div className='text-sm text-muted-foreground'>{DateFormatter.formatDate(data.statusUpdateAt)}</div>
                         <div className='flex items-center space-x-1'>
-                          {getTrendIcon(data?.score)}
+                          {getPerformanceIcon(data?.overallWeight)}
                           <span className='font-semibold'>{data?.overallWeight}%</span>
                         </div>
                         <RatingBadge weight={data?.overallWeight} />
