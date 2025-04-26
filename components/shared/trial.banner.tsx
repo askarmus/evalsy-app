@@ -1,6 +1,6 @@
 "use client";
 
-import { useTrialStatus } from "@/app/hooks/useTrialStatus";
+import { useTrialStatus } from "@/hooks/useTrialStatus";
 import Link from "next/link";
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure } from "@heroui/react";
 import { PricingSubscription } from "../start/PricingSubscription";

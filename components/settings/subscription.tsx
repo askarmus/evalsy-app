@@ -8,7 +8,7 @@ import ConfirmDialog from "../ConfirmDialog";
 import SubscriptionUsageCard from "./components/subscription.usage.card";
 import SubscriptionCard from "./components/subscription.card";
 import SubscriptionDetailsCard from "./components/subscription.details.card";
-import { useTrialStatus } from "@/app/hooks/useTrialStatus";
+import { useTrialStatus } from "@/hooks/useTrialStatus";
 
 const SubscribePage = () => {
   const [subscription, setSubscription] = useState<{

@@ -1,5 +1,6 @@
 import React from "react";
 import { AiOutlineCheckCircle } from "react-icons/ai";
+import { EXTRA_INVITATION_PRICE, EXTRA_RESUME_PRICE, MONTHLY_BASE_INVITATION, MONTHLY_BASE_PRICE, MONTHLY_BASE_RESUME } from "../../../evalsy-shared/constants";
 
 export const PricingSubscription = () => {
   return (
@@ -10,7 +11,7 @@ export const PricingSubscription = () => {
           <section className='flex flex-col rounded-3xl px-6 sm:px-8 bg-blue-100 dark:bg-blue-200 py-8 shadow-md'>
             <h3 className='mt-5 font-display text-lg text-gray-900 dark:text-gray-800'>Subscription</h3>
             <p className='mt-2 text-base text-gray-700 dark:text-gray-800'>Ideal for growing businesses</p>
-            <p className='order-first font-display text-3xl font-light tracking-tight text-gray-900 dark:text-gray-800 font-semibold'>$20/m</p>
+            <p className='order-first font-display text-3xl font-light tracking-tight text-gray-900 dark:text-gray-800 font-semibold'>${MONTHLY_BASE_PRICE}/m</p>
 
             <ul role='list' className='order-last mt-10 flex flex-col gap-y-3 text-sm text-gray-700 dark:text-gray-800'>
               {["Unlimited Job Postings", "50 Invitations per month", "50 AI Resume Screening per month", "Secure Stripe Billing", "Cancel Anytime"].map((item, idx) => (
@@ -32,7 +33,8 @@ export const PricingSubscription = () => {
               <li className='flex'>
                 <AiOutlineCheckCircle className='h-6 w-6 flex-none text-blue-500' />
                 <span className='ml-4'>
-                  <strong>$0.10 per extra invite</strong> beyond 50
+                  <strong>${EXTRA_INVITATION_PRICE} per extra invite</strong> beyond {}
+                  {MONTHLY_BASE_INVITATION}
                 </span>
               </li>
               <li className='flex'>
@@ -60,7 +62,7 @@ export const PricingSubscription = () => {
               <li className='flex'>
                 <AiOutlineCheckCircle className='h-6 w-6 flex-none text-blue-500' />
                 <span className='ml-4'>
-                  <strong>$0.10 per extra resume screening</strong> beyond 50
+                  <strong>${EXTRA_RESUME_PRICE} per extra resume screening</strong> beyond {MONTHLY_BASE_RESUME}
                 </span>
               </li>
               <li className='flex'>

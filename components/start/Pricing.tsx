@@ -1,6 +1,7 @@
 import Link from "next/link";
 import React from "react";
 import { AiOutlineCheckCircle } from "react-icons/ai";
+import { EXTRA_INVITATION_PRICE, EXTRA_RESUME_PRICE, MONTHLY_BASE_INVITATION, MONTHLY_BASE_PRICE, MONTHLY_BASE_RESUME } from "../../../evalsy-shared/constants";
 
 export const Pricing = () => {
   return (
@@ -13,7 +14,7 @@ export const Pricing = () => {
             </span>
           </h2>
           <p className='mt-4 text-lg text-slate-400'>
-            Start for just <span className='font-bold'>$20/month</span> – Unlimited Jobs &amp; Flexible Invitations!
+            Start for just <span className='font-bold'>${MONTHLY_BASE_PRICE}/month</span> – Unlimited Jobs &amp; Flexible Invitations!
           </p>
         </div>
         <div className='-mx-4 mt-16 grid max-w-2xl grid-cols-1 gap-y-10 sm:mx-auto lg:-mx-8 lg:max-w-none lg:grid-cols-3 xl:mx-0 xl:gap-x-8'>
@@ -21,7 +22,7 @@ export const Pricing = () => {
           <section className='flex flex-col rounded-3xl px-6 sm:px-8 order-first bg-blue-600 py-8 lg:order-none'>
             <h3 className='mt-5 font-display text-lg text-white'>Subscription</h3>
             <p className='mt-2 text-base text-blue-50'>Ideal for growing businesses</p>
-            <p className='order-first font-display text-3xl font-light tracking-tight text-white'>$20/m</p>
+            <p className='order-first font-display text-3xl font-light tracking-tight text-white'>${MONTHLY_BASE_PRICE}/m</p>
 
             <ul role='list' className='order-last mt-10 flex flex-col gap-y-3 text-sm text-blue-50'>
               <li className='flex'>
@@ -33,13 +34,13 @@ export const Pricing = () => {
               <li className='flex'>
                 <AiOutlineCheckCircle className='h-6 w-6 flex-none fill-current stroke-current text-blue-200' />
                 <span className='ml-4'>
-                  <strong>50 Invitations</strong> per month
+                  <strong>{MONTHLY_BASE_INVITATION} Invitations</strong> per month
                 </span>
               </li>
               <li className='flex'>
                 <AiOutlineCheckCircle className='h-6 w-6 flex-none fill-current stroke-current text-blue-200' />
                 <span className='ml-4'>
-                  <strong>50 AI Resume Screening</strong> per month
+                  <strong>{MONTHLY_BASE_RESUME} AI Resume Screening</strong> per month
                 </span>
               </li>
               <li className='flex'>
@@ -63,7 +64,7 @@ export const Pricing = () => {
               <li className='flex'>
                 <AiOutlineCheckCircle className='h-6 w-6 flex-none fill-current stroke-current text-blue-200' />
                 <span className='ml-4'>
-                  <strong>$0.10 per extra invite</strong> beyond 50
+                  <strong>${EXTRA_INVITATION_PRICE} per extra invite</strong> beyond {MONTHLY_BASE_INVITATION}
                 </span>
               </li>
               <li className='flex'>
@@ -91,7 +92,7 @@ export const Pricing = () => {
               <li className='flex'>
                 <AiOutlineCheckCircle className='h-6 w-6 flex-none fill-current stroke-current text-blue-200' />
                 <span className='ml-4'>
-                  <strong>$0.10 per extra resume screening</strong> beyond 50
+                  <strong>${EXTRA_RESUME_PRICE} per extra resume screening</strong> beyond {MONTHLY_BASE_RESUME}
                 </span>
               </li>
               <li className='flex'>

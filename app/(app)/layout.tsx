@@ -2,11 +2,12 @@
 
 import { Layout } from "@/components/layout/layout";
 import { Logo } from "@/components/shared/logo";
+import { AuthContext } from "@/context/AuthContext";
 import { useAuth } from "@/hooks/useAuth";
 import "@/styles/globals.css";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  const { loading, authenticated } = useAuth();
+  const { loading, authenticated, user } = useAuth();
 
   if (loading) {
     return (
@@ -25,5 +26,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     return null; // Don't render anything, wait for redirect
   }
 
-  return <Layout>{children}</Layout>;
+  return (
+    <AuthContext.Provider value={{ user, loading, authenticated }}>
+      <Layout>{children}</Layout>
+    </AuthContext.Provider>
+  );
 }

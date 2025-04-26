@@ -4,11 +4,11 @@ import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, NavbarItem, User
 import { useCallback, useContext } from "react";
 import apiClient from "@/helpers/apiClient";
 import { truncateText } from "@/app/utils/truncate.text";
-import { AuthContext } from "@/context/AuthContext";
 import { DarkModeSwitch } from "./darkmodeswitch";
+import { useAuthContext } from "@/context/AuthContext";
 
 export const UserDropdown = () => {
-  const { user, loading } = useContext(AuthContext); // 👈 use the context here
+  const { user, loading } = useAuthContext();
 
   const handleLogout = useCallback(async () => {
     try {

@@ -1,34 +1,17 @@
 "use client";
 
-import { createContext, useEffect, useState } from "react";
-import { getCurrentUser } from "@/services/authService";
-import type { User } from "@/types/user";
-import { useRouter } from "next/navigation";
+import { createContext, useContext } from "react";
 
-interface AuthContextProps {
-  user: User | null;
+interface AuthContextType {
+  user: any;
   loading: boolean;
-  setUser: (user: User | null) => void;
+  authenticated: boolean;
 }
 
-export const AuthContext = createContext<AuthContextProps>({
+export const AuthContext = createContext<AuthContextType>({
   user: null,
   loading: true,
-  setUser: () => {},
+  authenticated: false,
 });
 
-export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    getCurrentUser()
-      .then(setUser)
-      .catch((err) => {
-        setUser(null);
-      })
-      .finally(() => setLoading(false));
-  }, []);
-
-  return <AuthContext.Provider value={{ user, loading, setUser }}>{children}</AuthContext.Provider>;
-};
+export const useAuthContext = () => useContext(AuthContext);

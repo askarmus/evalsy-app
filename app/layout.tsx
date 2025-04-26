@@ -3,7 +3,6 @@ import type { Metadata } from "next";
 import { Providers } from "./providers";
 import { fontSans } from "@/config/fonts";
 import clsx from "clsx";
-import { AuthProvider } from "@/context/AuthContext";
 import { GoogleAnalytic } from "@/components/GoogleAnalytic";
 
 export const metadata: Metadata = {
@@ -16,9 +15,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang='en' suppressHydrationWarning>
       <body className={clsx("font-sans antialiased", fontSans.className, "scroll-smooth")}>
         <GoogleAnalytic />
-        <Providers>
-          <AuthProvider>{children}</AuthProvider>{" "}
-        </Providers>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

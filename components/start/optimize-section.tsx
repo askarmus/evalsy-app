@@ -13,12 +13,12 @@ const tabs = [
     comparison: {
       traditional: {
         title: "Traditional Hiring",
-        value: "$4,500",
+        value: "$20",
         unit: "per hire",
       },
       ai: {
         title: "Evalsy AI",
-        value: "$900",
+        value: "$0.8",
         unit: "per hire",
       },
       savings: "80% Cost Savings",
