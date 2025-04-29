@@ -23,13 +23,12 @@ export const RegisterSchema = object().shape({
 export const ForgetPasswordSchema = object().shape({
   email: string().email("This field must be an email").required("Email is required"),
 });
+
 export const AddJobSchema = object().shape({
   jobTitle: string().required("Title is required"),
-
-  totalRandomQuestion: number(),
-
+  totalRandomVerbalQuestion: number(),
+  totalRandomCodingQuestion: number(),
   description: string().required("Job description is required"),
-
   experienceLevel: string().required("Please select an experience level"),
 
   questions: array()
@@ -39,6 +38,17 @@ export const AddJobSchema = object().shape({
         text: string().required("Question is required"),
         expectedScore: number().required(),
         isRandom: boolean().required(),
+        type: string().required(),
+        timeLimit: number().when("type", {
+          is: "coding",
+          then: (schema) => schema.required("Time limit is required for coding questions").min(1, "Time limit must be at least 1 minute"),
+          otherwise: (schema) => schema.notRequired().nullable(),
+        }),
+        language: string().when("type", {
+          is: "coding",
+          then: (schema) => schema.required("Language is required for coding questions"),
+          otherwise: (schema) => schema.notRequired().nullable(),
+        }),
       })
     )
     .min(1, "At least one question is required")
@@ -46,13 +56,13 @@ export const AddJobSchema = object().shape({
       name: "random-question-limit",
       message: "Total random question should not exceed available random questions",
       test(questions) {
-        const { totalRandomQuestion } = this.parent;
+        const { totalRandomVerbalQuestion } = this.parent;
         const randomCount = questions?.filter((q) => q.isRandom).length || 0;
 
-        if (totalRandomQuestion > randomCount) {
+        if (totalRandomVerbalQuestion > randomCount) {
           return this.createError({
-            path: "totalRandomQuestion",
-            message: "Total random question should not exceed available random questions",
+            path: "totalRandomVerbalQuestion",
+            message: "Total random verbal question should not exceed available random questions",
           });
         }
 
