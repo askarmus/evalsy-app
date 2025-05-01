@@ -1,7 +1,7 @@
 "use client";
 
 import { Drawer, DrawerBody, DrawerFooter, DrawerHeader, DrawerContent, Button, Select, SelectItem, Checkbox, Textarea, Input } from "@heroui/react";
-import { Formik, FormikErrors } from "formik";
+import { Formik } from "formik";
 import { AddJobSchema } from "@/helpers/schemas";
 import { nanoid } from "nanoid";
 import { ArraySchema } from "yup";
@@ -55,6 +55,7 @@ export const QuestionEditDrawer = ({ isOpen, onOpenChange, mode, initialQuestion
                       <div>
                         <label className='block text-sm font-medium mb-1'>Question Type</label>
                         <Select
+                          aria-label='Select question type'
                           selectedKeys={[values.type]}
                           onChange={(e) => {
                             const newType = e.target.value;
@@ -101,7 +102,7 @@ export const QuestionEditDrawer = ({ isOpen, onOpenChange, mode, initialQuestion
                         {/* Language */}
                         <div>
                           <label className='block text-sm font-medium text-gray-700 mb-1'>Language</label>
-                          <Select selectedKeys={values.language ? [values.language] : []} onChange={(e) => setFieldValue("language", e.target.value)} size='sm' isInvalid={Boolean(errors.language) && Boolean(touched.language)} className='w-48'>
+                          <Select aria-label='language' selectedKeys={values.language ? [values.language] : []} onChange={(e) => setFieldValue("language", e.target.value)} size='sm' isInvalid={Boolean(errors.language) && Boolean(touched.language)} className='w-48'>
                             {languages.map((lang) => (
                               <SelectItem key={lang.monacoLang}>{lang.label}</SelectItem>
                             ))}

@@ -1,6 +1,6 @@
 import apiClient from "@/helpers/apiClient";
 
-export const updateQuestion = async (payload: { invitationId: string; questionId: string; recordedUrl: string }) => {
+export const updateQuestion = async (payload: { invitationId: string; questionId: string; recordedUrl: string; code?: string; output?: string }) => {
   const response = await apiClient.post("/interview/updatequestion", payload);
   return response.data.data;
 };

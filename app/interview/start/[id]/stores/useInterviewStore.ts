@@ -11,6 +11,11 @@ interface Question {
   id: string;
   text: string;
   audioUrl: string;
+  type: string;
+  timelimit: number;
+  lannguage: string;
+  explanation: string;
+  starterCode: string;
 }
 
 interface InterviewState {
@@ -41,6 +46,7 @@ interface InterviewState {
   toggleCamera: () => void;
   uploadScreenshot: (imageBlob: Blob, questionId: string) => Promise<void>;
   uploadRecording: (audioBlob: Blob) => Promise<void>;
+  updateCodeResult: (code: string, output: string) => Promise<void>;
   endInterview: () => void;
   setInvitationId: (id: string) => void;
   loadInterview: (interviewId: string) => Promise<void>;
@@ -138,6 +144,30 @@ export const useInterviewStore = create<InterviewState>()((set, get) => ({
         invitationId: invitationId,
         questionId: state.questions[state.currentQuestion].id,
         recordedUrl: recordedData.url,
+      });
+    } catch (error) {}
+  },
+
+  updateCodeResult: async (code, output) => {
+    try {
+      const invitationId = get().invitationId;
+      if (!invitationId) {
+        throw new Error("Interview ID not found.");
+      }
+      const state = get();
+
+      await updateQuestion({
+        recordedUrl: "",
+        invitationId: invitationId,
+        questionId: state.questions[state.currentQuestion].id,
+        code: code,
+        output: output,
+      });
+
+      set({
+        currentQuestion: state.currentQuestion,
+        isAudioCompleted: false,
+        isRecording: false,
       });
     } catch (error) {}
   },

@@ -1,41 +1,38 @@
 "use client";
 import { Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerHeader, Button, Input, Textarea, Radio, RadioGroup, Select, SelectItem } from "@heroui/react";
-import { useFormikContext } from "formik";
 import { useState } from "react";
 import { nanoid } from "nanoid";
 import { generateQuestions } from "@/services/job.service";
 import { showToast } from "@/app/utils/toastUtils";
-import { AddJobFormValues } from "../../types";
 import { languages } from "@/config/languages";
-import { time } from "console";
+import { Question } from "../../types";
 
 interface GenerateQuestionsDrawerProps {
   isOpen: boolean;
+  jobTitle: string;
+  description: string;
   onOpenChange: (open: boolean) => void;
-  prompt: string;
-  setPrompt: (prompt: string) => void;
-  totalQuestions: number;
-  setTotalQuestions: (questions: number) => void;
+  onQuestionsGenerated: (questions: Question[]) => void;
 }
 
-export const GenerateQuestionsDrawer = ({ isOpen, onOpenChange, prompt, setPrompt, totalQuestions, setTotalQuestions }: GenerateQuestionsDrawerProps) => {
-  const { values, setFieldValue, validateForm } = useFormikContext<AddJobFormValues>();
+export const GenerateQuestionsDrawer = ({ isOpen, jobTitle, description, onOpenChange, onQuestionsGenerated }: GenerateQuestionsDrawerProps) => {
   const [isGenerating, setGenerating] = useState(false);
+  const [prompt, setPrompt] = useState("");
+  const [experienceLevel, setExperienceLevel] = useState("");
+  const [totalQuestions, setTotalQuestions] = useState(5);
   const [selectedType, setSelectedType] = useState<"verbal" | "coding">("verbal");
   const [selectedLanguage, setSelectedLanguage] = useState<string>("javascript");
 
   const handleGenerateQuestions = async () => {
-    const errors = await validateForm();
-
-    if (!errors.jobTitle && !errors.experienceLevel) {
+    if (jobTitle && description) {
       setGenerating(true);
 
       try {
         const result = await generateQuestions({
-          jobTitle: values.jobTitle,
-          expertiseLevel: values.experienceLevel,
+          jobTitle: jobTitle,
+          expertiseLevel: experienceLevel,
           noOfQuestions: totalQuestions,
-          description: values.description,
+          description: description,
           prompt: prompt,
           type: selectedType,
           language: selectedType === "coding" ? selectedLanguage : undefined,
@@ -58,12 +55,11 @@ export const GenerateQuestionsDrawer = ({ isOpen, onOpenChange, prompt, setPromp
           starterCode: item.starterCode,
         }));
 
-        console.log("Old questions:", ...values.questions);
+        onQuestionsGenerated(newQuestions);
+
         console.log("Generated questions:", newQuestions);
 
-        setFieldValue("questions", [...values.questions, ...newQuestions]);
         showToast.success(result.message || "Questions generated successfully");
-        onOpenChange(false); // close drawer
       } catch (error: any) {
         console.error("Error generating questions:", error);
         showToast.error(error.message || "Failed to generate questions. Please try again.");
@@ -75,8 +71,6 @@ export const GenerateQuestionsDrawer = ({ isOpen, onOpenChange, prompt, setPromp
     }
   };
 
-  const isButtonDisabled = !values.experienceLevel || totalQuestions <= 0;
-
   return (
     <Drawer isOpen={isOpen} onOpenChange={onOpenChange}>
       <DrawerContent>
@@ -85,7 +79,7 @@ export const GenerateQuestionsDrawer = ({ isOpen, onOpenChange, prompt, setPromp
             <DrawerHeader className='flex flex-col gap-1'>Generate Questions using AI</DrawerHeader>
             <DrawerBody>
               <div className='flex flex-col gap-6'>
-                <RadioGroup size='sm' label='Select the experience level' orientation='horizontal' value={values.experienceLevel} onValueChange={(value) => setFieldValue("experienceLevel", value)}>
+                <RadioGroup size='sm' label='Select the experience level' orientation='horizontal' value={experienceLevel} onValueChange={(value) => setExperienceLevel(value)}>
                   <Radio value='beginner'>Beginner</Radio>
                   <Radio value='intermediate'>Intermediate</Radio>
                   <Radio value='senior'>Senior</Radio>
@@ -122,19 +116,14 @@ export const GenerateQuestionsDrawer = ({ isOpen, onOpenChange, prompt, setPromp
                     input: "resize-y min-h-[60px]",
                   }}
                 />
-                <Input size='sm' placeholder='Total questions to generate' label='Total' type='number' min='1' className='w-full text-center' value={totalQuestions.toString()} onChange={(e) => setTotalQuestions(Number(e.target.value))} />
+                <Input size='sm' placeholder='Total questions to generate' label='Total' type='number' min='1' className='w-full text-center' onChange={(e) => setTotalQuestions(Number(e.target.value))} />
               </div>
             </DrawerBody>
             <DrawerFooter>
               <Button color='danger' variant='light' onPress={onClose}>
                 Close
               </Button>
-              <Button
-                color='primary'
-                isLoading={isGenerating}
-                onPress={handleGenerateQuestions}
-                isDisabled={isButtonDisabled} // <-- button disabled here!
-              >
+              <Button color='primary' isLoading={isGenerating} onPress={handleGenerateQuestions} isDisabled={isGenerating}>
                 Generate Questions
               </Button>
             </DrawerFooter>

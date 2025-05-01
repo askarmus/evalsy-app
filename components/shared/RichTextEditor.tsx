@@ -43,7 +43,7 @@ export default function RichTextEditor({ value, onChange }: RichTextEditorProps)
   if (!editor) return null;
 
   return (
-    <div className='border border-gray-300 rounded-lg p-4 space-y-4'>
+    <div className='border-2 border-gray-200 rounded-xl p-4 space-y-4'>
       {/* Toolbar */}
       <div className='flex flex-wrap gap-2'>
         <Button isIconOnly variant='ghost' size='sm' onClick={() => editor.chain().focus().toggleBold().run()} aria-label='Bold'>
@@ -67,7 +67,7 @@ export default function RichTextEditor({ value, onChange }: RichTextEditorProps)
       </div>
 
       {/* Editor Content */}
-      <EditorContent editor={editor} className='tiptap prose prose-sm max-w-none min-h-[150px] focus:outline-none focus:ring-0' />
+      <EditorContent editor={editor} className='tiptap prose prose-sm max-w-none min-h-[53px] focus:outline-none focus:ring-0' />
     </div>
   );
 }

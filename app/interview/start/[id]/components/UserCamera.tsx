@@ -1,10 +1,8 @@
 import React, { useEffect, useRef } from "react";
 import { useInterviewStore } from "../stores/useInterviewStore";
-import { Card, CardBody, CardFooter, CardHeader, Switch } from "@heroui/react";
-import { FaReply } from "react-icons/fa";
 
-const UserCamera: React.FC = () => {
-  const { isCameraOn, toggleCamera, uploadScreenshot, screenshotInterval } = useInterviewStore();
+const UserCamera: React.FC<{ height?: string }> = ({ height }) => {
+  const { isCameraOn, uploadScreenshot, screenshotInterval } = useInterviewStore();
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const interviewId = "12345"; // Replace with actual interview ID
@@ -57,13 +55,12 @@ const UserCamera: React.FC = () => {
 
   return (
     <>
-      <div className='relative aspect-video   overflow-hidden    '>
-        <video ref={videoRef} autoPlay playsInline className='absolute inset-0 w-full h-full object-cover' />
-
+      <div className={`relative w-auto overflow-hidden ${height ? "" : "aspect-video"}`} style={{ height: height || undefined }}>
+        <video ref={videoRef} autoPlay playsInline className='w-full h-full object-cover' />
         <canvas ref={canvasRef} style={{ display: "none" }} />
 
-        <div className='absolute top-3 right-3 bg-red-500 text-white text-xs px-2 py-1 rounded-full flex items-center gap-1'>
-          <span className='h-2 w-2 rounded-full bg-white animate-pulse text-xs'></span>
+        <div className='absolute top-1 right-1 bg-red-500 text-white text-xs px-2 py-1 rounded-full flex items-center gap-1'>
+          <span className='h-1 w-1 rounded-full bg-white animate-pulse'></span>
           REC
         </div>
       </div>

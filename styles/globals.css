@@ -90,7 +90,8 @@ html {
   }
 }
 
-.tiptap pre {
+.tiptap,
+.coding-instruction pre {
   background-color: #f3f4f6; /* Tailwind's gray-100 */
   padding: 1rem;
   border-radius: 0.375rem; /* rounded-md */
@@ -100,26 +101,31 @@ html {
   line-height: 1.5rem; /* leading-relaxed */
 }
 
-.tiptap code {
+.tiptap,
+.coding-instruction code {
   background: none;
   padding: 0;
   color: inherit;
   font-size: inherit;
 }
-.tiptap ul {
+.tiptap,
+.coding-instruction ul {
   list-style-type: disc;
   padding-left: 1.25rem; /* same as Tailwind pl-5 */
   margin-bottom: 0.75rem;
+  font-size: 0.875rem; /* text-sm */
 }
 
-.tiptap ol {
+.tiptap,
+.coding-instruction ol {
   list-style-type: decimal;
   padding-left: 1.25rem;
   margin-bottom: 0.75rem;
 }
 
-.tiptap li {
-  margin-bottom: 0.25rem;
+.tiptap,
+.coding-instruction li {
+  margin-bottom: 0.1rem;
 }
 
 /* Disable focus styling from ProseMirror */

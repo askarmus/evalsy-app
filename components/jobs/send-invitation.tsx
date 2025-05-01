@@ -67,7 +67,7 @@ export const SendInvitationDrawer: React.FC<SendInvitationDrawerProps> = ({ isOp
   return (
     <Drawer size='2xl' isOpen={isOpen} onOpenChange={onClose}>
       <DrawerContent>
-        <Formik initialValues={initialValues} validationSchema={SendInvitationSchema} onSubmit={handleSubmit}>
+        <Formik enableReinitialize initialValues={initialValues} validationSchema={SendInvitationSchema} onSubmit={handleSubmit}>
           {({ values, errors, touched, handleChange, handleSubmit, resetForm, setFieldValue }) => (
             <>
               <DrawerHeader>Send Invitation</DrawerHeader>
