@@ -1,6 +1,6 @@
 import React from "react";
 import { AiOutlineCheckCircle } from "react-icons/ai";
-import { EXTRA_INVITATION_PRICE, EXTRA_RESUME_PRICE, MONTHLY_BASE_INVITATION, MONTHLY_BASE_PRICE, MONTHLY_BASE_RESUME } from "../../../evalsy-shared/constants";
+import { EXTRA_INVITATION_PRICE, EXTRA_RESUME_PRICE, MONTHLY_BASE_INVITATION, MONTHLY_BASE_PRICE, MONTHLY_BASE_RESUME } from "../../constants";
 
 export const PricingSubscription = () => {
   return (
