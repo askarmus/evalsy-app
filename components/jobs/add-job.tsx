@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
-import { Button, Card, CardBody, CardFooter, Divider, Input, Pagination, Textarea, NumberInput, Chip, Tooltip } from "@heroui/react";
+import { Button, Card, CardBody, CardFooter, Divider, Input, Pagination, NumberInput, Chip, Tooltip } from "@heroui/react";
 import { Formik, FormikHelpers } from "formik";
 import { showToast } from "@/app/utils/toastUtils";
 import { createJob, getJobById, updateJob } from "@/services/job.service";
@@ -17,10 +17,17 @@ import { AiOutlineDelete, AiOutlineEdit } from "react-icons/ai";
 import { QuestionHeaderActions } from "./components/add/QuestionHeaderActions";
 import RichTextEditor from "../shared/RichTextEditor";
 
+import { DndContext, closestCenter, PointerSensor, useSensor, useSensors } from "@dnd-kit/core";
+import { SortableContext, verticalListSortingStrategy, useSortable, arrayMove } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
+import { FaGripVertical } from "react-icons/fa";
+
 export const AddJob = () => {
   const router = useRouter();
   const { id } = useParams() as { id: string };
   const formRef = useRef<any>(null);
+
+  const sensors = useSensors(useSensor(PointerSensor));
 
   const [loading, setLoading] = useState(false);
   const [isQuestionDrawerOpen, setQuestionDrawerOpen] = useState(false);
@@ -68,7 +75,6 @@ export const AddJob = () => {
   }, [id]);
 
   const handleSubmit = async (values: AddJobFormValues, { resetForm }: FormikHelpers<AddJobFormValues>) => {
-    console.log("Form values:", values);
     setLoading(true);
     try {
       if (!isEditMode) {
@@ -95,6 +101,38 @@ export const AddJob = () => {
     { name: !isEditMode ? "Add" : "Edit", link: "" },
   ];
 
+  const SortableQuestionItem = ({ question, index, handleEditQuestion, handleDeleteQuestion }: { question: Question; index: number; handleEditQuestion: (id: string) => void; handleDeleteQuestion: (id: string) => void }) => {
+    const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: question.id });
+    const style = { transform: CSS.Transform.toString(transform), transition };
+
+    return (
+      <div ref={setNodeRef} {...attributes} style={style} className='flex items-center justify-between p-2 border-2 rounded-xl border-gray-300 dark:border-gray-600'>
+        <div className='flex items-center text-base min-w-0'>
+          <span {...listeners} className='mr-2 cursor-grab text-gray-500 hover:text-gray-800'>
+            <FaGripVertical />
+          </span>
+          <span className='flex items-center justify-center bg-gray-900 text-primary-foreground rounded-full w-7 h-7 mr-3 text-sm font-medium'>{index + 1}</span>
+          <span className='truncate font-semibold max-w-[200px] md:max-w-[400px]'>{question.text.length > 80 ? `${question.text.substring(0, 80)}...` : question.text || "New Question"}</span>
+        </div>
+        <div className='flex items-center gap-2 ml-4 shrink-0'>
+          <Chip color={question.type === "coding" ? "secondary" : "primary"} variant='flat' size='sm'>
+            {question.type}
+          </Chip>
+          <Tooltip content='Edit question'>
+            <button aria-label='Edit' onClick={() => handleEditQuestion(question.id)} className='p-1 text-gray-600 hover:text-black rounded-full dark:text-gray-300 dark:hover:text-white'>
+              <AiOutlineEdit className='h-5 w-5' />
+            </button>
+          </Tooltip>
+          <Tooltip content='Remove question'>
+            <button aria-label='Delete' onClick={() => handleDeleteQuestion(question.id)} className='p-1 text-gray-600 hover:text-black rounded-full dark:text-gray-300 dark:hover:text-white'>
+              <AiOutlineDelete className='h-5 w-5 text-red-400' />
+            </button>
+          </Tooltip>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className='my-10 px-4 lg:px-6 max-w-[82rem] mx-auto w-full flex flex-col gap-4'>
       <Breadcrumb items={breadcrumbItems} />
@@ -103,15 +141,23 @@ export const AddJob = () => {
       <Formik<AddJobFormValues> innerRef={formRef} enableReinitialize initialValues={initialValues} validationSchema={AddJobSchema} onSubmit={handleSubmit}>
         {({ values, errors, touched, handleChange, setFieldValue }) => {
           const filteredQuestions = values.questions.filter((q) => q.text.toLowerCase().includes(searchTerm.toLowerCase())).filter((q) => selectedTab === "all" || q.type === selectedTab);
-
           const paginatedQuestions = filteredQuestions.slice((page - 1) * pageSize, page * pageSize);
           const startIndex = (page - 1) * pageSize;
 
-          const handleEditQuestion = (index: number) => {
+          const handleEditQuestion = (id: string) => {
+            const index = values.questions.findIndex((q) => q.id === id);
+            if (index === -1) return;
             setDrawerMode("edit");
             setEditingQuestion(values.questions[index]);
             setEditingQuestionIndex(index);
             setQuestionDrawerOpen(true);
+          };
+
+          const handleDeleteQuestion = (id: string) => {
+            setFieldValue(
+              "questions",
+              values.questions.filter((q) => q.id !== id)
+            );
           };
 
           const handleAddQuestion = () => {
@@ -136,7 +182,6 @@ export const AddJob = () => {
               <CardBody>
                 <div className='grid grid-cols-1 gap-4'>
                   <Input label='Job Title' size='sm' radius='sm' variant='bordered' value={values.jobTitle} isInvalid={!!errors.jobTitle && !!touched.jobTitle} errorMessage={errors.jobTitle} onChange={handleChange("jobTitle")} />
-
                   <RichTextEditor value={values.description} onChange={(val) => setFieldValue("description", val)} />
                 </div>
 
@@ -156,39 +201,31 @@ export const AddJob = () => {
                 <div className='mt-6'>
                   <QuestionHeaderActions onGenerateAI={() => setGenerateDrawerOpen(true)} onAddManual={handleAddQuestion} questionCount={10} />
                 </div>
-                <div className='flex flex-col gap-2 mt-4'>
-                  {paginatedQuestions.map((question, index) => (
-                    <div key={question.id} className='flex items-center justify-between p-2 border-2 rounded-xl border-gray-300 dark:border-gray-600'>
-                      <div className='flex items-center text-base min-w-0'>
-                        <span className='flex items-center justify-center bg-gray-900 text-primary-foreground rounded-full w-7 h-7 mr-3 text-sm font-medium'>{startIndex + index + 1}</span>
-                        <span className='truncate font-semibold max-w-[200px] md:max-w-[400px]'>{question.text.length > 80 ? `${question.text.substring(0, 80)}...` : question.text || "New Question"}</span>
-                      </div>
 
-                      <div className='flex items-center gap-2 ml-4 shrink-0'>
-                        <Chip color={question.type === "coding" ? "secondary" : "primary"} variant='flat' size='sm'>
-                          {question.type}
-                        </Chip>
-
-                        <Tooltip content='Edit question'>
-                          <button aria-label='Edit' onClick={() => handleEditQuestion(startIndex + index)} className='p-1 text-gray-600 hover:text-black rounded-full dark:text-gray-300 dark:hover:text-white'>
-                            <AiOutlineEdit className='h-5 w-5  ' />
-                          </button>
-                        </Tooltip>
-
-                        <Tooltip content='Remove question'>
-                          <button aria-label='Delete' className='p-1 text-gray-600 hover:text-black rounded-full dark:text-gray-300 dark:hover:text-white'>
-                            <AiOutlineDelete className='h-5 w-5 text-red-400' />
-                          </button>
-                        </Tooltip>
-                      </div>
+                <DndContext
+                  sensors={sensors}
+                  collisionDetection={closestCenter}
+                  onDragEnd={({ active, over }) => {
+                    if (!over || active.id === over.id) return;
+                    const oldIndex = values.questions.findIndex((q) => q.id === active.id);
+                    const newIndex = values.questions.findIndex((q) => q.id === over.id);
+                    const reordered = arrayMove(values.questions, oldIndex, newIndex);
+                    setFieldValue("questions", reordered);
+                  }}>
+                  <SortableContext items={values.questions.map((q) => q.id)} strategy={verticalListSortingStrategy}>
+                    <div className='flex flex-col gap-2 mt-4'>
+                      {paginatedQuestions.map((question, index) => (
+                        <SortableQuestionItem key={question.id} question={question} index={startIndex + index} handleEditQuestion={handleEditQuestion} handleDeleteQuestion={handleDeleteQuestion} />
+                      ))}
                     </div>
-                  ))}
-                </div>
+                  </SortableContext>
+                </DndContext>
 
                 <div className='flex flex-wrap gap-4 mt-4'>
                   <NumberInput size='sm' variant='bordered' label='Total Random Verbal Question' value={values.totalRandomVerbalQuestion} onValueChange={(val) => setFieldValue("totalRandomVerbalQuestion", val)} isInvalid={!!errors.totalRandomVerbalQuestion && !!touched.totalRandomVerbalQuestion} errorMessage={errors.totalRandomVerbalQuestion} className='max-w-xs' />
                   <NumberInput size='sm' variant='bordered' label='Total Random Coding Question' value={values.totalRandomCodingQuestion} onValueChange={(val) => setFieldValue("totalRandomCodingQuestion", val)} isInvalid={!!errors.totalRandomCodingQuestion && !!touched.totalRandomCodingQuestion} errorMessage={errors.totalRandomCodingQuestion} className='max-w-xs' />
                 </div>
+
                 <Divider className='my-6' />
                 <div className='flex justify-center mt-6'>
                   <Pagination total={Math.ceil(filteredQuestions.length / pageSize)} initialPage={1} page={page} onChange={setPage} size='sm' variant='faded' color='primary' />
@@ -196,12 +233,7 @@ export const AddJob = () => {
               </CardBody>
               <CardFooter>
                 <div className='flex justify-end w-full'>
-                  <Button
-                    color='primary'
-                    isLoading={loading}
-                    onPress={async () => {
-                      formRef.current.handleSubmit();
-                    }}>
+                  <Button color='primary' isLoading={loading} onPress={() => formRef.current.handleSubmit()}>
                     Save Changes
                   </Button>
                 </div>

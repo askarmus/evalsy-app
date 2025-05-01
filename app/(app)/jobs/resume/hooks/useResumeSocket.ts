@@ -22,9 +22,7 @@ export const useResumeSocket = (onProgress: (data: UploadProgress) => void, onCo
 
     setSocket(socketInstance);
 
-    socketInstance.on("connect", () => {
-      console.log("✅ Connected to socket:", socketInstance.id);
-    });
+    socketInstance.on("connect", () => {});
 
     socketInstance.on("upload-progress", (data: UploadProgress) => {
       onProgress(data);

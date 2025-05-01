@@ -29,7 +29,6 @@ export function useTrialStatus() {
     try {
       const res = await getTrialStatus();
       const trialData = res; // <--- THIS LINE FIXES IT
-      console.log("Trial data:", trialData); // Log the trial data for debugging
       setData({
         loading: false,
         isTrialActive: trialData.isTrialActive,

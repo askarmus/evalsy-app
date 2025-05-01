@@ -21,7 +21,6 @@ const ChangePassword = () => {
     try {
       setIsLoading(true);
       var result = await changePassword(values);
-      console.log(result);
 
       showToast.success("Password updated successfully! Logging out...");
 

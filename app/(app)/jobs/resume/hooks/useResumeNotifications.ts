@@ -11,10 +11,8 @@ export const useResumeNotifications = (jobId: string) => {
 
     const q = query(collection(db, "resume-process-status"), where("jobId", "==", jobId), orderBy("createdAt", "desc"));
 
-    // Optional initial fetch (if needed)
     const fetchInitial = async () => {
       const snapshot = await getDocs(q);
-      console.log("Document count:", snapshot.size);
     };
 
     fetchInitial();
@@ -22,7 +20,6 @@ export const useResumeNotifications = (jobId: string) => {
     const unsub = onSnapshot(q, (snapshot) => {
       const newItems = snapshot.docs.map((doc) => doc.data());
       setNotifications(newItems);
-      console.log("New items:", newItems);
     });
 
     return () => unsub();

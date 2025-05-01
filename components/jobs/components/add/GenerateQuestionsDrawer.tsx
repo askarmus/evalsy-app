@@ -57,8 +57,6 @@ export const GenerateQuestionsDrawer = ({ isOpen, jobTitle, description, onOpenC
 
         onQuestionsGenerated(newQuestions);
 
-        console.log("Generated questions:", newQuestions);
-
         showToast.success(result.message || "Questions generated successfully");
       } catch (error: any) {
         console.error("Error generating questions:", error);

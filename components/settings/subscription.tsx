@@ -27,8 +27,6 @@ const SubscribePage = () => {
 
   const { loading: trialStatusLoading, isTrialActive, subscriptionActive, isCanceled, refetch } = useTrialStatus();
 
-  console.log("trialStatusLoading", trialStatusLoading);
-  console.log("loadingSubscription", loadingSubscription);
   const fetchSubscriptionData = useCallback(async () => {
     try {
       setLoadingSubscription(true);
@@ -46,8 +44,6 @@ const SubscribePage = () => {
           cancelAtPeriodEnd: subData.cancel_at_period_end,
         });
       }
-      console.log("statusRes:", statusRes);
-
       setUsage(usageRes);
     } catch (error) {
       console.error("Error loading subscription data:", error);

@@ -26,7 +26,6 @@ export default function RichTextEditor({ value, onChange }: RichTextEditorProps)
   lowlight.register("typescript", typescript);
   lowlight.register("python", python);
 
-  console.log("value", value);
   const editor = useEditor({
     extensions: [
       StarterKit.configure({

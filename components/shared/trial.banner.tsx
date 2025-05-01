@@ -16,10 +16,8 @@ export default function TrialBanner() {
     setLoadingSubscribe(true);
     try {
       const res = await createSubscription();
-      console.log("Subscription response:", res);
       window.location.href = res.data;
     } catch (error) {
-      console.error("Subscription error:", error);
       setLoadingSubscribe(false);
     }
   };

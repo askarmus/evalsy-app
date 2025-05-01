@@ -52,8 +52,6 @@ export const NotificationsDropdown = () => {
       const snapshot = await getDocs(q);
       const count = snapshot.size;
 
-      console.log("Document count:", count);
-
       const unsub = onSnapshot(q, (snapshot) => {
         const newItems = snapshot.docs.map((doc) => ({
           id: doc.id,
@@ -107,12 +105,7 @@ export const NotificationsDropdown = () => {
                 </DropdownItem>
               ))}
 
-              <DropdownItem
-                key='viewAll'
-                className='text-center text-primary font-medium hover:underline cursor-pointer'
-                onClick={() => {
-                  console.log("Navigate to /notifications or open modal");
-                }}>
+              <DropdownItem key='viewAll' className='text-center text-primary font-medium hover:underline cursor-pointer' onPress={() => {}}>
                 View All
               </DropdownItem>
             </>

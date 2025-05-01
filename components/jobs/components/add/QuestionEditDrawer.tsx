@@ -89,21 +89,27 @@ export const QuestionEditDrawer = ({ isOpen, onOpenChange, mode, initialQuestion
                     </div>
 
                     {values.type === "coding" && (
-                      <div className='flex justify-between gap-4'>
-                        <div className='flex-1 max-w-[160px]'>
-                          <label className='block text-sm font-medium text-gray-700 mb-1'>Time Limit (minutes)</label>
-                          <Input size='sm' type='number' min={1} value={values.timeLimit?.toString() || ""} placeholder='Enter time limit' isInvalid={Boolean(errors.timeLimit) && Boolean(touched.timeLimit)} onChange={(e) => setFieldValue("timeLimit", Number(e.target.value))} className='w-full' />
-                        </div>
+                      <>
+                        <div className='flex justify-between gap-4'>
+                          <div className='flex-1 max-w-[160px]'>
+                            <label className='block text-sm font-medium text-gray-700 mb-1'>Time Limit (minutes)</label>
+                            <Input size='sm' type='number' min={1} value={values.timeLimit?.toString() || ""} placeholder='Enter time limit' isInvalid={Boolean(errors.timeLimit) && Boolean(touched.timeLimit)} onChange={(e) => setFieldValue("timeLimit", Number(e.target.value))} className='w-full' />
+                          </div>
 
-                        <div className='flex-1'>
-                          <label className='block text-sm font-medium text-gray-700 mb-1'>Language</label>
-                          <Select aria-label='language' selectedKeys={values.language ? [values.language] : []} onChange={(e) => setFieldValue("language", e.target.value)} size='sm' isInvalid={Boolean(errors.language) && Boolean(touched.language)} className='w-full'>
-                            {languages.map((lang) => (
-                              <SelectItem key={lang.monacoLang}>{lang.label}</SelectItem>
-                            ))}
-                          </Select>
+                          <div className='flex-1'>
+                            <label className='block text-sm font-medium text-gray-700 mb-1'>Language</label>
+                            <Select aria-label='language' selectedKeys={values.language ? [values.language] : []} onChange={(e) => setFieldValue("language", e.target.value)} size='sm' isInvalid={Boolean(errors.language) && Boolean(touched.language)} className='w-full'>
+                              {languages.map((lang) => (
+                                <SelectItem key={lang.monacoLang}>{lang.label}</SelectItem>
+                              ))}
+                            </Select>
+                          </div>
                         </div>
-                      </div>
+                        <div>
+                          <label className='block text-sm font-medium mb-1'>Starting Code</label>
+                          <Textarea className='w-full' variant='bordered' placeholder='Code' value={values.starterCode || ""} onChange={(e) => setFieldValue("starterCode", e.target.value)} />
+                        </div>
+                      </>
                     )}
                   </div>
                 </DrawerBody>
