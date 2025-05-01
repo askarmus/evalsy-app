@@ -1,0 +1,11 @@
+export const MONTHLY_BASE_PRICE = "50";
+export const MONTHLY_BASE_RESUME = "100";
+export const MONTHLY_BASE_INVITATION = "50";
+export const EXTRA_RESUME_PRICE = "0.1";
+export const EXTRA_INVITATION_PRICE = "0.1";
+export const TRIAL_DAYS = 7;
+export const TRIAL_INVITATION = 20;
+export const TRIAL_RESUME = 100;
+export const BASE_PLAN_PRICE_ID = "price_1N4v2dJ0xk3Qz5X9Z8Y6g7hE";
+export const INVITES_PRICE_ID = "price_1RGAi0GfB1ITJSxDcaOtN5vz";
+export const RESUMES_PRICE_ID = "price_1RGAi0GfB1ITJSxDwFUX2pEf";
