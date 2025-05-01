@@ -12,6 +12,7 @@ import python from "highlight.js/lib/languages/python";
 
 import { Button } from "@heroui/react";
 import { AiOutlineBold, AiOutlineItalic, AiOutlineUnderline, AiOutlineUnorderedList, AiOutlineOrderedList, AiOutlineCode } from "react-icons/ai";
+import { useEffect } from "react";
 
 interface RichTextEditorProps {
   value: string;
@@ -21,11 +22,11 @@ interface RichTextEditorProps {
 export default function RichTextEditor({ value, onChange }: RichTextEditorProps) {
   const lowlight = createLowlight();
 
-  // ✅ Register languages
   lowlight.register("javascript", javascript);
   lowlight.register("typescript", typescript);
   lowlight.register("python", python);
 
+  console.log("value", value);
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
@@ -35,10 +36,18 @@ export default function RichTextEditor({ value, onChange }: RichTextEditorProps)
       CodeBlockLowlight.configure({ lowlight }),
     ],
     content: value || "<p></p>",
+
     onUpdate: ({ editor }) => {
       onChange(editor.getHTML());
+      editor.commands.scrollIntoView();
     },
   });
+
+  useEffect(() => {
+    if (editor && value !== editor.getHTML()) {
+      editor.commands.setContent(value, false);
+    }
+  }, [value, editor]);
 
   if (!editor) return null;
 
@@ -66,8 +75,10 @@ export default function RichTextEditor({ value, onChange }: RichTextEditorProps)
         </Button>
       </div>
 
-      {/* Editor Content */}
-      <EditorContent editor={editor} className='tiptap prose prose-sm max-w-none min-h-[53px] focus:outline-none focus:ring-0' />
+      {/* Scrollable Editor Container */}
+      <div className='max-h-64 overflow-y-auto border rounded-md p-2'>
+        <EditorContent editor={editor} className='tiptap prose prose-sm max-w-none min-h-[53px] focus:outline-none focus:ring-0' />
+      </div>
     </div>
   );
 }

@@ -15,6 +15,7 @@ import { QuestionSearchAndFilter } from "./components/add/QuestionSearchAndFilte
 import { GenerateQuestionsDrawer } from "./components/add/GenerateQuestionsDrawer";
 import { AiOutlineDelete, AiOutlineEdit } from "react-icons/ai";
 import { QuestionHeaderActions } from "./components/add/QuestionHeaderActions";
+import RichTextEditor from "../shared/RichTextEditor";
 
 export const AddJob = () => {
   const router = useRouter();
@@ -106,7 +107,6 @@ export const AddJob = () => {
           const paginatedQuestions = filteredQuestions.slice((page - 1) * pageSize, page * pageSize);
           const startIndex = (page - 1) * pageSize;
 
-          // Handle question editing
           const handleEditQuestion = (index: number) => {
             setDrawerMode("edit");
             setEditingQuestion(values.questions[index]);
@@ -136,7 +136,8 @@ export const AddJob = () => {
               <CardBody>
                 <div className='grid grid-cols-1 gap-4'>
                   <Input label='Job Title' size='sm' radius='sm' variant='bordered' value={values.jobTitle} isInvalid={!!errors.jobTitle && !!touched.jobTitle} errorMessage={errors.jobTitle} onChange={handleChange("jobTitle")} />
-                  <Textarea size='sm' placeholder='Enter description' variant='bordered' value={values.description} isInvalid={!!errors.description && !!touched.description} errorMessage={errors.description} onChange={handleChange("description")} />
+
+                  <RichTextEditor value={values.description} onChange={(val) => setFieldValue("description", val)} />
                 </div>
 
                 <div className='mt-6'>
@@ -157,7 +158,7 @@ export const AddJob = () => {
                 </div>
                 <div className='flex flex-col gap-2 mt-4'>
                   {paginatedQuestions.map((question, index) => (
-                    <div key={question.id} className='flex items-center justify-between p-2 border-2 rounded-xl'>
+                    <div key={question.id} className='flex items-center justify-between p-2 border-2 rounded-xl border-gray-300 dark:border-gray-600'>
                       <div className='flex items-center text-base min-w-0'>
                         <span className='flex items-center justify-center bg-gray-900 text-primary-foreground rounded-full w-7 h-7 mr-3 text-sm font-medium'>{startIndex + index + 1}</span>
                         <span className='truncate font-semibold max-w-[200px] md:max-w-[400px]'>{question.text.length > 80 ? `${question.text.substring(0, 80)}...` : question.text || "New Question"}</span>
@@ -189,12 +190,10 @@ export const AddJob = () => {
                   <NumberInput size='sm' variant='bordered' label='Total Random Coding Question' value={values.totalRandomCodingQuestion} onValueChange={(val) => setFieldValue("totalRandomCodingQuestion", val)} isInvalid={!!errors.totalRandomCodingQuestion && !!touched.totalRandomCodingQuestion} errorMessage={errors.totalRandomCodingQuestion} className='max-w-xs' />
                 </div>
                 <Divider className='my-6' />
-
                 <div className='flex justify-center mt-6'>
                   <Pagination total={Math.ceil(filteredQuestions.length / pageSize)} initialPage={1} page={page} onChange={setPage} size='sm' variant='faded' color='primary' />
                 </div>
               </CardBody>
-
               <CardFooter>
                 <div className='flex justify-end w-full'>
                   <Button

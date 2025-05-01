@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import { useInterviewStore } from "../stores/useInterviewStore";
 
-const UserCamera: React.FC<{ height?: string }> = ({ height }) => {
+const UserCamera: React.FC<{ height?: string; hideRecLabel: boolean }> = ({ height, hideRecLabel = false }) => {
   const { isCameraOn, uploadScreenshot, screenshotInterval } = useInterviewStore();
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -59,10 +59,12 @@ const UserCamera: React.FC<{ height?: string }> = ({ height }) => {
         <video ref={videoRef} autoPlay playsInline className='w-full h-full object-cover' />
         <canvas ref={canvasRef} style={{ display: "none" }} />
 
-        <div className='absolute top-1 right-1 bg-red-500 text-white text-xs px-2 py-1 rounded-full flex items-center gap-1'>
-          <span className='h-1 w-1 rounded-full bg-white animate-pulse'></span>
-          REC
-        </div>
+        {!hideRecLabel && (
+          <div className='absolute top-1 right-1 bg-red-500 text-white text-xs px-2 py-1 rounded-full flex items-center gap-1'>
+            <span className='h-1 w-1 rounded-full bg-white animate-pulse'></span>
+            REC
+          </div>
+        )}
       </div>
     </>
   );

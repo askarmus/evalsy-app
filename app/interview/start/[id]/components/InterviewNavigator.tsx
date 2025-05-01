@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useInterviewStore } from "../stores/useInterviewStore";
 import UserCamera from "./UserCamera";
 import InterviewNavbar from "./InterviewNavbar";
-import { Button, Card, CardBody, Chip, ScrollShadow, Textarea } from "@heroui/react";
+import { Button, Card, CardBody, Chip, ScrollShadow, Textarea, Tooltip } from "@heroui/react";
 import CandidateInfo from "./CandidateInfo";
 import { FaExpand, FaMicrophone, FaMicrophoneAlt, FaPlay, FaStopCircle } from "react-icons/fa";
 import { AnimatePresence, motion } from "framer-motion";
@@ -163,18 +163,29 @@ const InterviewNavigator: React.FC = () => {
               <div className='md:col-span-3 bg-slate-50 dark:bg-slate-800 p-4 border-l border-gray-200 dark:border-gray-900'>
                 <div className=' '>
                   <InterviewProgress candidate={candidate} job={job} company={company} questions={questions} currentQuestion={currentQuestion} />
-                  <motion.h3 initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className='text-md mt-6  font-semibold text-gray-800 dark:text-gray-100'>
-                    {question?.text || "No Questions Available"}
+                  <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className='flex items-center justify-between mt-6'>
+                    <h3 className='text-md font-semibold text-gray-800 dark:text-gray-100'>{question.text}</h3>
 
-                    <audio ref={audioRef} onEnded={handleQuestionAudioEnd} onPlay={() => setIsReplayingAudio(true)} onPause={handleReplayAudioEnded}>
-                      <source src={question?.audioUrl} type='audio/wav' />
-                      Your browser does not support the audio element.
-                    </audio>
-                    <audio ref={reminderAudioRef}>
-                      <source src={company.answerQuestionAudioUrl} type='audio/wav' />
-                      Your browser does not support the audio element.
-                    </audio>
-                  </motion.h3>
+                    {!isReplayingAudio ? (
+                      <Button size='sm' variant='solid' radius='full' color='default' startContent={<FaPlay />} isDisabled={!isRefreshed || isRecording} onPress={handleReplayAudio}>
+                        Replay Audio
+                      </Button>
+                    ) : (
+                      <Button size='sm' variant='bordered' radius='full' startContent={<FaStopCircle />} color='warning' onPress={handleStopReplayAudio}>
+                        Stop Replay
+                      </Button>
+                    )}
+                  </motion.div>
+
+                  <audio ref={audioRef} onEnded={handleQuestionAudioEnd} onPlay={() => setIsReplayingAudio(true)} onPause={handleReplayAudioEnded}>
+                    <source src={question?.audioUrl} type='audio/wav' />
+                    Your browser does not support the audio element.
+                  </audio>
+
+                  <audio ref={reminderAudioRef}>
+                    <source src={company.answerQuestionAudioUrl} type='audio/wav' />
+                    Your browser does not support the audio element.
+                  </audio>
 
                   {question.type == "coding" && (
                     <div className='mt-6'>
@@ -206,7 +217,7 @@ const InterviewNavigator: React.FC = () => {
                   </div>
                 )}
 
-                {question.type == "verbal" && <UserCamera />}
+                {question.type == "verbal" && <UserCamera hideRecLabel={false} />}
 
                 {question.type == "coding" && (
                   <div className='p-2'>
@@ -228,11 +239,7 @@ const InterviewNavigator: React.FC = () => {
                 </Button>
 
                 <Button color='default' isLoading={isResultUpdating} size='md' radius='full' variant='solid' startContent={<FaExpand />} onPress={handleCodeFinish}>
-                  {isResultUpdating ? "Loading Next Question..." : "Finish Code"}
-                </Button>
-
-                <Button size='md' variant='solid' radius='full' color='default' startContent={<FaPlay />} isDisabled={!isRefreshed || isRecording} onPress={handleReplayAudio}>
-                  Replay Audio
+                  {isResultUpdating ? "Loading Next Question..." : "Next Question"}
                 </Button>
               </div>
             )}
@@ -259,16 +266,6 @@ const InterviewNavigator: React.FC = () => {
                     isDisabled={isResultUpdating}
                     onPress={handleStopRecording}>
                     {isResultUpdating ? "Loading Next Question..." : "Stop Recording"}
-                  </Button>
-                )}
-
-                {!isReplayingAudio ? (
-                  <Button size='md' variant='solid' radius='full' color='default' startContent={<FaPlay />} isDisabled={!isRefreshed || isRecording} onPress={handleReplayAudio}>
-                    Replay Audio
-                  </Button>
-                ) : (
-                  <Button size='md' variant='bordered' radius='full' startContent={<FaStopCircle />} color='warning' onPress={handleStopReplayAudio}>
-                    Stop Replay
                   </Button>
                 )}
               </div>

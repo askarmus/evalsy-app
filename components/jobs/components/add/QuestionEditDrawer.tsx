@@ -50,11 +50,11 @@ export const QuestionEditDrawer = ({ isOpen, onOpenChange, mode, initialQuestion
 
                 <DrawerBody>
                   <div className='flex flex-col gap-4'>
-                    {/* Question Type and Randomize */}
-                    <div className='flex items-center gap-4'>
-                      <div>
+                    <div className='flex justify-between gap-4'>
+                      <div className='flex-1'>
                         <label className='block text-sm font-medium mb-1'>Question Type</label>
                         <Select
+                          className='w-full'
                           aria-label='Select question type'
                           selectedKeys={[values.type]}
                           onChange={(e) => {
@@ -71,55 +71,43 @@ export const QuestionEditDrawer = ({ isOpen, onOpenChange, mode, initialQuestion
                         </Select>
                       </div>
 
-                      <div className='mt-6'>
+                      <div className='flex items-end flex-1'>
                         <Checkbox isSelected={values.isRandom} onChange={(e) => setFieldValue("isRandom", e.target.checked)}>
-                          Randomize Question
+                          Random Only
                         </Checkbox>
                       </div>
                     </div>
 
-                    {/* Question Text */}
                     <div>
                       <label className='block text-sm font-medium mb-1'>Question Text</label>
                       <Textarea variant='bordered' placeholder='Enter your question' value={values.text} isInvalid={Boolean(touched.text) && Boolean(errors.text)} onChange={handleChange("text")} />
                     </div>
 
-                    {/* Explanation */}
                     <div>
                       <label className='block text-sm font-medium mb-1'>Explanation (optional)</label>
                       <RichTextEditor value={values.explanation || ""} onChange={(val) => setFieldValue("explanation", val)} />
                     </div>
 
-                    {/* Coding-specific options */}
                     {values.type === "coding" && (
-                      <div className='flex flex-col gap-4'>
-                        {/* Time Limit */}
-                        <div>
+                      <div className='flex justify-between gap-4'>
+                        <div className='flex-1 max-w-[160px]'>
                           <label className='block text-sm font-medium text-gray-700 mb-1'>Time Limit (minutes)</label>
-                          <Input size='sm' type='number' min={1} value={values.timeLimit?.toString() || ""} placeholder='Enter time limit' isInvalid={Boolean(errors.timeLimit) && Boolean(touched.timeLimit)} onChange={(e) => setFieldValue("timeLimit", Number(e.target.value))} className='max-w-[120px]' />
+                          <Input size='sm' type='number' min={1} value={values.timeLimit?.toString() || ""} placeholder='Enter time limit' isInvalid={Boolean(errors.timeLimit) && Boolean(touched.timeLimit)} onChange={(e) => setFieldValue("timeLimit", Number(e.target.value))} className='w-full' />
                         </div>
 
-                        {/* Language */}
-                        <div>
+                        <div className='flex-1'>
                           <label className='block text-sm font-medium text-gray-700 mb-1'>Language</label>
-                          <Select aria-label='language' selectedKeys={values.language ? [values.language] : []} onChange={(e) => setFieldValue("language", e.target.value)} size='sm' isInvalid={Boolean(errors.language) && Boolean(touched.language)} className='w-48'>
+                          <Select aria-label='language' selectedKeys={values.language ? [values.language] : []} onChange={(e) => setFieldValue("language", e.target.value)} size='sm' isInvalid={Boolean(errors.language) && Boolean(touched.language)} className='w-full'>
                             {languages.map((lang) => (
                               <SelectItem key={lang.monacoLang}>{lang.label}</SelectItem>
                             ))}
                           </Select>
-                        </div>
-
-                        {/* Starter Code */}
-                        <div>
-                          <label className='block text-sm font-medium mb-1'>Starting Code</label>
-                          <Textarea className='w-full' variant='bordered' placeholder='Code' value={values.starterCode || ""} onChange={(e) => setFieldValue("starterCode", e.target.value)} />
                         </div>
                       </div>
                     )}
                   </div>
                 </DrawerBody>
 
-                {/* Footer Buttons */}
                 <DrawerFooter>
                   <Button variant='light' color='danger' onPress={onClose}>
                     Cancel

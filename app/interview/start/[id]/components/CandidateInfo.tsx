@@ -26,7 +26,7 @@ const CandidateInfo: React.FC<any> = ({ candidate, job, addTopPadding = true, cu
 
       {questions && questions[currentQuestion]?.type === "coding" && (
         <div>
-          <UserCamera height='100px' />
+          <UserCamera hideRecLabel={false} height='100px' />
         </div>
       )}
     </div>

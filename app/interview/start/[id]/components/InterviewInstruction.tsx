@@ -1,10 +1,11 @@
-import { Button, Card, CardBody, CardFooter, Chip, Switch } from "@heroui/react";
+import { Button, Card, CardBody, CardFooter, Chip, Switch, User } from "@heroui/react";
 import React, { useState } from "react";
 import { useInterviewStore } from "../stores/useInterviewStore";
 import CandidateInfo from "./CandidateInfo";
 import { FaCamera, FaCheckCircle, FaMicrophone } from "react-icons/fa";
 import PoweredBy from "./PoweredBy";
 import InterviewNavbar from "./InterviewNavbar";
+import UserCamera from "./UserCamera";
 
 const InterviewInstruction: React.FC<any> = () => {
   const [permissionGranted, setPermissionGranted] = useState(false);
@@ -60,29 +61,39 @@ const InterviewInstruction: React.FC<any> = () => {
             </div>
 
             <div className='mt-8 flex flex-col gap-[6px] md:mt-0 font-xs'>
-              <h1 className='text-md font-medium text-tertiary'>Job Description</h1>
+              <h1 className='text-md font-medium text-tertiary mb-2'>Job Description</h1>
 
               <div className='relative'>
-                <div className={`text-primary4 container space-y-4 text-sm  pr-2 ${showFullDescription ? "max-h-full" : "max-h-[160px] overflow-hidden"}`}>{job?.description}</div>
+                <div className={`text-primary4 container space-y-4 text-sm pr-2 ${showFullDescription ? "max-h-full" : "max-h-[160px] overflow-hidden"}`} dangerouslySetInnerHTML={{ __html: job?.description || "" }} />
 
                 {!showFullDescription && <div className='absolute bottom-0 left-0 right-0 h-16 pointer-events-none rounded-b-md' />}
               </div>
 
-              <button onClick={() => setShowFullDescription((prev) => !prev)} className='text-black-600 text-xs font-semibold  hover:underline mt-2 w-fit'>
+              <button onClick={() => setShowFullDescription((prev) => !prev)} className='text-black-600 text-xs text-blue-600   hover:underline mt-2 w-fit'>
                 {showFullDescription ? "Read Less" : "Read More"}
               </button>
             </div>
+            <div className='bg-gray-50 dark:bg-gray-800 rounded-2xl p-6 mt-6 shadow-sm'>
+              <div className='flex flex-col sm:flex-row justify-between items-center gap-6'>
+                <div className='w-full sm:w-1/2 space-y-4'>
+                  <div className='flex items-center space-x-2 text-green-600'>
+                    <FaCheckCircle className='h-5 w-5' />
+                    <h3 className='text-base font-semibold text-slate-800 dark:text-slate-100'>Device Check</h3>
+                  </div>
 
-            <div className='bg-gray-50 dark:bg-gray-800 rounded-lg p-4 mt-6'>
-              <div className='flex items-center gap-2 mb-3'>
-                <FaCheckCircle className='h-4 w-4 text-green-600' />
-                <h3 className='text-sm font-semibold text-slate-800 dark:text-slate-100'>Device Check</h3>
-              </div>
-              <div className='flex items-center justify-between mb-2'>
-                <div className='flex items-center gap-2'>
-                  <FaCamera className={`h-4 w-4 ${permissionGranted ? "text-green-600" : "text-slate-400 dark:text-slate-500"}`} />
-                  <FaMicrophone className={`h-4 w-4 ${permissionGranted ? "text-green-600" : "text-slate-400 dark:text-slate-500"}`} />
-                  <span className='text-sm font-medium text-slate-700 dark:text-slate-300'>Camera & Microphone</span>
+                  <div className='flex items-center space-x-3'>
+                    <FaCamera className={`h-5 w-5 ${permissionGranted ? "text-green-600" : "text-slate-400 dark:text-slate-500"}`} />
+                    <span className='text-sm font-medium text-slate-700 dark:text-slate-200'>Camera</span>
+                  </div>
+
+                  <div className='flex items-center space-x-3'>
+                    <FaMicrophone className={`h-5 w-5 ${permissionGranted ? "text-green-600" : "text-slate-400 dark:text-slate-500"}`} />
+                    <span className='text-sm font-medium text-slate-700 dark:text-slate-200'>Microphone</span>
+                  </div>
+                </div>
+
+                <div className='w-full sm:w-auto flex justify-center sm:justify-end'>
+                  <UserCamera hideRecLabel={true} height='120px' />
                 </div>
               </div>
             </div>
