@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
-import { Button, Card, CardBody, CardFooter, Divider, Input, Pagination, NumberInput, Chip, Tooltip } from "@heroui/react";
+import { Button, Card, CardBody, CardFooter, Divider, Input, Pagination, NumberInput, Chip, Tooltip, Select, SelectItem } from "@heroui/react";
 import { Formik, FormikHelpers } from "formik";
 import { showToast } from "@/app/utils/toastUtils";
 import { createJob, getJobById, updateJob } from "@/services/job.service";
@@ -39,7 +39,7 @@ export const AddJob = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedTab, setSelectedTab] = useState<"all" | "verbal" | "coding">("all");
   const [page, setPage] = useState(1);
-  const pageSize = 10;
+  const [pageSize, setPageSize] = React.useState("5");
 
   const [initialValues, setInitialValues] = useState<AddJobFormValues>({
     jobTitle: "",
@@ -95,6 +95,22 @@ export const AddJob = () => {
     }
   };
 
+  const pageSizes = [
+    { key: 5, label: "5" },
+    { key: 10, label: "10" },
+    { key: 30, label: "20" },
+    { key: 40, label: "30" },
+    { key: 50, label: "40" },
+    { key: 60, label: "50" },
+    { key: 60, label: "60" },
+    { key: 70, label: "70" },
+  ];
+
+  const handlePageSizeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selected = e.target.value;
+    setPageSize(selected);
+    // setPage(1); // reset page if needed
+  };
   const breadcrumbItems = [
     { name: "Dashboard", link: "/" },
     { name: "Job", link: "/job/list" },
@@ -141,8 +157,8 @@ export const AddJob = () => {
       <Formik<AddJobFormValues> innerRef={formRef} enableReinitialize initialValues={initialValues} validationSchema={AddJobSchema} onSubmit={handleSubmit}>
         {({ values, errors, touched, handleChange, setFieldValue }) => {
           const filteredQuestions = values.questions.filter((q) => q.text.toLowerCase().includes(searchTerm.toLowerCase())).filter((q) => selectedTab === "all" || q.type === selectedTab);
-          const paginatedQuestions = filteredQuestions.slice((page - 1) * pageSize, page * pageSize);
-          const startIndex = (page - 1) * pageSize;
+          const paginatedQuestions = filteredQuestions.slice((page - 1) * Number(pageSize), page * Number(pageSize));
+          const startIndex = (page - 1) * Number(pageSize);
 
           const handleEditQuestion = (id: string) => {
             const index = values.questions.findIndex((q) => q.id === id);
@@ -227,8 +243,16 @@ export const AddJob = () => {
                 </div>
 
                 <Divider className='my-6' />
-                <div className='flex justify-center mt-6'>
-                  <Pagination total={Math.ceil(filteredQuestions.length / pageSize)} initialPage={1} page={page} onChange={setPage} size='sm' variant='faded' color='primary' />
+                <div className='flex flex-wrap justify-center items-center gap-4 mt-6'>
+                  <Pagination color='default' size='sm' total={Math.ceil(filteredQuestions.length / Number(pageSize))} initialPage={1} page={page} onChange={setPage} />
+
+                  <div className='flex items-center gap-2'>
+                    <Select className='w-20' size='sm' defaultSelectedKeys={[pageSize]} selectedKeys={[pageSize]} variant='faded' onChange={handlePageSizeChange}>
+                      {pageSizes.map((animal) => (
+                        <SelectItem key={animal.key}>{animal.label}</SelectItem>
+                      ))}
+                    </Select>
+                  </div>
                 </div>
               </CardBody>
               <CardFooter>

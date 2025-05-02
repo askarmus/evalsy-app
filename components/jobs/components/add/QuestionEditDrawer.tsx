@@ -40,9 +40,12 @@ export const QuestionEditDrawer = ({ isOpen, onOpenChange, mode, initialQuestion
           <Formik
             initialValues={initialQuestion || handleCreateNewQuestion()}
             validationSchema={questionSchema}
-            onSubmit={(values) => {
+            onSubmit={(values, { resetForm }) => {
               onSave(values);
-              onClose();
+
+              if (!isEdit) {
+                resetForm({ values: handleCreateNewQuestion() }); // Clear form for next question
+              }
             }}>
             {({ values, errors, touched, handleChange, setFieldValue, handleSubmit }) => (
               <>
