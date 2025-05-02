@@ -6,6 +6,7 @@ import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDi
 import { PricingSubscription } from "../start/PricingSubscription";
 import { useState } from "react";
 import { createSubscription } from "@/services/subscription.service";
+import { FaAccusoft, FaArrowRight } from "react-icons/fa";
 
 export default function TrialBanner() {
   const { loading, isTrialActive, subscriptionActive, trialEnd } = useTrialStatus();
@@ -27,20 +28,50 @@ export default function TrialBanner() {
   return (
     <>
       {!subscriptionActive && (
-        <div className='p-2 bg-[#FFB65E] text-center'>
+        <div className='p-2 bg-[#e5e7eb] text-center'>
           {isTrialActive ? (
             <p className='text-sm'>
               You are on a free trial until {trialEnd?.toLocaleDateString()}{" "}
-              <Link href='#' onClick={onOpen} className='font-bold'>
+              <Button
+                size='sm'
+                radius='full'
+                as={Link}
+                className='group relative h-9 overflow-hidden bg-transparent text-small font-normal'
+                color='default'
+                endContent={<FaArrowRight />}
+                onPress={onOpen}
+                href='#'
+                style={{
+                  border: "solid 2px transparent",
+                  backgroundImage: `linear-gradient(hsl(var(--heroui-background)), hsl(var(--heroui-background))), linear-gradient(to right, #F871A0, #9353D3)`,
+                  backgroundOrigin: "border-box",
+                  backgroundClip: "padding-box, border-box",
+                }}
+                variant='bordered'>
                 Upgrade Now
-              </Link>
+              </Button>
             </p>
           ) : (
             <p>
               Your trial has ended. Please{" "}
-              <Link href='#' onClick={onOpen} className='font-bold'>
+              <Button
+                size='sm'
+                radius='full'
+                as={Link}
+                className='group relative h-9 overflow-hidden bg-transparent text-small font-normal'
+                color='default'
+                endContent={<FaArrowRight />}
+                onPress={onOpen}
+                href='#'
+                style={{
+                  border: "solid 2px transparent",
+                  backgroundImage: `linear-gradient(hsl(var(--heroui-background)), hsl(var(--heroui-background))), linear-gradient(to right, #F871A0, #9353D3)`,
+                  backgroundOrigin: "border-box",
+                  backgroundClip: "padding-box, border-box",
+                }}
+                variant='bordered'>
                 Upgrade Now
-              </Link>
+              </Button>
             </p>
           )}
         </div>
