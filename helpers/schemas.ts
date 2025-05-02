@@ -1,25 +1,41 @@
 import { array, boolean, number, object, ref, string } from "yup";
 import zxcvbn from "zxcvbn";
+import * as Yup from "yup";
+import { freeEmailDomains, disposableEmailDomains, blacklistedDomains } from "@/lib/data/emailDomains";
 
 export const LoginSchema = object().shape({
   email: string().email("This field must be an email").required("Email is required"),
   password: string().required("Password is required"),
 });
 
-export const RegisterSchema = object().shape({
-  name: string().required("Name is required"),
-  email: string().email("This field must be an email").required("Email is required"),
-  password: string()
+export const RegisterSchema = Yup.object().shape({
+  name: Yup.string().required("Name is required"),
+
+  email: string()
+    .email("This field must be an email")
+    .required("Email is required")
+    .test("is-work-email", "Only work email addresses are allowed", (value: any) => {
+      console.log("value:", value);
+
+      if (!value) return false;
+      const domain = value.split("@")[1]?.toLowerCase().trim();
+      console.log("Checking domain:", domain);
+      return domain && !freeEmailDomains.includes(domain) && !disposableEmailDomains.includes(domain) && !blacklistedDomains.includes(domain);
+    }),
+
+  password: Yup.string()
     .required("Password is required")
     .test("password-strength", "Password must be stronger (at least 'Fair')", (value) => {
       if (!value) return false;
       const result = zxcvbn(value);
-      return result.score >= 2; // Only allow Good (3) and Strong (4)
+      return result.score >= 2;
     }),
-  confirmPassword: string()
+
+  confirmPassword: Yup.string()
     .required("Confirm password is required")
     .oneOf([ref("password")], "Passwords must match"),
 });
+
 export const ForgetPasswordSchema = object().shape({
   email: string().email("This field must be an email").required("Email is required"),
 });

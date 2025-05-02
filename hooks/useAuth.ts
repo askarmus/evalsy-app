@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import apiClient, { refreshAccessToken } from "@/helpers/apiClient";
 
 export const useAuth = () => {
@@ -9,27 +9,32 @@ export const useAuth = () => {
   const [user, setUser] = useState<any>(null);
   const [authenticated, setAuthenticated] = useState(false);
   const router = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => {
     const initAuth = async () => {
       try {
         const { data } = await apiClient.get("/auth/me");
         setUser(data);
-        setAuthenticated(true); // ✅ authenticated
+        setAuthenticated(true);
       } catch {
         const didRefresh = await refreshAccessToken();
         if (didRefresh) {
           try {
             const { data } = await apiClient.get("/auth/me");
             setUser(data);
-            setAuthenticated(true); // ✅ authenticated after refresh
+            setAuthenticated(true);
           } catch {
             setAuthenticated(false);
-            router.replace("/login");
+            if (pathname !== "/") {
+              router.replace("/login");
+            }
           }
         } else {
           setAuthenticated(false);
-          router.replace("/login");
+          if (pathname !== "/") {
+            router.replace("/login");
+          }
         }
       } finally {
         setLoading(false);
@@ -37,7 +42,7 @@ export const useAuth = () => {
     };
 
     initAuth();
-  }, [router]);
+  }, [router, pathname]);
 
   return { user, loading, authenticated };
 };
