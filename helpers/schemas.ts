@@ -1,7 +1,7 @@
 import { array, boolean, number, object, ref, string } from "yup";
 import zxcvbn from "zxcvbn";
 import * as Yup from "yup";
-import { freeEmailDomains, disposableEmailDomains, blacklistedDomains } from "@/lib/data/emailDomains";
+import { freeEmailDomains } from "@/lib/data/freeEmailDomains";
 
 export const LoginSchema = object().shape({
   email: string().email("This field must be an email").required("Email is required"),
@@ -15,12 +15,11 @@ export const RegisterSchema = Yup.object().shape({
     .email("This field must be an email")
     .required("Email is required")
     .test("is-work-email", "Only work email addresses are allowed", (value: any) => {
-      console.log("value:", value);
-
       if (!value) return false;
       const domain = value.split("@")[1]?.toLowerCase().trim();
-      console.log("Checking domain:", domain);
-      return domain && !freeEmailDomains.includes(domain) && !disposableEmailDomains.includes(domain) && !blacklistedDomains.includes(domain);
+      console.log("TEST domain:", domain);
+      return domain && !freeEmailDomains.includes(domain);
+      // Block only hotmail.com for now
     }),
 
   password: Yup.string()
