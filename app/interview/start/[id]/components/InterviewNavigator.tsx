@@ -11,20 +11,23 @@ import InterviewProgress from "./InterviewProgress";
 import { Editor } from "@monaco-editor/react";
 import { executeCode } from "@/app/utils/judge0";
 import { useTheme } from "next-themes";
+import axios from "axios";
+import { getUploadUrl, uploadRecordingBlob } from "@/services/interview.service";
 
 const InterviewNavigator: React.FC = () => {
-  const { questions, setPhase, candidate, job, company, uploadRecording, updateCodeResult, currentQuestion, setAudioCompleted, isRecording, setRecording } = useInterviewStore();
+  const { questions, invitationId, setPhase, candidate, job, company, finalizeRecording, updateCodeResult, currentQuestion, setAudioCompleted, isRecording, setRecording } = useInterviewStore();
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const reminderAudioRef = useRef<HTMLAudioElement | null>(null);
   const [reminderInterval, setReminderInterval] = useState<NodeJS.Timeout | null>(null);
   const [isReplayingAudio, setIsReplayingAudio] = useState(false);
   const [isResultUpdating, setIsResultUpdating] = useState(false);
-  const [codeOutput, setCodeOutput] = useState("");
   const [isRefreshed, setIsRefreshed] = useState(false);
   const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(null);
   const question = questions[currentQuestion];
   const { theme } = useTheme(); // Gets 'light' or 'dark'
+  const [recordingDuration, setRecordingDuration] = useState(0);
+  const recordingTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     const isRefreshed = localStorage.getItem("pageRefreshed");
@@ -58,9 +61,6 @@ const InterviewNavigator: React.FC = () => {
   const [code, setCode] = useState<string>("");
   const [output, setOutput] = useState<string>("");
   const [codeExecuting, setCodeExecuting] = useState<boolean>(false);
-  const [isFullscreen, setIsFullscreen] = useState(false);
-
-  const editorRef = useRef<HTMLDivElement>(null);
 
   const handleRun = async () => {
     setCodeExecuting(true);
@@ -77,30 +77,69 @@ const InterviewNavigator: React.FC = () => {
   const handleStartRecording = async () => {
     setRecording(true);
     setAudioCompleted(false);
-    if (reminderInterval) {
-      clearInterval(reminderInterval);
-      setReminderInterval(null);
+
+    setRecordingDuration(0);
+    recordingTimerRef.current = setInterval(() => {
+      setRecordingDuration((prev) => prev + 1);
+    }, 1000);
+
+    const questionId = question.id;
+
+    let uploadUrl = "";
+    let publicUrl = "";
+
+    try {
+      const res = await getUploadUrl(invitationId, questionId);
+      uploadUrl = res.uploadUrl;
+      publicUrl = res.publicUrl;
+    } catch (error: any) {
+      const message = error?.response?.data?.error || error?.message || "Failed to get upload URL";
+      console.error("Failed to fetch upload URL:", message);
+      setRecording(false);
+      return;
     }
-    if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current.currentTime = 0;
-    }
+
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    const recorder = new MediaRecorder(stream);
-    let audioChunks: BlobPart[] = [];
+    const recorder = new MediaRecorder(stream, { mimeType: "audio/webm" });
+    const chunks: Blob[] = [];
+
     recorder.ondataavailable = (event) => {
-      if (event.data.size > 0) audioChunks.push(event.data);
+      if (event.data.size > 0) chunks.push(event.data);
     };
 
     recorder.onstop = async () => {
-      const recordedAudio = new Blob(audioChunks, { type: "audio/mp3" });
+      const fullBlob = new Blob(chunks, { type: "audio/webm" });
+
       setIsResultUpdating(true);
-      await uploadRecording(recordedAudio);
+
+      try {
+        await uploadRecordingBlob(uploadUrl, fullBlob);
+      } catch (error: any) {
+        const message = error?.response?.data || error?.response?.statusText || error?.message || "Upload failed";
+        console.error("Upload failed:", message);
+        throw new Error("Upload failed: " + message);
+      }
+
+      await finalizeRecording(publicUrl);
       setIsResultUpdating(false);
       setRecording(false);
+
+      if (recordingTimerRef.current) {
+        clearInterval(recordingTimerRef.current);
+        recordingTimerRef.current = null;
+      }
     };
+
     recorder.start();
     setMediaRecorder(recorder);
+  };
+
+  const formatDuration = (seconds: number) => {
+    const mins = Math.floor(seconds / 60)
+      .toString()
+      .padStart(2, "0");
+    const secs = (seconds % 60).toString().padStart(2, "0");
+    return `${mins}:${secs}`;
   };
 
   const handleStopRecording = async () => {
@@ -154,7 +193,7 @@ const InterviewNavigator: React.FC = () => {
 
   return (
     <div className='min-h-screen flex items-center justify-center  '>
-      <div className='w-full max-w-screen-xl mx-auto px-6 py-8'>
+      <div className='w-full max-w-screen-lg mx-auto px-6 py-8'>
         <InterviewNavbar company={company} />
         <Card className='w-full p-0 mt-6  dark:border-gray-900 overflow-hidden bg-white/90 dark:bg-gray-900'>
           <CardBody className='p-0'>
@@ -163,18 +202,20 @@ const InterviewNavigator: React.FC = () => {
               <div className='md:col-span-3 bg-slate-50 dark:bg-slate-800 p-4 border-l border-gray-200 dark:border-gray-900'>
                 <div className=' '>
                   <InterviewProgress candidate={candidate} job={job} company={company} questions={questions} currentQuestion={currentQuestion} />
-                  <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className='flex items-center justify-between mt-6'>
-                    <h3 className='text-md font-semibold text-gray-800 dark:text-gray-100'>{question.text}</h3>
+                  <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className='flex items-center justify-between mt-6 gap-4'>
+                    <h3 className='text-md font-semibold text-gray-800 dark:text-gray-100 leading-tight'>{question.text}</h3>
 
-                    {!isReplayingAudio ? (
-                      <Button size='sm' variant='solid' radius='full' color='default' startContent={<FaPlay />} isDisabled={!isRefreshed || isRecording} onPress={handleReplayAudio}>
-                        Replay Audio
-                      </Button>
-                    ) : (
-                      <Button size='sm' variant='bordered' radius='full' startContent={<FaStopCircle />} color='warning' onPress={handleStopReplayAudio}>
-                        Stop Replay
-                      </Button>
-                    )}
+                    <div className='shrink-0'>
+                      {!isReplayingAudio ? (
+                        <Button size='sm' variant='solid' radius='full' color='default' startContent={<FaPlay />} isDisabled={!isRefreshed || isRecording} onPress={handleReplayAudio}>
+                          Replay Audio
+                        </Button>
+                      ) : (
+                        <Button size='sm' variant='bordered' radius='full' startContent={<FaStopCircle />} color='warning' onPress={handleStopReplayAudio}>
+                          Stop Replay
+                        </Button>
+                      )}
+                    </div>
                   </motion.div>
 
                   <audio ref={audioRef} onEnded={handleQuestionAudioEnd} onPlay={() => setIsReplayingAudio(true)} onPause={handleReplayAudioEnded}>
@@ -217,7 +258,7 @@ const InterviewNavigator: React.FC = () => {
                   </div>
                 )}
 
-                {question.type == "verbal" && <UserCamera hideRecLabel={false} />}
+                {question.type == "verbal" && <UserCamera hideRecLabel={false} invitationId={invitationId} />}
 
                 {question.type == "coding" && (
                   <div className='p-2'>
@@ -265,7 +306,7 @@ const InterviewNavigator: React.FC = () => {
                     }
                     isDisabled={isResultUpdating}
                     onPress={handleStopRecording}>
-                    {isResultUpdating ? "Loading Next Question..." : "Stop Recording"}
+                    {isResultUpdating ? "Loading Next Question..." : `Stop Recording (${formatDuration(recordingDuration)})`}
                   </Button>
                 )}
               </div>

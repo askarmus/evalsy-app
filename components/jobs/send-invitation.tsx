@@ -50,7 +50,15 @@ export const SendInvitationDrawer: React.FC<SendInvitationDrawerProps> = ({ isOp
       setInvitations((prev) => [newInvitation, ...prev].sort((a, b) => new Date(b.sentOn).getTime() - new Date(a.sentOn).getTime()));
 
       showToast.success("Invitation sent successfully.");
-      resetForm();
+      resetForm({
+        values: {
+          name: "",
+          email: "",
+          message: "",
+          expires: "",
+          duration: 15,
+        },
+      });
     } catch (error) {
       showToast.error("Failed to send invitation.");
     } finally {
@@ -115,7 +123,20 @@ export const SendInvitationDrawer: React.FC<SendInvitationDrawerProps> = ({ isOp
                     <Button color='primary' className='mr-2' isLoading={loading} onPress={handleSubmit as any}>
                       Send
                     </Button>
-                    <Button color='primary' variant='flat' onPress={() => resetForm({ values: initialValues })}>
+                    <Button
+                      color='primary'
+                      variant='flat'
+                      onPress={() =>
+                        resetForm({
+                          values: {
+                            name: "",
+                            email: "",
+                            message: "",
+                            expires: "",
+                            duration: 15,
+                          },
+                        })
+                      }>
                       Reset
                     </Button>
                   </div>

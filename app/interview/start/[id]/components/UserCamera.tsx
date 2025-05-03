@@ -1,11 +1,10 @@
 import React, { useEffect, useRef } from "react";
 import { useInterviewStore } from "../stores/useInterviewStore";
 
-const UserCamera: React.FC<{ height?: string; hideRecLabel: boolean }> = ({ height, hideRecLabel = false }) => {
+const UserCamera: React.FC<{ height?: string; hideRecLabel: boolean; invitationId: string }> = ({ height, hideRecLabel = false, invitationId }) => {
   const { isCameraOn, uploadScreenshot, screenshotInterval } = useInterviewStore();
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const interviewId = "12345"; // Replace with actual interview ID
 
   useEffect(() => {
     let stream: MediaStream | null = null;
@@ -44,7 +43,7 @@ const UserCamera: React.FC<{ height?: string; hideRecLabel: boolean }> = ({ heig
         ctx.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
 
         canvas.toBlob((blob) => {
-          if (blob) uploadScreenshot(blob, interviewId);
+          if (blob) uploadScreenshot(blob, invitationId);
         }, "image/png");
       }
     };

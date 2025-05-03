@@ -16,6 +16,8 @@ interface Question {
   lannguage: string;
   explanation: string;
   starterCode: string;
+  uploadUrl: string;
+  publicUrl: string;
 }
 
 interface InterviewState {
@@ -45,7 +47,7 @@ interface InterviewState {
   setRecording: (status: boolean) => void;
   toggleCamera: () => void;
   uploadScreenshot: (imageBlob: Blob, questionId: string) => Promise<void>;
-  uploadRecording: (audioBlob: Blob) => Promise<void>;
+  finalizeRecording: (publicUrl: string) => Promise<void>;
   updateCodeResult: (code: string, output: string) => Promise<void>;
   endInterview: () => void;
   setInvitationId: (id: string) => void;
@@ -130,22 +132,29 @@ export const useInterviewStore = create<InterviewState>()((set, get) => ({
     } catch (error) {}
   },
 
-  uploadRecording: async (audioBlob) => {
+  finalizeRecording: async (publicUrl) => {
     try {
       const invitationId = get().invitationId;
       if (!invitationId) {
         throw new Error("Interview ID not found.");
       }
-      const file = new File([audioBlob], `answer_audio${invitationId}_${Date.now()}.mp3`, { type: "image/png" });
-      const recordedData = await upload(file);
+
       const state = get();
 
       await updateQuestion({
-        invitationId: invitationId,
+        invitationId,
         questionId: state.questions[state.currentQuestion].id,
-        recordedUrl: recordedData.url,
+        recordedUrl: publicUrl,
       });
-    } catch (error) {}
+
+      set({
+        isRecording: false,
+        isAudioCompleted: true,
+      });
+    } catch (error) {
+      console.error("Error finalizing recording:", error);
+      showToast.error("Failed to update answer.");
+    }
   },
 
   updateCodeResult: async (code, output) => {

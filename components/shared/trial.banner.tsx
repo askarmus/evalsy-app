@@ -6,7 +6,7 @@ import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDi
 import { PricingSubscription } from "../start/PricingSubscription";
 import { useState } from "react";
 import { createSubscription } from "@/services/subscription.service";
-import { FaAccusoft, FaArrowRight } from "react-icons/fa";
+import { FaArrowRight } from "react-icons/fa";
 
 export default function TrialBanner() {
   const { loading, isTrialActive, subscriptionActive, trialEnd } = useTrialStatus();
