@@ -2,7 +2,7 @@ import { Avatar, Chip } from "@heroui/react";
 import React from "react";
 import UserCamera from "./UserCamera";
 
-const CandidateInfo: React.FC<any> = ({ candidate, job, addTopPadding = true, currentQuestion, questions }) => {
+const CandidateInfo: React.FC<any> = ({ candidate, job, addTopPadding = true, currentQuestion, questions, invitationId }) => {
   return (
     <div className='flex justify-between items-start w-full border-b border-gray-200 dark:border-gray-700'>
       {/* Left Content: Candidate Info */}
@@ -26,7 +26,7 @@ const CandidateInfo: React.FC<any> = ({ candidate, job, addTopPadding = true, cu
 
       {questions && questions[currentQuestion]?.type === "coding" && (
         <div>
-          <UserCamera hideRecLabel={false} height='100px' />
+          <UserCamera hideRecLabel={false} height='100px' invitationId={invitationId} />
         </div>
       )}
     </div>

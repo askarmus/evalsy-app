@@ -197,7 +197,7 @@ const InterviewNavigator: React.FC = () => {
         <InterviewNavbar company={company} />
         <Card className='w-full p-0 mt-6  dark:border-gray-900 overflow-hidden bg-white/90 dark:bg-gray-900'>
           <CardBody className='p-0'>
-            <CandidateInfo candidate={candidate} job={job} company={company} questions={questions} currentQuestion={currentQuestion} />
+            <CandidateInfo candidate={candidate} job={job} company={company} questions={questions} currentQuestion={currentQuestion} invitationId={invitationId} />
             <div className='grid md:grid-cols-5 gap-0'>
               <div className='md:col-span-3 bg-slate-50 dark:bg-slate-800 p-4 border-l border-gray-200 dark:border-gray-900'>
                 <div className=' '>

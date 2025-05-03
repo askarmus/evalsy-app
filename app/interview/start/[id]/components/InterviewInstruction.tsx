@@ -93,7 +93,7 @@ const InterviewInstruction: React.FC<any> = () => {
                 </div>
 
                 <div className='w-full sm:w-auto flex justify-center sm:justify-end'>
-                  <UserCamera hideRecLabel={true} height='120px' />
+                  <UserCamera hideRecLabel={true} height='120px' invitationId='' />
                 </div>
               </div>
             </div>
