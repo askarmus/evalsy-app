@@ -132,7 +132,7 @@ export default function Jobs() {
     <div className='min-h-screen my-10 px-4 lg:px-6 max-w-[90rem] mx-auto w-full flex flex-col gap-4'>
       <Breadcrumb items={breadcrumbItems} />
 
-      <h3 className='text-xl font-semibold'>All Jobs</h3>
+      <h3 className='text-xl font-semibold'>All Interviews</h3>
 
       <div className='flex justify-between flex-wrap gap-4 items-center'>
         <div className='flex items-center gap-3 flex-wrap md:flex-nowrap'>

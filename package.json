@@ -32,6 +32,7 @@
     "@uppy/xhr-upload": "^4.3.3",
     "@wavesurfer/react": "^1.0.9",
     "apexcharts": "^3.35.5",
+    "aws-sdk": "^2.1692.0",
     "axios": "^1.7.9",
     "chart.js": "^4.4.7",
     "clsx": "^2.0.0",

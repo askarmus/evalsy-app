@@ -1,4 +1,3 @@
-import { ViewResultDrawer } from "@/app/(app)/result/components/view.result.drawer";
 import DateFormatter from "@/app/utils/DateFormatter";
 import { getColorByInitial } from "@/app/utils/getColorByInitial";
 import { getInitials } from "@/app/utils/getInitials";
@@ -128,7 +127,6 @@ export const RecentInterviews = () => {
             </div>
           )}
         </div>
-        <ViewResultDrawer isOpen={isDrawerOpen} onClose={() => setDrawerOpen(false)} interviewerData={selectedInterviewerData} />
       </CardBody>
     </Card>
   );

@@ -1,52 +1,56 @@
 "use client";
 import React, { useState, useMemo, useEffect, useCallback } from "react";
-import { Card, Button, Input, Pagination, CardBody, Tabs, Tab, Chip } from "@heroui/react";
-import { Breadcrumb } from "@/components/bread.crumb";
+import { Card, Button, Input, CardBody, Tabs, Tab, CardHeader, Avatar } from "@heroui/react";
 import { getAllInterviewResult, getInterviewResultById } from "@/services/interview.service";
-import { ViewResultDrawer } from "./components/view.result.drawer";
 import RatingBadge from "./components/rating,badge";
 import DateFormatter from "@/app/utils/DateFormatter";
-import { FaAccessibleIcon, FaArrowDown, FaArrowUp, FaCheckCircle, FaChevronRight, FaEquals, FaExclamationCircle, FaMinusCircle, FaSearch, FaStar, FaSyncAlt } from "react-icons/fa";
-import ResultListItemSkeleton from "./components/result.listItem.skeleton";
-import EmptyStateCards from "@/components/shared/empty-state-cards";
+import { FaSearch, FaSyncAlt } from "react-icons/fa";
+import EvaluationChart from "./components/EvaluationChart";
+import QuestionsTable from "./components/QuestionsTable";
+import CustomVideoPlayer from "./components/CustomVideoPlayer";
+import SimpleScoreDisplay from "./components/SimpleScoreDisplay";
 
 export default function InterviewResultList() {
   const [page, setPage] = useState(1);
   const [isLoading, setIsLoading] = useState(true); // ✅ set to true by default
-  const [loadingResults, setLoadingResults] = useState<{ [key: string]: boolean }>({});
   const [filterValue, setFilterValue] = useState("");
   const [interviewResults, setInterviewResults] = useState([]);
-  const [isDrawerOpen, setDrawerOpen] = useState(false);
   const [selectedInterviewerData, setSelectedInterviewerData] = useState<any>(null);
   const [selectedTab, setSelectedTab] = useState<string>("all");
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [selectedQuestion, setSelectedQuestion] = useState<any>({});
 
-  const rowsPerPage = 5;
+  const rowsPerPage = 1000;
 
   const fetchInterviewResult = async () => {
     try {
       const data = await getAllInterviewResult();
-      setInterviewResults(data);
+      setInterviewResults(data.all);
+      setSelectedInterviewerData(data.first);
     } catch (err) {
       console.error("Failed to fetch interview results:", err);
     } finally {
-      setIsLoading(false); // ✅ ensures the skeleton disappears after fetch
+      setIsLoading(false);
     }
   };
-
+  const handleSelect = (question) => {
+    setSelectedQuestion(question);
+    console.log("Selected:", question);
+  };
   useEffect(() => {
     fetchInterviewResult();
   }, []);
 
   const handleViewDetails = async (resultId: string) => {
-    setLoadingResults((prev) => ({ ...prev, [resultId]: true }));
+    setSelectedId(resultId);
+
     try {
       const data = await getInterviewResultById(resultId);
       setSelectedInterviewerData(data);
-      setDrawerOpen(true);
     } catch (error) {
       console.error("Error fetching interviewer data:", error);
     }
-    setLoadingResults((prev) => ({ ...prev, [resultId]: false }));
   };
 
   const onSearchChange = useCallback((value: string) => {
@@ -57,7 +61,6 @@ export default function InterviewResultList() {
   const filteredResults = useMemo(() => {
     let results = [...interviewResults];
 
-    // Filter by tab
     if (selectedTab === "below-average") {
       results = results.filter((r: any) => r.overallWeight <= 25);
     } else if (selectedTab === "average") {
@@ -68,7 +71,6 @@ export default function InterviewResultList() {
       results = results.filter((r: any) => r.overallWeight > 75);
     }
 
-    // Then filter by search
     if (filterValue) {
       results = results.filter((r: any) => r.name.toLowerCase().includes(filterValue.toLowerCase()));
     }
@@ -87,188 +89,236 @@ export default function InterviewResultList() {
     return filteredResults.slice(start, end);
   }, [page, filteredResults]);
 
-  const getPerformanceIcon = (score: number) => {
-    if (score <= 25) return <FaExclamationCircle className='h-4 w-4 text-red-500' />;
-    if (score > 25 && score <= 50) return <FaMinusCircle className='h-4 w-4 text-amber-500' />;
-    if (score > 50 && score <= 75) return <FaCheckCircle className='h-4 w-4 text-blue-500' />;
-    return <FaStar className='h-4 w-4 text-green-500' />;
-  };
-
   return (
-    <div className='my-10 px-4 lg:px-6 max-w-[90rem] mx-auto w-full flex flex-col gap-4'>
-      <Breadcrumb
-        items={[
-          { name: "Dashboard", link: "/" },
-          { name: "Result", link: "" },
-        ]}
-      />
-      <h3 className='text-xl font-semibold'>Interview Results</h3>
+    <div className='  max-w-[90rem] mx-auto w-full flex flex-col gap-4'>
+      <div className='flex flex-col min-h-screen '>
+        {/* Top Navigation would go here */}
 
-      <div className='flex justify-between flex-wrap gap-4 items-center'>
-        <div className='flex items-center gap-3 flex-wrap md:flex-nowrap'>
-          <Input
-            onChange={(e) => onSearchChange(e.target.value)}
-            isClearable
-            className='max-w-md'
-            placeholder='Search Result'
-            defaultValue=''
-            startContent={<FaSearch />}
-            variant='bordered'
-            onClear={() => {
-              setFilterValue("");
-              setPage(1);
-            }}
-          />
-        </div>
-
-        <div>
-          <Tabs key='tabs' aria-label='Performance Tabs' size='sm' selectedKey={selectedTab} onSelectionChange={(key) => setSelectedTab(key as string)}>
-            <Tab key='all' title='All' />
-            <Tab
-              key='below-average'
-              title={
-                <>
-                  <span>Below Average </span>
-                  <Chip size='sm' variant='faded'>
-                    {interviewResults.filter((j: any) => j.overallWeight <= 25).length}
-                  </Chip>
-                </>
-              }
-            />
-            <Tab
-              key='average'
-              title={
-                <>
-                  <span>Average </span>
-                  <Chip size='sm' variant='faded'>
-                    {
-                      interviewResults.filter((j: any) => {
-                        return j.overallWeight > 25 && j.overallWeight <= 50;
-                      }).length
-                    }
-                  </Chip>
-                </>
-              }
-            />
-            <Tab
-              key='good'
-              title={
-                <>
-                  <span>Good </span>
-                  <Chip size='sm' variant='faded'>
-                    {
-                      interviewResults.filter((j: any) => {
-                        return j.overallWeight > 50 && j.overallWeight <= 75;
-                      }).length
-                    }
-                  </Chip>
-                </>
-              }
-            />
-            <Tab
-              key='excellent'
-              title={
-                <>
-                  <span>Excellent </span>
-                  <Chip size='sm' variant='faded'>
-                    {
-                      interviewResults.filter((j: any) => {
-                        return j.overallWeight > 75;
-                      }).length
-                    }
-                  </Chip>
-                </>
-              }
-            />
-          </Tabs>
-          <Button
-            className='ml-3'
-            isIconOnly
-            variant='ghost'
-            size='sm'
-            isLoading={isLoading}
-            color='default'
-            onPress={() => {
-              setIsLoading(true);
-              fetchInterviewResult();
-            }}>
-            <FaSyncAlt />
-          </Button>
-        </div>
-      </div>
-
-      {isLoading ? (
-        <>
-          <ResultListItemSkeleton />
-          <div className='h-10' />
-        </>
-      ) : (
-        <>
-          <div>
-            {filteredResults.length === 0 ? (
-              <div className='w-full text-center text-gray-500 py-10'>
-                {filterValue ? (
-                  <EmptyStateCards
-                    title='No matching results'
-                    description='Try adjusting your search or filter to find what you are looking for.'
-                    onReset={() => {
-                      setFilterValue("");
-                      setPage(1);
-                    }}
-                  />
-                ) : (
-                  <EmptyStateCards
-                    title='No interview results found'
-                    description='No results are currently available..'
-                    onReset={() => {
-                      setSelectedTab("all");
-                      setFilterValue("");
-                      setPage(1);
-                    }}
-                  />
-                )}
+        <div className='flex flex-col md:flex-row flex-1 max-w-screen-2xl mx-auto w-full'>
+          {/* Mobile Sidebar Toggle */}
+          <div className='md:hidden sticky top-16 z-10   border-b p-2'>
+            <button className='inline-flex items-center justify-between w-full rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2' onClick={() => setSidebarOpen(!sidebarOpen)}>
+              <div className='flex items-center gap-2'>
+                dd
+                <span>All Candidates</span>
               </div>
-            ) : (
-              items.map((data: any) => (
-                <Card radius='sm' shadow='sm' key={data.id} className='mb-4'>
-                  <CardBody>
-                    <div className='flex items-center p-4'>
-                      <div className='flex-1 flex items-center space-x-4'>
-                        <div>
-                          <h3 className='font-medium'>{data?.name}</h3>
-                          <p className='text-sm text-muted-foreground mt-1'>{data?.jobTitle}</p>
-                        </div>
-                      </div>
+              dd
+            </button>
+          </div>
 
-                      <div className='flex items-center space-x-6'>
-                        <div className='text-sm text-muted-foreground'>{DateFormatter.formatDate(data.statusUpdateAt)}</div>
-                        <div className='flex items-center space-x-1'>
-                          {getPerformanceIcon(data?.overallWeight)}
-                          <span className='font-semibold'>{data?.overallWeight}%</span>
-                        </div>
-                        <RatingBadge weight={data?.overallWeight} />
-                        <Button color='primary' endContent={<FaChevronRight />} isLoading={loadingResults[data.id]} onPress={() => handleViewDetails(data.id)} radius='full' size='sm'>
-                          {loadingResults[data.id] ? "Loading.." : "View Result"}
-                        </Button>
+          {/* Desktop Sidebar */}
+          <aside className={`${sidebarOpen ? "block" : "hidden"} md:block w-80 lg:w-80 border-r border-l  overflow-y-auto`}>
+            <div className='p-5 border-b'>
+              <h2 className='text-lg font-semibold mb-4 '>All Candidates</h2>
+              <div className='relative'>
+                <Tabs key='tabs' aria-label='Performance Tabs' size='sm' selectedKey={selectedTab} onSelectionChange={(key) => setSelectedTab(key as string)}>
+                  <Tab key='all' title='All' />
+                  <Tab
+                    key='below-average'
+                    title={
+                      <>
+                        <span className='text-xs'>Low </span>
+                      </>
+                    }
+                  />
+                  <Tab
+                    key='average'
+                    title={
+                      <>
+                        <span>Avg </span>
+                      </>
+                    }
+                  />
+                  <Tab
+                    key='good'
+                    title={
+                      <>
+                        <span> Good </span>
+                      </>
+                    }
+                  />
+                  <Tab
+                    key='excellent'
+                    title={
+                      <>
+                        <span>Best </span>
+                      </>
+                    }
+                  />
+                </Tabs>
+
+                <div className='flex items-center mt-5 '>
+                  <Input
+                    onChange={(e) => onSearchChange(e.target.value)}
+                    isClearable
+                    className='max-w-md'
+                    placeholder='Search Result'
+                    defaultValue=''
+                    startContent={<FaSearch />}
+                    variant='bordered'
+                    onClear={() => {
+                      setFilterValue("");
+                      setPage(1);
+                    }}
+                  />
+
+                  <Button
+                    className='ml-3'
+                    isIconOnly
+                    variant='ghost'
+                    size='sm'
+                    isLoading={isLoading}
+                    color='default'
+                    onPress={() => {
+                      setIsLoading(true);
+                      fetchInterviewResult();
+                    }}>
+                    <FaSyncAlt />
+                  </Button>
+                </div>
+              </div>
+            </div>
+            <div className='overflow-auto'>
+              <div className=' '>
+                <div className='h-[700px] flex flex-col'>
+                  <div className='p-0 overflow-y-auto flex-grow'>
+                    <ul className='divide-y'>
+                      {items.map((data: any) => (
+                        <li
+                          onClick={() => handleViewDetails(data.id)}
+                          key={data.id}
+                          className={`flex items-center cursor-pointer justify-between p-4 transition-colors
+                          ${selectedId === data.id ? "bg-gray-100" : "hover:bg-gray-50"}`}>
+                          <div className='flex items-center gap-3'>
+                            <Avatar name={data.name} className='h-10 w-10  '></Avatar>
+                            <div>
+                              <h3 className='font-medium  '>{data.name}</h3>
+                              <p className='text-sm  '>{data.jobTitle}</p>
+                            </div>
+                          </div>
+                          <RatingBadge weight={data.overallWeight} />
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </aside>
+
+          {/* Main Content */}
+          <main className='flex-1 border-r overflow-auto lg:max-w-[calc(100%-320px)]'>
+            {/* Candidate Header */}
+            <div className='  border-b  '>
+              {/* Top section with candidate info */}
+              <div className='p-5 lg:p-6 border-b border-slate-100'>
+                <div className='flex flex-col md:flex-row gap-4 items-start md:items-center'>
+                  <div className='flex items-center gap-4'>
+                    <div className='relative'>
+                      <div className='absolute -top-2 -left-2 rounded-full p-1 shadow-sm z-10'>
+                        <div className='w-8 h-8 rounded-full bg-gradient-to-br from-amber-400 to-amber-500 flex items-center justify-center text-sm font-semibold text-white'>{Math.floor(selectedInterviewerData?.overallWeight)}</div>
+                      </div>
+                      <div className='w-16 h-16 rounded-xl border-2 border-slate-100 bg-slate-100 flex items-center justify-center'>
+                        <img src='https://interviewer-ai-videos.s3-accelerate.amazonaws.com/sample_candidate_video/melissa_89%40domain.tld/thumbnail.jpg?AWSAccessKeyId=AKIAIXAEKUJAAA3N7HDQ&Expires=1746427045&Signature=WqDaH2zs1Nufrofwhje2I1YZNqQ%3D' alt='Austin Aguilar' width={64} height={64} className='rounded-xl' />
                       </div>
                     </div>
-                  </CardBody>
-                </Card>
-              ))
-            )}
-          </div>
+                    <div>
+                      <div className='text-xs font-medium text-blue-600'>{selectedInterviewerData?.jobTitle}</div>
+                      <h1 className='text-xl font-bold '>{selectedInterviewerData?.name}</h1>
+                    </div>
+                  </div>
 
-          <div className='flex w-full justify-center'>
-            {filteredResults.length > 0 && (
-              <div className='flex w-full justify-center'>
-                <Pagination showControls color='default' size='sm' page={page} total={pages} onChange={(page) => setPage(page)} />
+                  <div className='flex flex-wrap gap-4 ml-auto items-center'>
+                    <div className='flex items-center gap-6'>
+                      <div className='flex items-center gap-1.5 text-sm'>
+                        <div className='flex items-center gap-2 text-sm   px-3 py-2 rounded-lg'>
+                          <span className='font-medium'>Completed:</span>
+                          <span className=''>{DateFormatter.formatDate(selectedInterviewerData?.statusUpdateAt)}</span>
+                        </div>
+                      </div>
+                      <div className='flex items-center gap-2 text-sm'>
+                        <span className='inline-flex items-center gap-1.5 px-3 py-1.5 font-medium bg-green-50 text-green-600 border border-green-200 rounded-lg'>
+                          <div className='w-4 h-4 flex items-center justify-center'>✓</div>
+                          Shortlisted
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
-            )}
-          </div>
+            </div>
+            <div className='m-5 '>
+              <div className='  rounded-xl border  p-5 shadow-sm'>
+                <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4'>
+                  <div>
+                    <h3 className='text-base font-semibold   mb-4'>Interview Questions</h3>
+                    {selectedInterviewerData && <QuestionsTable data={selectedInterviewerData} onSelect={handleSelect} />}
+                  </div>
 
-          <ViewResultDrawer isOpen={isDrawerOpen} onClose={() => setDrawerOpen(false)} interviewerData={selectedInterviewerData} />
-        </>
-      )}
+                  <div className=''>
+                    <h3 className='text-base font-semibold   mb-4'>Video</h3>
+                    <CustomVideoPlayer />
+                  </div>
+                  <div className=' '>
+                    <h3 className='text-base font-semibold   mb-4'>Transcript</h3>
+                    <div className=' pt-4'>
+                      <h3 className='text-sm font-medium mb-3   flex items-center gap-2'>{selectedQuestion?.text}</h3>
+                      <div className='text-sm    p-4 rounded-lg border border-slate-200'>
+                        <p className='mb-3'>{selectedQuestion?.transcription}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className='mt-5'>
+                  <SimpleScoreDisplay
+                    scores={{
+                      relevance: 4.2,
+                      completeness: 3.8,
+                      clarity: 4.5,
+                      grammar_language: 4.0,
+                      technical_accuracy: 4.3,
+                    }}
+                    totalScore={100}
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-5 p-5'>
+              <div className='space-y-5'>
+                <div className='  rounded-xl border border-slate-200 p-5 shadow-sm'>
+                  <h2 className='text-lg font-semibold   mb-4'>Overall Performence</h2>
+
+                  {selectedInterviewerData && <EvaluationChart data={selectedInterviewerData}></EvaluationChart>}
+                </div>
+              </div>
+
+              <div className='space-y-5'>
+                <div className=' rounded-xl border border-slate-200 p-5 shadow-sm'>
+                  <h2 className='text-lg font-semibold   mb-4'>Feedback</h2>
+                  <Card shadow='sm' radius='sm' className='p-2 mt-6 w-full'>
+                    <CardBody className='  w-full'>
+                      {Array.isArray(selectedInterviewerData?.notes?.summary) && selectedInterviewerData.notes.summary.filter((item) => item.trim() !== "").length > 0 && (
+                        <ul className='space-y-3'>
+                          {selectedInterviewerData.notes.summary
+                            .filter((item) => item.trim() !== "")
+                            .map((item, index) => (
+                              <li key={index} className='flex items-start gap-2'>
+                                <span className='mt-2 w-2 h-2 rounded-full   shrink-0' />
+                                <span className='text-sm   leading-relaxed'>{item}</span>
+                              </li>
+                            ))}
+                        </ul>
+                      )}
+                    </CardBody>
+                  </Card>
+                </div>
+              </div>
+            </div>
+          </main>
+        </div>
+      </div>
     </div>
   );
 }

@@ -53,8 +53,6 @@ const EvaluationTable = ({ data }) => {
                     </tr>
                     {expandedRow === answer.id && (
                       <tr key={`expanded-${answer.id || index}`}>
-                        {" "}
-                        {/* ✅ Unique key for expanded row */}
                         <td colSpan={8} className='p-3'>
                           <p className='  text-small'>
                             <strong>Answer:</strong> {answer.transcription || "No transcription available."}

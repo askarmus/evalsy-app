@@ -3,29 +3,23 @@ import React from "react";
 
 const getBadgeStyle = (percent: number) => {
   if (percent <= 25) {
-    return { bgColor: "bg-orange-500", text: "Below Average" };
+    return { textColor: "text-orange-400", text: "Low" };
   } else if (percent > 25 && percent <= 50) {
-    return { bgColor: "bg-yellow-500", text: "Average" };
+    return { textColor: "text-yellow-400", text: "Avg" };
   } else if (percent > 50 && percent <= 75) {
-    return { bgColor: "bg-blue-500", text: "Good" };
+    return { textColor: "text-blue-400", text: "Good" };
   } else if (percent > 75) {
-    return { bgColor: "bg-green-500", text: "Excellent" };
+    return { textColor: "text-green-400", text: "Best" };
   }
 
-  return { bgColor: "bg-gray-500", text: "Unknown" };
+  return { textColor: "bg-gray-400", text: "Unknown" };
 };
 
 const RatingBadge = ({ weight }) => {
-  const { bgColor, text } = getBadgeStyle(weight);
+  const { textColor, text } = getBadgeStyle(weight);
 
   return (
-    <Chip
-      color='primary'
-      classNames={{
-        base: `${bgColor} text-white font-sm`,
-      }}
-      size='sm'
-      variant='flat'>
+    <Chip size='sm' color='default' variant='bordered' className={textColor}>
       {text}
     </Chip>
   );
