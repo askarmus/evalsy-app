@@ -9,6 +9,7 @@ import EvaluationChart from "./components/EvaluationChart";
 import QuestionsTable from "./components/QuestionsTable";
 import CustomVideoPlayer from "./components/CustomVideoPlayer";
 import SimpleScoreDisplay from "./components/SimpleScoreDisplay";
+import OverlayLoader from "@/components/shared/OverlayLoader";
 
 export default function InterviewResultList() {
   const [page, setPage] = useState(1);
@@ -25,6 +26,8 @@ export default function InterviewResultList() {
 
   const fetchInterviewResult = async () => {
     try {
+      setIsLoading(true);
+
       const data = await getAllInterviewResult();
       setInterviewResults(data.all);
       setSelectedInterviewerData(data.first);
@@ -44,7 +47,15 @@ export default function InterviewResultList() {
 
   const handleViewDetails = async (resultId: string) => {
     setSelectedId(resultId);
-
+    setIsLoading(true);
+    try {
+      const data = await getInterviewResultById(resultId);
+      setSelectedInterviewerData(data);
+    } catch (error) {
+      console.error("Error fetching interviewer data:", error);
+    } finally {
+      setIsLoading(false);
+    }
     try {
       const data = await getInterviewResultById(resultId);
       setSelectedInterviewerData(data);
@@ -93,7 +104,7 @@ export default function InterviewResultList() {
     <div className='  max-w-[90rem] mx-auto w-full flex flex-col gap-4'>
       <div className='flex flex-col min-h-screen '>
         {/* Top Navigation would go here */}
-
+  { isLoading && <OverlayLoader   /> }  
         <div className='flex flex-col md:flex-row flex-1 max-w-screen-2xl mx-auto w-full'>
           {/* Mobile Sidebar Toggle */}
           <div className='md:hidden sticky top-16 z-10   border-b p-2'>
@@ -218,9 +229,18 @@ export default function InterviewResultList() {
                       <div className='absolute -top-2 -left-2 rounded-full p-1 shadow-sm z-10'>
                         <div className='w-8 h-8 rounded-full bg-gradient-to-br from-amber-400 to-amber-500 flex items-center justify-center text-sm font-semibold text-white'>{Math.floor(selectedInterviewerData?.overallWeight)}</div>
                       </div>
-                      <div className='w-16 h-16 rounded-xl border-2 border-slate-100 bg-slate-100 flex items-center justify-center'>
-                        <img src='https://interviewer-ai-videos.s3-accelerate.amazonaws.com/sample_candidate_video/melissa_89%40domain.tld/thumbnail.jpg?AWSAccessKeyId=AKIAIXAEKUJAAA3N7HDQ&Expires=1746427045&Signature=WqDaH2zs1Nufrofwhje2I1YZNqQ%3D' alt='Austin Aguilar' width={64} height={64} className='rounded-xl' />
+                      <div className="w-16 h-16 rounded-xl border-2 border-slate-100 bg-slate-100 flex items-center justify-center overflow-hidden">
+                          <img
+                            onError={(e) => {
+                              e.currentTarget.onerror = null;
+                              e.currentTarget.src = '/avatar-cartoon-in-flat-style-png.webp';
+                            }}
+                            src={selectedInterviewerData?.imageUrl}
+                            alt={selectedInterviewerData?.name}
+                            className="w-full h-full object-cover rounded-xl"
+                          />
                       </div>
+
                     </div>
                     <div>
                       <div className='text-xs font-medium text-blue-600'>{selectedInterviewerData?.jobTitle}</div>
