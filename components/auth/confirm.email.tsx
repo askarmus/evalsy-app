@@ -5,7 +5,7 @@ import { Logo } from "../shared/logo";
 
 export default function ConfirmEmailSent() {
   const searchParams = useSearchParams();
-  const email = searchParams.get("email");
+  const email = searchParams?.get("email");
 
   return (
     <div className='max-w-md mx-auto mt-20 text-center px-4'>

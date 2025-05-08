@@ -31,13 +31,13 @@ export function useTrialStatus() {
       const trialData = res; // <--- THIS LINE FIXES IT
       setData({
         loading: false,
-        isTrialActive: trialData.isTrialActive,
-        subscriptionActive: trialData.subscriptionActive,
-        cancelAtPeriodEnd: trialData.cancelAtPeriodEnd,
-        trialEnd: trialData.trialEnd ? new Date(trialData.trialEnd) : null,
-        invites: trialData.invites,
-        resumes: trialData.resumes,
-        isCanceled: trialData.isCanceled,
+        isTrialActive: trialData?.isTrialActive,
+        subscriptionActive: trialData?.subscriptionActive,
+        cancelAtPeriodEnd: trialData?.cancelAtPeriodEnd,
+        trialEnd: trialData?.trialEnd ? new Date(trialData?.trialEnd) : null,
+        invites: trialData?.invites,
+        resumes: trialData?.resumes,
+        isCanceled: trialData?.isCanceled,
       });
     } catch (error) {
       console.error("Failed to fetch trial status:", error);
