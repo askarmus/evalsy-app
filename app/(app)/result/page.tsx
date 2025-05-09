@@ -203,8 +203,8 @@ export default function InterviewResultList() {
                           <div className='flex items-center gap-3'>
                             <Avatar name={data.name} className='h-10 w-10  '></Avatar>
                             <div>
-                              <h3 className='font-medium  '>{data.name}</h3>
-                              <p className='text-sm  '>{data.jobTitle}</p>
+                              <h3 className='font-medium text-sm '>{data.name}</h3>
+                              <p className='text-xs  '>{data.jobTitle}</p>
                             </div>
                           </div>
                           <RatingBadge weight={data.overallWeight} />
@@ -231,11 +231,8 @@ export default function InterviewResultList() {
                       </div>
                       <div className="w-16 h-16 rounded-xl border-2 border-slate-100 bg-slate-100 flex items-center justify-center overflow-hidden">
                           <img
-                            onError={(e) => {
-                              e.currentTarget.onerror = null;
-                              e.currentTarget.src = '/avatar-cartoon-in-flat-style-png.webp';
-                            }}
-                            src={selectedInterviewerData?.imageUrl}
+                           
+                            src={selectedInterviewerData?.imageUrl ? selectedInterviewerData?.imageUrl : "/avatar-cartoon-in-flat-style-png.webp"}
                             alt={selectedInterviewerData?.name}
                             className="w-full h-full object-cover rounded-xl"
                           />

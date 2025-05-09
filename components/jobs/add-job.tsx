@@ -86,7 +86,7 @@ export const AddJob = () => {
         showToast.success("Job updated successfully.");
       }
       setTimeout(() => {
-        router.push("/jobs/list");
+        router.push("/interviews/list");
       }, 3000);
     } catch (error) {
       showToast.error("Error occurred while saving the job. Please try again.");

@@ -78,7 +78,7 @@ export default function Jobs() {
 
   const handleManageResumeClick = (jobId: string) => {
     setSelectedJobId(jobId);
-    router.push(`/jobs/resume/${jobId}`);
+    router.push(`/interviews/resume/${jobId}`);
   };
 
   const handleDeleteClick = (jobId: string) => {
@@ -184,7 +184,7 @@ export default function Jobs() {
             />
           </Tabs>
 
-          <Button color='primary' size='sm' onPress={() => router.push("/jobs/add")} endContent={<AiOutlinePlus />}>
+          <Button color='primary' size='sm' onPress={() => router.push("/interviews/add")} endContent={<AiOutlinePlus />}>
             Add New
           </Button>
         </div>
@@ -242,7 +242,7 @@ export default function Jobs() {
                               </Tooltip>
 
                               <Tooltip content='Edit job'>
-                                <button aria-label='Edit' className='p-1 text-gray-600 hover:text-black rounded-full dark:text-gray-300 dark:hover:text-white' onClick={() => router.push(`/jobs/edit/${job.id}`)}>
+                                <button aria-label='Edit' className='p-1 text-gray-600 hover:text-black rounded-full dark:text-gray-300 dark:hover:text-white' onClick={() => router.push(`/interviews/edit/${job.id}`)}>
                                   <AiFillEdit className='h-5 w-5' />
                                 </button>
                               </Tooltip>
