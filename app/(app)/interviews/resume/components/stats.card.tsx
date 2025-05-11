@@ -11,10 +11,10 @@ type Props = {
 };
 
 const iconMap = {
-  totalCandidates: <FaUsers className="h-6 w-6 text-sky-500 mr-4 flex-shrink-0" />,
-  avgMatchScore: <FaChartBar className="h-6 w-6 text-teal-500 mr-4 flex-shrink-0" />,
-  topCandidatesPercent: <FaStar className="h-6 w-6 text-amber-500 mr-4 flex-shrink-0" />,
-  rejectedCandidates: <FaUserSlash className="h-6 w-6 text-rose-500 mr-4 flex-shrink-0" />,
+  totalCandidates: <FaUsers className="h-7 w-7 text-slate-900 mr-4 flex-shrink-0" />,
+  avgMatchScore: <FaChartBar className="h-7 w-7 text-slate-900 mr-4 flex-shrink-0" />,
+  topCandidatesPercent: <FaStar className="h-7 w-7 text-slate-900 mr-4 flex-shrink-0" />,
+  rejectedCandidates: <FaUserSlash className="h-7 w-7 text-slate-900 mr-4 flex-shrink-0" />,
 };
 
 export default function ResumeStatsGrid({ resumeStats }: Props) {
@@ -52,9 +52,9 @@ export default function ResumeStatsGrid({ resumeStats }: Props) {
           <div className="flex items-center p-3">
             {iconMap[card.key as keyof typeof iconMap]}
             <div className="min-w-0">
-              <div className="text-[18px] font-medium  mb-1  truncate">{card.title}</div>
+              <div className="text-[22px] font-medium  mb-1  truncate">{card.title}</div>
               <div className="flex items-baseline">
-                <span className="text-xl font-bold mr-1">{card.value}</span>
+                <span className="text-xl font-bold mr-2">{card.value}</span>
                 <span className="text-xs text-slate-500 truncate">{card.subtitle}</span>
               </div>
             </div>
