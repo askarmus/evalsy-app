@@ -32,7 +32,7 @@ export const ValidProcessedCard = ({ file, onDelete, onViewDetails }: { file: Up
         Analysis
       </Button>
     </CardHeader>
-    <CardFooter className="gap-3 mt-0">
+    <CardFooter className="gap-3 pt-0">
       <div className="flex items-center justify-between w-full">
         <div className="flex items-center gap-x-2">
           <p className="text-default-400 text-small">Processed</p>
