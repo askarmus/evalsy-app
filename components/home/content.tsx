@@ -42,13 +42,13 @@ export const Content = () => {
         <div className="mt-6 gap-6 flex flex-col w-full">
           {/* Card Section Top */}
           <div className="flex flex-col gap-2">
-            <h3 className="text-xl font-semibold mb-3">Hiring Pipeline Overview</h3>
+            <h3 className="text-2xl font-semibold mb-3">Hiring Pipeline Overview</h3>
             <div className="grid md:grid-cols-2 grid-cols-1 2xl:grid-cols-3 gap-5 justify-center w-full">{loading ? Array.from({ length: 3 }).map((_, index) => <Skeleton key={index} className="h-24 w-full rounded-xl" />) : widgetData.map((data, index) => <DashboardWidjet key={index} data={data} />)}</div>
           </div>
 
           {/* Chart */}
           <div className="h-full flex flex-col gap-2">
-            <h3 className="text-xl font-semibold mb-3">Trend analytics</h3>
+            <h3 className="text-2xl font-semibold mb-3">Trend analytics</h3>
             <Card radius="md" shadow="sm">
               <CardBody>
                 <Chart />
@@ -59,7 +59,7 @@ export const Content = () => {
 
         {/* Left Section */}
         <div className="mt-4 gap-2 flex flex-col xl:max-w-md w-full">
-          <h3 className="text-xl font-semibold mb-3">Recent Interviwers</h3>
+          <h3 className="text-2xl font-semibold mb-3">Recent Interviwers</h3>
           <div className="flex flex-col justify-center gap-4 flex-wrap md:flex-nowrap md:flex-col">
             <RecentInterviews />
           </div>

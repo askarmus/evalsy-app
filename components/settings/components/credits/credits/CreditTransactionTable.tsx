@@ -63,7 +63,7 @@ export const CreditTransactionTable = () => {
 
   return (
     <div className="space-y-6">
-      <Card className="p-4" radius="md" shadow="md">
+      <Card radius="md" shadow="md">
         <CardBody>
           <h1 className="text-xl font-semibold mb-4">Credit Transaction</h1>
 
