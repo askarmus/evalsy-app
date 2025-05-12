@@ -1,7 +1,7 @@
-import React, { useMemo, useState } from "react";
-import { Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, Input, Pagination } from "@heroui/react";
-import Link from "next/link";
-import DateFormatter from "@/app/utils/DateFormatter";
+import React, { useMemo, useState } from 'react';
+import { Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, Input, Pagination } from '@heroui/react';
+import Link from 'next/link';
+import DateFormatter from '@/app/utils/DateFormatter';
 
 export interface Invitation {
   id: string;
@@ -15,7 +15,7 @@ interface SentInvitationsTableProps {
 }
 
 export const SentInvitationsTable: React.FC<SentInvitationsTableProps> = ({ invitations }) => {
-  const [searchValue, setSearchValue] = useState("");
+  const [searchValue, setSearchValue] = useState('');
   const [page, setPage] = useState(1);
   const rowsPerPage = 5; // Number of rows per page
 
@@ -36,20 +36,20 @@ export const SentInvitationsTable: React.FC<SentInvitationsTableProps> = ({ invi
   }, [page, filteredInvitations]);
 
   return (
-    <div className='flex flex-col gap-4'>
+    <div className="flex flex-col gap-4">
       {/* Search Input */}
-      <Input placeholder='Search invitations...' value={searchValue} onChange={(e) => setSearchValue(e.target.value)} />
+      <Input placeholder="Search invitations..." value={searchValue} onChange={(e) => setSearchValue(e.target.value)} />
 
       {/* Table */}
-      <Table shadow='sm' radius='sm' aria-label='Sent Invitations'>
+      <Table shadow="md" radius="md" aria-label="Sent Invitations">
         <TableHeader>
           <TableColumn>#</TableColumn>
           <TableColumn>Name</TableColumn>
           <TableColumn>Email</TableColumn>
           <TableColumn>Sent On</TableColumn>
-          <TableColumn>{""}</TableColumn>
+          <TableColumn>{''}</TableColumn>
         </TableHeader>
-        <TableBody emptyContent={"No invitations to display."} loadingContent='Loading invitations... '>
+        <TableBody emptyContent={'No invitations to display.'} loadingContent="Loading invitations... ">
           {paginatedInvitations.map((invitation, index) => (
             <TableRow key={invitation.id}>
               <TableCell>{(page - 1) * rowsPerPage + index + 1}</TableCell>
@@ -57,7 +57,7 @@ export const SentInvitationsTable: React.FC<SentInvitationsTableProps> = ({ invi
               <TableCell>{invitation.email}</TableCell>
               <TableCell>{DateFormatter.formatDate(invitation.sentOn, true)}</TableCell>
               <TableCell>
-                <Link target='_blank' href={`/interview/start/${invitation.id}`}>
+                <Link target="_blank" href={`/interview/start/${invitation.id}`}>
                   Start
                 </Link>
               </TableCell>
@@ -68,8 +68,8 @@ export const SentInvitationsTable: React.FC<SentInvitationsTableProps> = ({ invi
 
       {/* Pagination */}
       {paginatedInvitations.length > 0 && (
-        <div className='flex justify-center'>
-          <Pagination showControls color='default' size='sm' total={Math.ceil(filteredInvitations.length / rowsPerPage)} page={page} onChange={(page) => setPage(page)} />
+        <div className="flex justify-center">
+          <Pagination showControls color="default" size="md" total={Math.ceil(filteredInvitations.length / rowsPerPage)} page={page} onChange={(page) => setPage(page)} />
         </div>
       )}
     </div>

@@ -1,15 +1,15 @@
-import { Link, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from "@heroui/react";
-import React from "react";
-import { columns, users } from "./data";
-import { RenderCell } from "./render-cell";
+import { Link, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from '@heroui/react';
+import React from 'react';
+import { columns, users } from './data';
+import { RenderCell } from './render-cell';
 
 export const TableWrapper = () => {
   return (
-    <div className=' w-full flex flex-col gap-4'>
-      <Table shadow='sm' radius='sm' aria-label='Example table with custom cells'>
+    <div className=" w-full flex flex-col gap-4">
+      <Table shadow="sm" radius="md" aria-label="Example table with custom cells">
         <TableHeader columns={columns}>
           {(column) => (
-            <TableColumn key={column.uid} hideHeader={column.uid === "actions"} align={column.uid === "actions" ? "center" : "start"}>
+            <TableColumn key={column.uid} hideHeader={column.uid === 'actions'} align={column.uid === 'actions' ? 'center' : 'start'}>
               {column.name}
             </TableColumn>
           )}

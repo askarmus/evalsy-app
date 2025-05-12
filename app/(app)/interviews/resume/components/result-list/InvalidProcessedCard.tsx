@@ -3,7 +3,7 @@ import { AiOutlineDownload } from 'react-icons/ai';
 import { UploadFile } from '../../types/UploadFileType';
 
 export const InvalidProcessedCard = ({ file }: { file: UploadFile }) => (
-  <Card shadow="sm" radius="sm">
+  <Card shadow="md" radius="md">
     <CardBody>
       <div className="flex flex-col items-center justify-center">
         <h1 className="text-1xl   text-red-600 mb-4">Invalid Profile</h1>
@@ -19,7 +19,7 @@ export const InvalidProcessedCard = ({ file }: { file: UploadFile }) => (
             link.click();
             document.body.removeChild(link);
           }}
-          size="sm"
+          size="md"
           color="default"
           variant="bordered"
         >

@@ -1,6 +1,6 @@
 import { AiOutlineDelete, AiOutlineDownload, AiOutlineRight } from 'react-icons/ai';
 import DateFormatter from '@/app/utils/DateFormatter';
-import { Card, CardHeader, CircularProgress, Button, CardBody, CardFooter, Tooltip } from '@heroui/react';
+import { Card, CardHeader, CircularProgress, Button, CardFooter, Tooltip, Spinner } from '@heroui/react';
 import { UploadFile } from '../../types/UploadFileType';
 
 const getRecommendationColor = (recommendation: string) => {
@@ -16,8 +16,8 @@ const getRecommendationColor = (recommendation: string) => {
   }
 };
 
-export const ValidProcessedCard = ({ file, onDelete, onViewDetails }: { file: UploadFile; onDelete: (id: string) => void; onViewDetails: (id: string) => void }) => (
-  <Card shadow="sm" radius="sm" className="P-5">
+export const ValidProcessedCard = ({ file, onDelete, onViewDetails, isLoading = false }: { file: UploadFile; onDelete: (id: string) => void; onViewDetails: (id: string) => void; isLoading?: boolean }) => (
+  <Card shadow="md" radius="md" className="P-5">
     <CardHeader className="justify-between">
       <div className="flex gap-5">
         <div className="flex items-center justify-between w-full">
@@ -28,7 +28,7 @@ export const ValidProcessedCard = ({ file, onDelete, onViewDetails }: { file: Up
           </div>
         </div>
       </div>
-      <Button color="primary" endContent={<AiOutlineRight />} onPress={() => onViewDetails(file.resumeId)} radius="full" variant="solid" size="sm">
+      <Button color="primary" isLoading={isLoading} onPress={() => onViewDetails(file.resumeId)} radius="full" variant="solid" size="md" isDisabled={isLoading}>
         Analysis
       </Button>
     </CardHeader>
@@ -40,7 +40,7 @@ export const ValidProcessedCard = ({ file, onDelete, onViewDetails }: { file: Up
         </div>
         <div className="flex items-center gap-x-2">
           <Tooltip content="Delete Resume">
-            <Button isIconOnly aria-label="Delete" onPress={() => onDelete(file.resumeId)} size="sm" color="default" variant="bordered">
+            <Button isIconOnly aria-label="Delete" onPress={() => onDelete(file.resumeId)} size="md" color="default" variant="bordered">
               <AiOutlineDelete />
             </Button>
           </Tooltip>
@@ -56,7 +56,7 @@ export const ValidProcessedCard = ({ file, onDelete, onViewDetails }: { file: Up
                 link.click();
                 document.body.removeChild(link);
               }}
-              size="sm"
+              size="md"
               color="default"
               variant="bordered"
             >

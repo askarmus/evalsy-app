@@ -16,6 +16,7 @@ import { UploadedCard } from './result-list/UploadedCard';
 import { showToast } from '@/app/utils/toastUtils';
 import { useResumeFilters } from '../hooks/useResumeFilters';
 import { ResumeFilters } from './result-list/ResumeFilters';
+import { useCredits } from '@/context/CreditContext';
 
 const ALLOWED_EXTENSIONS = ['pdf', 'doc', 'docx'];
 const PAGE_SIZE = 50;
@@ -54,10 +55,10 @@ function filesReducer(state: UploadFile[], action: Action): UploadFile[] {
 
 const ResumeUploader = ({ jobid, onViewDetails, onDelete, existingResume }: ResumeUploaderProps) => {
   const [files, dispatch] = useReducer(filesReducer, []);
-
+  const { credits, refreshCredits } = useCredits();
   const [currentPage, setCurrentPage] = useState(1);
   const { notifications } = useResumeNotifications(jobid);
-
+  const [loadingResumeId, setLoadingResumeId] = useState<string | null>(null);
   const { searchTerm, setSearchTerm, selectedRecommendations, setSelectedRecommendations, experienceRange, setExperienceRange, dateRange, setDateRange, filteredFiles, clearFilters } = useResumeFilters(files);
 
   useEffect(() => {
@@ -95,6 +96,7 @@ const ResumeUploader = ({ jobid, onViewDetails, onDelete, existingResume }: Resu
               publicUrl: url,
               isTest: false,
             });
+            await refreshCredits();
           } catch (err) {
             console.error('Failed to create resume:', err);
           }
@@ -113,6 +115,10 @@ const ResumeUploader = ({ jobid, onViewDetails, onDelete, existingResume }: Resu
     (acceptedFiles: File[]) => {
       if (acceptedFiles.length > 2) {
         showToast.error('You can only upload a maximum of 20 files at a time.');
+        return;
+      }
+      if (credits < acceptedFiles.length) {
+        showToast.error(`You only have ${credits} credit(s), but tried uploading ${acceptedFiles.length}.`);
         return;
       }
 
@@ -149,6 +155,14 @@ const ResumeUploader = ({ jobid, onViewDetails, onDelete, existingResume }: Resu
     [files, handleUpload, jobid, isUploadingOrProcessing]
   );
 
+  const handleViewDetails = async (resumeId: string) => {
+    setLoadingResumeId(resumeId);
+    try {
+      await onViewDetails(resumeId); // assuming this is async or wraps an async call
+    } finally {
+      setLoadingResumeId(null);
+    }
+  };
   const { getRootProps, getInputProps } = useDropzone({ onDrop, multiple: true, disabled: isUploadingOrProcessing });
 
   useEffect(() => {
@@ -187,7 +201,7 @@ const ResumeUploader = ({ jobid, onViewDetails, onDelete, existingResume }: Resu
     <div className="">
       <div {...getRootProps()}>
         <input {...getInputProps()} className="hidden" aria-label="Upload resume file" />
-        <Card radius="sm" shadow="sm" className="w-full mb-8 border-dashed border-2 cursor-pointer hover:bg-slate-50 hover:border-slate-400 transition-colors">
+        <Card radius="md" shadow="md" className="w-full mb-8 border-dashed border-2 cursor-pointer hover:bg-slate-50 hover:border-slate-400 transition-colors">
           <CardBody className="flex flex-row items-center justify-between py-4 px-6">
             <div className="flex items-center">
               <div className="rounded-full bg-slate-100 p-2 mr-4">
@@ -201,7 +215,7 @@ const ResumeUploader = ({ jobid, onViewDetails, onDelete, existingResume }: Resu
               </div>
             </div>
             <div>
-              <Button isDisabled={isUploadingOrProcessing} variant="bordered" size="sm">
+              <Button isDisabled={isUploadingOrProcessing} variant="bordered" size="md">
                 Browse Files
               </Button>
             </div>
@@ -238,7 +252,7 @@ const ResumeUploader = ({ jobid, onViewDetails, onDelete, existingResume }: Resu
             <div className="flex items-center justify-between mb-1">
               <span className="text-sm font-medium text-blue-800">Uploading Progress</span>
               {pendingUploadCount > 0 && (
-                <Badge color="primary" size="sm">
+                <Badge color="primary" size="md">
                   {pendingUploadCount} pending
                 </Badge>
               )}
@@ -251,7 +265,7 @@ const ResumeUploader = ({ jobid, onViewDetails, onDelete, existingResume }: Resu
             <div className="flex items-center justify-between mb-1">
               <span className="text-sm font-medium text-purple-800">Processing Progress</span>
               {pendingProcessingCount > 0 && (
-                <Badge color="secondary" size="sm">
+                <Badge color="secondary" size="md">
                   {pendingProcessingCount} pending
                 </Badge>
               )}
@@ -266,14 +280,14 @@ const ResumeUploader = ({ jobid, onViewDetails, onDelete, existingResume }: Resu
           if (file.status === 'uploading') return <UploadingCard key={file.resumeId} file={file} />;
           if (file.status === 'uploaded') return <UploadedCard key={file.resumeId} file={file} />;
           if (file.status === 'processed') {
-            return file.analysisResults.validityStatus ? <ValidProcessedCard key={file.resumeId} file={file} onDelete={onDelete} onViewDetails={onViewDetails} /> : <InvalidProcessedCard key={file.resumeId} file={file} />;
+            return file.analysisResults.validityStatus ? <ValidProcessedCard onViewDetails={handleViewDetails} isLoading={loadingResumeId === file.resumeId} key={file.resumeId} file={file} onDelete={onDelete} /> : <InvalidProcessedCard key={file.resumeId} file={file} />;
           }
           return null;
         })}
       </div>
       {totalPages > 1 && (
         <div className="flex justify-center mt-6">
-          <Pagination total={totalPages} page={currentPage} onChange={setCurrentPage} showControls loop size="sm" radius="full" color="primary" />
+          <Pagination total={totalPages} page={currentPage} onChange={setCurrentPage} showControls loop size="md" radius="full" color="primary" />
         </div>
       )}
     </div>

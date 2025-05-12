@@ -1,13 +1,13 @@
-import React, { useState } from "react";
-import { Drawer, DrawerContent, DrawerBody, DrawerFooter, Button } from "@heroui/react";
-import { SendInvitationDrawer } from "@/components/jobs/send-invitation";
-import { ResumeHeader } from "./ResumeHeader";
-import { EducationAndSoftSkills } from "./EducationAndSoftSkills";
-import { RedFlagsSection } from "./RedFlagsSection";
-import { KeyMatchesSection } from "./KeyMatchesSection";
-import { RecommendationSection } from "./RecommendationSection";
-import { KeyMissingSection } from "./KeyMissingSection";
-import { TopSkillsSection } from "./TopSkillsSection";
+import React, { useState } from 'react';
+import { Drawer, DrawerContent, DrawerBody, DrawerFooter, Button } from '@heroui/react';
+import { SendInvitationDrawer } from '@/components/jobs/send-invitation';
+import { ResumeHeader } from './ResumeHeader';
+import { EducationAndSoftSkills } from './EducationAndSoftSkills';
+import { RedFlagsSection } from './RedFlagsSection';
+import { KeyMatchesSection } from './KeyMatchesSection';
+import { RecommendationSection } from './RecommendationSection';
+import { KeyMissingSection } from './KeyMissingSection';
+import { TopSkillsSection } from './TopSkillsSection';
 
 export const ResumeAnalyseDrawer: React.FC<{ isOpen: boolean; onClose: () => void; resumeData: any }> = ({ isOpen, onClose, resumeData }) => {
   const [isDrawerOpen, setDrawerOpen] = useState(false);
@@ -19,9 +19,9 @@ export const ResumeAnalyseDrawer: React.FC<{ isOpen: boolean; onClose: () => voi
 
   return (
     <>
-      <Drawer isOpen={isOpen} onOpenChange={onClose} size='3xl'>
+      <Drawer isOpen={isOpen} onOpenChange={onClose} size="2xl">
         <DrawerContent>
-          <DrawerBody className='space-y-6'>
+          <DrawerBody className="space-y-6">
             <ResumeHeader contact={contact} current_role={current_role} experience={experience} />
             <RecommendationSection job_match={job_match} decision_summary={decision_summary} />
             <KeyMatchesSection key_matches={job_match.key_matches} />
@@ -31,10 +31,10 @@ export const ResumeAnalyseDrawer: React.FC<{ isOpen: boolean; onClose: () => voi
             <TopSkillsSection skill_experience={skill_experience} />
           </DrawerBody>
           <DrawerFooter>
-            <Button color='primary' onPress={() => handleInviteClick()} variant='solid'>
+            <Button color="primary" onPress={() => handleInviteClick()} variant="solid">
               Send Interview Invitation
             </Button>
-            <Button color='default' variant='bordered' onPress={onClose}>
+            <Button color="default" variant="bordered" onPress={onClose}>
               Close
             </Button>
           </DrawerFooter>
