@@ -129,7 +129,7 @@ export default function Jobs() {
   };
 
   return (
-    <div className="min-h-screen my-10 px-4 lg:px-6 max-w-[90rem] mx-auto w-full flex flex-col gap-4">
+    <div className="min-h-screen my-10 px-4 lg:px-6 max-w-[80rem] mx-auto w-full flex flex-col gap-4">
       <Breadcrumb items={breadcrumbItems} />
 
       <h3 className="text-xl font-semibold">All Interviews</h3>
@@ -191,7 +191,7 @@ export default function Jobs() {
         </div>
       </div>
 
-      <div className="max-w-[90rem] mx-auto w-full">
+      <div className="max-w-[80rem] mx-auto w-full">
         {isLoading && <JobListItemSkeleton />}
 
         {!isLoading && (

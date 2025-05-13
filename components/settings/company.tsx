@@ -54,11 +54,6 @@ const CompanySettings = () => {
     fetchSettings();
   }, []);
 
-  const breadcrumbItems = [
-    { name: 'Dashboard', link: '/' },
-    { name: 'Company', link: '' },
-  ];
-
   const handleSubmit = async (values: CompanySettingsFormValues) => {
     try {
       setIsLoading(true);
@@ -76,9 +71,9 @@ const CompanySettings = () => {
     <Formik enableReinitialize initialValues={initialValues} validationSchema={CompanySettingsSchema} onSubmit={handleSubmit}>
       {({ values, errors, touched, setFieldValue, handleChange }) => (
         <Form>
-          <Card className="p-5" radius="md" shadow="sm">
+          <Card className="p-0" radius="md" shadow="none">
             <CardBody>
-              <h1 className="text-xl font-semibold mb-4">Company Settings</h1>
+              <h1 className="text-xl font-bold mb-4">Company</h1>
               <div className="flex gap-4">
                 <div className="w-4/5">
                   <div className="grid grid-cols-1 gap-4">

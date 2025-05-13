@@ -62,60 +62,58 @@ export const CreditTransactionTable = () => {
   };
 
   return (
-    <div className="space-y-6">
-      <Card radius="md" shadow="md">
-        <CardBody>
-          <h1 className="text-xl font-semibold mb-4">Credit Transaction</h1>
+    <Card radius="none" shadow="none">
+      <CardBody>
+        <h1 className="text-xl font-semibold mb-4">Credit Transaction</h1>
 
-          <div className="flex flex-col sm:flex-row justify-between items-end mb-5 gap-4">
-            <div className="w-full sm:w-60">
-              <DateRangePicker label="Filter by Date" placeholder="Select range" value={dateRange} onChange={setDateRange} size="md" />
-            </div>
-
-            <Button onPress={handleExport} color="primary" startContent={<FaFileDownload />} className="w-full sm:w-auto">
-              Export CSV
-            </Button>
+        <div className="flex flex-col sm:flex-row justify-between items-end mb-5 gap-4">
+          <div className="w-full sm:w-60">
+            <DateRangePicker label="Filter by Date" placeholder="Select range" value={dateRange} onChange={setDateRange} size="md" />
           </div>
 
-          <Table aria-label="Credit Transactions" isStriped removeWrapper>
-            <TableHeader>
-              <TableColumn>Date</TableColumn>
-              <TableColumn>Type</TableColumn>
-              <TableColumn>Amount</TableColumn>
-              <TableColumn>Related ID</TableColumn>
-            </TableHeader>
-            <TableBody
-              emptyContent={
-                <div className="flex flex-col items-center justify-center py-10 text-center text-slate-400">
-                  <FaInbox className="text-4xl text-slate-500 mb-2" />
-                  <h4 className="text-md font-semibold">No transactions to display</h4>
-                  <p className="text-sm">Your recent credit activity will appear here.</p>
-                </div>
-              }
-              loadingContent="Loading transactions... "
-            >
-              {paginated.map((tx) => (
-                <TableRow key={tx.id}>
-                  <TableCell>{format(new Date(tx.createdAt), 'PPpp')}</TableCell>
-                  <TableCell className="capitalize">{tx.type}</TableCell>
-                  <TableCell>
-                    <div className="flex items-center gap-2">
-                      {tx.amount > 0 ? <FaArrowDown className="text-green-500" /> : <FaArrowUp className="text-red-500" />}
-                      <span className={tx.amount > 0 ? 'text-green-500' : 'text-red-500'}>
-                        {Math.abs(tx.amount)} credit{Math.abs(tx.amount) !== 1 ? 's' : ''}
-                      </span>
-                    </div>
-                  </TableCell>
-                  <TableCell>{tx.relatedId || '—'}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-          <div className="flex justify-center mt-4">
-            <Pagination page={currentPage} total={totalPages} onChange={setCurrentPage} showControls size="md" color="primary" />
-          </div>
-        </CardBody>
-      </Card>
-    </div>
+          <Button onPress={handleExport} color="primary" startContent={<FaFileDownload />} className="w-full sm:w-auto">
+            Export CSV
+          </Button>
+        </div>
+
+        <Table aria-label="Credit Transactions" isStriped removeWrapper>
+          <TableHeader>
+            <TableColumn>Date</TableColumn>
+            <TableColumn>Type</TableColumn>
+            <TableColumn>Amount</TableColumn>
+            <TableColumn>Related ID</TableColumn>
+          </TableHeader>
+          <TableBody
+            emptyContent={
+              <div className="flex flex-col items-center justify-center py-10 text-center text-slate-400">
+                <FaInbox className="text-4xl text-slate-500 mb-2" />
+                <h4 className="text-md font-semibold">No transactions to display</h4>
+                <p className="text-sm">Your recent credit activity will appear here.</p>
+              </div>
+            }
+            loadingContent="Loading transactions... "
+          >
+            {paginated.map((tx) => (
+              <TableRow key={tx.id}>
+                <TableCell>{format(new Date(tx.createdAt), 'PPpp')}</TableCell>
+                <TableCell className="capitalize">{tx.type}</TableCell>
+                <TableCell>
+                  <div className="flex items-center gap-2">
+                    {tx.amount > 0 ? <FaArrowDown className="text-green-500" /> : <FaArrowUp className="text-red-500" />}
+                    <span className={tx.amount > 0 ? 'text-green-500' : 'text-red-500'}>
+                      {Math.abs(tx.amount)} credit{Math.abs(tx.amount) !== 1 ? 's' : ''}
+                    </span>
+                  </div>
+                </TableCell>
+                <TableCell>{tx.relatedId || '—'}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+        <div className="flex justify-center mt-4">
+          <Pagination page={currentPage} total={totalPages} onChange={setCurrentPage} showControls size="md" color="primary" />
+        </div>
+      </CardBody>
+    </Card>
   );
 };

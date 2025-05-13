@@ -101,7 +101,7 @@ export default function InterviewResultList() {
   }, [page, filteredResults]);
 
   return (
-    <div className="  max-w-[90rem] mx-auto w-full flex flex-col gap-4">
+    <div className="  max-w-[80rem] mx-auto w-full flex flex-col gap-4">
       <div className="flex flex-col min-h-screen ">
         {/* Top Navigation would go here */}
         {isLoading && <OverlayLoader />}
