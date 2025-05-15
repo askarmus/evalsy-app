@@ -1,15 +1,17 @@
 'use client';
-import React, { useState, useMemo, useEffect, useCallback } from 'react';
-import { Card, Button, Input, CardBody, Tabs, Tab, CardHeader, Avatar } from '@heroui/react';
+import React, { useState, useMemo, useEffect, useCallback, useRef } from 'react';
+import { Tabs, Tab } from '@heroui/react';
 import { getAllInterviewResult, getInterviewResultById } from '@/services/interview.service';
-import RatingBadge from './components/rating,badge';
-import DateFormatter from '@/app/utils/DateFormatter';
-import { FaSearch, FaSyncAlt } from 'react-icons/fa';
+
 import EvaluationChart from './components/EvaluationChart';
 import QuestionsTable from './components/QuestionsTable';
 import CustomVideoPlayer from './components/CustomVideoPlayer';
 import SimpleScoreDisplay from './components/SimpleScoreDisplay';
 import OverlayLoader from '@/components/shared/OverlayLoader';
+import ImageSlider from '@/components/shared/ImageSlider';
+import Sidebar from './components/Sidebar';
+import CandidateHeader from './components/CandidateHeader';
+import FeedbackCard from './components/FeedbackCard';
 
 export default function InterviewResultList() {
   const [page, setPage] = useState(1);
@@ -21,6 +23,7 @@ export default function InterviewResultList() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [selectedQuestion, setSelectedQuestion] = useState<any>({});
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const rowsPerPage = 1000;
 
@@ -37,10 +40,19 @@ export default function InterviewResultList() {
       setIsLoading(false);
     }
   };
+
   const handleSelect = (question) => {
     setSelectedQuestion(question);
-    console.log('Selected:', question);
+    setTimeout(() => {
+      if (audioRef.current) {
+        audioRef.current.load(); // reload source
+        audioRef.current.play().catch((e) => {
+          console.warn('Auto-play blocked:', e);
+        });
+      }
+    }, 100); // brief delay ensures state is updated
   };
+
   useEffect(() => {
     fetchInterviewResult();
   }, []);
@@ -69,6 +81,12 @@ export default function InterviewResultList() {
     setPage(1);
   }, []);
 
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.volume = 0.5; // Set default volume to 50%
+    }
+  }, []);
+
   const filteredResults = useMemo(() => {
     let results = [...interviewResults];
 
@@ -89,7 +107,6 @@ export default function InterviewResultList() {
     return results;
   }, [filterValue, interviewResults, selectedTab]);
 
-  const pages = Math.ceil(filteredResults.length / rowsPerPage);
   useEffect(() => {
     setPage(1);
   }, [selectedTab]);
@@ -103,10 +120,8 @@ export default function InterviewResultList() {
   return (
     <div className="  max-w-[80rem] mx-auto w-full flex flex-col gap-4">
       <div className="flex flex-col min-h-screen ">
-        {/* Top Navigation would go here */}
         {isLoading && <OverlayLoader />}
         <div className="flex flex-col md:flex-row flex-1 max-w-screen-2xl mx-auto w-full">
-          {/* Mobile Sidebar Toggle */}
           <div className="md:hidden sticky top-16 z-10   border-b p-2">
             <button className="inline-flex items-center justify-between w-full rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2" onClick={() => setSidebarOpen(!sidebarOpen)}>
               <div className="flex items-center gap-2">
@@ -117,149 +132,11 @@ export default function InterviewResultList() {
             </button>
           </div>
 
-          {/* Desktop Sidebar */}
-          <aside className={`${sidebarOpen ? 'block' : 'hidden'} md:block w-80 lg:w-80 border-r border-l  overflow-y-auto`}>
-            <div className="p-5 border-b">
-              <h2 className="text-lg font-semibold mb-4 ">All Candidates</h2>
-              <div className="relative">
-                <Tabs key="tabs" aria-label="Performance Tabs" size="md" selectedKey={selectedTab} onSelectionChange={(key) => setSelectedTab(key as string)}>
-                  <Tab key="all" title="All" />
-                  <Tab
-                    key="below-average"
-                    title={
-                      <>
-                        <span className="text-xs">Low </span>
-                      </>
-                    }
-                  />
-                  <Tab
-                    key="average"
-                    title={
-                      <>
-                        <span>Avg </span>
-                      </>
-                    }
-                  />
-                  <Tab
-                    key="good"
-                    title={
-                      <>
-                        <span> Good </span>
-                      </>
-                    }
-                  />
-                  <Tab
-                    key="excellent"
-                    title={
-                      <>
-                        <span>Best </span>
-                      </>
-                    }
-                  />
-                </Tabs>
+          <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} selectedTab={selectedTab} setSelectedTab={setSelectedTab} filterValue={filterValue} setFilterValue={setFilterValue} onSearchChange={onSearchChange} isLoading={isLoading} fetchInterviewResult={fetchInterviewResult} items={items} selectedId={selectedId} handleViewDetails={handleViewDetails} />
 
-                <div className="flex items-center mt-5 ">
-                  <Input
-                    onChange={(e) => onSearchChange(e.target.value)}
-                    isClearable
-                    className="max-w-md"
-                    placeholder="Search Result"
-                    defaultValue=""
-                    startContent={<FaSearch />}
-                    variant="bordered"
-                    onClear={() => {
-                      setFilterValue('');
-                      setPage(1);
-                    }}
-                  />
-
-                  <Button
-                    className="ml-3"
-                    isIconOnly
-                    variant="ghost"
-                    size="md"
-                    isLoading={isLoading}
-                    color="default"
-                    onPress={() => {
-                      setIsLoading(true);
-                      fetchInterviewResult();
-                    }}
-                  >
-                    <FaSyncAlt />
-                  </Button>
-                </div>
-              </div>
-            </div>
-            <div className="overflow-auto">
-              <div className=" ">
-                <div className="h-[700px] flex flex-col">
-                  <div className="p-0 overflow-y-auto flex-grow">
-                    <ul className="divide-y">
-                      {items.map((data: any) => (
-                        <li
-                          onClick={() => handleViewDetails(data.id)}
-                          key={data.id}
-                          className={`flex items-center cursor-pointer justify-between p-4 transition-colors
-                          ${selectedId === data.id ? 'bg-gray-100' : 'hover:bg-gray-50'}`}
-                        >
-                          <div className="flex items-center gap-3">
-                            <Avatar name={data.name} className="h-10 w-10  "></Avatar>
-                            <div>
-                              <h3 className="font-medium text-sm ">{data.name}</h3>
-                              <p className="text-xs  ">{data.jobTitle}</p>
-                            </div>
-                          </div>
-                          <RatingBadge weight={data.overallWeight} />
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </aside>
-
-          {/* Main Content */}
           <main className="flex-1 border-r overflow-auto lg:max-w-[calc(100%-320px)]">
-            {/* Candidate Header */}
-            <div className="  border-b  ">
-              {/* Top section with candidate info */}
-              <div className="p-5 lg:p-6 border-b border-slate-100">
-                <div className="flex flex-col md:flex-row gap-4 items-start md:items-center">
-                  <div className="flex items-center gap-4">
-                    <div className="relative">
-                      <div className="absolute -top-2 -left-2 rounded-full p-1 shadow-sm z-10">
-                        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-amber-400 to-amber-500 flex items-center justify-center text-sm font-semibold text-white">{Math.floor(selectedInterviewerData?.overallWeight)}</div>
-                      </div>
-                      <div className="w-16 h-16 rounded-xl border-2 border-slate-100 bg-slate-100 flex items-center justify-center overflow-hidden">
-                        <img src={selectedInterviewerData?.imageUrl ? selectedInterviewerData?.imageUrl : '/avatar-cartoon-in-flat-style-png.webp'} alt={selectedInterviewerData?.name} className="w-full h-full object-cover rounded-xl" />
-                      </div>
-                    </div>
-                    <div>
-                      <div className="text-xs font-medium text-blue-600">{selectedInterviewerData?.jobTitle}</div>
-                      <h1 className="text-xl font-bold ">{selectedInterviewerData?.name}</h1>
-                    </div>
-                  </div>
+            <CandidateHeader selectedInterviewerData={selectedInterviewerData} />
 
-                  <div className="flex flex-wrap gap-4 ml-auto items-center">
-                    <div className="flex items-center gap-6">
-                      <div className="flex items-center gap-1.5 text-sm">
-                        <div className="flex items-center gap-2 text-sm   px-3 py-2 rounded-lg">
-                          <span className="font-medium">Completed:</span>
-                          <span className="">{DateFormatter.formatDate(selectedInterviewerData?.statusUpdateAt)}</span>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-2 text-sm">
-                        <span className="inline-flex items-center gap-1.5 px-3 py-1.5 font-medium bg-green-50 text-green-600 border border-green-200 rounded-lg">
-                          <div className="w-4 h-4 flex items-center justify-center">✓</div>
-                          Shortlisted
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
             <div className="m-5 ">
               <div className="  rounded-xl border  p-5 shadow-sm">
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -269,64 +146,53 @@ export default function InterviewResultList() {
                   </div>
 
                   <div className="">
-                    <h3 className="text-base font-semibold   mb-4">Video</h3>
-                    <CustomVideoPlayer />
+                    <Tabs aria-label="Options" size="sm">
+                      <Tab key="photos" title="Photos">
+                        <ImageSlider images={selectedInterviewerData?.screenshots} />
+                      </Tab>
+
+                      <Tab key="videos" title="Videos">
+                        <h3 className="text-base font-semibold   mb-4">Comming</h3>
+
+                        <CustomVideoPlayer />
+                      </Tab>
+                    </Tabs>
                   </div>
                   <div className=" ">
                     <h3 className="text-base font-semibold   mb-4">Transcript</h3>
                     <div className=" pt-4">
-                      <h3 className="text-sm font-medium mb-3   flex items-center gap-2">{selectedQuestion?.text}</h3>
+                      <h3 className="text-sm   mb-3   flex items-center gap-2">{selectedQuestion?.text}</h3>
                       <div className="text-sm    p-4 rounded-lg border border-slate-200">
-                        <p className="mb-3">{selectedQuestion?.transcription}</p>
+                        {selectedQuestion?.transcription ? (
+                          <>
+                            <p className="mb-3">{selectedQuestion.transcription}</p>
+                            <audio ref={audioRef} controls className="mt-3 w-full">
+                              <source src={selectedQuestion.recordedUrl} type="audio/mpeg" />
+                              Your browser does not support the audio element.
+                            </audio>
+                          </>
+                        ) : (
+                          <p>No Answered</p>
+                        )}
                       </div>
                     </div>
                   </div>
                 </div>
 
                 <div className="mt-5">
-                  <SimpleScoreDisplay
-                    scores={{
-                      relevance: 4.2,
-                      completeness: 3.8,
-                      clarity: 4.5,
-                      grammar_language: 4.0,
-                      technical_accuracy: 4.3,
-                    }}
-                    totalScore={100}
-                  />
+                  <SimpleScoreDisplay scores={selectedQuestion} totalScore={100} />
                 </div>
               </div>
             </div>
-
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-5 p-5">
               <div className="space-y-5">
                 <div className="  rounded-xl border border-slate-200 p-5 shadow-sm">
                   <h2 className="text-lg font-semibold   mb-4">Overall Performence</h2>
-
                   {selectedInterviewerData && <EvaluationChart data={selectedInterviewerData}></EvaluationChart>}
                 </div>
               </div>
-
               <div className="space-y-5">
-                <div className=" rounded-xl border border-slate-200 p-5 shadow-sm">
-                  <h2 className="text-lg font-semibold   mb-4">Feedback</h2>
-                  <Card shadow="sm" radius="md" className="p-2 mt-6 w-full">
-                    <CardBody className="  w-full">
-                      {Array.isArray(selectedInterviewerData?.notes?.summary) && selectedInterviewerData.notes.summary.filter((item) => item.trim() !== '').length > 0 && (
-                        <ul className="space-y-3">
-                          {selectedInterviewerData.notes.summary
-                            .filter((item) => item.trim() !== '')
-                            .map((item, index) => (
-                              <li key={index} className="flex items-start gap-2">
-                                <span className="mt-2 w-2 h-2 rounded-full   shrink-0" />
-                                <span className="text-sm   leading-relaxed">{item}</span>
-                              </li>
-                            ))}
-                        </ul>
-                      )}
-                    </CardBody>
-                  </Card>
-                </div>
+                <FeedbackCard summary={selectedInterviewerData?.notes?.summary} />
               </div>
             </div>
           </main>

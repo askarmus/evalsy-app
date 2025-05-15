@@ -29,7 +29,7 @@ export const TopUpCreditsModal = ({ modal }: TopUpCreditsModalProps) => {
             <ModalHeader className="text-xl font-bold">Top Up Credits</ModalHeader>
             <ModalBody>
               {packages.map(({ credits, price, description, popular }) => (
-                <Card radius="md" shadow="md" key={credits} className="mb-2">
+                <Card radius="sm" shadow="sm" key={credits} className="mb-2">
                   <CardBody className="flex flex-row justify-between items-center">
                     <div>
                       <div className="flex items-center gap-2">

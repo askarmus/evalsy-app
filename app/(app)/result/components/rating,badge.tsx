@@ -1,28 +1,38 @@
-import { Chip } from "@heroui/react";
-import React from "react";
+import { Badge } from '@heroui/react';
+import React from 'react';
 
-const getBadgeStyle = (percent: number) => {
+type BadgeColor = 'default' | 'primary' | 'secondary' | 'success' | 'warning' | 'danger';
+
+interface BadgeStyle {
+  color: BadgeColor;
+  text: string;
+}
+
+const getBadgeStyle = (percent: number): BadgeStyle => {
   if (percent <= 25) {
-    return { textColor: "text-orange-400", text: "Low" };
-  } else if (percent > 25 && percent <= 50) {
-    return { textColor: "text-yellow-400", text: "Avg" };
-  } else if (percent > 50 && percent <= 75) {
-    return { textColor: "text-blue-400", text: "Good" };
-  } else if (percent > 75) {
-    return { textColor: "text-green-400", text: "Best" };
+    return { color: 'danger', text: 'Low' };
+  } else if (percent <= 50) {
+    return { color: 'warning', text: 'Avg' };
+  } else if (percent <= 75) {
+    return { color: 'secondary', text: 'Good' };
+  } else {
+    return { color: 'success', text: 'Best' };
   }
-
-  return { textColor: "bg-gray-400", text: "Unknown" };
 };
 
-const RatingBadge = ({ weight }) => {
-  const { textColor, text } = getBadgeStyle(weight);
+interface RatingBadgesProps {
+  weight: number;
+  children?: React.ReactNode;
+}
+
+const RatingBadges: React.FC<RatingBadgesProps> = ({ weight, children }) => {
+  const { color, text } = getBadgeStyle(weight);
 
   return (
-    <Chip size='sm' color='default' variant='bordered' className={textColor}>
-      {text}
-    </Chip>
+    <Badge size="sm" color={color} variant="flat" content={text}>
+      {children}
+    </Badge>
   );
 };
 
-export default RatingBadge;
+export default RatingBadges;

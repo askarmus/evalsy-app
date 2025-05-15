@@ -42,7 +42,7 @@ const Welcome: React.FC = () => {
         <div className="w-full max-w-screen-lg mx-auto px-6 py-8">
           <InterviewNavbar company={company} />
 
-          <Card shadow="md" radius="md" className="p-6 mt-6">
+          <Card shadow="sm" radius="sm" className="p-6 mt-6">
             <CardHeader>
               <CandidateInfo candidate={candidate} company={company} job={job} addTopPadding={false} />
             </CardHeader>

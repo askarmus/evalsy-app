@@ -16,7 +16,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <div className="flex flex-col items-center justify-center h-screen bg-gray-50">
         <Logo />
         <div className="text-center space-y-2">
-          <div className="text-xl font-semibold text-gray-700 mt-6">Loading...</div>
+          <div className="text-lg font-semibold text-gray-700 mt-6">Loading...</div>
         </div>
       </div>
     );

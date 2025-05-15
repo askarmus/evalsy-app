@@ -48,7 +48,7 @@ export default function ResumeStatsGrid({ resumeStats }: Props) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
       {cards.map((card, idx) => (
-        <Card key={idx} className="overflow-hidden" radius="md" shadow="md">
+        <Card key={idx} className="overflow-hidden" radius="sm" shadow="sm">
           <div className="flex items-center p-3">
             {iconMap[card.key as keyof typeof iconMap]}
             <div className="min-w-0">

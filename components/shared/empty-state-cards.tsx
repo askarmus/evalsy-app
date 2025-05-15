@@ -18,7 +18,7 @@ export default function EmptyStateCards({ onReset, title, description }: { onRes
             </div>
             {onReset && (
               <div className="flex gap-2 shrink-0">
-                <Button variant="solid" size="md" onPress={onReset}>
+                <Button variant="solid" size="sm" onPress={onReset}>
                   Reset Filters
                 </Button>
               </div>

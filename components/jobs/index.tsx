@@ -154,7 +154,7 @@ export default function Jobs() {
           <Tabs
             key="tabs"
             aria-label="Tabs sizes"
-            size="md"
+            size="sm"
             selectedKey={selectedTab}
             onSelectionChange={(key) => {
               setSelectedTab(key as string);
@@ -166,7 +166,7 @@ export default function Jobs() {
               title={
                 <>
                   <span>Active </span>
-                  <Chip size="md" variant="faded">
+                  <Chip size="sm" variant="faded">
                     {jobs.filter((j: any) => j.status.toLowerCase() !== 'deleted').length}
                   </Chip>
                 </>
@@ -177,7 +177,7 @@ export default function Jobs() {
               title={
                 <>
                   <span>Inactive </span>
-                  <Chip size="md" variant="faded">
+                  <Chip size="sm" variant="faded">
                     {jobs.filter((j: any) => j.status.toLowerCase() === 'deleted').length}
                   </Chip>
                 </>
@@ -185,7 +185,7 @@ export default function Jobs() {
             />
           </Tabs>
 
-          <Button color="primary" size="md" onPress={() => router.push('/interviews/add')} endContent={<AiOutlinePlus />}>
+          <Button color="primary" size="sm" onPress={() => router.push('/interviews/add')} endContent={<AiOutlinePlus />}>
             Add New
           </Button>
         </div>
@@ -212,7 +212,7 @@ export default function Jobs() {
             ) : (
               <>
                 {items.map((job: any) => (
-                  <Card key={job.id} shadow="md" radius="md">
+                  <Card key={job.id} shadow="sm" radius="sm">
                     <CardHeader className="flex justify-between items-center">
                       <div className="flex gap-5">
                         <div className="flex flex-col gap-1 items-start justify-center">
@@ -231,7 +231,7 @@ export default function Jobs() {
                           ) : (
                             <>
                               <Tooltip content="Manage Resume">
-                                <Button size="md" radius="full" variant="bordered" startContent={<AiOutlineDiff className="h-6 w-6" />} aria-label="manage" onPress={() => handleManageResumeClick(job.id)}>
+                                <Button size="sm" radius="full" variant="bordered" startContent={<AiOutlineDiff className="h-6 w-6" />} aria-label="manage" onPress={() => handleManageResumeClick(job.id)}>
                                   Candidate
                                 </Button>
                               </Tooltip>
@@ -262,7 +262,7 @@ export default function Jobs() {
                     <CardFooter className="gap-6 flex-wrap flex justify-between items-center pt-0">
                       <div className="flex gap-6 flex-wrap items-center">
                         <div className="flex gap-1">
-                          <Chip size="md" color="default" variant="solid" className={`${getExperienceLevelColor(job.experienceLevel)} `}>
+                          <Chip size="sm" color="default" variant="solid" className={`${getExperienceLevelColor(job.experienceLevel)} `}>
                             {job.experienceLevel.toUpperCase()}
                           </Chip>
                         </div>
@@ -292,7 +292,7 @@ export default function Jobs() {
                   </Card>
                 ))}
 
-                <Pagination showControls color="default" size="md" page={page} total={pages} onChange={(page) => setPage(page)} />
+                <Pagination showControls color="default" size="sm" page={page} total={pages} onChange={(page) => setPage(page)} />
               </>
             )}
 

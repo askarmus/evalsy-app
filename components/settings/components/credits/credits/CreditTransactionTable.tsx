@@ -68,7 +68,7 @@ export const CreditTransactionTable = () => {
 
         <div className="flex flex-col sm:flex-row justify-between items-end mb-5 gap-4">
           <div className="w-full sm:w-60">
-            <DateRangePicker label="Filter by Date" placeholder="Select range" value={dateRange} onChange={setDateRange} size="md" />
+            <DateRangePicker label="Filter by Date" placeholder="Select range" value={dateRange} onChange={setDateRange} size="sm" />
           </div>
 
           <Button onPress={handleExport} color="primary" startContent={<FaFileDownload />} className="w-full sm:w-auto">
@@ -111,7 +111,7 @@ export const CreditTransactionTable = () => {
           </TableBody>
         </Table>
         <div className="flex justify-center mt-4">
-          <Pagination page={currentPage} total={totalPages} onChange={setCurrentPage} showControls size="md" color="primary" />
+          <Pagination page={currentPage} total={totalPages} onChange={setCurrentPage} showControls size="sm" color="primary" />
         </div>
       </CardBody>
     </Card>

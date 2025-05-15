@@ -47,14 +47,14 @@ const InterviewInstruction: React.FC<any> = () => {
             <div className="flex flex-col md:flex-row gap-4 md:items-center mb-8">
               <div className="flex flex-col">
                 <span className="text-md font-semibold  ">Duration</span>
-                <Chip size="md" className="mt-2" color="danger" variant="faded" radius="lg">
+                <Chip size="sm" className="mt-2" color="danger" variant="faded" radius="lg">
                   {duration / 60} minutes
                 </Chip>
               </div>
 
               <div className="flex flex-col">
                 <span className="text-md font-semibold ">Total Questions</span>
-                <Chip size="md" className="mt-2" color="danger" variant="faded" radius="lg">
+                <Chip size="sm" className="mt-2" color="danger" variant="faded" radius="lg">
                   {job.totalQuestions}
                 </Chip>
               </div>
@@ -99,7 +99,7 @@ const InterviewInstruction: React.FC<any> = () => {
             </div>
 
             <div className="mt-6 flex items-center space-x-3">
-              <Switch isSelected={permissionGranted} onValueChange={requestPermissions} color="primary" size="md" isDisabled={isChecking} />
+              <Switch isSelected={permissionGranted} onValueChange={requestPermissions} color="primary" size="sm" isDisabled={isChecking} />
               <span className="text-sm font-medium">{permissionGranted ? 'Camera & Microphone Enabled' : 'Enable Camera & Microphone'}</span>
             </div>
 

@@ -46,7 +46,7 @@ const EvaluationTable = ({ data }) => {
                       <td className="py-2 px-3 text-[12px]">{scores.technical_accuracy || 0}</td>
                       <td className="py-2 px-3 text-[12px]">{`${questionScore}/25`}</td>
                       <td className="py-2 px-3 text-[12px]">
-                        <Button size="md" isIconOnly onPress={() => toggleRow(answer.id)}>
+                        <Button size="sm" isIconOnly onPress={() => toggleRow(answer.id)}>
                           {expandedRow === answer.id ? <AiOutlineUp /> : <AiOutlineDown />}
                         </Button>
                       </td>

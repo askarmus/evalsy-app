@@ -24,9 +24,9 @@ const CompanySettingsPage = () => {
 
   return (
     <div className="my-10 px-4 lg:px-6 max-w-[80rem] mx-auto w-full flex flex-col gap-4">
-      <Card className="p-2" shadow="md" radius="md">
+      <Card className="p-4" shadow="sm" radius="sm">
         <CardBody>
-          <div className="grid lg:grid-cols-4 gap-6">
+          <div className="grid lg:grid-cols-4 gap-3">
             <div className="col-span-1">
               <nav className="flex flex-row lg:flex-col gap-2 w-auto lg:w-full bg-default-100 p-1.5 rounded-lg" aria-label="Tabs" role="tablist" aria-orientation="horizontal">
                 {TABS.map((tab) => (

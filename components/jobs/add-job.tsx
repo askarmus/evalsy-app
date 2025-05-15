@@ -131,7 +131,7 @@ export const AddJob = () => {
           <span className="truncate font-semibold max-w-[200px] md:max-w-[400px]">{question.text.length > 80 ? `${question.text.substring(0, 80)}...` : question.text || 'New Question'}</span>
         </div>
         <div className="flex items-center gap-2 ml-4 shrink-0">
-          <Chip color={question.type === 'coding' ? 'secondary' : 'primary'} variant="flat" size="md">
+          <Chip color={question.type === 'coding' ? 'secondary' : 'primary'} variant="flat" size="sm">
             {question.type}
           </Chip>
           <Tooltip content="Edit question">
@@ -197,7 +197,7 @@ export const AddJob = () => {
             <Card className="p-4">
               <CardBody>
                 <div className="grid grid-cols-1 gap-4">
-                  <Input label="Job Title" size="md" radius="md" variant="bordered" value={values.jobTitle} isInvalid={!!errors.jobTitle && !!touched.jobTitle} errorMessage={errors.jobTitle} onChange={handleChange('jobTitle')} />
+                  <Input label="Job Title" size="sm" radius="md" variant="bordered" value={values.jobTitle} isInvalid={!!errors.jobTitle && !!touched.jobTitle} errorMessage={errors.jobTitle} onChange={handleChange('jobTitle')} />
                   <RichTextEditor value={values.description} onChange={(val) => setFieldValue('description', val)} />
                 </div>
 
@@ -239,16 +239,16 @@ export const AddJob = () => {
                 </DndContext>
 
                 <div className="flex flex-wrap gap-4 mt-4">
-                  <NumberInput size="md" variant="bordered" label="Total Random Verbal Question" value={values.totalRandomVerbalQuestion} onValueChange={(val) => setFieldValue('totalRandomVerbalQuestion', val)} isInvalid={!!errors.totalRandomVerbalQuestion && !!touched.totalRandomVerbalQuestion} errorMessage={errors.totalRandomVerbalQuestion} className="max-w-xs" />
-                  <NumberInput size="md" variant="bordered" label="Total Random Coding Question" value={values.totalRandomCodingQuestion} onValueChange={(val) => setFieldValue('totalRandomCodingQuestion', val)} isInvalid={!!errors.totalRandomCodingQuestion && !!touched.totalRandomCodingQuestion} errorMessage={errors.totalRandomCodingQuestion} className="max-w-xs" />
+                  <NumberInput size="sm" variant="bordered" label="Total Random Verbal Question" value={values.totalRandomVerbalQuestion} onValueChange={(val) => setFieldValue('totalRandomVerbalQuestion', val)} isInvalid={!!errors.totalRandomVerbalQuestion && !!touched.totalRandomVerbalQuestion} errorMessage={errors.totalRandomVerbalQuestion} className="max-w-xs" />
+                  <NumberInput size="sm" variant="bordered" label="Total Random Coding Question" value={values.totalRandomCodingQuestion} onValueChange={(val) => setFieldValue('totalRandomCodingQuestion', val)} isInvalid={!!errors.totalRandomCodingQuestion && !!touched.totalRandomCodingQuestion} errorMessage={errors.totalRandomCodingQuestion} className="max-w-xs" />
                 </div>
 
                 <Divider className="my-6" />
                 <div className="flex flex-wrap justify-center items-center gap-4 mt-6">
-                  <Pagination color="default" size="md" total={Math.ceil(filteredQuestions.length / Number(pageSize))} initialPage={1} page={page} onChange={setPage} />
+                  <Pagination color="default" size="sm" total={Math.ceil(filteredQuestions.length / Number(pageSize))} initialPage={1} page={page} onChange={setPage} />
 
                   <div className="flex items-center gap-2">
-                    <Select className="w-20" size="md" defaultSelectedKeys={[pageSize]} selectedKeys={[pageSize]} variant="faded" onChange={handlePageSizeChange}>
+                    <Select className="w-20" size="sm" defaultSelectedKeys={[pageSize]} selectedKeys={[pageSize]} variant="faded" onChange={handlePageSizeChange}>
                       {pageSizes.map((animal) => (
                         <SelectItem key={animal.key}>{animal.label}</SelectItem>
                       ))}

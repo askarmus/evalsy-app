@@ -110,7 +110,7 @@ export const SendInvitationDrawer: React.FC<SendInvitationDrawerProps> = ({ isOp
                       maxValue={120}
                       minValue={15}
                       showSteps={true}
-                      size="md"
+                      size="sm"
                       step={15}
                       onChange={(e) =>
                         handleChange({
@@ -119,7 +119,7 @@ export const SendInvitationDrawer: React.FC<SendInvitationDrawerProps> = ({ isOp
                       }
                     />
                   </div>
-                  <RadioGroup label="Expires" size="md" defaultValue={'7'} orientation="horizontal" value={values.expires} onChange={handleChange('expires')} isInvalid={!!errors.expires && !!touched.expires} errorMessage={errors.expires}>
+                  <RadioGroup label="Expires" size="sm" defaultValue={'7'} orientation="horizontal" value={values.expires} onChange={handleChange('expires')} isInvalid={!!errors.expires && !!touched.expires} errorMessage={errors.expires}>
                     <Radio value="3">3 Days</Radio>
                     <Radio value="7">One Week</Radio>
                     <Radio value="14">Two Weeks</Radio>

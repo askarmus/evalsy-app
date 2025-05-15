@@ -41,7 +41,7 @@ export const SentInvitationsTable: React.FC<SentInvitationsTableProps> = ({ invi
       <Input placeholder="Search invitations..." value={searchValue} onChange={(e) => setSearchValue(e.target.value)} />
 
       {/* Table */}
-      <Table shadow="md" radius="md" aria-label="Sent Invitations">
+      <Table shadow="sm" radius="sm" aria-label="Sent Invitations">
         <TableHeader>
           <TableColumn>#</TableColumn>
           <TableColumn>Name</TableColumn>
@@ -69,7 +69,7 @@ export const SentInvitationsTable: React.FC<SentInvitationsTableProps> = ({ invi
       {/* Pagination */}
       {paginatedInvitations.length > 0 && (
         <div className="flex justify-center">
-          <Pagination showControls color="default" size="md" total={Math.ceil(filteredInvitations.length / rowsPerPage)} page={page} onChange={(page) => setPage(page)} />
+          <Pagination showControls color="default" size="sm" total={Math.ceil(filteredInvitations.length / rowsPerPage)} page={page} onChange={(page) => setPage(page)} />
         </div>
       )}
     </div>

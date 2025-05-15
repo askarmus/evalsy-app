@@ -12,6 +12,7 @@ export const NavbarWrapper = () => {
 
   return (
     <Navbar
+      height={55}
       position="sticky"
       isBordered
       onMenuOpenChange={setIsMenuOpen}

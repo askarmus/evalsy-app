@@ -38,7 +38,7 @@ export const RenderCell = ({ user, columnKey }: Props) => {
       );
     case 'status':
       return (
-        <Chip size="md" variant="flat" color={cellValue === 'active' ? 'success' : cellValue === 'paused' ? 'danger' : 'warning'}>
+        <Chip size="sm" variant="flat" color={cellValue === 'active' ? 'success' : cellValue === 'paused' ? 'danger' : 'warning'}>
           <span className="capitalize text-xs">{cellValue}</span>
         </Chip>
       );

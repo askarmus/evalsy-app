@@ -106,8 +106,8 @@ export const RecentInterviews = () => {
 
                   {/* Fourth Column: Button - Align to Right */}
                   <div className="flex items-center justify-self-end ml-auto">
-                    <Button color="primary" isIconOnly={true} isLoading={loadingResults[item.id]} onPress={() => handleViewDetails(item.id)} radius="full" size="md" variant="flat">
-                      {loadingResults[item.id] ? <Spinner size="md" /> : <AiFillEye />}
+                    <Button color="primary" isIconOnly={true} isLoading={loadingResults[item.id]} onPress={() => handleViewDetails(item.id)} radius="full" size="sm" variant="flat">
+                      {loadingResults[item.id] ? <Spinner size="sm" /> : <AiFillEye />}
                     </Button>
                   </div>
                 </div>

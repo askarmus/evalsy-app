@@ -201,7 +201,7 @@ const ResumeUploader = ({ jobid, onViewDetails, onDelete, existingResume }: Resu
     <div className="">
       <div {...getRootProps()}>
         <input {...getInputProps()} className="hidden" aria-label="Upload resume file" />
-        <Card radius="md" shadow="md" className="w-full mb-8 border-dashed border-2 cursor-pointer hover:bg-slate-50 hover:border-slate-400 transition-colors">
+        <Card radius="sm" shadow="sm" className="w-full mb-8 border-dashed border-2 cursor-pointer hover:bg-slate-50 hover:border-slate-400 transition-colors">
           <CardBody className="flex flex-row items-center justify-between py-4 px-6">
             <div className="flex items-center">
               <div className="rounded-full bg-slate-100 p-2 mr-4">
@@ -215,7 +215,7 @@ const ResumeUploader = ({ jobid, onViewDetails, onDelete, existingResume }: Resu
               </div>
             </div>
             <div>
-              <Button isDisabled={isUploadingOrProcessing} variant="bordered" size="md">
+              <Button isDisabled={isUploadingOrProcessing} variant="bordered" size="sm">
                 Browse Files
               </Button>
             </div>
@@ -252,7 +252,7 @@ const ResumeUploader = ({ jobid, onViewDetails, onDelete, existingResume }: Resu
             <div className="flex items-center justify-between mb-1">
               <span className="text-sm font-medium text-blue-800">Uploading Progress</span>
               {pendingUploadCount > 0 && (
-                <Badge color="primary" size="md">
+                <Badge color="primary" size="sm">
                   {pendingUploadCount} pending
                 </Badge>
               )}
@@ -265,7 +265,7 @@ const ResumeUploader = ({ jobid, onViewDetails, onDelete, existingResume }: Resu
             <div className="flex items-center justify-between mb-1">
               <span className="text-sm font-medium text-purple-800">Processing Progress</span>
               {pendingProcessingCount > 0 && (
-                <Badge color="secondary" size="md">
+                <Badge color="secondary" size="sm">
                   {pendingProcessingCount} pending
                 </Badge>
               )}
@@ -287,7 +287,7 @@ const ResumeUploader = ({ jobid, onViewDetails, onDelete, existingResume }: Resu
       </div>
       {totalPages > 1 && (
         <div className="flex justify-center mt-6">
-          <Pagination total={totalPages} page={currentPage} onChange={setCurrentPage} showControls loop size="md" radius="full" color="primary" />
+          <Pagination total={totalPages} page={currentPage} onChange={setCurrentPage} showControls loop size="sm" radius="full" color="primary" />
         </div>
       )}
     </div>
