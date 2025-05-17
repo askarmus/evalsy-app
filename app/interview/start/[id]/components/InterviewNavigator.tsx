@@ -14,6 +14,8 @@ import { useTheme } from 'next-themes';
 import axios from 'axios';
 import { getUploadUrl, uploadRecordingBlob } from '@/services/interview.service';
 import { AntiCheat } from './AntiCheat';
+import WaveformVisualizer from './WaveformVisualizer';
+import ReactiveMicVisualizer from './WaveformVisualizer';
 
 const InterviewNavigator: React.FC = () => {
   const { questions, invitationId, setPhase, micDeviceId, candidate, job, company, finalizeRecording, updateCodeResult, currentQuestion, setAudioCompleted, isRecording, setRecording } = useInterviewStore();
@@ -29,6 +31,7 @@ const InterviewNavigator: React.FC = () => {
   const { theme } = useTheme(); // Gets 'light' or 'dark'
   const [recordingDuration, setRecordingDuration] = useState(0);
   const recordingTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const [micStream, setMicStream] = useState<MediaStream | null>(null);
 
   useEffect(() => {
     const isRefreshed = localStorage.getItem('pageRefreshed');
@@ -103,6 +106,9 @@ const InterviewNavigator: React.FC = () => {
     const stream = await navigator.mediaDevices.getUserMedia({
       audio: micDeviceId ? { deviceId: { exact: micDeviceId } } : true,
     });
+
+    setMicStream(stream);
+
     const recorder = new MediaRecorder(stream, { mimeType: 'audio/webm' });
     const chunks: Blob[] = [];
 
@@ -114,7 +120,7 @@ const InterviewNavigator: React.FC = () => {
       const fullBlob = new Blob(chunks, { type: 'audio/webm' });
 
       setIsResultUpdating(true);
-
+      setMicStream(null);
       try {
         await uploadRecordingBlob(uploadUrl, fullBlob);
       } catch (error: any) {
@@ -222,6 +228,11 @@ const InterviewNavigator: React.FC = () => {
                     </div>
                   </motion.div>
 
+                  {isRecording && micStream && (
+                    <div className="flex justify-center py-8">
+                      <ReactiveMicVisualizer stream={micStream} />
+                    </div>
+                  )}
                   <audio ref={audioRef} onEnded={handleQuestionAudioEnd} onPlay={() => setIsReplayingAudio(true)} onPause={handleReplayAudioEnded}>
                     <source src={question?.audioUrl} type="audio/wav" />
                     Your browser does not support the audio element.
@@ -262,7 +273,7 @@ const InterviewNavigator: React.FC = () => {
                   </div>
                 )}
 
-                {question.type == 'verbal' && <UserCamera hideRecLabel={false} invitationId={invitationId} />}
+                {question.type == 'verbal' && <UserCamera height="500" hideRecLabel={false} invitationId={invitationId} />}
 
                 {question.type == 'coding' && (
                   <div className="p-2">
@@ -295,22 +306,7 @@ const InterviewNavigator: React.FC = () => {
                     Record Answer
                   </Button>
                 ) : (
-                  <Button
-                    color="danger"
-                    size="md"
-                    radius="full"
-                    variant="solid"
-                    startContent={
-                      <AnimatePresence mode="wait">
-                        <motion.div key="recording" initial={{ scale: 1 }} animate={{ scale: [1, 1.2, 1] }} transition={{ repeat: Infinity, duration: 1.5 }} className="relative">
-                          <FaMicrophone className="h-4 w-4" />
-                          <motion.div className="absolute -inset-1 rounded-full border-1 border-white opacity-50" initial={{ scale: 1, opacity: 0.8 }} animate={{ scale: [1, 1.2, 1], opacity: [0.8, 0, 0.8] }} transition={{ repeat: Infinity, duration: 1.5 }} />
-                        </motion.div>
-                      </AnimatePresence>
-                    }
-                    isDisabled={isResultUpdating}
-                    onPress={handleStopRecording}
-                  >
+                  <Button color="danger" size="md" radius="full" variant="solid" isDisabled={isResultUpdating} onPress={handleStopRecording}>
                     {isResultUpdating ? 'Loading Next Question...' : `Stop Recording (${formatDuration(recordingDuration)})`}
                   </Button>
                 )}
