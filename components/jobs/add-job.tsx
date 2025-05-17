@@ -348,9 +348,7 @@ export const AddJob = () => {
 
               <div className="fixed bottom-0 left-0 right-0 bg-white border-t p-4 flex justify-end">
                 <div className="mx-auto flex w-full max-w-[90rem] items-center px-5 xl:px-8 xl2:px-[60px] xl2:!pr-[60px] justify-between">
-                  <Button disabled={currentStep === 0} onPress={() => setCurrentStep(currentStep - 1)}>
-                    Previous
-                  </Button>
+                  {currentStep > 0 && <Button onPress={() => setCurrentStep(currentStep - 1)}>Previous</Button>}
 
                   <div className="flex gap-2">
                     {isEditMode && (
