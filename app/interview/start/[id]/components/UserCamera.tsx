@@ -1,7 +1,19 @@
-import React, { useEffect, useRef } from "react";
-import { useInterviewStore } from "../stores/useInterviewStore";
+import React, { useEffect, useRef } from 'react';
+import { useInterviewStore } from '../stores/useInterviewStore';
 
-const UserCamera: React.FC<{ height?: string; hideRecLabel: boolean; invitationId: string }> = ({ height, hideRecLabel = false, invitationId }) => {
+type UserCameraProps = {
+  height?: string;
+  hideRecLabel: boolean;
+  invitationId: string;
+  enableCapture?: boolean; // <-- NEW FLAG
+};
+
+const UserCamera: React.FC<UserCameraProps> = ({
+  height,
+  hideRecLabel = false,
+  invitationId,
+  enableCapture = true, // default: screenshots are enabled
+}) => {
   const { isCameraOn, uploadScreenshot, screenshotInterval } = useInterviewStore();
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -18,7 +30,7 @@ const UserCamera: React.FC<{ height?: string; hideRecLabel: boolean; invitationI
           videoRef.current.srcObject = stream;
         }
       } catch (error) {
-        console.error("❌ Error accessing camera:", error);
+        console.error('❌ Error accessing camera:', error);
       }
     };
 
@@ -32,10 +44,12 @@ const UserCamera: React.FC<{ height?: string; hideRecLabel: boolean; invitationI
   }, [isCameraOn]);
 
   useEffect(() => {
+    if (!enableCapture) return; // 🔁 Don't start interval if disabled
+
     const takeScreenshot = async () => {
       if (!videoRef.current || !canvasRef.current) return;
       const canvas = canvasRef.current;
-      const ctx = canvas.getContext("2d");
+      const ctx = canvas.getContext('2d');
 
       if (ctx) {
         canvas.width = videoRef.current.videoWidth;
@@ -44,26 +58,27 @@ const UserCamera: React.FC<{ height?: string; hideRecLabel: boolean; invitationI
 
         canvas.toBlob((blob) => {
           if (blob) uploadScreenshot(blob, invitationId);
-        }, "image/png");
+        }, 'image/png');
       }
     };
 
     const interval = setInterval(takeScreenshot, screenshotInterval);
     return () => clearInterval(interval);
-  }, [screenshotInterval]);
+  }, [screenshotInterval, enableCapture]); // <- add enableCapture to deps
 
   return (
     <>
-      <div className={`relative w-auto overflow-hidden ${height ? "" : "aspect-video"}`} style={{ height: height || undefined }}>
-        <video ref={videoRef} autoPlay playsInline className='w-full h-full object-cover' />
-        <canvas ref={canvasRef} style={{ display: "none" }} />
+      <div className={`relative w-auto overflow-hidden ${height ? '' : 'aspect-video'}`} style={{ height: height || undefined }}>
+        <video ref={videoRef} autoPlay playsInline className="w-full h-full object-cover" />
+        <canvas ref={canvasRef} style={{ display: 'none' }} />
 
-        {!hideRecLabel && (
-          <div className='absolute top-1 right-1 bg-red-500 text-white text-xs px-2 py-1 rounded-full flex items-center gap-1'>
-            <span className='h-1 w-1 rounded-full bg-white animate-pulse'></span>
-            REC
-          </div>
-        )}
+        {!hideRecLabel &&
+          enableCapture && ( // Hide REC if not capturing
+            <div className="absolute top-1 right-1 bg-red-500 text-white text-xs px-2 py-1 rounded-full flex items-center gap-1">
+              <span className="h-1 w-1 rounded-full bg-white animate-pulse"></span>
+              REC
+            </div>
+          )}
       </div>
     </>
   );

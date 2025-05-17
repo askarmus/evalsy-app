@@ -9,7 +9,7 @@ export const CreditBalanceCardSticky = ({ onTopUpClick }: CreditBalanceCardStick
   const { credits } = useCredits();
 
   return (
-    <Card shadow="sm" radius="sm" className="fixed bottom-4 right-4 z-50 p-1">
+    <Card shadow="sm" radius="sm" className="fixed top-20 right-4 z-50 p-1">
       <CardBody>
         <h2 className="text-xs font-semibold mb-1">Your Credit Balance</h2>
         <div className="flex items-center justify-between">

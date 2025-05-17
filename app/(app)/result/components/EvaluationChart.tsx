@@ -24,23 +24,21 @@ const EvaluationChart = ({ data }: { data: any }) => {
   };
 
   return (
-    <div className="p-2 mb-6">
-      <div className="space-y-2">
-        {Object.entries(averageScores).map(([key, value]) => {
-          const score = value as number;
-          return (
-            <div key={key} className="grid grid-cols-12 gap-2 items-center">
-              <span className="col-span-5 text-xs capitalize">{key.replace('_', ' ')}:</span>
-              <div className="col-span-5">
-                <div className="h-2 w-full rounded-full bg-gray-200">
-                  <div className={`h-2 rounded-full ${getScoreBarColor(score)}`} style={{ width: `${(score / 5) * 100}%` }}></div>
-                </div>
+    <div className="space-y-2">
+      {Object.entries(averageScores).map(([key, value]) => {
+        const score = value as number;
+        return (
+          <div key={key} className="grid grid-cols-12 gap-2 items-center">
+            <span className="col-span-5 text-xs capitalize">{key.replace('_', ' ')}:</span>
+            <div className="col-span-5">
+              <div className="h-2 w-full rounded-full bg-gray-200">
+                <div className={`h-2 rounded-full ${getScoreBarColor(score)}`} style={{ width: `${(score / 5) * 100}%` }}></div>
               </div>
-              <span className="col-span-2 text-right text-xs font-medium">{score.toFixed(1)}/5</span>
             </div>
-          );
-        })}
-      </div>
+            <span className="col-span-2 text-right text-xs font-medium">{score.toFixed(1)}/5</span>
+          </div>
+        );
+      })}
     </div>
   );
 };

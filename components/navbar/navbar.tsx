@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { AiOutlineHome, AiOutlineNotification, AiOutlineSetting, AiOutlineShopping } from 'react-icons/ai';
 import { usePathname } from 'next/navigation';
 import { DarkLogo } from '../shared/dark-logo';
+import { DarkModeSwitch } from './darkmodeswitch';
 
 export const NavbarWrapper = () => {
   const currentPath = usePathname();
@@ -12,7 +13,7 @@ export const NavbarWrapper = () => {
 
   return (
     <Navbar
-      height={55}
+      height={60}
       position="sticky"
       isBordered
       onMenuOpenChange={setIsMenuOpen}
@@ -61,7 +62,7 @@ export const NavbarWrapper = () => {
 
       <NavbarContent justify="end" className="w-fit data-[justify=end]:flex-grow-0">
         <NavbarContent>
-          <UserDropdown />
+          <DarkModeSwitch /> <UserDropdown />
         </NavbarContent>
         <NavbarMenuToggle aria-label={isMenuOpen ? 'Close menu' : 'Open menu'} className="sm:hidden" />
       </NavbarContent>

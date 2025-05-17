@@ -54,3 +54,14 @@ export const uploadRecordingBlob = async (uploadUrl: string, blob: Blob) => {
     withCredentials: false,
   });
 };
+
+export const logFraudEvent = async (payload: { invitationId: string; type: string; details?: string }) => {
+  await apiClient.post('/interview/logFraudEvent', {
+    invitationId: payload.invitationId,
+    event: {
+      type: payload.type,
+      timestamp: Date.now(),
+      details: payload.details,
+    },
+  });
+};

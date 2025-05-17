@@ -186,7 +186,7 @@ export default function Jobs() {
           </Tabs>
 
           <Button color="primary" size="sm" onPress={() => router.push('/interviews/add')} endContent={<AiOutlinePlus />}>
-            Add New
+            Create New Interview
           </Button>
         </div>
       </div>
@@ -212,7 +212,7 @@ export default function Jobs() {
             ) : (
               <>
                 {items.map((job: any) => (
-                  <Card key={job.id} shadow="sm" radius="sm">
+                  <Card key={job.id} shadow="sm" radius="sm" className="P-3">
                     <CardHeader className="flex justify-between items-center">
                       <div className="flex gap-5">
                         <div className="flex flex-col gap-1 items-start justify-center">

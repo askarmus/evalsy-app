@@ -7,4 +7,19 @@ export interface AddJobFormValues {
   totalRandomCodingQuestion: number;
   experienceLevel: string;
   description: string;
+  fraudDetection: {
+    tabSwitch: boolean;
+    rightClick: boolean;
+    devTools: boolean;
+    faceNotDetected: boolean;
+    clipboard: boolean;
+  };
 }
+
+export type FraudDetectionSettings = {
+  tabSwitch: boolean;
+  rightClick: boolean;
+  devTools: boolean;
+  faceNotDetected: boolean;
+  clipboard: boolean;
+};

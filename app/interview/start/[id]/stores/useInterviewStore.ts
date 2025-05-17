@@ -1,11 +1,11 @@
-"use client";
-import { showToast } from "@/app/utils/toastUtils";
-import { upload } from "@/services/company.service";
-import { endInterview, startInterview, updateQuestion, updateScreeshot } from "@/services/interview.service";
-import { getInvitationDetails } from "@/services/invitation.service";
-import { create } from "zustand";
+'use client';
+import { showToast } from '@/app/utils/toastUtils';
+import { upload } from '@/services/company.service';
+import { endInterview, startInterview, updateQuestion, updateScreeshot } from '@/services/interview.service';
+import { getInvitationDetails } from '@/services/invitation.service';
+import { create } from 'zustand';
 
-type Phase = "init" | "not-started" | "welcome" | "in-progress" | "completed" | "time-up" | "expired" | "skeleton-loading";
+type Phase = 'init' | 'not-started' | 'welcome' | 'in-progress' | 'completed' | 'time-up' | 'expired' | 'skeleton-loading';
 
 interface Question {
   id: string;
@@ -38,8 +38,10 @@ interface InterviewState {
   isLoading: boolean;
   isSkeletonLoading: boolean;
   invitationId: string;
+  micDeviceId: string; // ✅ NEW
 
   startInterview: () => void;
+  setMicDeviceId: (id: string) => void;
   stopRecordingAndNextQuestion: () => void;
   setTimeLeft: (time: number) => void;
   setPhase: (phase: Phase) => void;
@@ -55,7 +57,7 @@ interface InterviewState {
 }
 
 export const useInterviewStore = create<InterviewState>()((set, get) => ({
-  phase: "init",
+  phase: 'init',
   questions: [],
   currentQuestion: 0,
   duration: 0,
@@ -71,16 +73,17 @@ export const useInterviewStore = create<InterviewState>()((set, get) => ({
   job: null,
   candidate: null,
   isSkeletonLoading: false,
-  invitationId: "",
-
+  invitationId: '',
+  micDeviceId: '',
+  setMicDeviceId: (id: string) => set({ micDeviceId: id }),
   loadInterview: async (id: string) => {
     try {
-      set({ phase: "skeleton-loading" });
+      set({ phase: 'skeleton-loading' });
 
       const data = await getInvitationDetails(id as string);
 
-      if (data?.status === "expired") {
-        set({ phase: "expired", isLoading: false });
+      if (data?.status === 'expired') {
+        set({ phase: 'expired', isLoading: false });
         return;
       }
 
@@ -104,9 +107,9 @@ export const useInterviewStore = create<InterviewState>()((set, get) => ({
 
       set({ isLoading: true });
       var resposne = await startInterview({ invitationId });
-      set({ phase: "welcome", questions: resposne.questions });
+      set({ phase: 'welcome', questions: resposne.questions });
     } catch (error) {
-      showToast.error("Error starting the interview");
+      showToast.error('Error starting the interview');
     } finally {
       set({
         isLoading: false,
@@ -120,10 +123,10 @@ export const useInterviewStore = create<InterviewState>()((set, get) => ({
     try {
       const invitationId = get().invitationId;
       if (!invitationId) {
-        throw new Error("Interview ID not found.");
+        throw new Error('Interview ID not found.');
       }
-      const file = new File([imageBlob], `screenshot_${interviewId}_${Date.now()}.png`, { type: "image/png" });
-      const recordedUrl = await upload(file, "image/png");
+      const file = new File([imageBlob], `screenshot_${interviewId}_${Date.now()}.png`, { type: 'image/png' });
+      const recordedUrl = await upload(file, 'image/png');
 
       await updateScreeshot({
         invitationId: invitationId,
@@ -136,7 +139,7 @@ export const useInterviewStore = create<InterviewState>()((set, get) => ({
     try {
       const invitationId = get().invitationId;
       if (!invitationId) {
-        throw new Error("Interview ID not found.");
+        throw new Error('Interview ID not found.');
       }
 
       const state = get();
@@ -152,8 +155,8 @@ export const useInterviewStore = create<InterviewState>()((set, get) => ({
         isAudioCompleted: true,
       });
     } catch (error) {
-      console.error("Error finalizing recording:", error);
-      showToast.error("Failed to update answer.");
+      console.error('Error finalizing recording:', error);
+      showToast.error('Failed to update answer.');
     }
   },
 
@@ -161,12 +164,12 @@ export const useInterviewStore = create<InterviewState>()((set, get) => ({
     try {
       const invitationId = get().invitationId;
       if (!invitationId) {
-        throw new Error("Interview ID not found.");
+        throw new Error('Interview ID not found.');
       }
       const state = get();
 
       await updateQuestion({
-        recordedUrl: "",
+        recordedUrl: '',
         invitationId: invitationId,
         questionId: state.questions[state.currentQuestion].id,
         code: code,
@@ -186,16 +189,16 @@ export const useInterviewStore = create<InterviewState>()((set, get) => ({
       const invitationId = get().invitationId;
       set({ isLoading: true });
       await endInterview({ invitationId });
-      set({ phase: "completed" });
+      set({ phase: 'completed' });
     } catch (error) {
-      showToast.error("Error ending the interview");
+      showToast.error('Error ending the interview');
     } finally {
       set({
         isLoading: false,
       });
 
       setTimeout(() => {
-        localStorage.removeItem("pageRefreshed");
+        localStorage.removeItem('pageRefreshed');
       }, 100);
     }
   },
@@ -211,7 +214,7 @@ export const useInterviewStore = create<InterviewState>()((set, get) => ({
     } else {
       await state.endInterview();
       setTimeout(() => {
-        localStorage.removeItem("pageRefreshed");
+        localStorage.removeItem('pageRefreshed');
       }, 100);
     }
   },
@@ -220,11 +223,11 @@ export const useInterviewStore = create<InterviewState>()((set, get) => ({
   setTimeLeft: (time) =>
     set((state) => {
       if (time <= 0) {
-        return { phase: "time-up", timeLeft: 0 };
+        return { phase: 'time-up', timeLeft: 0 };
       }
 
       if (!state.extraTimeAdded && time <= state.duration * 0.2) {
-        showToast.error("80% of your interview time is completed! Extra time added.");
+        showToast.error('80% of your interview time is completed! Extra time added.');
         return {
           timeLeft: time + state.extraTime,
           extraTimeAdded: true,

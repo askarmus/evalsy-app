@@ -1,13 +1,11 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
-import { Button, Card, CardBody, CardFooter, Divider, Input, Pagination, NumberInput, Chip, Tooltip, Select, SelectItem } from '@heroui/react';
+import { Button, Card, CardBody, Input, Pagination, NumberInput, Chip, Tooltip, Select, SelectItem } from '@heroui/react';
 import { Formik, FormikHelpers } from 'formik';
 import { showToast } from '@/app/utils/toastUtils';
 import { createJob, getJobById, updateJob } from '@/services/job.service';
 import { AddJobSchema } from '@/helpers/schemas';
-import { Breadcrumb } from '../bread.crumb';
-import { nanoid } from 'nanoid';
 import { useParams, useRouter } from 'next/navigation';
 import { QuestionEditDrawer } from './components/add/QuestionEditDrawer';
 import { AddJobFormValues, Question } from './types';
@@ -16,17 +14,19 @@ import { GenerateQuestionsDrawer } from './components/add/GenerateQuestionsDrawe
 import { AiOutlineDelete, AiOutlineEdit } from 'react-icons/ai';
 import { QuestionHeaderActions } from './components/add/QuestionHeaderActions';
 import RichTextEditor from '../shared/RichTextEditor';
-
 import { DndContext, closestCenter, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy, useSortable, arrayMove } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { FaGripVertical } from 'react-icons/fa';
+import { FaBriefcase, FaCogs, FaGripVertical, FaQuestionCircle, FaShieldAlt } from 'react-icons/fa';
+import { FraudDetectionSettings } from './components/add/FraudDetectionSettings';
+import { VerticalStepper } from './components/add/VerticalStepper';
+import { StepperHeader } from './components/add/StepperHeader';
+import { defaultJobFormValues } from './helpers/formDefaults';
 
 export const AddJob = () => {
   const router = useRouter();
   const { id } = useParams() as { id: string };
   const formRef = useRef<any>(null);
-
   const sensors = useSensors(useSensor(PointerSensor));
 
   const [loading, setLoading] = useState(false);
@@ -35,40 +35,67 @@ export const AddJob = () => {
   const [editingQuestion, setEditingQuestion] = useState<Question | null>(null);
   const [editingQuestionIndex, setEditingQuestionIndex] = useState<number | null>(null);
   const [isGenerateDrawerOpen, setGenerateDrawerOpen] = useState(false);
-
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedTab, setSelectedTab] = useState<'all' | 'verbal' | 'coding'>('all');
   const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = React.useState('5');
+  const [pageSize, setPageSize] = useState('1000');
+  const [currentStep, setCurrentStep] = useState(0);
+  const [completedSteps, setCompletedSteps] = useState<number[]>([]);
+  const [invalidSteps, setInvalidSteps] = useState<number[]>([]);
 
-  const [initialValues, setInitialValues] = useState<AddJobFormValues>({
-    jobTitle: '',
-    totalRandomVerbalQuestion: 0,
-    totalRandomCodingQuestion: 0,
-    questions: [
-      {
-        id: nanoid(),
-        text: 'Tell me about yourself and your experience',
-        expectedScore: 20,
-        isRandom: false,
-        type: 'verbal',
-        timeLimit: 0,
-        language: '',
-        explanation: '',
-        starterCode: '',
-      },
-    ],
-    experienceLevel: 'beginner',
-    description: '',
-  });
+  const stepsData = [
+    {
+      icon: <FaBriefcase className="w-5 h-5 text-xl text-gray-300" />,
+      title: 'Job Info',
+      description: 'Overview of job roles and responsibilities',
+    },
+    {
+      icon: <FaQuestionCircle className="w-5 h-5 text-xl text-gray-300" />,
+      title: 'Questions',
+      description: 'Common questions related to job applications',
+    },
+    {
+      icon: <FaCogs className="w-5 h-5 text-xl text-gray-300" />,
+      title: 'Random Settings',
+      description: 'Miscellaneous configurations and settings',
+    },
+    {
+      icon: <FaShieldAlt className="w-5 h-5 text-xl text-gray-300" />,
+      title: 'Fraud Detection',
+      description: 'Monitor and prevent fraudulent activities',
+    },
+  ];
+
+  const [initialValues, setInitialValues] = useState<AddJobFormValues>(defaultJobFormValues);
 
   const isEditMode = Boolean(id);
+  useEffect(() => {
+    if (isEditMode) {
+      const fetchJob = async () => {
+        const jobData = await getJobById(id);
+        setInitialValues(jobData);
+        setFormReady(true); // ✅ now validation can be trusted
+      };
+      fetchJob();
+    }
+  }, [id]);
+
+  const [formReady, setFormReady] = useState(!isEditMode);
 
   useEffect(() => {
     if (isEditMode) {
       const fetchJob = async () => {
         const jobData = await getJobById(id);
         setInitialValues(jobData);
+        setFormReady(true);
+
+        // ✅ Validate all steps once form is ready
+        try {
+          await AddJobSchema.validate(jobData, { abortEarly: false });
+          setCompletedSteps(stepsData.map((_, index) => index)); // all steps passed
+        } catch {
+          // do nothing — user will need to fix form
+        }
       };
       fetchJob();
     }
@@ -85,9 +112,7 @@ export const AddJob = () => {
         await updateJob(values);
         showToast.success('Job updated successfully.');
       }
-      setTimeout(() => {
-        router.push('/interviews/list');
-      }, 3000);
+      setTimeout(() => router.push('/interviews/list'), 3000);
     } catch (error) {
       showToast.error('Error occurred while saving the job. Please try again.');
     } finally {
@@ -95,27 +120,7 @@ export const AddJob = () => {
     }
   };
 
-  const pageSizes = [
-    { key: 5, label: '5' },
-    { key: 10, label: '10' },
-    { key: 30, label: '20' },
-    { key: 40, label: '30' },
-    { key: 50, label: '40' },
-    { key: 60, label: '50' },
-    { key: 60, label: '60' },
-    { key: 70, label: '70' },
-  ];
-
-  const handlePageSizeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const selected = e.target.value;
-    setPageSize(selected);
-    // setPage(1); // reset page if needed
-  };
-  const breadcrumbItems = [
-    { name: 'Dashboard', link: '/' },
-    { name: 'Job', link: '/job/list' },
-    { name: !isEditMode ? 'Add' : 'Edit', link: '' },
-  ];
+  const pageSizes = [5, 10, 20, 30, 40, 50, 60, 70];
 
   const SortableQuestionItem = ({ question, index, handleEditQuestion, handleDeleteQuestion }: { question: Question; index: number; handleEditQuestion: (id: string) => void; handleDeleteQuestion: (id: string) => void }) => {
     const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: question.id });
@@ -151,14 +156,52 @@ export const AddJob = () => {
 
   return (
     <div className="my-10 px-4 lg:px-6 max-w-[82rem] mx-auto w-full flex flex-col gap-4">
-      <Breadcrumb items={breadcrumbItems} />
-      <h3 className="text-xl font-semibold">{isEditMode ? 'Edit Interview' : 'Add Interview'}</h3>
-
-      <Formik<AddJobFormValues> innerRef={formRef} enableReinitialize initialValues={initialValues} validationSchema={AddJobSchema} onSubmit={handleSubmit}>
-        {({ values, errors, touched, handleChange, setFieldValue }) => {
+      <StepperHeader isEditMode={isEditMode} currentStep={currentStep} stepsData={stepsData} completedSteps={completedSteps} invalidSteps={invalidSteps} />
+      <Formik innerRef={formRef} enableReinitialize validationSchema={AddJobSchema} initialValues={initialValues} onSubmit={handleSubmit} validateOnChange={true} validateOnBlur={true}>
+        {({ values, errors, touched, handleChange, setFieldValue, setErrors, setTouched }) => {
           const filteredQuestions = values.questions.filter((q) => q.text.toLowerCase().includes(searchTerm.toLowerCase())).filter((q) => selectedTab === 'all' || q.type === selectedTab);
           const paginatedQuestions = filteredQuestions.slice((page - 1) * Number(pageSize), page * Number(pageSize));
           const startIndex = (page - 1) * Number(pageSize);
+
+          console.log('errors', errors);
+          const validateStep = async () => {
+            try {
+              await AddJobSchema.validate(values, { abortEarly: false });
+
+              if (!completedSteps.includes(currentStep)) {
+                setCompletedSteps((prev) => [...prev, currentStep]);
+              }
+              if (invalidSteps.includes(currentStep)) {
+                setInvalidSteps((prev) => prev.filter((step) => step !== currentStep));
+              }
+
+              return true;
+            } catch (err: any) {
+              if (err?.inner) {
+                const errObj = err.inner.reduce((acc: any, curr: any) => {
+                  acc[curr.path] = curr.message;
+                  return acc;
+                }, {});
+
+                const touchedObj = Object.keys(errObj).reduce((acc: any, key) => {
+                  acc[key] = true;
+                  return acc;
+                }, {});
+
+                setErrors(errObj);
+                setTouched(touchedObj);
+              }
+
+              if (!invalidSteps.includes(currentStep)) {
+                setInvalidSteps((prev) => [...prev, currentStep]);
+              }
+
+              if (completedSteps.includes(currentStep)) {
+                setCompletedSteps((prev) => prev.filter((step) => step !== currentStep));
+              }
+              return false;
+            }
+          };
 
           const handleEditQuestion = (id: string) => {
             const index = values.questions.findIndex((q) => q.id === id);
@@ -194,101 +237,148 @@ export const AddJob = () => {
           };
 
           return (
-            <Card className="p-4">
-              <CardBody>
-                <div className="grid grid-cols-1 gap-4">
-                  <Input label="Job Title" size="sm" radius="md" variant="bordered" value={values.jobTitle} isInvalid={!!errors.jobTitle && !!touched.jobTitle} errorMessage={errors.jobTitle} onChange={handleChange('jobTitle')} />
-                  <RichTextEditor value={values.description} onChange={(val) => setFieldValue('description', val)} />
-                </div>
-
-                <div className="mt-6">
-                  <QuestionSearchAndFilter
-                    searchTerm={searchTerm}
-                    setSearchTerm={setSearchTerm}
-                    selectedTab={selectedTab}
-                    setSelectedTab={setSelectedTab}
-                    questionsCount={{
-                      all: values.questions.length,
-                      verbal: values.questions.filter((q) => q.type === 'verbal').length,
-                      coding: values.questions.filter((q) => q.type === 'coding').length,
+            <>
+              <div className="grid md:grid-cols-[1.5fr_4fr] gap-6">
+                <div>
+                  <VerticalStepper
+                    steps={stepsData}
+                    currentStep={currentStep}
+                    formReady={formReady}
+                    onStepChange={async (index) => {
+                      const valid = await validateStep();
+                      if (valid) setCurrentStep(index);
+                      return valid;
                     }}
                   />
                 </div>
-                <div className="mt-6">
-                  <QuestionHeaderActions onGenerateAI={() => setGenerateDrawerOpen(true)} onAddManual={handleAddQuestion} questionCount={10} />
+                <div>
+                  <Card shadow="sm" className="p-2">
+                    <CardBody>
+                      {currentStep === 0 && (
+                        <>
+                          <div className="space-y-4">
+                            <div className="mb-5">
+                              <h1 className=" text-xl/[24px] font-semibold text-tertiary  md:text-[20px]/[24px]">Job Details</h1>
+                            </div>
+                            <h1 className="text-sm font-semibold text-gray-500 mb-0">Job title</h1>
+                            <Input variant="bordered" value={values.jobTitle} onChange={handleChange('jobTitle')} isInvalid={!!errors.jobTitle && !!touched.jobTitle} errorMessage={errors.jobTitle} />
+                            <h1 className="text-sm font-semibold text-gray-500">Job description</h1>
+                            <RichTextEditor value={values.description} onChange={(val) => setFieldValue('description', val)} />
+                          </div>
+                        </>
+                      )}
+                      {currentStep === 1 && (
+                        <>
+                          <div className="mb-3">
+                            <QuestionSearchAndFilter searchTerm={searchTerm} setSearchTerm={setSearchTerm} selectedTab={selectedTab} setSelectedTab={setSelectedTab} questionsCount={{ all: values.questions.length, verbal: values.questions.filter((q) => q.type === 'verbal').length, coding: values.questions.filter((q) => q.type === 'coding').length }} />
+                          </div>
+                          <QuestionHeaderActions onGenerateAI={() => setGenerateDrawerOpen(true)} onAddManual={handleAddQuestion} questionCount={values.questions.length} />
+
+                          {touched.questions && typeof errors.questions === 'string' && <div className="text-sm text-red-500 mt-2">{errors.questions}</div>}
+
+                          <DndContext
+                            sensors={sensors}
+                            collisionDetection={closestCenter}
+                            onDragEnd={({ active, over }) => {
+                              if (!over || active.id === over.id) return;
+                              const oldIndex = values.questions.findIndex((q) => q.id === active.id);
+                              const newIndex = values.questions.findIndex((q) => q.id === over.id);
+                              setFieldValue('questions', arrayMove(values.questions, oldIndex, newIndex));
+                            }}
+                          >
+                            <SortableContext items={values.questions.map((q) => q.id)} strategy={verticalListSortingStrategy}>
+                              <div className="flex flex-col gap-2 mt-4">
+                                {paginatedQuestions.map((question, index) => (
+                                  <SortableQuestionItem key={question.id} question={question} index={startIndex + index} handleEditQuestion={handleEditQuestion} handleDeleteQuestion={handleDeleteQuestion} />
+                                ))}
+                              </div>
+                            </SortableContext>
+                          </DndContext>
+                        </>
+                      )}
+                      {currentStep === 2 && (
+                        <>
+                          <div className="mb-5">
+                            <h1 className=" text-xl/[24px] font-semibold text-tertiary  md:text-[20px]/[24px]">Random Settings</h1>
+                          </div>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                              <h1 className="text-sm font-semibold text-gray-500 mb-0">Total verbal questions ({values.questions.filter((q) => q.type === 'verbal').length})</h1>
+                              <NumberInput variant="bordered" maxValue={values.questions.filter((q) => q.type === 'verbal').length} value={values.totalRandomVerbalQuestion} onValueChange={(val) => setFieldValue('totalRandomVerbalQuestion', val)} />
+                              <p className="text-xs text-gray-400 mt-1">Random questions mean picking 5 questions out of 50 that are marked as random.</p>
+                            </div>
+
+                            <div>
+                              <h1 className="text-sm font-semibold text-gray-500 mb-0">Total coding questions ({values.questions.filter((q) => q.type === 'coding').length})</h1>
+                              <NumberInput variant="bordered" maxValue={values.questions.filter((q) => q.type === 'coding').length} value={values.totalRandomCodingQuestion} onValueChange={(val) => setFieldValue('totalRandomCodingQuestion', val)} />
+                              <p className="text-xs text-gray-400 mt-1">Random questions mean picking 5 questions out of 50 that are marked as random.</p>
+                            </div>
+                          </div>
+                        </>
+                      )}
+                      {currentStep === 3 && <FraudDetectionSettings values={values.fraudDetection} setFieldValue={setFieldValue} />}
+                    </CardBody>
+
+                    <GenerateQuestionsDrawer
+                      onQuestionsGenerated={(generatedQuestions) => {
+                        setFieldValue('questions', [...generatedQuestions, ...values.questions]);
+                        setGenerateDrawerOpen(false);
+                      }}
+                      onOpenChange={(open) => setGenerateDrawerOpen(open)}
+                      isOpen={isGenerateDrawerOpen}
+                      description={values.description}
+                      jobTitle={values.jobTitle}
+                    />
+                    <QuestionEditDrawer
+                      isOpen={isQuestionDrawerOpen}
+                      onOpenChange={(open) => {
+                        if (!open) {
+                          setEditingQuestion(null);
+                          setEditingQuestionIndex(null);
+                          setQuestionDrawerOpen(false);
+                        }
+                      }}
+                      mode={drawerMode}
+                      initialQuestion={editingQuestion}
+                      onSave={handleSaveQuestion}
+                    />
+                  </Card>
                 </div>
+              </div>
 
-                <DndContext
-                  sensors={sensors}
-                  collisionDetection={closestCenter}
-                  onDragEnd={({ active, over }) => {
-                    if (!over || active.id === over.id) return;
-                    const oldIndex = values.questions.findIndex((q) => q.id === active.id);
-                    const newIndex = values.questions.findIndex((q) => q.id === over.id);
-                    const reordered = arrayMove(values.questions, oldIndex, newIndex);
-                    setFieldValue('questions', reordered);
-                  }}
-                >
-                  <SortableContext items={values.questions.map((q) => q.id)} strategy={verticalListSortingStrategy}>
-                    <div className="flex flex-col gap-2 mt-4">
-                      {paginatedQuestions.map((question, index) => (
-                        <SortableQuestionItem key={question.id} question={question} index={startIndex + index} handleEditQuestion={handleEditQuestion} handleDeleteQuestion={handleDeleteQuestion} />
-                      ))}
-                    </div>
-                  </SortableContext>
-                </DndContext>
+              <div className="fixed bottom-0 left-0 right-0 bg-white border-t p-4 flex justify-end">
+                <div className="mx-auto flex w-full max-w-[90rem] items-center px-5 xl:px-8 xl2:px-[60px] xl2:!pr-[60px] justify-between">
+                  <Button disabled={currentStep === 0} onPress={() => setCurrentStep(currentStep - 1)}>
+                    Previous
+                  </Button>
 
-                <div className="flex flex-wrap gap-4 mt-4">
-                  <NumberInput size="sm" variant="bordered" label="Total Random Verbal Question" value={values.totalRandomVerbalQuestion} onValueChange={(val) => setFieldValue('totalRandomVerbalQuestion', val)} isInvalid={!!errors.totalRandomVerbalQuestion && !!touched.totalRandomVerbalQuestion} errorMessage={errors.totalRandomVerbalQuestion} className="max-w-xs" />
-                  <NumberInput size="sm" variant="bordered" label="Total Random Coding Question" value={values.totalRandomCodingQuestion} onValueChange={(val) => setFieldValue('totalRandomCodingQuestion', val)} isInvalid={!!errors.totalRandomCodingQuestion && !!touched.totalRandomCodingQuestion} errorMessage={errors.totalRandomCodingQuestion} className="max-w-xs" />
-                </div>
+                  <div className="flex gap-2">
+                    {isEditMode && (
+                      <Button color="primary" onPress={() => formRef.current.handleSubmit()} isLoading={loading}>
+                        Save
+                      </Button>
+                    )}
 
-                <Divider className="my-6" />
-                <div className="flex flex-wrap justify-center items-center gap-4 mt-6">
-                  <Pagination color="default" size="sm" total={Math.ceil(filteredQuestions.length / Number(pageSize))} initialPage={1} page={page} onChange={setPage} />
-
-                  <div className="flex items-center gap-2">
-                    <Select className="w-20" size="sm" defaultSelectedKeys={[pageSize]} selectedKeys={[pageSize]} variant="faded" onChange={handlePageSizeChange}>
-                      {pageSizes.map((animal) => (
-                        <SelectItem key={animal.key}>{animal.label}</SelectItem>
-                      ))}
-                    </Select>
+                    {currentStep < stepsData.length - 1 ? (
+                      <Button
+                        onPress={async () => {
+                          const valid = await validateStep();
+                          if (valid) setCurrentStep(currentStep + 1);
+                        }}
+                      >
+                        Next
+                      </Button>
+                    ) : (
+                      !isEditMode && (
+                        <Button color="primary" isLoading={loading} onPress={() => formRef.current.handleSubmit()}>
+                          Save & Activate
+                        </Button>
+                      )
+                    )}
                   </div>
                 </div>
-              </CardBody>
-              <CardFooter>
-                <div className="flex justify-end w-full">
-                  <Button color="primary" isLoading={loading} onPress={() => formRef.current.handleSubmit()}>
-                    Save Changes
-                  </Button>
-                </div>
-              </CardFooter>
-
-              <GenerateQuestionsDrawer
-                onQuestionsGenerated={(generatedQuestions) => {
-                  setFieldValue('questions', [...generatedQuestions, ...values.questions]);
-                  setGenerateDrawerOpen(false);
-                }}
-                onOpenChange={(open) => setGenerateDrawerOpen(open)}
-                isOpen={isGenerateDrawerOpen}
-                description={values.description}
-                jobTitle={values.jobTitle}
-              />
-
-              <QuestionEditDrawer
-                isOpen={isQuestionDrawerOpen}
-                onOpenChange={(open) => {
-                  if (!open) {
-                    setEditingQuestion(null);
-                    setEditingQuestionIndex(null);
-                    setQuestionDrawerOpen(false);
-                  }
-                }}
-                mode={drawerMode}
-                initialQuestion={editingQuestion}
-                onSave={handleSaveQuestion}
-              />
-            </Card>
+              </div>
+            </>
           );
         }}
       </Formik>

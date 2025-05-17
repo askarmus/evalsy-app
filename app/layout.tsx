@@ -12,8 +12,8 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={clsx('font-sans antialiased', fontSans.className, 'scroll-smooth')}>
+    <html lang="en" className="bg-gray-100" suppressHydrationWarning>
+      <body className={clsx('font-sans antialiased  ', fontSans.className, 'scroll-smooth')}>
         <GoogleAnalytic />
 
         <Providers>{children}</Providers>

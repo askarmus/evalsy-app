@@ -2,15 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-html,
-html,
-body {
-}
-
-.dark html,
-.dark body {
-}
-
 * {
   box-sizing: border-box;
 }
@@ -22,7 +13,7 @@ html {
   display: inline-block;
 }
 .recording::before {
-  content: "🔴";
+  content: '🔴';
   animation: recording 600ms alternate infinite;
 }
 @keyframes recording {
