@@ -1,9 +1,7 @@
 'use client';
 import React from 'react';
-import { Tabs, Tab, Input, Button, Avatar, Badge } from '@heroui/react';
+import { Tabs, Tab, Input, Button, Avatar } from '@heroui/react';
 import { FaSearch, FaSyncAlt } from 'react-icons/fa';
-import RatingChips from './rating,chips';
-import { formatRelativeDate } from '@/app/utils/formatRelativeDate';
 import RatingBadges from './rating,badge';
 
 interface SidebarProps {
@@ -58,22 +56,28 @@ export default function Sidebar({ sidebarOpen, selectedTab, setSelectedTab, filt
           </div>
         </div>
 
-        <ul className="divide-y">
+        <ul>
           {items.map((data: any) => (
-            <li onClick={() => handleViewDetails(data.id)} key={data.id} className={`flex items-center cursor-pointer justify-between pt-2 pb-2 transition-colors ${selectedId === data.id ? 'bg-gray-100' : 'hover:bg-gray-50'}`}>
+            <li
+              onClick={() => handleViewDetails(data.id)}
+              key={data.id}
+              className={`flex items-center cursor-pointer justify-between border pt-2 pb-2 mb-2 pr-2 pl-2 rounded-xl transition-colors 
+    ${selectedId === data.id ? 'bg-gray-100 dark:bg-gray-800' : 'hover:bg-gray-50 dark:hover:bg-gray-700'}
+    dark:border-gray-700`}
+            >
               <div className="flex items-center gap-2">
                 <RatingBadges weight={data.overallWeight}>
                   <Avatar name={data.name} className="h-8 w-8" src={data.image} />
                 </RatingBadges>
 
                 <div>
-                  <h3 className="font-medium text-sm pl-2 text-gray-800">{data.name}</h3>
-                  <p className="text-xs text-gray-500 pl-2">{data.jobTitle}</p>
+                  <h3 className="font-medium text-sm pl-2 text-gray-900 dark:text-gray-100">{data.name}</h3>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 pl-2">{data.jobTitle}</p>
                 </div>
               </div>
 
-              <div className="ml-4">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <div>
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-gray-400 dark:text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>
               </div>

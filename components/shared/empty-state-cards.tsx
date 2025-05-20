@@ -4,7 +4,7 @@ import { FaExclamationCircle } from 'react-icons/fa';
 export default function EmptyStateCards({ onReset, title, description }: { onReset?: () => void; title: string; description: string }) {
   return (
     <div className="grid gap-6 md:grid-cols-2">
-      <Card radius="sm" shadow="sm" className="overflow-hidden col-span-full">
+      <Card shadow="none" className="overflow-hidden col-span-full">
         <CardBody className="p-0">
           <div className="flex flex-col md:flex-row items-center justify-between p-6 gap-4">
             <div className="flex items-center gap-4">

@@ -129,7 +129,7 @@ export default function Jobs() {
   };
 
   return (
-    <div className="min-h-screen my-10 px-4 lg:px-6 max-w-[80rem] mx-auto w-full flex flex-col gap-4">
+    <div className="  my-10 px-4 lg:px-6 max-w-[80rem] mx-auto w-full flex flex-col gap-4">
       <Breadcrumb items={breadcrumbItems} />
 
       <h3 className="text-xl font-semibold">All Interviews</h3>
@@ -144,6 +144,7 @@ export default function Jobs() {
             defaultValue=""
             startContent={<FaSearch />}
             variant="bordered"
+            color="default"
             onClear={() => {
               setFilterValue('');
               setPage(1);
@@ -212,7 +213,7 @@ export default function Jobs() {
             ) : (
               <>
                 {items.map((job: any) => (
-                  <Card key={job.id} shadow="sm" radius="sm" className="P-3">
+                  <Card key={job.id} shadow="none" className="P-3">
                     <CardHeader className="flex justify-between items-center">
                       <div className="flex gap-5">
                         <div className="flex flex-col gap-1 items-start justify-center">
@@ -225,32 +226,32 @@ export default function Jobs() {
                           {selectedTab === 'inactive' ? (
                             <Tooltip content="Restore job">
                               <button aria-label="Restore" className="p-1 text-gray-600 hover:text-black rounded-full" onClick={() => handleRestore(job.id)}>
-                                <AiOutlineRollback className="h-6 w-6" />
+                                <AiOutlineRollback className="h-5 w-5" />
                               </button>
                             </Tooltip>
                           ) : (
                             <>
                               <Tooltip content="Manage Resume">
-                                <Button size="sm" radius="full" variant="bordered" startContent={<AiOutlineDiff className="h-6 w-6" />} aria-label="manage" onPress={() => handleManageResumeClick(job.id)}>
+                                <Button size="sm" radius="full" variant="bordered" startContent={<AiOutlineDiff className="h-5 w-5" />} aria-label="manage" onPress={() => handleManageResumeClick(job.id)}>
                                   Candidate
                                 </Button>
                               </Tooltip>
 
                               <Tooltip content="Send invitation">
                                 <button onClick={() => handleInviteClick(job.id)} className="p-1 text-gray-600 hover:text-black rounded-full dark:text-gray-300 dark:hover:text-white" aria-label="Send invitation">
-                                  <AiOutlineUserAdd className="h-6 w-6" />
+                                  <AiOutlineUserAdd className="h-5 w-5" />
                                 </button>
                               </Tooltip>
 
                               <Tooltip content="Edit job">
                                 <button aria-label="Edit" className="p-1 text-gray-600 hover:text-black rounded-full dark:text-gray-300 dark:hover:text-white" onClick={() => router.push(`/interviews/edit/${job.id}`)}>
-                                  <AiFillEdit className="h-6 w-6" />
+                                  <AiFillEdit className="h-5 w-5" />
                                 </button>
                               </Tooltip>
 
                               <Tooltip content="Delete job">
                                 <button aria-label="Delete" className="p-1 text-gray-600 hover:text-black rounded-full dark:text-gray-300 dark:hover:text-white" onClick={() => handleDeleteClick(job.id)}>
-                                  <AiOutlineDelete className="h-6 w-6" />
+                                  <AiOutlineDelete className="h-5 w-5" />
                                 </button>
                               </Tooltip>
                             </>
@@ -292,7 +293,7 @@ export default function Jobs() {
                   </Card>
                 ))}
 
-                <Pagination showControls color="default" size="sm" page={page} total={pages} onChange={(page) => setPage(page)} />
+                <Pagination showControls color="primary" variant="bordered" size="sm" page={page} total={pages} onChange={(page) => setPage(page)} />
               </>
             )}
 

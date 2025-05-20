@@ -49,7 +49,7 @@ export const Content = () => {
           {/* Chart */}
           <div className="h-full flex flex-col gap-2">
             <h3 className="text-2xl font-semibold mb-3">Trend analytics</h3>
-            <Card radius="md" shadow="sm">
+            <Card shadow="none" className="p-4">
               <CardBody>
                 <Chart />
               </CardBody>

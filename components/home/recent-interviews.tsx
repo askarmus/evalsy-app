@@ -35,7 +35,7 @@ export const RecentInterviews = () => {
   }, []);
 
   return (
-    <Card radius="md" shadow="sm" className="p-4">
+    <Card shadow="none" className="p-4">
       <CardBody className="py-5 gap-4">
         <div className="flex gap-2.5 justify-center">
           <div className="flex flex-col border-dashed border-2 border-divider py-2 px-6 rounded-xl">

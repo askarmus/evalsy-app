@@ -36,6 +36,12 @@ export default function InterviewResultList() {
       const id = searchParams?.get('id') ?? '';
       const data = await getAllInterviewResult(id);
 
+      if (id) {
+        setSelectedId(id);
+      } else {
+        setSelectedId(data.all[0].id);
+      }
+
       setInterviewResults(data.all);
       setSelectedInterviewerData(data.first);
     } catch (err) {
@@ -128,7 +134,7 @@ export default function InterviewResultList() {
         <div className="flex h-full flex-col gap-2 xl:flex-row">
           <aside className="flex flex-col xl:w-[320px]">
             <div className="no-scrollbar max-h-full overflow-auto p-1 ">
-              <Card shadow="sm" radius="sm" className="no-scrollbar max-h-full overflow-auto p-1 ">
+              <Card shadow="none" className="no-scrollbar max-h-full overflow-auto p-1 ">
                 <CardBody>
                   <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} selectedTab={selectedTab} setSelectedTab={setSelectedTab} filterValue={filterValue} setFilterValue={setFilterValue} onSearchChange={onSearchChange} isLoading={isLoading} fetchInterviewResult={fetchInterviewResult} items={items} selectedId={selectedId} handleViewDetails={handleViewDetails} />
                 </CardBody>
@@ -138,12 +144,12 @@ export default function InterviewResultList() {
 
           <main className="flex h-screen flex-col overflow-hidden xl:h-full xl:w-[calc(100%-300px)]">
             <div className="p-1">
-              <Card shadow="sm" radius="sm" className="mb-4 p-2">
+              <Card shadow="none" className="mb-4 p-2">
                 <CardBody>
                   <CandidateHeader selectedInterviewerData={selectedInterviewerData} />
                 </CardBody>
               </Card>
-              <Card shadow="sm" radius="sm">
+              <Card shadow="none">
                 <CardBody>
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     <div>
@@ -168,7 +174,7 @@ export default function InterviewResultList() {
                       <h3 className="text-base font-semibold   mb-4">Transcript</h3>
                       <div className=" pt-4">
                         <h3 className="text-sm   mb-3   flex items-center gap-2">{selectedQuestion?.text}</h3>
-                        <div className="text-sm    p-4 rounded-lg border border-slate-200">
+                        <div className="text-sm p-4 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100">
                           {selectedQuestion?.transcription ? (
                             <>
                               <p className="mb-3">{selectedQuestion.transcription}</p>
@@ -191,7 +197,7 @@ export default function InterviewResultList() {
                 </CardBody>
               </Card>
 
-              <Card shadow="sm" radius="sm" className="mt-4 p-2">
+              <Card shadow="none" className="mt-4 p-2">
                 <CardBody>
                   <Tabs>
                     <Tab key="overall" title="Overall Performence">

@@ -71,7 +71,7 @@ const CompanySettings = () => {
     <Formik enableReinitialize initialValues={initialValues} validationSchema={CompanySettingsSchema} onSubmit={handleSubmit}>
       {({ values, errors, touched, setFieldValue, handleChange }) => (
         <Form>
-          <Card className="p-0" radius="md" shadow="none">
+          <Card className="p-0" shadow="none">
             <CardBody>
               <h1 className="text-xl font-bold mb-4">Company</h1>
               <div className="flex gap-4">
