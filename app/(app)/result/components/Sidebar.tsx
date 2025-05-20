@@ -63,7 +63,7 @@ export default function Sidebar({ sidebarOpen, selectedTab, setSelectedTab, filt
             <li onClick={() => handleViewDetails(data.id)} key={data.id} className={`flex items-center cursor-pointer justify-between pt-2 pb-2 transition-colors ${selectedId === data.id ? 'bg-gray-100' : 'hover:bg-gray-50'}`}>
               <div className="flex items-center gap-2">
                 <RatingBadges weight={data.overallWeight}>
-                  <Avatar name={data.name} className="h-10 w-10" src={data.image} />
+                  <Avatar name={data.name} className="h-8 w-8" src={data.image} />
                 </RatingBadges>
 
                 <div>
@@ -72,7 +72,6 @@ export default function Sidebar({ sidebarOpen, selectedTab, setSelectedTab, filt
                 </div>
               </div>
 
-              {/* Right Arrow Icon */}
               <div className="ml-4">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />

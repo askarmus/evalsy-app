@@ -3,8 +3,8 @@ import { getColorByInitial } from '@/app/utils/getColorByInitial';
 import { getInitials } from '@/app/utils/getInitials';
 import { truncateText } from '@/app/utils/truncate.text';
 import { get10InterviewResult } from '@/services/dashboard.service';
-import { getInterviewResultById } from '@/services/interview.service';
-import { Button, Card, CardBody, Skeleton, Spinner, User } from '@heroui/react';
+import { Button, Card, CardBody, Skeleton, User } from '@heroui/react';
+import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { AiFillEye } from 'react-icons/ai';
 import { FaInfoCircle } from 'react-icons/fa';
@@ -12,22 +12,11 @@ import { FaInfoCircle } from 'react-icons/fa';
 export const RecentInterviews = () => {
   const [results, setResults] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [isDrawerOpen, setDrawerOpen] = useState(false);
-  const [selectedInterviewerData, setSelectedInterviewerData] = useState<any>(null);
-  const [loadingResults, setLoadingResults] = useState<{ [key: string]: boolean }>({});
+
+  const router = useRouter();
 
   const handleViewDetails = async (resultId: string) => {
-    setLoadingResults((prev) => ({ ...prev, [resultId]: true })); // Set loading for the specific result
-
-    try {
-      const data = await getInterviewResultById(resultId);
-      setSelectedInterviewerData(data);
-      setDrawerOpen(true);
-    } catch (error) {
-      console.error('Error fetching interviewer data:', error);
-    }
-
-    setLoadingResults((prev) => ({ ...prev, [resultId]: false })); // Reset loading after fetch
+    router.push(`/result?id=${resultId}`);
   };
 
   useEffect(() => {
@@ -106,8 +95,8 @@ export const RecentInterviews = () => {
 
                   {/* Fourth Column: Button - Align to Right */}
                   <div className="flex items-center justify-self-end ml-auto">
-                    <Button color="primary" isIconOnly={true} isLoading={loadingResults[item.id]} onPress={() => handleViewDetails(item.id)} radius="full" size="sm" variant="flat">
-                      {loadingResults[item.id] ? <Spinner size="sm" /> : <AiFillEye />}
+                    <Button color="primary" isIconOnly={true} onPress={() => handleViewDetails(item.id)} radius="full" size="sm" variant="flat">
+                      <AiFillEye />
                     </Button>
                   </div>
                 </div>

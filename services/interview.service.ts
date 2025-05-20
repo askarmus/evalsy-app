@@ -26,8 +26,9 @@ export const sendResultEmail = async (payload: { interviewResultId: string; send
   return response.data.data.uploadedFileUrl;
 };
 
-export const getAllInterviewResult = async () => {
-  const response = await apiClient.get('/interview/result/all');
+export const getAllInterviewResult = async (resultId?: string) => {
+  const url = resultId ? `/interview/result/all/${resultId}` : `/interview/result/all`;
+  const response = await apiClient.get(url);
   return response.data.data;
 };
 

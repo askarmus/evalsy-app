@@ -12,9 +12,9 @@ const Chart = dynamic(() => import('../charts/steam'), {
 });
 
 const widgetConfig = {
-  'Open Jobs': { icon: <AiOutlineFileSearch className="text-white text-3xl" />, bgColor: 'bg-primary' },
-  'Pending Invitation': { icon: <AiOutlineUserSwitch className="text-white text-3xl" />, bgColor: 'bg-yellow-500' },
-  'Completed Interviews': { icon: <AiOutlineCheckCircle className="text-white text-3xl" />, bgColor: 'bg-green-500' },
+  'Open Jobs': { icon: <AiOutlineFileSearch className="text-white text-2xl" />, bgColor: 'bg-primary' },
+  'Pending Invitation': { icon: <AiOutlineUserSwitch className="text-white text-2xl" />, bgColor: 'bg-yellow-500' },
+  'Completed Interview': { icon: <AiOutlineCheckCircle className="text-2xl text-white" />, bgColor: 'bg-primary' },
 };
 
 export const Content = () => {
