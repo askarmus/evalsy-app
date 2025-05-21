@@ -7,6 +7,8 @@ export interface AddJobFormValues {
   totalRandomCodingQuestion: number;
   experienceLevel: string;
   description: string;
+  prompt?: string;
+
   fraudDetection: {
     tabSwitch: boolean;
     rightClick: boolean;

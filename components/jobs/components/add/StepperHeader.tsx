@@ -26,8 +26,8 @@ export const StepperHeader: React.FC<StepperHeaderProps> = ({ isEditMode, curren
         <CardBody>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
-                <FaRegEdit className="w-5 h-5 text-green-600" />
+              <div className="w-10 h-10 rounded-full bg-primary-400 flex items-center justify-center">
+                <FaRegEdit className="w-5 h-5 text-white" />
               </div>
               <div>
                 <p className="text-sm text-gray-500 font-bold">
@@ -42,13 +42,13 @@ export const StepperHeader: React.FC<StepperHeaderProps> = ({ isEditMode, curren
                 <div key={idx} className="flex items-center">
                   {completedSteps.includes(idx) ? (
                     <div className="w-6 h-6 rounded-full bg-green-100 flex items-center justify-center">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                       </svg>
                     </div>
                   ) : idx === currentStep ? (
-                    <div className="w-6 h-6 rounded-full border-2 border-green-600 flex items-center justify-center">
-                      <div className="w-2 h-2 rounded-full bg-green-600"></div>
+                    <div className="w-6 h-6 rounded-full border-2 border-primary-400 flex items-center justify-center">
+                      <div className="w-2 h-2 rounded-full bg-primary"></div>
                     </div>
                   ) : invalidSteps.includes(idx) ? (
                     <div className="w-6 h-6 rounded-full border-2 border-red-500 flex items-center justify-center">

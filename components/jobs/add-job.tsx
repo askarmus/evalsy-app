@@ -1,10 +1,10 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
-import { Button, Card, CardBody, Input, Pagination, NumberInput, Chip, Tooltip, Select, SelectItem } from '@heroui/react';
+import { Button, Card, CardBody, Input, Pagination, NumberInput, Chip, Tooltip, Select, SelectItem, Textarea } from '@heroui/react';
 import { Formik, FormikHelpers } from 'formik';
 import { showToast } from '@/app/utils/toastUtils';
-import { createJob, getJobById, updateJob } from '@/services/job.service';
+import { createJob, generateJobDescriptionFromAI, getJobById, updateJob } from '@/services/job.service';
 import { AddJobSchema } from '@/helpers/schemas';
 import { useParams, useRouter } from 'next/navigation';
 import { QuestionEditDrawer } from './components/add/QuestionEditDrawer';
@@ -45,22 +45,22 @@ export const AddJob = () => {
 
   const stepsData = [
     {
-      icon: <FaBriefcase className="w-5 h-5 text-xl text-gray-300" />,
+      icon: <FaBriefcase className="w-5 h-5 text-xl text-primary-300" />,
       title: 'Job Info',
       description: 'Overview of job roles and responsibilities',
     },
     {
-      icon: <FaQuestionCircle className="w-5 h-5 text-xl text-gray-300" />,
+      icon: <FaQuestionCircle className="w-5 h-5 text-xl text-primary-300" />,
       title: 'Questions',
       description: 'Common questions related to job applications',
     },
     {
-      icon: <FaCogs className="w-5 h-5 text-xl text-gray-300" />,
+      icon: <FaCogs className="w-5 h-5 text-xl text-primary-300" />,
       title: 'Random Settings',
       description: 'Miscellaneous configurations and settings',
     },
     {
-      icon: <FaShieldAlt className="w-5 h-5 text-xl text-gray-300" />,
+      icon: <FaShieldAlt className="w-5 h-5 text-xl text-primary-300" />,
       title: 'Fraud Detection',
       description: 'Monitor and prevent fraudulent activities',
     },
@@ -101,6 +101,22 @@ export const AddJob = () => {
     }
   }, [id]);
 
+  const handleGenerateJobDescription = async (values: AddJobFormValues, setFieldValue: FormikHelpers<AddJobFormValues>['setFieldValue'], setLoading: (loading: boolean) => void) => {
+    try {
+      setLoading(true);
+      const jobDescription = await generateJobDescriptionFromAI({
+        jobTitle: values.jobTitle,
+        focusPrompt: values.prompt,
+      });
+      setFieldValue('description', jobDescription);
+      showToast.success('Job description generated!');
+    } catch (err) {
+      showToast.error('Failed to generate job description.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleSubmit = async (values: AddJobFormValues, { resetForm }: FormikHelpers<AddJobFormValues>) => {
     setLoading(true);
     try {
@@ -129,7 +145,7 @@ export const AddJob = () => {
     return (
       <div ref={setNodeRef} {...attributes} style={style} className="flex items-center justify-between p-2 border-2 rounded-xl border-gray-300 dark:border-gray-600">
         <div className="flex items-center text-base min-w-0">
-          <span {...listeners} className="mr-2 cursor-grab text-gray-500 hover:text-gray-800">
+          <span {...listeners} className="mr-2 cursor-grab  hover:text-gray-800">
             <FaGripVertical />
           </span>
           <span className="flex items-center justify-center bg-gray-900 text-primary-foreground rounded-full w-7 h-7 mr-3 text-sm font-medium">{index + 1}</span>
@@ -237,7 +253,7 @@ export const AddJob = () => {
           };
 
           return (
-            <>
+            <div className="pb-16">
               <div className="grid md:grid-cols-[1.5fr_4fr] gap-6">
                 <div>
                   <VerticalStepper
@@ -257,12 +273,40 @@ export const AddJob = () => {
                       {currentStep === 0 && (
                         <>
                           <div className="space-y-4">
-                            <div className="mb-5">
+                            <div className="mb-5 flex items-center gap-[5px] mb-3 md:mb-4 ">
+                              <FaBriefcase className="w-5 h-5 text-xl text-primary-400" />
                               <h1 className=" text-xl/[24px] font-semibold text-tertiary  md:text-[20px]/[24px]">Job Details</h1>
                             </div>
-                            <h1 className="text-sm font-semibold text-gray-500 mb-0">Job title</h1>
+                            <h1 className="text-sm font-semibold   mb-0">Role Name</h1>
                             <Input variant="bordered" value={values.jobTitle} onChange={handleChange('jobTitle')} isInvalid={!!errors.jobTitle && !!touched.jobTitle} errorMessage={errors.jobTitle} />
-                            <h1 className="text-sm font-semibold text-gray-500">Job description</h1>
+
+                            <div className="mb-5 flex items-center gap-[5px] mb-3 md:mb-4 ">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="none" viewBox="0 0 16 16">
+                                <path stroke="currentColor" d="M7 13.5H1.5v-12H10L11.5 3v3M4 4.5h5M4 6.5h4" />
+                                <path fill="currentColor" d="m11.5 8 .99 2.51 2.51.99-2.51.99L11.5 15l-.99-2.51L8 11.5l2.51-.99L11.5 8Z" />
+                              </svg>
+                              <h1 className="text-sm font-semibold ">Use AI to help write the job description</h1>
+                            </div>
+                            <div className="mb-5 flex items-center   ">
+                              <Textarea variant="bordered" placeholder="e.g. Focus on leadership, architecture patterns, or microservices" value={values.prompt} onChange={handleChange('prompt')} className="pr-10" />
+
+                              <Button
+                                endContent={
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="4em" height="4em" fill="none" viewBox="0 0 18 18" className="text-lg">
+                                    <path stroke="#53B43B" stroke-linecap="round" stroke-linejoin="round" d="M2.623 15.373a1.59 1.59 0 0 0 2.25 0l9.75-9.75a1.59 1.59 0 0 0 0-2.25 1.59 1.59 0 0 0-2.25 0l-9.75 9.75a1.59 1.59 0 0 0 0 2.25M13.508 6.742l-2.25-2.25M6.375 1.83 7.5 1.5l-.33 1.125.33 1.125-1.125-.33-1.125.33.33-1.125L5.25 1.5zM3.375 6.33 4.5 6l-.33 1.125.33 1.125-1.125-.33-1.125.33.33-1.125L2.25 6zM14.625 10.08l1.125-.33-.33 1.125.33 1.125-1.125-.33L13.5 12l.33-1.125-.33-1.125z"></path>
+                                  </svg>
+                                }
+                                variant="bordered"
+                                radius="full"
+                                isDisabled={!values.jobTitle}
+                                isLoading={loading}
+                                onPress={() => handleGenerateJobDescription(values, setFieldValue, setLoading)}
+                              >
+                                Generate
+                              </Button>
+                            </div>
+
+                            <h1 className="text-sm font-semibold ">Job description</h1>
                             <RichTextEditor value={values.description} onChange={(val) => setFieldValue('description', val)} />
                           </div>
                         </>
@@ -303,13 +347,13 @@ export const AddJob = () => {
                           </div>
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
-                              <h1 className="text-sm font-semibold text-gray-500 mb-0">Total verbal questions ({values.questions.filter((q) => q.type === 'verbal').length})</h1>
+                              <h1 className="text-sm font-semibold  mb-0">Total verbal questions ({values.questions.filter((q) => q.type === 'verbal').length})</h1>
                               <NumberInput variant="bordered" maxValue={values.questions.filter((q) => q.type === 'verbal').length} value={values.totalRandomVerbalQuestion} onValueChange={(val) => setFieldValue('totalRandomVerbalQuestion', val)} />
                               <p className="text-xs text-gray-400 mt-1">Random questions mean picking 5 questions out of 50 that are marked as random.</p>
                             </div>
 
                             <div>
-                              <h1 className="text-sm font-semibold text-gray-500 mb-0">Total coding questions ({values.questions.filter((q) => q.type === 'coding').length})</h1>
+                              <h1 className="text-sm font-semibold  mb-0">Total coding questions ({values.questions.filter((q) => q.type === 'coding').length})</h1>
                               <NumberInput variant="bordered" maxValue={values.questions.filter((q) => q.type === 'coding').length} value={values.totalRandomCodingQuestion} onValueChange={(val) => setFieldValue('totalRandomCodingQuestion', val)} />
                               <p className="text-xs text-gray-400 mt-1">Random questions mean picking 5 questions out of 50 that are marked as random.</p>
                             </div>
@@ -346,21 +390,22 @@ export const AddJob = () => {
                 </div>
               </div>
 
-              <div className="fixed bottom-0 left-0 right-0 bg-white border-t p-4 flex justify-end">
+              <div className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t p-2 flex justify-end mt-8">
                 <div className="mx-auto flex w-full max-w-[90rem] items-center px-5 xl:px-8 xl2:px-[60px] xl2:!pr-[60px] justify-between">
                   {currentStep > 0 ? <Button onPress={() => setCurrentStep(currentStep - 1)}>Previous</Button> : <div></div>}
 
                   <div className="flex gap-2">
                     {isEditMode && (
-                      <Button color="primary" onPress={() => formRef.current.handleSubmit()} isLoading={loading}>
+                      <Button color="primary" size="lg" onPress={() => formRef.current.handleSubmit()} isLoading={loading}>
                         Save
                       </Button>
                     )}
 
                     {currentStep < stepsData.length - 1 ? (
                       <Button
+                        size="lg"
                         variant="solid"
-                        color="warning"
+                        color="primary"
                         onPress={async () => {
                           const valid = await validateStep();
                           if (valid) setCurrentStep(currentStep + 1);
@@ -370,7 +415,7 @@ export const AddJob = () => {
                       </Button>
                     ) : (
                       !isEditMode && (
-                        <Button color="primary" isLoading={loading} onPress={() => formRef.current.handleSubmit()}>
+                        <Button color="primary" size="lg" isLoading={loading} onPress={() => formRef.current.handleSubmit()}>
                           Save & Activate
                         </Button>
                       )
@@ -378,7 +423,7 @@ export const AddJob = () => {
                   </div>
                 </div>
               </div>
-            </>
+            </div>
           );
         }}
       </Formik>
