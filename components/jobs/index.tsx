@@ -199,8 +199,8 @@ export default function Jobs() {
           <div className="w-full flex flex-col gap-4">
             {filteredItems.length === 0 ? (
               <EmptyStateCards
-                title={jobs.length === 0 ? 'No jobs available' : 'No matching results'}
-                description={jobs.length === 0 ? "You haven't added any jobs yet. Start by creating a new one." : 'Try adjusting your search or filter to find what you are looking for.'}
+                title={jobs.length === 0 ? 'No Interviews available' : 'No matching results'}
+                description={jobs.length === 0 ? "You haven't added any Interviews yet. Start by creating a new one." : 'Try adjusting your search or filter to find what you are looking for.'}
                 onReset={
                   jobs.length === 0
                     ? undefined
