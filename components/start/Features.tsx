@@ -1,71 +1,107 @@
 'use client';
-import React, { useState } from 'react';
-const featureList = [
-  {
-    title: 'AI-Powered Interview Experience',
-    description: 'AI interview platform with video response, live questions, reviewer insights, and seamless, modern UI for evaluations.',
-    image: '/feature-screen/post.png',
-  },
-  {
-    title: 'Instant Interview Invite',
-    description: 'Quickly send interview invites with name, email, duration, expiry, and interviewer—simple, fast, and efficient.',
-    image: '/feature-screen/invitation.png',
-  },
-  {
-    title: 'AI Resume Screening',
-    description: 'Effortlessly screen resumes using AI—auto-score candidates, filter by experience, and manage invitations in one place.',
-    image: '/feature-screen/resume-screening.png',
-  },
-  {
-    title: 'AI Resume Screening',
-    description: 'Effortlessly screen resumes using AI—auto-score candidates, filter by experience, and manage invitations in one place.',
-    image: '/feature-screen/resume-screening.png',
-  },
-];
+
+import React, { useEffect, useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
+
+type FeatureItem = {
+  title: string;
+  description: string;
+  image: string;
+  progressTime: number;
+};
 
 export const Features = () => {
-  const [activeTab, setActiveTab] = useState(0);
+  const features: FeatureItem[] = [
+    {
+      title: 'Create Interview',
+      image: '/feature-screen/create-interview.png',
+      progressTime: 3000,
+      description: 'Design interview flow',
+    },
+    {
+      title: 'Shortlist Candidates',
+      image: '/feature-screen/post.png',
+      progressTime: 4000,
+      description: 'AI resume screening',
+    },
+    {
+      title: 'Send Invitations',
+      image: '/feature-screen/invitation.png',
+      progressTime: 4000,
+      description: 'Invite shortlisted candidates',
+    },
+    {
+      title: 'Conduct Interviews',
+      image: '/feature-screen/post.png',
+      progressTime: 5000,
+      description: 'AI-led video interviews',
+    },
+    {
+      title: 'View Results',
+      image: '/feature-screen/post.png',
+      progressTime: 4000,
+      description: 'Analyze interview scores',
+    },
+  ];
+
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [progress, setProgress] = useState(100);
+
+  useEffect(() => {
+    setProgress(100);
+    const progressTime = features[currentIndex]?.progressTime ?? 4000;
+    const step = 100 / (progressTime / 50);
+    let localProgress = 100;
+
+    const interval = setInterval(() => {
+      localProgress -= step;
+
+      if (localProgress <= 0) {
+        clearInterval(interval);
+        setCurrentIndex((prevIndex) => (prevIndex + 1) % features.length);
+      } else {
+        setProgress(localProgress);
+      }
+    }, 50);
+
+    return () => clearInterval(interval);
+  }, [currentIndex]);
 
   return (
-    <section id="features" aria-label="Features for running your books" className="relative overflow-hidden bg-blue-600 pt-20 pb-28 sm:py-32">
+    <section id="testimonials" aria-labelledby="faq-title" className="relative overflow-hidden bg-slate-50 py-20 sm:py-32">
       <img alt="" loading="lazy" width={2245} height={1636} decoding="async" className="absolute top-1/2 left-1/2 max-w-none translate-x-[-44%] translate-y-[-42%]" src="/background-features.5f7a9ac9.jpg" style={{ color: 'transparent' }} />
-
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative">
-        {/* Header */}
-        <div className="max-w-2xl md:mx-auto md:text-center xl:max-w-none">
-          <h2 className="font-display text-3xl tracking-tight text-white sm:text-4xl md:text-5xl">How Evalsy AI Interviewer Works</h2>
-          <p className="mt-6 text-lg tracking-tight text-blue-100">Manage hiring with ease—automated interviews, quick invites, and AI screening to skip repetitive tasks.</p>
+        <div className="mx-auto max-w-2xl text-center flex flex-col items-center justify-center">
+          <h2 id="faq-title" className="font-display text-3xl tracking-tight text-white sm:text-4xl">
+            How AI Interviewer Works
+          </h2>
+          <p className="mt-4 text-lg tracking-tight text-white">If you can’t find what you’re looking for, email our support team and if you’re lucky someone will get back to you.</p>
         </div>
 
-        <div className="mt-16 grid grid-cols-1 items-center gap-y-2 pt-10 sm:gap-y-6 md:mt-20 lg:grid-cols-12 lg:pt-0">
-          {/* Tabs - Scrollable on Mobile */}
-          <div className="-mx-4 flex  pb-4  sm:pb-0 lg:col-span-5" style={{ WebkitOverflowScrolling: 'touch', touchAction: 'pan-y' }}>
-            <div className="relative z-10 flex gap-x-4 px-4 whitespace-nowrap sm:mx-auto sm:px-0 lg:mx-0 lg:block lg:gap-x-0 lg:gap-y-1 lg:whitespace-normal" role="tablist" aria-orientation="vertical">
-              {featureList.map((feature, index) => (
-                <div key={index} className={`group relative rounded-full px-4 py-1 lg:rounded-l-xl lg:rounded-r-none lg:p-6 ${activeTab === index ? 'bg-white lg:bg-white/10 lg:ring-1 lg:ring-white/10 lg:ring-inset' : 'hover:bg-white/10 lg:hover:bg-white/5'}`} onClick={() => setActiveTab(index)} role="tab" aria-selected={activeTab === index} tabIndex={0}>
-                  <h3>
-                    <button className={`font-display text-lg ${activeTab === index ? 'text-blue-600 lg:text-white' : 'text-blue-100 hover:text-white'}`}>
-                      <span className="absolute inset-0 rounded-full lg:rounded-l-xl lg:rounded-r-none" />
-                      {feature.title}
-                    </button>
-                  </h3>
-                  <p className={`mt-2 hidden text-sm lg:block ${activeTab === index ? 'text-white' : 'text-blue-100 group-hover:text-white'}`}>{feature.description}</p>
-                </div>
-              ))}
+        <div className="flex flex-wrap mt-12">
+          <div className="flex w-full flex-col lg:flex-row items-center justify-center">
+            {/* Sidebar Menu */}
+            <div className="w-full lg:w-1/3 flex lg:justify-end justify-center">
+              <div className="flex flex-row lg:flex-col items-center justify-center space-x-4 lg:space-x-0 lg:space-y-4">
+                {features.map((feature, index) => (
+                  <motion.div key={feature.title} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.1 }} className=" min-w-[300px] text-white group relative rounded-full px-4 py-4 lg:rounded-l-xl lg:rounded-r-none lg:p-4 bg-white lg:bg-white/10 lg:ring-1 lg:ring-white/10 lg:ring-inset">
+                    {feature.title}
+                    <p className="mt-0 hidden text-xs lg:block text-gray-300">{feature.description}</p>
+                    {index === currentIndex && (
+                      <div className="w-full h-1 bg-indigo-300 rounded overflow-hidden mt-1">
+                        <motion.div className="h-full bg-white" initial={{ width: '100%' }} animate={{ width: `${progress}%` }} transition={{ duration: 0.05, ease: 'linear' }} />
+                      </div>
+                    )}
+                  </motion.div>
+                ))}
+              </div>
             </div>
-          </div>
 
-          {/* Content - Image and Description */}
-          <div className="lg:col-span-7">
-            <div role="tabpanel" tabIndex={0} aria-labelledby={`tab-${activeTab}`}>
-              <div className="relative sm:px-6 lg:hidden">
-                <div className="absolute -inset-x-4 top-[-6.5rem] bottom-[-4.25rem] bg-white/10 ring-1 ring-white/10 ring-inset sm:inset-x-0 sm:rounded-t-xl" />
-                <p className="relative mx-auto max-w-2xl text-base text-white sm:text-center">{featureList[activeTab].description}</p>
-              </div>
-
-              <div className="mt-10 w-[45rem] overflow-hidden rounded-xl bg-slate-50 shadow-xl shadow-blue-900/20 sm:w-auto lg:mt-0 lg:w-[67.8125rem]">
-                <img alt={featureList[activeTab].title} width={2174} height={1464} className="w-full" sizes="(min-width: 1024px) 67.8125rem, (min-width: 640px) 100vw, 45rem" src={featureList[activeTab].image} style={{ color: 'transparent' }} />
-              </div>
+            {/* Feature Image */}
+            <div className="w-full mt-8 lg:mt-0 flex items-center justify-center overflow-hidden relative">
+              <AnimatePresence mode="wait">
+                <motion.img key={features[currentIndex].image} src={features[currentIndex].image} alt={features[currentIndex].title} className="max-w-full max-h-[70vh] rounded-xl" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.4 }} />
+              </AnimatePresence>
             </div>
           </div>
         </div>
