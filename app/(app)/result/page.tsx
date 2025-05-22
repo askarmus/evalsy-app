@@ -13,6 +13,7 @@ import CandidateHeader from './components/CandidateHeader';
 import FeedbackCard from './components/FeedbackCard';
 import { useRouter, useSearchParams } from 'next/navigation';
 import EventTable from './components/EventTable';
+import EmptyStateCards from '@/components/shared/empty-state-cards';
 
 export default function InterviewResultList() {
   const [page, setPage] = useState(1);
@@ -131,102 +132,120 @@ export default function InterviewResultList() {
   return (
     <div className="my-3 px-4 lg:px-6 max-w-[82rem] mx-auto w-full  ">
       <div className="sm:h-[calc(100vh-110px)] overflow-hidden xl:h-[calc(100vh-110px)]">
-        <div className="flex h-full flex-col gap-2 xl:flex-row">
-          <aside className="flex flex-col xl:w-[320px]">
-            <div className="no-scrollbar max-h-full overflow-auto p-1 ">
-              <Card shadow="none" className="no-scrollbar max-h-full overflow-auto p-1 ">
-                <CardBody>
-                  <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} selectedTab={selectedTab} setSelectedTab={setSelectedTab} filterValue={filterValue} setFilterValue={setFilterValue} onSearchChange={onSearchChange} isLoading={isLoading} fetchInterviewResult={fetchInterviewResult} items={items} selectedId={selectedId} handleViewDetails={handleViewDetails} />
-                </CardBody>
-              </Card>
-            </div>
-          </aside>
+        {interviewResults.length == 0 && (
+          <div className="flex items-center justify-center h-full w-full">
+            <EmptyStateCards
+              title="No Interview Results Yet"
+              description="Interview results will appear here once a candidate has completed an interview. Please check back later."
+              onReset={
+                interviewResults.length === 0
+                  ? undefined
+                  : () => {
+                      setFilterValue('');
+                      setPage(1);
+                    }
+              }
+            />
+          </div>
+        )}
+        {interviewResults.length > 0 && (
+          <div className="flex h-full flex-col gap-2 xl:flex-row">
+            <aside className="flex flex-col xl:w-[320px]">
+              <div className="no-scrollbar max-h-full overflow-auto p-1 ">
+                <Card shadow="none" className="no-scrollbar max-h-full overflow-auto p-1 ">
+                  <CardBody>
+                    <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} selectedTab={selectedTab} setSelectedTab={setSelectedTab} filterValue={filterValue} setFilterValue={setFilterValue} onSearchChange={onSearchChange} isLoading={isLoading} fetchInterviewResult={fetchInterviewResult} items={items} selectedId={selectedId} handleViewDetails={handleViewDetails} />
+                  </CardBody>
+                </Card>
+              </div>
+            </aside>
 
-          <main className="flex h-screen flex-col overflow-hidden xl:h-full xl:w-[calc(100%-300px)]">
-            <div className="p-1">
-              <Card shadow="none" className="mb-4 p-2">
-                <CardBody>
-                  <CandidateHeader selectedInterviewerData={selectedInterviewerData} />
-                </CardBody>
-              </Card>
-              <Card shadow="none">
-                <CardBody>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                    <div>
-                      <h3 className="text-base font-semibold   mb-4">Interview Questions</h3>
-                      {selectedInterviewerData && <QuestionsTable data={selectedInterviewerData} onSelect={handleSelect} />}
-                    </div>
-
-                    <div className="">
-                      <Tabs aria-label="Options" size="sm">
-                        <Tab key="photos" title="Photos">
-                          <ImageSlider images={selectedInterviewerData?.screenshots} />
-                        </Tab>
-
-                        <Tab key="videos" title="Videos">
-                          <h3 className="text-base font-semibold   mb-4">Comming</h3>
-
-                          <CustomVideoPlayer />
-                        </Tab>
-                      </Tabs>
-                    </div>
-                    <div className=" ">
-                      <h3 className="text-base font-semibold   mb-4">Transcript</h3>
-                      <div className=" pt-4">
-                        <h3 className="text-sm   mb-3   flex items-center gap-2">{selectedQuestion?.text}</h3>
-                        <div className="text-sm p-4 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100">
-                          {selectedQuestion?.transcription ? (
-                            <>
-                              <p className="mb-3">{selectedQuestion.transcription}</p>
-                              <audio ref={audioRef} controls className="mt-3 w-full">
-                                <source src={selectedQuestion.recordedUrl} type="audio/mpeg" />
-                                Your browser does not support the audio element.
-                              </audio>
-                            </>
-                          ) : (
-                            <p>No Answered</p>
-                          )}
-                        </div>
+            <main className="flex h-screen flex-col overflow-hidden xl:h-full xl:w-[calc(100%-300px)]">
+              <div className="p-1">
+                <Card shadow="none" className="mb-4 p-2">
+                  <CardBody>
+                    <CandidateHeader selectedInterviewerData={selectedInterviewerData} />
+                  </CardBody>
+                </Card>
+                <Card shadow="none">
+                  <CardBody>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                      <div>
+                        <h3 className="text-base font-semibold   mb-4">Interview Questions</h3>
+                        {selectedInterviewerData && <QuestionsTable data={selectedInterviewerData} onSelect={handleSelect} />}
                       </div>
-                    </div>
-                  </div>
 
-                  <div className="mt-5">
-                    <SimpleScoreDisplay scores={selectedQuestion} totalScore={100} />
-                  </div>
-                </CardBody>
-              </Card>
+                      <div className="">
+                        <Tabs aria-label="Options" size="sm">
+                          <Tab key="photos" title="Photos">
+                            <ImageSlider images={selectedInterviewerData?.screenshots} />
+                          </Tab>
 
-              <Card shadow="none" className="mt-4 p-2">
-                <CardBody>
-                  <Tabs>
-                    <Tab key="overall" title="Overall Performence">
-                      <div className="grid grid-cols-[1fr_auto_1fr] gap-5">
-                        <div className="space-y-5">
-                          <div>
-                            <h2 className="text-lg font-semibold mb-4">Overall Performence</h2>
-                            {selectedInterviewerData && <EvaluationChart data={selectedInterviewerData} />}
+                          <Tab key="videos" title="Videos">
+                            <h3 className="text-base font-semibold   mb-4">Comming</h3>
+
+                            <CustomVideoPlayer />
+                          </Tab>
+                        </Tabs>
+                      </div>
+                      <div className=" ">
+                        <h3 className="text-base font-semibold   mb-4">Transcript</h3>
+                        <div className=" pt-4">
+                          <h3 className="text-sm   mb-3   flex items-center gap-2">{selectedQuestion?.text}</h3>
+                          <div className="text-sm p-4 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100">
+                            {selectedQuestion?.transcription ? (
+                              <>
+                                <p className="mb-3">{selectedQuestion.transcription}</p>
+                                <audio ref={audioRef} controls className="mt-3 w-full">
+                                  <source src={selectedQuestion.recordedUrl} type="audio/mpeg" />
+                                  Your browser does not support the audio element.
+                                </audio>
+                              </>
+                            ) : (
+                              <p>No Answered</p>
+                            )}
                           </div>
                         </div>
-
-                        {/* Divider */}
-                        <div className="w-px bg-gray-300 h-full mx-auto" />
-
-                        <div className="space-y-5">
-                          <FeedbackCard summary={selectedInterviewerData?.notes?.summary} />
-                        </div>
                       </div>
-                    </Tab>
+                    </div>
 
-                    <Tab key="fraud" title="Fraud Risk">
-                      <EventTable data={selectedInterviewerData?.fraudEvents} />
-                    </Tab>
-                  </Tabs>
-                </CardBody>
-              </Card>
-            </div>
-          </main>
-        </div>
+                    <div className="mt-5">
+                      <SimpleScoreDisplay scores={selectedQuestion} totalScore={100} />
+                    </div>
+                  </CardBody>
+                </Card>
+
+                <Card shadow="none" className="mt-4 p-2">
+                  <CardBody>
+                    <Tabs>
+                      <Tab key="overall" title="Overall Performence">
+                        <div className="grid grid-cols-[1fr_auto_1fr] gap-5">
+                          <div className="space-y-5">
+                            <div>
+                              <h2 className="text-lg font-semibold mb-4">Overall Performence</h2>
+                              {selectedInterviewerData && <EvaluationChart data={selectedInterviewerData} />}
+                            </div>
+                          </div>
+
+                          {/* Divider */}
+                          <div className="w-px bg-gray-300 h-full mx-auto" />
+
+                          <div className="space-y-5">
+                            <FeedbackCard summary={selectedInterviewerData?.notes?.summary} />
+                          </div>
+                        </div>
+                      </Tab>
+
+                      <Tab key="fraud" title="Fraud Risk">
+                        <EventTable data={selectedInterviewerData?.fraudEvents} />
+                      </Tab>
+                    </Tabs>
+                  </CardBody>
+                </Card>
+              </div>
+            </main>
+          </div>
+        )}
       </div>
     </div>
   );
