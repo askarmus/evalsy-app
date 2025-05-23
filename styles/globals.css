@@ -180,3 +180,18 @@ div::-webkit-scrollbar-thumb {
 div::-webkit-scrollbar-track {
   background: transparent;
 }
+.avatar {
+  z-index: 10;
+  --tw-gradient-position: to left in oklab;
+  background-image: linear-gradient(var(--tw-gradient-stops));
+  --tw-gradient-from: #fff;
+  --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+  --tw-gradient-to: #cac5fe;
+  border-radius: 3.40282e38px;
+  justify-content: center;
+  align-items: center;
+  width: 120px;
+  height: 120px;
+  display: flex;
+  position: relative;
+}
