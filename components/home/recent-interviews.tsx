@@ -85,7 +85,7 @@ export const RecentInterviews = () => {
                   {/* Second Column: Status */}
                   <div className="flex items-center flex-col text-center">
                     <span className="text-success text-xs mb-1">Score</span>
-                    <span className="text-xs">{((item?.overallWeight / 30) * 100).toFixed(2)}% </span>
+                    <span className="text-xs">{item?.totalScore}% </span>
                   </div>
 
                   {/* Third Column: Date */}

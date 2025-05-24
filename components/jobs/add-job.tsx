@@ -36,7 +36,7 @@ export const AddJob = () => {
   const [editingQuestionIndex, setEditingQuestionIndex] = useState<number | null>(null);
   const [isGenerateDrawerOpen, setGenerateDrawerOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedTab, setSelectedTab] = useState<'all' | 'verbal' | 'coding'>('all');
+  const [selectedTab, setSelectedTab] = useState<'all' | 'verbal'>('all');
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState('1000');
   const [currentStep, setCurrentStep] = useState(0);
@@ -152,9 +152,6 @@ export const AddJob = () => {
           <span className="truncate font-semibold max-w-[200px] md:max-w-[400px]">{question.text.length > 80 ? `${question.text.substring(0, 80)}...` : question.text || 'New Question'}</span>
         </div>
         <div className="flex items-center gap-2 ml-4 shrink-0">
-          <Chip color={question.type === 'coding' ? 'secondary' : 'primary'} variant="flat" size="sm">
-            {question.type}
-          </Chip>
           <Tooltip content="Edit question">
             <button aria-label="Edit" onClick={() => handleEditQuestion(question.id)} className="p-1 text-gray-600 hover:text-black rounded-full dark:text-gray-300 dark:hover:text-white">
               <AiOutlineEdit className="h-5 w-5" />
@@ -314,7 +311,7 @@ export const AddJob = () => {
                       {currentStep === 1 && (
                         <>
                           <div className="mb-3">
-                            <QuestionSearchAndFilter searchTerm={searchTerm} setSearchTerm={setSearchTerm} selectedTab={selectedTab} setSelectedTab={setSelectedTab} questionsCount={{ all: values.questions.length, verbal: values.questions.filter((q) => q.type === 'verbal').length, coding: values.questions.filter((q) => q.type === 'coding').length }} />
+                            <QuestionSearchAndFilter searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
                           </div>
                           <QuestionHeaderActions onGenerateAI={() => setGenerateDrawerOpen(true)} onAddManual={handleAddQuestion} questionCount={values.questions.length} />
 
@@ -347,14 +344,8 @@ export const AddJob = () => {
                           </div>
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
-                              <h1 className="text-sm font-semibold  mb-0">Total verbal questions ({values.questions.filter((q) => q.type === 'verbal').length})</h1>
-                              <NumberInput variant="bordered" maxValue={values.questions.filter((q) => q.type === 'verbal').length} value={values.totalRandomVerbalQuestion} onValueChange={(val) => setFieldValue('totalRandomVerbalQuestion', val)} />
-                              <p className="text-xs text-gray-400 mt-1">Random questions mean picking 5 questions out of 50 that are marked as random.</p>
-                            </div>
-
-                            <div>
-                              <h1 className="text-sm font-semibold  mb-0">Total coding questions ({values.questions.filter((q) => q.type === 'coding').length})</h1>
-                              <NumberInput variant="bordered" maxValue={values.questions.filter((q) => q.type === 'coding').length} value={values.totalRandomCodingQuestion} onValueChange={(val) => setFieldValue('totalRandomCodingQuestion', val)} />
+                              <h1 className="text-sm font-semibold  mb-0">Total verbal questions ({values.questions.length})</h1>
+                              <NumberInput variant="bordered" maxValue={values.questions.length} value={values.totalRandomVerbalQuestion} onValueChange={(val) => setFieldValue('totalRandomVerbalQuestion', val)} />
                               <p className="text-xs text-gray-400 mt-1">Random questions mean picking 5 questions out of 50 that are marked as random.</p>
                             </div>
                           </div>

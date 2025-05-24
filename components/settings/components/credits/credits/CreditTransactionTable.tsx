@@ -6,7 +6,7 @@ import { FaArrowUp, FaArrowDown, FaFileDownload, FaInbox } from 'react-icons/fa'
 import { format } from 'date-fns';
 import { saveAs } from 'file-saver';
 import { getCreditHistory } from '@/services/credits.service';
-import { DateRangePicker, Button, Spinner, Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Pagination, Card, CardBody } from '@heroui/react';
+import { DateRangePicker, Button, Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Pagination, Card, CardBody } from '@heroui/react';
 
 const PAGE_SIZE = 10;
 

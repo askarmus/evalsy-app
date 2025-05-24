@@ -12,9 +12,6 @@ import { AiOutlineCloseCircle } from 'react-icons/ai';
 export type CompanySettingsFormValues = {
   name: string;
   address?: string;
-  aboutCompany?: string;
-  thankYouMessage?: string;
-  answerQuestionMessage?: string;
   website?: string;
   linkedin?: string;
   facebook?: string;
@@ -29,9 +26,6 @@ const CompanySettings = () => {
   const [initialValues, setInitialValues] = useState<CompanySettingsFormValues>({
     name: '',
     address: '',
-    aboutCompany: '',
-    thankYouMessage: '',
-    answerQuestionMessage: '',
     website: '',
     linkedin: '',
     facebook: '',
@@ -89,11 +83,6 @@ const CompanySettings = () => {
                       <Input label="Twitter" name="twitter" value={values.twitter || ''} onChange={handleChange} isInvalid={!!errors.twitter && !!touched.twitter} errorMessage={errors.twitter} />
                     </div>
                     <Input label="Phone" name="phone" value={values.phone || ''} onChange={handleChange} isInvalid={!!errors.phone && !!touched.phone} errorMessage={errors.phone} />
-                    <h1 className="text-xl font-semibold mb-4">Interview Settings</h1>
-
-                    <Textarea minRows={1} label="About Company" name="aboutCompany" value={values.aboutCompany || ''} onChange={handleChange} isInvalid={!!errors.aboutCompany && !!touched.aboutCompany} errorMessage={errors.aboutCompany} />
-                    <Textarea minRows={1} label="Completion Message" name="thankYouMessage" value={values.thankYouMessage || ''} onChange={handleChange} isInvalid={!!errors.thankYouMessage && !!touched.thankYouMessage} errorMessage={errors.thankYouMessage} />
-                    <Textarea minRows={1} label="Response Confirmation Message" name="answerQuestionMessage" value={values.answerQuestionMessage || ''} onChange={handleChange} isInvalid={!!errors.answerQuestionMessage && !!touched.answerQuestionMessage} errorMessage={errors.answerQuestionMessage} />
                   </div>
                 </div>
                 <div className="w-1/5">

@@ -2,11 +2,8 @@
 import React, { useState, useMemo, useEffect, useCallback, useRef } from 'react';
 import { Tabs, Tab, Card, CardBody } from '@heroui/react';
 import { getAllInterviewResult, getInterviewResultById } from '@/services/interview.service';
-
 import EvaluationChart from './components/EvaluationChart';
-import QuestionsTable from './components/QuestionsTable';
 import CustomVideoPlayer from './components/CustomVideoPlayer';
-import SimpleScoreDisplay from './components/SimpleScoreDisplay';
 import ImageSlider from '@/components/shared/ImageSlider';
 import Sidebar from './components/Sidebar';
 import CandidateHeader from './components/CandidateHeader';
@@ -14,6 +11,7 @@ import FeedbackCard from './components/FeedbackCard';
 import { useRouter, useSearchParams } from 'next/navigation';
 import EventTable from './components/EventTable';
 import EmptyStateCards from '@/components/shared/empty-state-cards';
+import AudioPlayerWithHighlight from './components/TranscriptPlayer';
 
 export default function InterviewResultList() {
   const [page, setPage] = useState(1);
@@ -50,18 +48,6 @@ export default function InterviewResultList() {
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const handleSelect = (question) => {
-    setSelectedQuestion(question);
-    setTimeout(() => {
-      if (audioRef.current) {
-        audioRef.current.load(); // reload source
-        audioRef.current.play().catch((e) => {
-          console.warn('Auto-play blocked:', e);
-        });
-      }
-    }, 100);
   };
 
   useEffect(() => {
@@ -103,13 +89,13 @@ export default function InterviewResultList() {
     let results = [...interviewResults];
 
     if (selectedTab === 'below-average') {
-      results = results.filter((r: any) => r.overallWeight <= 25);
+      results = results.filter((r: any) => r.totalScore <= 25);
     } else if (selectedTab === 'average') {
-      results = results.filter((r: any) => r.overallWeight > 25 && r.overallWeight <= 50);
+      results = results.filter((r: any) => r.totalScore > 25 && r.totalScore <= 50);
     } else if (selectedTab === 'good') {
-      results = results.filter((r: any) => r.overallWeight > 50 && r.overallWeight <= 75);
+      results = results.filter((r: any) => r.totalScore > 50 && r.totalScore <= 75);
     } else if (selectedTab === 'excellent') {
-      results = results.filter((r: any) => r.overallWeight > 75);
+      results = results.filter((r: any) => r.totalScore > 75);
     }
 
     if (filterValue) {
@@ -131,7 +117,7 @@ export default function InterviewResultList() {
 
   return (
     <div className="my-3 px-4 lg:px-6 max-w-[82rem] mx-auto w-full  ">
-      <div className="sm:h-[calc(100vh-110px)] overflow-hidden xl:h-[calc(100vh-110px)]">
+      <div className=" ">
         {interviewResults.length == 0 && (
           <div className="flex items-center justify-center h-full w-full">
             <EmptyStateCards
@@ -160,7 +146,7 @@ export default function InterviewResultList() {
               </div>
             </aside>
 
-            <main className="flex h-screen flex-col overflow-hidden xl:h-full xl:w-[calc(100%-300px)]">
+            <main className="flex flex-col">
               <div className="p-1">
                 <Card shadow="none" className="mb-4 p-2">
                   <CardBody>
@@ -169,48 +155,21 @@ export default function InterviewResultList() {
                 </Card>
                 <Card shadow="none">
                   <CardBody>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                      <div>
-                        <h3 className="text-base font-semibold   mb-4">Interview Questions</h3>
-                        {selectedInterviewerData && <QuestionsTable data={selectedInterviewerData} onSelect={handleSelect} />}
-                      </div>
-
-                      <div className="">
+                    <div className="flex gap-4">
+                      <div className="w-1/3">
                         <Tabs aria-label="Options" size="sm">
                           <Tab key="photos" title="Photos">
                             <ImageSlider images={selectedInterviewerData?.screenshots} />
                           </Tab>
-
                           <Tab key="videos" title="Videos">
-                            <h3 className="text-base font-semibold   mb-4">Comming</h3>
-
-                            <CustomVideoPlayer />
+                            <p className="text-base  mb-4">Coming soon</p>
+                            {/* <CustomVideoPlayer /> */}
                           </Tab>
                         </Tabs>
                       </div>
-                      <div className=" ">
-                        <h3 className="text-base font-semibold   mb-4">Transcript</h3>
-                        <div className=" pt-4">
-                          <h3 className="text-sm   mb-3   flex items-center gap-2">{selectedQuestion?.text}</h3>
-                          <div className="text-sm p-4 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100">
-                            {selectedQuestion?.transcription ? (
-                              <>
-                                <p className="mb-3">{selectedQuestion.transcription}</p>
-                                <audio ref={audioRef} controls className="mt-3 w-full">
-                                  <source src={selectedQuestion.recordedUrl} type="audio/mpeg" />
-                                  Your browser does not support the audio element.
-                                </audio>
-                              </>
-                            ) : (
-                              <p>No Answered</p>
-                            )}
-                          </div>
-                        </div>
+                      <div className="w-2/3">
+                        <AudioPlayerWithHighlight transcript={selectedInterviewerData.messages} recordingUrl={selectedInterviewerData.recordingUrl} />
                       </div>
-                    </div>
-
-                    <div className="mt-5">
-                      <SimpleScoreDisplay scores={selectedQuestion} totalScore={100} />
                     </div>
                   </CardBody>
                 </Card>
@@ -228,10 +187,10 @@ export default function InterviewResultList() {
                           </div>
 
                           {/* Divider */}
-                          <div className="w-px bg-gray-300 h-full mx-auto" />
+                          <div className="w-px bg-gray-300 " />
 
                           <div className="space-y-5">
-                            <FeedbackCard summary={selectedInterviewerData?.notes?.summary} />
+                            <FeedbackCard data={selectedInterviewerData} />
                           </div>
                         </div>
                       </Tab>

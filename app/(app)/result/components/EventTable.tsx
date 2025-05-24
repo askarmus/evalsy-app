@@ -20,7 +20,7 @@ const EventTable: React.FC<EventTableProps> = ({ data }) => {
   const [page, setPage] = useState(1);
 
   const filteredData = useMemo(() => {
-    return data.filter((item) => item.type.toLowerCase().includes(searchTerm.toLowerCase()));
+    return data?.filter((item) => item.type.toLowerCase().includes(searchTerm.toLowerCase()));
   }, [searchTerm, data]);
 
   const totalPages = Math.ceil(filteredData.length / ROWS_PER_PAGE);

@@ -1,8 +1,8 @@
 import apiClient from '@/helpers/apiClient';
 import axios from 'axios';
 
-export const updateQuestion = async (payload: { invitationId: string; questionId: string; recordedUrl: string; code?: string; output?: string }) => {
-  const response = await apiClient.post('/interview/updatequestion', payload);
+export const updateVapiCallId = async (payload: { invitationId: string; callId: string }) => {
+  const response = await apiClient.post('/interview/updateVapiCallId', payload);
   return response.data.data;
 };
 

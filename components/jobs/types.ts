@@ -1,4 +1,4 @@
-export type Question = { id: string; text: string; expectedScore: number; isRandom: boolean; type: string; timeLimit?: number; language?: string; explanation?: string; starterCode?: string };
+export type Question = { id: string; text: string; expectedScore: number; isRandom: boolean };
 
 export interface AddJobFormValues {
   jobTitle: string;

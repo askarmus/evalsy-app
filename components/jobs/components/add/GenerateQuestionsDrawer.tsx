@@ -20,8 +20,6 @@ export const GenerateQuestionsDrawer = ({ isOpen, jobTitle, description, onOpenC
   const [prompt, setPrompt] = useState('');
   const [experienceLevel, setExperienceLevel] = useState('intermediate');
   const [totalQuestions, setTotalQuestions] = useState(5);
-  const [selectedType, setSelectedType] = useState<'verbal' | 'coding'>('verbal');
-  const [selectedLanguage, setSelectedLanguage] = useState<string>('javascript');
 
   const handleGenerateQuestions = async () => {
     if (jobTitle && description) {
@@ -34,8 +32,6 @@ export const GenerateQuestionsDrawer = ({ isOpen, jobTitle, description, onOpenC
           noOfQuestions: totalQuestions,
           description: description,
           prompt: prompt,
-          type: selectedType,
-          language: selectedType === 'coding' ? selectedLanguage : undefined,
         });
 
         if (!Array.isArray(result.data) || result.data.length === 0) {
@@ -43,16 +39,11 @@ export const GenerateQuestionsDrawer = ({ isOpen, jobTitle, description, onOpenC
           return;
         }
 
-        const newQuestions = result.data.map((item: { text: string; timeLimit: number; explanation: number; starterCode: string }) => ({
+        const newQuestions = result.data.map((item: { text: string }) => ({
           id: nanoid(),
           text: item.text,
           expectedScore: 3,
           isRandom: true,
-          type: selectedType,
-          timeLimit: item.timeLimit,
-          language: selectedLanguage,
-          explanation: item.explanation,
-          starterCode: item.starterCode,
         }));
 
         onQuestionsGenerated(newQuestions);
@@ -83,24 +74,6 @@ export const GenerateQuestionsDrawer = ({ isOpen, jobTitle, description, onOpenC
                   <Radio value="senior">Senior</Radio>
                   <Radio value="expert">Expert</Radio>
                 </RadioGroup>
-
-                <Select aria-label="Type" className="w-full" size="sm" selectedKeys={[selectedType]} onChange={(e) => setSelectedType(e.target.value as 'verbal' | 'coding')}>
-                  <SelectItem key="verbal" textValue="Verbal">
-                    Verbal
-                  </SelectItem>
-                  <SelectItem key="coding" textValue="Coding">
-                    Coding
-                  </SelectItem>
-                </Select>
-                {selectedType === 'coding' && (
-                  <Select aria-label="Language" className="w-full" size="sm" selectedKeys={[selectedLanguage]} onChange={(e) => setSelectedLanguage(e.target.value)}>
-                    {languages.map((lang) => (
-                      <SelectItem key={lang.monacoLang} textValue={lang.label}>
-                        {lang.label}
-                      </SelectItem>
-                    ))}
-                  </Select>
-                )}
 
                 <Textarea
                   size="sm"

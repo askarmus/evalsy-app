@@ -66,7 +66,7 @@ export default function Sidebar({ sidebarOpen, selectedTab, setSelectedTab, filt
     dark:border-gray-700`}
             >
               <div className="flex items-center gap-2">
-                <RatingBadges weight={data.overallWeight}>
+                <RatingBadges weight={data.totalScore}>
                   <Avatar name={data.name} className="h-8 w-8" src={data.image} />
                 </RatingBadges>
 

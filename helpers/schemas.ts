@@ -53,24 +53,13 @@ export const AddJobSchema = Yup.object()
           text: Yup.string().required('Question is required'),
           expectedScore: Yup.number().required(),
           isRandom: Yup.boolean().required(),
-          type: Yup.string().required(),
-          timeLimit: Yup.number().when('type', {
-            is: 'coding',
-            then: (schema) => schema.required('Time limit is required for coding questions').min(1, 'Time limit must be at least 1 minute'),
-            otherwise: (schema) => schema.notRequired().nullable(),
-          }),
-          language: Yup.string().when('type', {
-            is: 'coding',
-            then: (schema) => schema.required('Language is required for coding questions'),
-            otherwise: (schema) => schema.notRequired().nullable(),
-          }),
         })
       )
       .min(1, 'At least one question is required'),
   })
   .test('random-question-limit', 'Total random verbal question should not exceed available random verbal questions', function (values) {
     const { totalRandomVerbalQuestion, questions } = values;
-    const randomVerbalCount = questions?.filter((q) => q.isRandom && q.type === 'verbal').length || 0;
+    const randomVerbalCount = questions?.length || 0;
     return totalRandomVerbalQuestion <= randomVerbalCount;
   });
 

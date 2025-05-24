@@ -1,21 +1,17 @@
 'use client';
 import { showToast } from '@/app/utils/toastUtils';
+import { createInterviewAssistant } from '@/lib/data/vapi.sdk';
 import { upload } from '@/services/company.service';
-import { endInterview, startInterview, updateQuestion, updateScreeshot } from '@/services/interview.service';
+import { endInterview, startInterview, updateScreeshot, updateVapiCallId } from '@/services/interview.service';
 import { getInvitationDetails } from '@/services/invitation.service';
 import { create } from 'zustand';
 
-type Phase = 'init' | 'not-started' | 'welcome' | 'in-progress' | 'completed' | 'time-up' | 'expired' | 'skeleton-loading';
+type Phase = 'init' | 'not-started' | 'in-progress' | 'completed' | 'time-up' | 'expired' | 'skeleton-loading';
 
-interface Question {
+export interface Question {
   id: string;
   text: string;
   audioUrl: string;
-  type: string;
-  timelimit: number;
-  lannguage: string;
-  explanation: string;
-  starterCode: string;
   uploadUrl: string;
   publicUrl: string;
 }
@@ -26,13 +22,8 @@ interface InterviewState {
   candidate: any;
   company: any;
   job: any;
-  currentQuestion: number;
   duration: number;
-  extraTime: number;
   timeLeft: number;
-  extraTimeAdded: boolean;
-  isAudioCompleted: boolean;
-  isRecording: boolean;
   isCameraOn: boolean;
   screenshotInterval: number;
   isLoading: boolean;
@@ -42,15 +33,9 @@ interface InterviewState {
 
   startInterview: () => void;
   setMicDeviceId: (id: string) => void;
-  stopRecordingAndNextQuestion: () => void;
   setTimeLeft: (time: number) => void;
   setPhase: (phase: Phase) => void;
-  setAudioCompleted: (status: boolean) => void;
-  setRecording: (status: boolean) => void;
-  toggleCamera: () => void;
   uploadScreenshot: (imageBlob: Blob, questionId: string) => Promise<void>;
-  finalizeRecording: (publicUrl: string) => Promise<void>;
-  updateCodeResult: (code: string, output: string) => Promise<void>;
   endInterview: () => void;
   setInvitationId: (id: string) => void;
   loadInterview: (interviewId: string) => Promise<void>;
@@ -61,11 +46,7 @@ export const useInterviewStore = create<InterviewState>()((set, get) => ({
   questions: [],
   currentQuestion: 0,
   duration: 0,
-  extraTime: 0,
   timeLeft: 0,
-  extraTimeAdded: false,
-  isAudioCompleted: false,
-  isRecording: false,
   isCameraOn: true,
   screenshotInterval: 40000,
   isLoading: false,
@@ -91,7 +72,6 @@ export const useInterviewStore = create<InterviewState>()((set, get) => ({
       set({
         phase: data.phase,
         questions: data.questions,
-        currentQuestion: data.currentQuestion,
         duration: data.duration * 60,
         timeLeft: data.timeLeft * 60,
         company: data.company || {},
@@ -101,13 +81,58 @@ export const useInterviewStore = create<InterviewState>()((set, get) => ({
     } catch (error) {}
   },
 
+  //   startInterview: async () => {
+  //   const { invitationId, candidate, job, questions } = get();
+  //   try {
+  //     set({ isLoading: true });
+
+  //     // Optional: update UI phase
+  //     set({ phase: 'in-progress' });
+
+  //     const baseInterviewData = {
+  //       userName: candidate?.name,
+  //       role: job?.jobTitle,
+  //       level: job?.experienceLevel,
+  //     };
+
+  //     const call = await createInterviewAssistant({
+  //       ...baseInterviewData,
+  //       questions,
+  //     });
+  //     console.log(call);
+  //     if (call?.id) {
+  //       await updateVapiCallId({ invitationId, callId: call.id });
+  //     } else {
+  //       console.error('Call ID is undefined');
+  //     }
+
+  //     // Optional: Return or trigger event so UI can set call status
+  //   } catch (error) {
+  //     showToast.error('Error starting the interview');
+  //   } finally {
+  //     set({ isLoading: false });
+  //   }
+  // },
+
   startInterview: async () => {
     try {
-      const invitationId = get().invitationId;
+      const { invitationId, candidate, job, questions } = get();
 
       set({ isLoading: true });
       var resposne = await startInterview({ invitationId });
-      set({ phase: 'welcome', questions: resposne.questions });
+      const baseInterviewData = {
+        userName: candidate?.name,
+        role: job?.jobTitle,
+        level: job?.experienceLevel,
+      };
+
+      const call = await createInterviewAssistant({ ...baseInterviewData, questions });
+      if (call?.id) {
+        await updateVapiCallId({ invitationId, callId: call.id });
+      } else {
+        console.error('Call ID is undefined');
+      }
+      set({ phase: 'in-progress', questions: resposne.questions });
     } catch (error) {
       showToast.error('Error starting the interview');
     } finally {
@@ -135,55 +160,6 @@ export const useInterviewStore = create<InterviewState>()((set, get) => ({
     } catch (error) {}
   },
 
-  finalizeRecording: async (publicUrl) => {
-    try {
-      const invitationId = get().invitationId;
-      if (!invitationId) {
-        throw new Error('Interview ID not found.');
-      }
-
-      const state = get();
-
-      await updateQuestion({
-        invitationId,
-        questionId: state.questions[state.currentQuestion].id,
-        recordedUrl: publicUrl,
-      });
-
-      set({
-        isRecording: false,
-        isAudioCompleted: true,
-      });
-    } catch (error) {
-      console.error('Error finalizing recording:', error);
-      showToast.error('Failed to update answer.');
-    }
-  },
-
-  updateCodeResult: async (code, output) => {
-    try {
-      const invitationId = get().invitationId;
-      if (!invitationId) {
-        throw new Error('Interview ID not found.');
-      }
-      const state = get();
-
-      await updateQuestion({
-        recordedUrl: '',
-        invitationId: invitationId,
-        questionId: state.questions[state.currentQuestion].id,
-        code: code,
-        output: output,
-      });
-
-      set({
-        currentQuestion: state.currentQuestion,
-        isAudioCompleted: false,
-        isRecording: false,
-      });
-    } catch (error) {}
-  },
-
   endInterview: async () => {
     try {
       const invitationId = get().invitationId;
@@ -203,21 +179,6 @@ export const useInterviewStore = create<InterviewState>()((set, get) => ({
     }
   },
 
-  stopRecordingAndNextQuestion: async () => {
-    const state = get();
-    if (state.currentQuestion < state.questions.length - 1) {
-      set({
-        currentQuestion: state.currentQuestion + 1,
-        isAudioCompleted: false,
-        isRecording: false,
-      });
-    } else {
-      await state.endInterview();
-      setTimeout(() => {
-        localStorage.removeItem('pageRefreshed');
-      }, 100);
-    }
-  },
   setInvitationId: (id: string) => set({ invitationId: id }),
 
   setTimeLeft: (time) =>
@@ -226,23 +187,8 @@ export const useInterviewStore = create<InterviewState>()((set, get) => ({
         return { phase: 'time-up', timeLeft: 0 };
       }
 
-      if (!state.extraTimeAdded && time <= state.duration * 0.2) {
-        showToast.error('80% of your interview time is completed! Extra time added.');
-        return {
-          timeLeft: time + state.extraTime,
-          extraTimeAdded: true,
-        };
-      }
-
       return { timeLeft: time };
     }),
 
   setPhase: (phase) => set({ phase }),
-  setAudioCompleted: (status) => set({ isAudioCompleted: status }),
-  setRecording: (status) => {
-    if (!status) {
-      get().stopRecordingAndNextQuestion();
-    }
-    set({ isRecording: status });
-  },
 }));

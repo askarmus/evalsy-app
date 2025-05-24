@@ -1,317 +1,166 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useInterviewStore } from '../stores/useInterviewStore';
 import UserCamera from './UserCamera';
 import InterviewNavbar from './InterviewNavbar';
-import { Button, Card, CardBody, Chip, ScrollShadow, Textarea, Tooltip } from '@heroui/react';
+import { Button, Card, CardBody } from '@heroui/react';
 import CandidateInfo from './CandidateInfo';
-import { FaExpand, FaMicrophone, FaMicrophoneAlt, FaPlay, FaStopCircle } from 'react-icons/fa';
-import { AnimatePresence, motion } from 'framer-motion';
 import PoweredBy from './PoweredBy';
-import InterviewProgress from './InterviewProgress';
-import { Editor } from '@monaco-editor/react';
-import { executeCode } from '@/app/utils/judge0';
-import { useTheme } from 'next-themes';
-import axios from 'axios';
-import { getUploadUrl, uploadRecordingBlob } from '@/services/interview.service';
 import { AntiCheat } from './AntiCheat';
-import WaveformVisualizer from './WaveformVisualizer';
-import ReactiveMicVisualizer from './WaveformVisualizer';
+import ConfirmDialog from '@/components/ConfirmDialog';
+import Image from 'next/image';
+import { createInterviewAssistant, vapi } from '@/lib/data/vapi.sdk';
+import { updateVapiCallId } from '@/services/interview.service';
+
+enum CallStatus {
+  INACTIVE = 'INACTIVE',
+  CONNECTING = 'CONNECTING',
+  ACTIVE = 'ACTIVE',
+  FINISHED = 'FINISHED',
+}
+
+interface SavedMessage {
+  role: 'user' | 'system' | 'assistant';
+  content: string;
+}
 
 const InterviewNavigator: React.FC = () => {
-  const { questions, invitationId, setPhase, micDeviceId, candidate, job, company, finalizeRecording, updateCodeResult, currentQuestion, setAudioCompleted, isRecording, setRecording } = useInterviewStore();
-
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-  const reminderAudioRef = useRef<HTMLAudioElement | null>(null);
-  const [reminderInterval, setReminderInterval] = useState<NodeJS.Timeout | null>(null);
-  const [isReplayingAudio, setIsReplayingAudio] = useState(false);
-  const [isResultUpdating, setIsResultUpdating] = useState(false);
-  const [isRefreshed, setIsRefreshed] = useState(false);
-  const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(null);
-  const question = questions[currentQuestion];
-  const { theme } = useTheme(); // Gets 'light' or 'dark'
-  const [recordingDuration, setRecordingDuration] = useState(0);
-  const recordingTimerRef = useRef<NodeJS.Timeout | null>(null);
-  const [micStream, setMicStream] = useState<MediaStream | null>(null);
+  const { questions, invitationId, micDeviceId, candidate, job, company, endInterview, isLoading } = useInterviewStore();
+  const [isConfirmDialogOpen, setConfirmDialogOpen] = useState(false);
+  const [isSpeaking, setIsSpeaking] = useState(false);
+  const [callStatus, setCallStatus] = useState<CallStatus>(CallStatus.INACTIVE);
+  const [messages, setMessages] = useState<SavedMessage[]>([]);
 
   useEffect(() => {
-    const isRefreshed = localStorage.getItem('pageRefreshed');
-    if (isRefreshed) {
-      localStorage.removeItem('pageRefreshed');
-      setIsRefreshed(false);
-    }
-    localStorage.setItem('pageRefreshed', 'true');
-    setIsRefreshed(true);
+    console.log('🎬 Setting up Vapi event listeners...');
+
+    const onCallStart = () => {
+      console.log('🔔 Call started');
+      setCallStatus(CallStatus.ACTIVE);
+    };
+
+    const onCallEnd = () => {
+      console.log('🔕 Call ended');
+      setCallStatus(CallStatus.FINISHED);
+    };
+
+    const onMessage = async (message: Message) => {
+      console.log('📨 Received message from Vapi:', message);
+
+      if (message.type === 'transcript' && message.transcriptType === 'final') {
+        console.log('✅ Final transcript:', message.transcript);
+
+        const userInput = message.transcript;
+        const newMessage = { role: message.role, content: userInput };
+        setMessages((prev) => [...prev, newMessage]);
+
+        try {
+          console.log('↩️ Sending user message to assistant...');
+          await vapi.send({
+            type: 'add-message',
+            message: {
+              role: 'user',
+              content: userInput,
+            },
+          });
+        } catch (err) {
+          console.error('❌ Failed to send user message:', err);
+        }
+      }
+    };
+
+    const onSpeechStart = () => {
+      console.log('🎙️ Speech started');
+      setIsSpeaking(true);
+    };
+
+    const onSpeechEnd = () => {
+      console.log('🔇 Speech ended');
+      setIsSpeaking(false);
+    };
+
+    const onError = (error: Error) => {
+      console.error('🚨 Vapi error:', error);
+    };
+
+    vapi.on('call-start', onCallStart);
+    vapi.on('call-end', onCallEnd);
+    vapi.on('message', onMessage);
+    vapi.on('speech-start', onSpeechStart);
+    vapi.on('speech-end', onSpeechEnd);
+    vapi.on('error', onError);
+
+    return () => {
+      vapi.off('call-start', onCallStart);
+      vapi.off('call-end', onCallEnd);
+      vapi.off('message', onMessage);
+      vapi.off('speech-start', onSpeechStart);
+      vapi.off('speech-end', onSpeechEnd);
+      vapi.off('error', onError);
+    };
   }, []);
 
-  useEffect(() => {
-    const playQuestionAudio = () => {
-      const audio = audioRef.current;
-      if (!audio) return;
-      audio.load();
-      setTimeout(() => {
-        audio.play().catch((error) => {
-          console.warn('Autoplay blocked or failed:', error);
-        });
-      }, 100);
-    };
-    playQuestionAudio();
-  }, [currentQuestion]);
-
-  const handleQuestionAudioEnd = () => {
-    setAudioCompleted(true);
-    playReminderAudio();
+  const handleEndClick = () => {
+    setConfirmDialogOpen(true);
   };
 
-  const [code, setCode] = useState<string>('');
-  const [output, setOutput] = useState<string>('');
-  const [codeExecuting, setCodeExecuting] = useState<boolean>(false);
-
-  const handleRun = async () => {
-    setCodeExecuting(true);
+  const handleConfirmEnd = async () => {
     try {
-      const result = await executeCode(code, 63);
-      setOutput(result.stdout || result.stderr || 'No output.');
-    } catch (error) {
-      setOutput('Error executing code.');
-    } finally {
-      setCodeExecuting(false);
-    }
-  };
-
-  const handleStartRecording = async () => {
-    setRecording(true);
-    setAudioCompleted(false);
-
-    setRecordingDuration(0);
-    recordingTimerRef.current = setInterval(() => {
-      setRecordingDuration((prev) => prev + 1);
-    }, 1000);
-
-    const questionId = question.id;
-
-    let uploadUrl = '';
-    let publicUrl = '';
-
-    try {
-      const res = await getUploadUrl(invitationId, questionId);
-      uploadUrl = res.uploadUrl;
-      publicUrl = res.publicUrl;
-    } catch (error: any) {
-      const message = error?.response?.data?.error || error?.message || 'Failed to get upload URL';
-      console.error('Failed to fetch upload URL:', message);
-      setRecording(false);
-      return;
-    }
-
-    const stream = await navigator.mediaDevices.getUserMedia({
-      audio: micDeviceId ? { deviceId: { exact: micDeviceId } } : true,
-    });
-
-    setMicStream(stream);
-
-    const recorder = new MediaRecorder(stream, { mimeType: 'audio/webm' });
-    const chunks: Blob[] = [];
-
-    recorder.ondataavailable = (event) => {
-      if (event.data.size > 0) chunks.push(event.data);
-    };
-
-    recorder.onstop = async () => {
-      const fullBlob = new Blob(chunks, { type: 'audio/webm' });
-
-      setIsResultUpdating(true);
-      setMicStream(null);
+      console.log('📴 Disconnecting call...');
       try {
-        await uploadRecordingBlob(uploadUrl, fullBlob);
-      } catch (error: any) {
-        const message = error?.response?.data || error?.response?.statusText || error?.message || 'Upload failed';
-        console.error('Upload failed:', message);
-        throw new Error('Upload failed: ' + message);
+        setCallStatus(CallStatus.FINISHED);
+        await vapi.stop();
+      } catch (error) {
+        console.error('❌ Error stopping interview:', error);
       }
-
-      await finalizeRecording(publicUrl);
-      setIsResultUpdating(false);
-      setRecording(false);
-
-      if (recordingTimerRef.current) {
-        clearInterval(recordingTimerRef.current);
-        recordingTimerRef.current = null;
-      }
-    };
-
-    recorder.start();
-    setMediaRecorder(recorder);
-  };
-
-  const formatDuration = (seconds: number) => {
-    const mins = Math.floor(seconds / 60)
-      .toString()
-      .padStart(2, '0');
-    const secs = (seconds % 60).toString().padStart(2, '0');
-    return `${mins}:${secs}`;
-  };
-
-  const handleStopRecording = async () => {
-    if (mediaRecorder) {
-      mediaRecorder.stop();
-      mediaRecorder.stream.getTracks().forEach((track) => track.stop());
+      await endInterview();
+      setConfirmDialogOpen(false);
+    } catch (error) {
+      console.error('Error ending interview', error);
     }
   };
 
-  const handleCodeFinish = async () => {
-    setIsResultUpdating(true);
-    await updateCodeResult(code, output);
-    setIsResultUpdating(false);
-    setRecording(false);
+  const handleCancelEnd = () => {
+    setConfirmDialogOpen(false);
   };
 
-  const handleReplayAudio = () => {
-    if (audioRef.current) {
-      setIsReplayingAudio(true);
-      audioRef.current.play();
-    }
-  };
-
-  const handleStopReplayAudio = () => {
-    if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current.currentTime = 0;
-    }
-    setIsReplayingAudio(false);
-    setAudioCompleted(true);
-  };
-
-  const handleReplayAudioEnded = () => {
-    setIsReplayingAudio(false);
-    setAudioCompleted(true);
-  };
-
-  const playReminderAudio = () => {
-    if (reminderAudioRef.current && !isRecording && question.type === 'verbal') {
-      reminderAudioRef.current.play();
-      if (!reminderInterval) {
-        const interval = setInterval(() => {
-          if (!isRecording && reminderAudioRef.current) {
-            // reminderAudioRef.current.play();
-          }
-        }, 10000);
-        setReminderInterval(interval);
-      }
-    }
-  };
-
+  const isCallInactiveOrFinished = callStatus === CallStatus.INACTIVE || callStatus === CallStatus.FINISHED;
   return (
     <div className="min-h-screen flex items-center justify-center  ">
       <div className="w-full max-w-screen-lg mx-auto px-6 py-8">
         <InterviewNavbar company={company} />
         <AntiCheat invitationId={invitationId} fraudDetection={job.fraudDetection} />
-        <Card className="w-full p-0 mt-6  dark:border-gray-900 overflow-hidden bg-white/90 dark:bg-gray-900">
+        <Card className="w-full p-0 mt-6  ">
           <CardBody className="p-0">
-            <CandidateInfo candidate={candidate} job={job} company={company} questions={questions} currentQuestion={currentQuestion} invitationId={invitationId} />
-            <div className="grid md:grid-cols-5 gap-0">
-              <div className="md:col-span-3 bg-slate-50 dark:bg-slate-800 p-4 border-l border-gray-200 dark:border-gray-900">
-                <div className=" ">
-                  <InterviewProgress candidate={candidate} job={job} company={company} questions={questions} currentQuestion={currentQuestion} />
-                  <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="flex items-center justify-between mt-6 gap-4">
-                    <h3 className="text-md font-semibold text-gray-800 dark:text-gray-100 leading-tight">{question.text}</h3>
-
-                    <div className="shrink-0">
-                      {!isReplayingAudio ? (
-                        <Button size="sm" variant="solid" radius="full" color="default" startContent={<FaPlay />} isDisabled={!isRefreshed || isRecording} onPress={handleReplayAudio}>
-                          Replay Audio
-                        </Button>
-                      ) : (
-                        <Button size="sm" variant="bordered" radius="full" startContent={<FaStopCircle />} color="warning" onPress={handleStopReplayAudio}>
-                          Stop Replay
-                        </Button>
-                      )}
-                    </div>
-                  </motion.div>
-
-                  {isRecording && micStream && (
-                    <div className="flex justify-center py-8">
-                      <ReactiveMicVisualizer stream={micStream} />
-                    </div>
-                  )}
-                  <audio ref={audioRef} onEnded={handleQuestionAudioEnd} onPlay={() => setIsReplayingAudio(true)} onPause={handleReplayAudioEnded}>
-                    <source src={question?.audioUrl} type="audio/wav" />
-                    Your browser does not support the audio element.
-                  </audio>
-
-                  <audio ref={reminderAudioRef}>
-                    <source src={company.answerQuestionAudioUrl} type="audio/wav" />
-                    Your browser does not support the audio element.
-                  </audio>
-
-                  {question.type == 'coding' && (
-                    <div className="mt-6">
-                      <Editor
-                        className={`rounded-xl ${theme === 'dark' ? 'border-8 border-gray-900' : 'border-8 border-white'}`}
-                        height={400}
-                        language={question.lannguage}
-                        defaultLanguage="javascript"
-                        options={{
-                          minimap: { enabled: false }, // Optional: hides the minimap
-                        }}
-                        value={question.starterCode}
-                        onChange={(value) => setCode(value || '')}
-                        theme={theme === 'dark' ? 'vs-dark' : 'light'}
-                      />
-                    </div>
-                  )}
+            <CandidateInfo candidate={candidate} job={job} company={company} questions={questions} invitationId={invitationId} />
+            <div className="grid md:grid-cols-6 gap-0">
+              <div className="md:col-span-3   p-4 border-l border-gray-200 dark:border-gray-900 flex items-center justify-center">
+                <div className="card-interviewer">
+                  <div className="avatar">
+                    <Image src="/ai-avatar.png" alt="vapi" width={65} height={54} className="object-cover" />
+                    {isSpeaking && <span className="animate-speak" />}
+                  </div>
+                  <h3>AI Interviewer</h3>
                 </div>
               </div>
-              <div className="md:col-span-2 bg-slate-50 dark:bg-gray-900 border-l border-gray-200 dark:border-gray-900">
-                {question.type == 'coding' && (
-                  <div className="p-2 coding-instruction mt-3">
-                    <div className="max-w-xl mx-auto   space-y-2">
-                      <div className="flex items-center">
-                        <h2 className="text-xs font-semibold">Instruction:</h2>
-                      </div>
-                      <div dangerouslySetInnerHTML={{ __html: question.explanation }} />
-                    </div>
-                  </div>
-                )}
 
-                {question.type == 'verbal' && <UserCamera height="500" hideRecLabel={false} invitationId={invitationId} />}
-
-                {question.type == 'coding' && (
-                  <div className="p-2">
-                    <h3 className="text-xs font-semibold mb-4">Output</h3>
-                    <div>
-                      <Textarea readOnly value={output} className="w-full" variant="bordered">
-                        {output}
-                      </Textarea>
-                    </div>
-                  </div>
-                )}
+              <div className="md:col-span-3  ">
+                <UserCamera height="500" hideRecLabel={false} invitationId={invitationId} />
               </div>
             </div>
-
-            {question.type == 'coding' && (
-              <div className="p-6 bg-gradient-to-r from-slate-50 to-white dark:from-slate-800 dark:to-slate-900 rounded-b-xl border-t border-gray-200 dark:border-gray-700 flex flex-col sm:flex-row gap-3">
-                <Button color="success" className="text-white" size="md" radius="full" variant="solid" startContent={<FaPlay />} isDisabled={codeExecuting} onPress={handleRun}>
-                  Run Code
-                </Button>
-
-                <Button color="default" isLoading={isResultUpdating} size="md" radius="full" variant="solid" startContent={<FaExpand />} onPress={handleCodeFinish}>
-                  {isResultUpdating ? 'Loading Next Question...' : 'Next Question'}
-                </Button>
+            <div className="p-6 flex items-center justify-center  rounded-b-xl border-t border-gray-200 dark:border-gray-700 flex flex-col sm:flex-row gap-3">
+              <div className="flex items-center gap-2">
+                <>
+                  <div className="w-full flex justify-center">
+                    {callStatus !== 'ACTIVE' && (
+                      <Button onPress={handleEndClick} isDisabled={isLoading} isLoading={isLoading} color="danger" size="lg" variant="shadow" radius="full">
+                        End Interview
+                      </Button>
+                    )}
+                  </div>
+                </>
               </div>
-            )}
-            {question.type == 'verbal' && (
-              <div className="p-6 bg-gradient-to-r from-slate-50 to-white dark:from-slate-800 dark:to-slate-900 rounded-b-xl border-t border-gray-200 dark:border-gray-700 flex flex-col sm:flex-row gap-3">
-                {!isRecording ? (
-                  <Button color="danger" size="md" radius="full" variant="solid" startContent={<FaMicrophoneAlt />} isDisabled={!isRefreshed || isReplayingAudio || isRecording || isResultUpdating} onPress={handleStartRecording}>
-                    Record Answer
-                  </Button>
-                ) : (
-                  <Button color="danger" size="md" radius="full" variant="solid" isDisabled={isResultUpdating} onPress={handleStopRecording}>
-                    {isResultUpdating ? 'Loading Next Question...' : `Stop Recording (${formatDuration(recordingDuration)})`}
-                  </Button>
-                )}
-              </div>
-            )}
+              <ConfirmDialog isOpen={isConfirmDialogOpen} onClose={handleCancelEnd} title="End Interview" description="Are you sure you want to end the interview?" onConfirm={handleConfirmEnd} confirmButtonText="End" cancelButtonText="Cancel" />
+            </div>
           </CardBody>
         </Card>
         <PoweredBy />

@@ -32,28 +32,28 @@ export const NavbarWrapper = () => {
 
       <NavbarContent className="hidden sm:flex gap-4" justify="center">
         <NavbarItem isActive={currentPath === '/dashboard'}>
-          <Link className="flex items-center text-md hover:text-blue-100 gap-2" href="/dashboard">
+          <Link className="flex items-center text-sm hover:text-blue-100 gap-2" href="/dashboard">
             <AiOutlineHome />
             Dashboard
           </Link>
         </NavbarItem>
 
         <NavbarItem isActive={currentPath === '/interviews/list'}>
-          <Link className="flex items-center text-md hover:text-blue-100 gap-2" href="/interviews/list">
+          <Link className="flex items-center text-sm hover:text-blue-100 gap-2" href="/interviews/list">
             <AiOutlineShopping />
             Interview
           </Link>
         </NavbarItem>
 
         <NavbarItem isActive={currentPath === '/result'}>
-          <Link className="flex items-center text-md hover:text-blue-100 gap-2" href="/result">
+          <Link className="flex items-center text-sm hover:text-blue-100 gap-2" href="/result">
             <AiOutlineNotification />
             Result
           </Link>
         </NavbarItem>
 
         <NavbarItem isActive={currentPath === '/company/settings'}>
-          <Link className="flex items-center text-md hover:text-blue-100 gap-2" href="/company/settings">
+          <Link className="flex items-center text-sm hover:text-blue-100 gap-2" href="/company/settings">
             <AiOutlineSetting />
             Settings
           </Link>
