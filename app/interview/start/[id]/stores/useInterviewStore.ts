@@ -48,7 +48,7 @@ export const useInterviewStore = create<InterviewState>()((set, get) => ({
   duration: 0,
   timeLeft: 0,
   isCameraOn: true,
-  screenshotInterval: 40000,
+  screenshotInterval: 80000,
   isLoading: false,
   company: null,
   job: null,
@@ -80,39 +80,6 @@ export const useInterviewStore = create<InterviewState>()((set, get) => ({
       });
     } catch (error) {}
   },
-
-  //   startInterview: async () => {
-  //   const { invitationId, candidate, job, questions } = get();
-  //   try {
-  //     set({ isLoading: true });
-
-  //     // Optional: update UI phase
-  //     set({ phase: 'in-progress' });
-
-  //     const baseInterviewData = {
-  //       userName: candidate?.name,
-  //       role: job?.jobTitle,
-  //       level: job?.experienceLevel,
-  //     };
-
-  //     const call = await createInterviewAssistant({
-  //       ...baseInterviewData,
-  //       questions,
-  //     });
-  //     console.log(call);
-  //     if (call?.id) {
-  //       await updateVapiCallId({ invitationId, callId: call.id });
-  //     } else {
-  //       console.error('Call ID is undefined');
-  //     }
-
-  //     // Optional: Return or trigger event so UI can set call status
-  //   } catch (error) {
-  //     showToast.error('Error starting the interview');
-  //   } finally {
-  //     set({ isLoading: false });
-  //   }
-  // },
 
   startInterview: async () => {
     try {

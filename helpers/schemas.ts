@@ -43,9 +43,9 @@ export const AddJobSchema = Yup.object()
   .shape({
     jobTitle: Yup.string().required('Title is required'),
     totalRandomVerbalQuestion: Yup.number().required(),
-    totalRandomCodingQuestion: Yup.number().required(),
     description: Yup.string().required('Job description is required'),
     experienceLevel: Yup.string().required('Please select an experience level'),
+
     questions: Yup.array()
       .of(
         Yup.object().shape({
@@ -66,7 +66,6 @@ export const AddJobSchema = Yup.object()
 export const SendInvitationSchema = object().shape({
   name: string().required('Name is required'),
   email: string().email('Invalid email address').required('Email is required'),
-  expires: string().required('Expiration date is required'),
 });
 
 export const CompanySettingsSchema = object().shape({

@@ -61,8 +61,6 @@ export const SendInvitationDrawer: React.FC<SendInvitationDrawerProps> = ({ isOp
           name: '',
           email: '',
           message: '',
-          expires: '',
-          duration: 15,
         },
       });
     } catch (error) {
@@ -75,8 +73,6 @@ export const SendInvitationDrawer: React.FC<SendInvitationDrawerProps> = ({ isOp
     name: name || '',
     email: email || '',
     message: '',
-    expires: '',
-    duration: 15,
   };
 
   return (
@@ -101,31 +97,7 @@ export const SendInvitationDrawer: React.FC<SendInvitationDrawerProps> = ({ isOp
                     isInvalid={!!errors.message && !!touched.message}
                     errorMessage={errors.message}
                   />
-                  <div className="flex justify-between gap-4  items-center ">
-                    <Slider
-                      className="max-w-full"
-                      defaultValue={30}
-                      value={values.duration}
-                      label="Duration (Minutes)"
-                      maxValue={120}
-                      minValue={15}
-                      showSteps={true}
-                      size="sm"
-                      step={15}
-                      onChange={(e) =>
-                        handleChange({
-                          target: { name: 'duration', value: Number(e) },
-                        })
-                      }
-                    />
-                  </div>
-                  <RadioGroup label="Expires" size="sm" defaultValue={'7'} orientation="horizontal" value={values.expires} onChange={handleChange('expires')} isInvalid={!!errors.expires && !!touched.expires} errorMessage={errors.expires}>
-                    <Radio value="3">3 Days</Radio>
-                    <Radio value="7">One Week</Radio>
-                    <Radio value="14">Two Weeks</Radio>
-                    <Radio value="30">1 Month</Radio>
-                    <Radio value="10000">No Expiry</Radio>
-                  </RadioGroup>
+
                   <div className="mt-6">
                     <Button color="primary" className="mr-2" isLoading={loading} onPress={handleSubmit as any}>
                       Send
@@ -139,8 +111,6 @@ export const SendInvitationDrawer: React.FC<SendInvitationDrawerProps> = ({ isOp
                             name: '',
                             email: '',
                             message: '',
-                            expires: '',
-                            duration: 15,
                           },
                         })
                       }

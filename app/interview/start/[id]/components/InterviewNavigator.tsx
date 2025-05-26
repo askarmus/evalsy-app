@@ -8,8 +8,9 @@ import PoweredBy from './PoweredBy';
 import { AntiCheat } from './AntiCheat';
 import ConfirmDialog from '@/components/ConfirmDialog';
 import Image from 'next/image';
-import { createInterviewAssistant, vapi } from '@/lib/data/vapi.sdk';
-import { updateVapiCallId } from '@/services/interview.service';
+import { vapi } from '@/lib/data/vapi.sdk';
+import SpeakingIndicatorSoft from './SpeakingIndicator';
+import { FaMicrophone, FaMicrophoneSlash, FaTimes, FaVideo, FaVideoSlash } from 'react-icons/fa';
 
 enum CallStatus {
   INACTIVE = 'INACTIVE',
@@ -24,11 +25,12 @@ interface SavedMessage {
 }
 
 const InterviewNavigator: React.FC = () => {
-  const { questions, invitationId, micDeviceId, candidate, job, company, endInterview, isLoading } = useInterviewStore();
+  const { questions, invitationId, micDeviceId, phase, candidate, job, company, endInterview, isLoading } = useInterviewStore();
   const [isConfirmDialogOpen, setConfirmDialogOpen] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [callStatus, setCallStatus] = useState<CallStatus>(CallStatus.INACTIVE);
   const [messages, setMessages] = useState<SavedMessage[]>([]);
+  const [isCameraOn, setIsCameraOn] = useState(true);
 
   useEffect(() => {
     console.log('🎬 Setting up Vapi event listeners...');
@@ -78,8 +80,9 @@ const InterviewNavigator: React.FC = () => {
       setIsSpeaking(false);
     };
 
-    const onError = (error: Error) => {
+    const onError = async (error: Error) => {
       console.error('🚨 Vapi error:', error);
+      await handleConfirmEnd();
     };
 
     vapi.on('call-start', onCallStart);
@@ -102,6 +105,9 @@ const InterviewNavigator: React.FC = () => {
   const handleEndClick = () => {
     setConfirmDialogOpen(true);
   };
+  const handleMute = () => {
+    vapi.setMuted(!vapi.isMuted());
+  };
 
   const handleConfirmEnd = async () => {
     try {
@@ -123,38 +129,39 @@ const InterviewNavigator: React.FC = () => {
     setConfirmDialogOpen(false);
   };
 
-  const isCallInactiveOrFinished = callStatus === CallStatus.INACTIVE || callStatus === CallStatus.FINISHED;
   return (
     <div className="min-h-screen flex items-center justify-center  ">
       <div className="w-full max-w-screen-lg mx-auto px-6 py-8">
         <InterviewNavbar company={company} />
         <AntiCheat invitationId={invitationId} fraudDetection={job.fraudDetection} />
-        <Card className="w-full p-0 mt-6  ">
+        <Card className="w-full p-0 mt-4  ">
           <CardBody className="p-0">
             <CandidateInfo candidate={candidate} job={job} company={company} questions={questions} invitationId={invitationId} />
             <div className="grid md:grid-cols-6 gap-0">
-              <div className="md:col-span-3   p-4 border-l border-gray-200 dark:border-gray-900 flex items-center justify-center">
-                <div className="card-interviewer">
-                  <div className="avatar">
-                    <Image src="/ai-avatar.png" alt="vapi" width={65} height={54} className="object-cover" />
-                    {isSpeaking && <span className="animate-speak" />}
-                  </div>
-                  <h3>AI Interviewer</h3>
-                </div>
+              <div className="md:col-span-3  bg-gray-900  p-4   flex items-center justify-center">
+                <SpeakingIndicatorSoft isSpeaking={isSpeaking} />
               </div>
 
               <div className="md:col-span-3  ">
-                <UserCamera height="500" hideRecLabel={false} invitationId={invitationId} />
+                <UserCamera isCameraOn={isCameraOn} hideRecLabel={false} invitationId={invitationId} />
               </div>
             </div>
-            <div className="p-6 flex items-center justify-center  rounded-b-xl border-t border-gray-200 dark:border-gray-700 flex flex-col sm:flex-row gap-3">
+            <div className="p-4 flex items-center justify-center  rounded-b-xl  flex flex-col sm:flex-row gap-3">
               <div className="flex items-center gap-2">
                 <>
                   <div className="w-full flex justify-center">
-                    {callStatus !== 'ACTIVE' && (
-                      <Button onPress={handleEndClick} isDisabled={isLoading} isLoading={isLoading} color="danger" size="lg" variant="shadow" radius="full">
-                        End Interview
-                      </Button>
+                    {phase === 'in-progress' && (
+                      <div className="gap-2 flex items-center justify-center">
+                        <Button onPress={handleEndClick} isDisabled={isLoading} isLoading={isLoading} isIconOnly color="danger" size="md" variant="bordered" radius="full">
+                          <FaTimes />
+                        </Button>
+                        <Button onPress={handleMute} isDisabled={isLoading} isLoading={isLoading} isIconOnly color="default" size="md" variant="bordered" radius="full">
+                          {vapi.isMuted() ? <FaMicrophoneSlash /> : <FaMicrophone />}
+                        </Button>
+                        <Button onPress={() => setIsCameraOn((prev) => !prev)} isDisabled={isLoading} isLoading={isLoading} isIconOnly color="default" size="md" variant="bordered" radius="full">
+                          {isCameraOn ? <FaVideo /> : <FaVideoSlash />}
+                        </Button>
+                      </div>
                     )}
                   </div>
                 </>

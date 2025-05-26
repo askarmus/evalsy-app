@@ -16,14 +16,6 @@ const InterviewNavbar: React.FC<any> = ({ company }) => {
           <p className="text-xs">Technical Interview</p>
         </div>
       </div>
-
-      <div className="flex items-center gap-2">
-        {phase === 'in-progress' && (
-          <>
-            <InterviewTimer />
-          </>
-        )}
-      </div>
     </div>
   );
 };

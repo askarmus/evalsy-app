@@ -8,7 +8,8 @@ export interface AddJobFormValues {
   experienceLevel: string;
   description: string;
   prompt?: string;
-
+  expires: string;
+  duration: 10;
   fraudDetection: {
     tabSwitch: boolean;
     rightClick: boolean;

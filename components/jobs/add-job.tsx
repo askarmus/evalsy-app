@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
-import { Button, Card, CardBody, Input, Pagination, NumberInput, Chip, Tooltip, Select, SelectItem, Textarea } from '@heroui/react';
+import { Button, Card, CardBody, Input, Pagination, NumberInput, Chip, Tooltip, Select, SelectItem, Textarea, RadioGroup, Radio, Slider } from '@heroui/react';
 import { Formik, FormikHelpers } from 'formik';
 import { showToast } from '@/app/utils/toastUtils';
 import { createJob, generateJobDescriptionFromAI, getJobById, updateJob } from '@/services/job.service';
@@ -119,6 +119,11 @@ export const AddJob = () => {
 
   const handleSubmit = async (values: AddJobFormValues, { resetForm }: FormikHelpers<AddJobFormValues>) => {
     setLoading(true);
+
+    let currentDate = new Date();
+    currentDate.setDate(currentDate.getDate() + 1);
+    values.expires = currentDate.toISOString();
+
     try {
       if (!isEditMode) {
         await createJob(values);
@@ -290,7 +295,7 @@ export const AddJob = () => {
                               <Button
                                 endContent={
                                   <svg xmlns="http://www.w3.org/2000/svg" width="4em" height="4em" fill="none" viewBox="0 0 18 18" className="text-lg">
-                                    <path stroke="#53B43B" stroke-linecap="round" stroke-linejoin="round" d="M2.623 15.373a1.59 1.59 0 0 0 2.25 0l9.75-9.75a1.59 1.59 0 0 0 0-2.25 1.59 1.59 0 0 0-2.25 0l-9.75 9.75a1.59 1.59 0 0 0 0 2.25M13.508 6.742l-2.25-2.25M6.375 1.83 7.5 1.5l-.33 1.125.33 1.125-1.125-.33-1.125.33.33-1.125L5.25 1.5zM3.375 6.33 4.5 6l-.33 1.125.33 1.125-1.125-.33-1.125.33.33-1.125L2.25 6zM14.625 10.08l1.125-.33-.33 1.125.33 1.125-1.125-.33L13.5 12l.33-1.125-.33-1.125z"></path>
+                                    <path stroke="#53B43B" d="M2.623 15.373a1.59 1.59 0 0 0 2.25 0l9.75-9.75a1.59 1.59 0 0 0 0-2.25 1.59 1.59 0 0 0-2.25 0l-9.75 9.75a1.59 1.59 0 0 0 0 2.25M13.508 6.742l-2.25-2.25M6.375 1.83 7.5 1.5l-.33 1.125.33 1.125-1.125-.33-1.125.33.33-1.125L5.25 1.5zM3.375 6.33 4.5 6l-.33 1.125.33 1.125-1.125-.33-1.125.33.33-1.125L2.25 6zM14.625 10.08l1.125-.33-.33 1.125.33 1.125-1.125-.33L13.5 12l.33-1.125-.33-1.125z"></path>
                                   </svg>
                                 }
                                 variant="bordered"
@@ -348,6 +353,30 @@ export const AddJob = () => {
                               <NumberInput variant="bordered" maxValue={values.questions.length} value={values.totalRandomVerbalQuestion} onValueChange={(val) => setFieldValue('totalRandomVerbalQuestion', val)} />
                               <p className="text-xs text-gray-400 mt-1">Random questions mean picking 5 questions out of 50 that are marked as random.</p>
                             </div>
+                            <Slider
+                              className="max-w-full"
+                              defaultValue={5}
+                              value={values.duration}
+                              label="Duration (Minutes)"
+                              maxValue={20}
+                              minValue={5}
+                              showSteps={true}
+                              size="sm"
+                              step={5}
+                              onChange={(e) =>
+                                handleChange({
+                                  target: { name: 'duration', value: Number(e) },
+                                })
+                              }
+                            />
+
+                            <RadioGroup label="Expires" size="sm" defaultValue={'7'} orientation="horizontal" value={values.expires} onChange={handleChange('expires')} isInvalid={!!errors.expires && !!touched.expires} errorMessage={errors.expires}>
+                              <Radio value="3">3 Days</Radio>
+                              <Radio value="7">One Week</Radio>
+                              <Radio value="14">Two Weeks</Radio>
+                              <Radio value="30">1 Month</Radio>
+                              <Radio value="10000">No Expiry</Radio>
+                            </RadioGroup>
                           </div>
                         </>
                       )}
