@@ -32,7 +32,7 @@ export default function Component() {
       icon: FaVideo,
       title: 'Interviewing',
       description: 'Conduct asynchronous or live AI-powered interview sessions to assess candidate responses with speed and consistency.',
-      image: '/feature-screen/post.png',
+      image: '/feature-screen/online-interview.png',
     },
     {
       icon: FaChartBar,
