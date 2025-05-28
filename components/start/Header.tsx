@@ -43,11 +43,11 @@ export const Header: React.FC = () => {
                     Sign in
                   </Link>
                 </div>
-                <Link className="group inline-flex items-center justify-center rounded-full py-3 px-5 text-sm font-semibold focus:outline-hidden focus-visible:outline-2 focus-visible:outline-offset-2 bg-blue-600 text-white hover:text-slate-100 hover:bg-blue-500 active:bg-blue-800 active:text-blue-100 focus-visible:outline-blue-600" href="/signup">
+                {/* <Link className="group inline-flex items-center justify-center rounded-full py-3 px-5 text-sm font-semibold focus:outline-hidden focus-visible:outline-2 focus-visible:outline-offset-2 bg-blue-600 text-white hover:text-slate-100 hover:bg-blue-500 active:bg-blue-800 active:text-blue-100 focus-visible:outline-blue-600" href="/signup">
                   <span>
                     Get started <span className="hidden lg:inline">today</span>
                   </span>
-                </Link>
+                </Link> */}
               </>
             )}
 
