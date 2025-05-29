@@ -1,5 +1,5 @@
 import { createCheckoutSession } from '@/services/credits.service';
-import { useDisclosure, Modal, ModalContent, ModalHeader, ModalBody, Card, CardBody, Button, ModalFooter, Badge, Chip } from '@heroui/react';
+import { useDisclosure, Modal, ModalContent, ModalHeader, ModalBody, Card, CardBody, Button, ModalFooter, Chip } from '@heroui/react';
 
 type TopUpCreditsModalProps = {
   modal: ReturnType<typeof useDisclosure>;
@@ -7,11 +7,28 @@ type TopUpCreditsModalProps = {
 
 export const TopUpCreditsModal = ({ modal }: TopUpCreditsModalProps) => {
   const { isOpen, onOpenChange } = modal;
+
   const packages = [
-    { credits: 50, price: 1000, description: 'Perfect for small projects or getting started with basic features.', popular: false },
-    { credits: 200, price: 3500, description: 'Our most popular option. Ideal for regular users with ongoing projects.', popular: true },
-    { credits: 500, price: 7500, description: 'Best value for power users. Unlimited access to all premium features.', popular: false },
+    {
+      credits: 50,
+      price: 1000, // $10.00
+      description: 'Best for light hiring or quick interview sessions.',
+      popular: false,
+    },
+    {
+      credits: 200,
+      price: 3500, // $35.00
+      description: 'Great value for regular hiring needs and mid-sized teams.',
+      popular: true,
+    },
+    {
+      credits: 500,
+      price: 7500, // $75.00
+      description: 'Ideal for agencies and high-volume hiring pipelines.',
+      popular: false,
+    },
   ];
+
   const handleBuy = async (credits: number) => {
     try {
       const url = await createCheckoutSession(credits);
@@ -40,7 +57,6 @@ export const TopUpCreditsModal = ({ modal }: TopUpCreditsModalProps) => {
                           </Chip>
                         )}
                       </div>
-
                       <p className="text-sm text-default-500">${(price / 100).toFixed(2)}</p>
                       <p className="text-sm text-default-500">{description}</p>
                     </div>

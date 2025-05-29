@@ -31,7 +31,10 @@ const CompanySettingsPage = () => {
               <nav className="flex flex-row lg:flex-col gap-2 w-auto lg:w-full bg-default-100 p-1.5 rounded-lg" aria-label="Tabs" role="tablist" aria-orientation="horizontal">
                 {TABS.map((tab) => (
                   <button key={tab} type="button" className={`text-start py-2 px-4 rounded bg-transparent transition-all ${activeTab === tab ? 'bg-white text-primary' : 'text-default-700'}`} onClick={() => setActiveTab(tab)} aria-selected={activeTab === tab} role="tab">
-                    {tab.charAt(0).toUpperCase() + tab.slice(1)}
+                    {tab
+                      .replace(/([a-z])([A-Z])/g, '$1 $2')
+                      .charAt(0)
+                      .toUpperCase() + tab.replace(/([a-z])([A-Z])/g, '$1 $2').slice(1)}
                   </button>
                 ))}
               </nav>

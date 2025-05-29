@@ -56,7 +56,7 @@ export const AddJob = () => {
     },
     {
       icon: <FaCogs className="w-5 h-5 text-xl text-primary-300" />,
-      title: 'Random Settings',
+      title: 'Settings',
       description: 'Miscellaneous configurations and settings',
     },
     {
@@ -308,8 +308,18 @@ export const AddJob = () => {
                               </Button>
                             </div>
 
-                            <h1 className="text-sm font-semibold ">Job description</h1>
-                            <RichTextEditor value={values.description} onChange={(val) => setFieldValue('description', val)} />
+                            <RichTextEditor
+                              value={values.description}
+                              onChange={(val) => {
+                                setFieldValue('description', val);
+
+                                // Optional: Mark as touched on first edit if not already
+                                if (!touched.description) {
+                                  setTouched({ ...touched, description: true });
+                                }
+                              }}
+                            />
+                            {touched.description && errors.description && <p className="text-sm text-red-600 mt-1">{errors.description}</p>}
                           </div>
                         </>
                       )}
@@ -345,9 +355,9 @@ export const AddJob = () => {
                       {currentStep === 2 && (
                         <>
                           <div className="mb-5">
-                            <h1 className=" text-xl/[24px] font-semibold text-tertiary  md:text-[20px]/[24px]">Random Settings</h1>
+                            <h1 className=" text-xl/[24px] font-semibold text-tertiary  md:text-[20px]/[24px]">Settings</h1>
                           </div>
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                          <div className="grid grid-cols-1  gap-6">
                             <div>
                               <h1 className="text-sm font-semibold  mb-0">Total verbal questions ({values.questions.length})</h1>
                               <NumberInput variant="bordered" maxValue={values.questions.length} value={values.totalRandomVerbalQuestion} onValueChange={(val) => setFieldValue('totalRandomVerbalQuestion', val)} />
@@ -370,7 +380,7 @@ export const AddJob = () => {
                               }
                             />
 
-                            <RadioGroup label="Expires" size="sm" defaultValue={'7'} orientation="horizontal" value={values.expires} onChange={handleChange('expires')} isInvalid={!!errors.expires && !!touched.expires} errorMessage={errors.expires}>
+                            <RadioGroup label="Expires" size="sm" orientation="horizontal" value={values.expires} onChange={handleChange('expires')} isInvalid={!!errors.expires && !!touched.expires} errorMessage={errors.expires}>
                               <Radio value="3">3 Days</Radio>
                               <Radio value="7">One Week</Radio>
                               <Radio value="14">Two Weeks</Radio>

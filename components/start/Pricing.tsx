@@ -7,10 +7,8 @@ export const Pricing = () => {
     <section id="pricing" className="bg-slate-900 py-20 sm:py-32">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="text-center">
-          <h2 className="font-display text-3xl tracking-tight text-white sm:text-4xl">Simple, Pay-As-You-Go Pricing</h2>
-          <p className="mt-4 text-lg text-slate-400">
-            Start with as low as <strong>$10</strong>. Buy credits and use them however you need — no subscriptions, no limits.
-          </p>
+          <h2 className="font-display text-3xl tracking-tight text-white sm:text-4xl">Simple, Usage-Based Pricing</h2>
+          <p className="mt-4 text-lg text-slate-400">Only pay for what you use — credits are flexible, fair, and never expire.</p>
         </div>
 
         <div className="mt-16 grid grid-cols-1 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 gap-x-6">
@@ -29,11 +27,11 @@ export const Pricing = () => {
               </li>
               <li className="flex items-center">
                 <AiOutlineCheckCircle className="text-blue-200 mr-3 h-5 w-5" />
-                Access to all features
+                Full access to AI interviews
               </li>
               <li className="flex items-center">
                 <AiOutlineCheckCircle className="text-blue-200 mr-3 h-5 w-5" />
-                No commitment, cancel anytime
+                Cancel anytime, no commitment
               </li>
             </ul>
           </div>
@@ -41,7 +39,7 @@ export const Pricing = () => {
           {/* Credit Packages */}
           <div className="rounded-3xl bg-white/5 p-8 text-white border border-slate-700 shadow-md">
             <h3 className="text-2xl font-semibold">Credit Packages</h3>
-            <p className="mt-2 text-sm text-slate-400">Pick the pack that fits your hiring volume.</p>
+            <p className="mt-2 text-sm text-slate-400">Buy once, use anytime — credits never expire.</p>
             <ul className="mt-6 space-y-4 text-sm">
               <li className="flex items-center">
                 <AiOutlineCheckCircle className="text-slate-400 mr-3 h-5 w-5" />
@@ -65,28 +63,30 @@ export const Pricing = () => {
           {/* Credit Usage */}
           <div className="rounded-3xl bg-white/5 p-8 text-white border border-slate-700 shadow-md">
             <h3 className="text-2xl font-semibold">Credit Usage</h3>
-            <p className="mt-2 text-sm text-slate-400">Only pay for what you use — nothing more.</p>
+            <p className="mt-2 text-sm text-slate-400">Pay only for the time and services you use.</p>
             <ul className="mt-6 space-y-4 text-sm">
               <li className="flex items-center">
-                <AiOutlineCheckCircle className="text-slate-400 mr-3 h-5 w-5" />1 credit per resume screened
-              </li>
-              <li className="flex items-center">
-                <AiOutlineCheckCircle className="text-slate-400 mr-3 h-5 w-5" />3 credits per interview invite
+                <AiOutlineCheckCircle className="text-slate-400 mr-3 h-5 w-5" />
+                Resume screening – 1 credit per resume
               </li>
               <li className="flex items-center">
                 <AiOutlineCheckCircle className="text-slate-400 mr-3 h-5 w-5" />
-                Transparent, usage-based pricing
+                Manual interview invite – 3 credits
               </li>
               <li className="flex items-center">
                 <AiOutlineCheckCircle className="text-slate-400 mr-3 h-5 w-5" />
-                Secure checkout via Stripe
+                AI voice interview – 1 credit per minute
+              </li>
+              <li className="flex items-center">
+                <AiOutlineCheckCircle className="text-slate-400 mr-3 h-5 w-5" />
+                Real-time usage tracking in your dashboard
               </li>
             </ul>
           </div>
         </div>
 
         <div className="mt-10 text-center">
-          <Link className="mt-8 inline-flex items-center justify-center rounded-full bg-green-700 py-4 px-8   font-medium text-white hover:bg-slate-600 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-700" href="/signup">
+          <Link className="mt-8 inline-flex items-center justify-center rounded-full bg-green-700 py-4 px-8 font-medium text-white hover:bg-slate-600 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-700" href="/signup">
             Try for free
           </Link>
           <p className="text-white text-sm mt-3">Start with 10 free credits – no credit card required.</p>

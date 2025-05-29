@@ -5,7 +5,7 @@ export const defaultJobFormValues: AddJobFormValues = {
   jobTitle: '',
   totalRandomVerbalQuestion: 0,
   totalRandomCodingQuestion: 0,
-  expires: '',
+  expires: '7',
   duration: 10,
   questions: [
     {

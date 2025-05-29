@@ -43,7 +43,11 @@ export const AddJobSchema = Yup.object()
   .shape({
     jobTitle: Yup.string().required('Title is required'),
     totalRandomVerbalQuestion: Yup.number().required(),
-    description: Yup.string().required('Job description is required'),
+    description: Yup.string()
+      .transform((value) => value.replace(/<[^>]+>/g, '').trim()) // Strip HTML tags
+      .min(20, 'Description must be at least 20 characters long')
+      .required('Job description is required'),
+
     experienceLevel: Yup.string().required('Please select an experience level'),
 
     questions: Yup.array()
