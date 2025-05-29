@@ -7,6 +7,7 @@ import { Footer } from '@/components/start/Footer';
 import { FAQ } from '@/components/start/FAQ';
 import { OptimizeSection } from '@/components/start/optimize-section';
 import FeaturesFeatures from '@/components/start/feature';
+import { RequestDemo } from '@/components/start/RequestDemo';
 
 export default function Home() {
   return (
@@ -19,6 +20,7 @@ export default function Home() {
         <FeaturesFeatures />
         <Pricing />
         <FAQ />
+        <RequestDemo />
       </main>
       <Footer />
     </>

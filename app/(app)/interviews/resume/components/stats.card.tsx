@@ -11,10 +11,10 @@ type Props = {
 };
 
 const iconMap = {
-  totalCandidates: <FaUsers className="h-7 w-7 text-slate-900 mr-4 flex-shrink-0" />,
-  avgMatchScore: <FaChartBar className="h-7 w-7 text-slate-900 mr-4 flex-shrink-0" />,
-  topCandidatesPercent: <FaStar className="h-7 w-7 text-slate-900 mr-4 flex-shrink-0" />,
-  rejectedCandidates: <FaUserSlash className="h-7 w-7 text-slate-900 mr-4 flex-shrink-0" />,
+  totalCandidates: <FaUsers className="h-7 w-7 text-slate-900 dark:text-slate-100 mr-4 flex-shrink-0" />,
+  avgMatchScore: <FaChartBar className="h-7 w-7 text-slate-900 dark:text-slate-100 mr-4 flex-shrink-0" />,
+  topCandidatesPercent: <FaStar className="h-7 w-7 text-slate-900 dark:text-slate-100 mr-4 flex-shrink-0" />,
+  rejectedCandidates: <FaUserSlash className="h-7 w-7 text-slate-900 dark:text-slate-100 mr-4 flex-shrink-0" />,
 };
 
 export default function ResumeStatsGrid({ resumeStats }: Props) {

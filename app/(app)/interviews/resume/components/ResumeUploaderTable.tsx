@@ -113,10 +113,11 @@ const ResumeUploader = ({ jobid, onViewDetails, onDelete, existingResume }: Resu
 
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
-      if (acceptedFiles.length > 2) {
+      if (acceptedFiles.length > 20) {
         showToast.error('You can only upload a maximum of 20 files at a time.');
         return;
       }
+
       if (credits < acceptedFiles.length) {
         showToast.error(`You only have ${credits} credit(s), but tried uploading ${acceptedFiles.length}.`);
         return;
@@ -124,13 +125,26 @@ const ResumeUploader = ({ jobid, onViewDetails, onDelete, existingResume }: Resu
 
       if (isUploadingOrProcessing) return;
 
+      // Track duplicate file names
+      const duplicateFileNames: string[] = [];
+
       const accepted = acceptedFiles
         .filter((file) => {
           const ext = file.name.split('.').pop()?.toLowerCase();
           return ext && ALLOWED_EXTENSIONS.includes(ext);
         })
         .filter((file, i, self) => i === self.findIndex((f) => f.name === file.name && f.size === file.size))
-        .filter((file) => !files.some((f) => f.name === file.name && f.file.size === file.size));
+        .filter((file) => {
+          const isDuplicate = files.some((f) => f.name === file.name && f.file.size === file.size);
+          if (isDuplicate) {
+            duplicateFileNames.push(file.name);
+          }
+          return !isDuplicate;
+        });
+
+      if (duplicateFileNames.length > 0) {
+        showToast.error(`Duplicate files skipped: ${duplicateFileNames.join(', ')}`);
+      }
 
       if (accepted.length === 0) return;
 
@@ -149,10 +163,9 @@ const ResumeUploader = ({ jobid, onViewDetails, onDelete, existingResume }: Resu
       }));
 
       dispatch({ type: 'ADD_NEW', payload: uploadList });
-
       uploadList.forEach((f) => handleUpload(f.file, f.resumeId));
     },
-    [files, handleUpload, jobid, isUploadingOrProcessing]
+    [files, handleUpload, jobid, isUploadingOrProcessing, credits]
   );
 
   const handleViewDetails = async (resumeId: string) => {
@@ -201,95 +214,100 @@ const ResumeUploader = ({ jobid, onViewDetails, onDelete, existingResume }: Resu
     <div className="">
       <div {...getRootProps()}>
         <input {...getInputProps()} className="hidden" aria-label="Upload resume file" />
-        <Card radius="sm" shadow="sm" className="w-full mb-8 border-dashed border-2 cursor-pointer hover:bg-slate-50 hover:border-slate-400 transition-colors">
+        <Card radius="sm" shadow="sm" className="w-full mb-8 border-2 border-dashed cursor-pointer transition-colors hover:bg-slate-50 hover:border-slate-400 dark:hover:bg-slate-800 dark:hover:border-slate-600">
           <CardBody className="flex flex-row items-center justify-between py-4 px-6">
             <div className="flex items-center">
-              <div className="rounded-full bg-slate-100 p-2 mr-4">
-                <FaUpload className="h-5 w-5 text-slate-500" />
+              <div className="rounded-full bg-slate-100 p-2 mr-4 dark:bg-slate-800">
+                <FaUpload className="h-5 w-5 text-slate-500 dark:text-slate-300" />
               </div>
               <div>
-                <h3 className="text-sm font-medium">Drag & drop resume files here</h3>
-                <p className="text-xs text-slate-500">
+                <h3 className="text-sm font-medium text-slate-800 dark:text-slate-100">Drag & drop resume files here</h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400">
                   Supported formats: <strong>.pdf, .doc, .docx</strong>. Upload <strong>1–20 files</strong> at a time. Duplicate files will be skipped. Please wait for current uploads and processing to finish before uploading more.
                 </p>
               </div>
             </div>
             <div>
-              <Button isDisabled={isUploadingOrProcessing} variant="bordered" size="sm">
+              <Button isDisabled={isUploadingOrProcessing} variant="bordered" size="sm" className="text-slate-700 dark:text-slate-200 border-slate-300 dark:border-slate-600">
                 Browse Files
               </Button>
             </div>
           </CardBody>
         </Card>
       </div>
-      <ResumeFilters
-        searchTerm={searchTerm}
-        onSearchChange={(val) => {
-          setSearchTerm(val);
-          setCurrentPage(1);
-        }}
-        selectedRecommendations={selectedRecommendations}
-        onRecommendationChange={(option, isSelected) => {
-          setSelectedRecommendations((prev) => (isSelected ? [...prev, option] : prev.filter((r) => r !== option)));
-        }}
-        experienceRange={experienceRange}
-        onExperienceChange={setExperienceRange}
-        dateRange={dateRange}
-        onDateChange={(range) => {
-          setDateRange(range);
-          setCurrentPage(1);
-        }}
-        onClearFilters={() => {
-          clearFilters();
-          setCurrentPage(1);
-        }}
-      />
 
-      <Divider orientation="horizontal" className="mb-4" />
-      {(uploadProgress < 100 || processingProgress < 100) && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-          <div>
-            <div className="flex items-center justify-between mb-1">
-              <span className="text-sm font-medium text-blue-800">Uploading Progress</span>
-              {pendingUploadCount > 0 && (
-                <Badge color="primary" size="sm">
-                  {pendingUploadCount} pending
-                </Badge>
-              )}
-            </div>
-            <Progress aria-label="Uploading progress" value={uploadProgress} color="primary" className="w-full" />
-            <span className="text-xs text-blue-700">{uploadProgress}%</span>
-          </div>
+      <Card radius="sm" shadow="sm" className="p-4">
+        <CardBody>
+          <ResumeFilters
+            searchTerm={searchTerm}
+            onSearchChange={(val) => {
+              setSearchTerm(val);
+              setCurrentPage(1);
+            }}
+            selectedRecommendations={selectedRecommendations}
+            onRecommendationChange={(option, isSelected) => {
+              setSelectedRecommendations((prev) => (isSelected ? [...prev, option] : prev.filter((r) => r !== option)));
+            }}
+            experienceRange={experienceRange}
+            onExperienceChange={setExperienceRange}
+            dateRange={dateRange}
+            onDateChange={(range) => {
+              setDateRange(range);
+              setCurrentPage(1);
+            }}
+            onClearFilters={() => {
+              clearFilters();
+              setCurrentPage(1);
+            }}
+          />
 
-          <div>
-            <div className="flex items-center justify-between mb-1">
-              <span className="text-sm font-medium text-purple-800">Processing Progress</span>
-              {pendingProcessingCount > 0 && (
-                <Badge color="secondary" size="sm">
-                  {pendingProcessingCount} pending
-                </Badge>
-              )}
+          <Divider orientation="horizontal" className="mb-4" />
+          {(uploadProgress < 100 || processingProgress < 100) && (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+              <div>
+                <div className="flex items-center justify-between mb-1">
+                  <span className="text-sm font-medium text-blue-800">Uploading Progress</span>
+                  {pendingUploadCount > 0 && (
+                    <Badge color="primary" size="sm">
+                      {pendingUploadCount} pending
+                    </Badge>
+                  )}
+                </div>
+                <Progress aria-label="Uploading progress" value={uploadProgress} color="primary" className="w-full" />
+                <span className="text-xs text-blue-700">{uploadProgress}%</span>
+              </div>
+
+              <div>
+                <div className="flex items-center justify-between mb-1">
+                  <span className="text-sm font-medium text-purple-800">Processing Progress</span>
+                  {pendingProcessingCount > 0 && (
+                    <Badge color="secondary" size="sm">
+                      {pendingProcessingCount} pending
+                    </Badge>
+                  )}
+                </div>
+                <Progress aria-label="Processing progress" value={processingProgress} color="secondary" className="w-full" />
+                <span className="text-xs text-purple-700">{processingProgress}%</span>
+              </div>
             </div>
-            <Progress aria-label="Processing progress" value={processingProgress} color="secondary" className="w-full" />
-            <span className="text-xs text-purple-700">{processingProgress}%</span>
+          )}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {paginatedFiles.map((file) => {
+              if (file.status === 'uploading') return <UploadingCard key={file.resumeId} file={file} />;
+              if (file.status === 'uploaded') return <UploadedCard key={file.resumeId} file={file} />;
+              if (file.status === 'processed') {
+                return file.analysisResults.validityStatus ? <ValidProcessedCard onViewDetails={handleViewDetails} isLoading={loadingResumeId === file.resumeId} key={file.resumeId} file={file} onDelete={onDelete} /> : <InvalidProcessedCard key={file.resumeId} file={file} />;
+              }
+              return null;
+            })}
           </div>
-        </div>
-      )}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {paginatedFiles.map((file) => {
-          if (file.status === 'uploading') return <UploadingCard key={file.resumeId} file={file} />;
-          if (file.status === 'uploaded') return <UploadedCard key={file.resumeId} file={file} />;
-          if (file.status === 'processed') {
-            return file.analysisResults.validityStatus ? <ValidProcessedCard onViewDetails={handleViewDetails} isLoading={loadingResumeId === file.resumeId} key={file.resumeId} file={file} onDelete={onDelete} /> : <InvalidProcessedCard key={file.resumeId} file={file} />;
-          }
-          return null;
-        })}
-      </div>
-      {totalPages > 1 && (
-        <div className="flex justify-center mt-6">
-          <Pagination total={totalPages} page={currentPage} onChange={setCurrentPage} showControls loop size="sm" radius="full" color="primary" />
-        </div>
-      )}
+          {totalPages > 1 && (
+            <div className="flex justify-center mt-6">
+              <Pagination total={totalPages} page={currentPage} onChange={setCurrentPage} showControls loop size="sm" radius="full" color="primary" />
+            </div>
+          )}
+        </CardBody>
+      </Card>
     </div>
   );
 };
