@@ -12,6 +12,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import EventTable from './components/EventTable';
 import EmptyStateCards from '@/components/shared/empty-state-cards';
 import AudioPlayerWithHighlight from './components/TranscriptPlayer';
+import CandidateSkeleton from './components/CandidateSkeleton';
 
 export default function InterviewResultList() {
   const [page, setPage] = useState(1);
@@ -117,8 +118,9 @@ export default function InterviewResultList() {
 
   return (
     <div className="my-3 px-4 lg:px-6 max-w-[82rem] mx-auto w-full  ">
+      {isLoading && <CandidateSkeleton />}
       <div className=" ">
-        {interviewResults.length == 0 && (
+        {!isLoading && interviewResults.length == 0 && (
           <div className="flex items-center justify-center h-full w-full">
             <EmptyStateCards
               title="No Interview Results Yet"
@@ -134,7 +136,7 @@ export default function InterviewResultList() {
             />
           </div>
         )}
-        {interviewResults.length > 0 && (
+        {!isLoading && interviewResults.length > 0 && (
           <div className="flex h-full flex-col gap-2 xl:flex-row">
             <aside className="flex flex-col xl:w-[320px]">
               <div className="no-scrollbar max-h-full overflow-auto p-1 ">
