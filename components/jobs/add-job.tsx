@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
-import { Button, Card, CardBody, Input, Pagination, NumberInput, Chip, Tooltip, Select, SelectItem, Textarea, RadioGroup, Radio, Slider } from '@heroui/react';
+import { Button, Card, CardBody, Input, NumberInput, Tooltip, Textarea, RadioGroup, Radio, Slider } from '@heroui/react';
 import { Formik, FormikHelpers } from 'formik';
 import { showToast } from '@/app/utils/toastUtils';
 import { createJob, generateJobDescriptionFromAI, getJobById, updateJob } from '@/services/job.service';
@@ -74,7 +74,7 @@ export const AddJob = () => {
       const fetchJob = async () => {
         const jobData = await getJobById(id);
         setInitialValues(jobData);
-        setFormReady(true); // ✅ now validation can be trusted
+        setFormReady(true);
       };
       fetchJob();
     }
@@ -120,10 +120,7 @@ export const AddJob = () => {
   const handleSubmit = async (values: AddJobFormValues, { resetForm }: FormikHelpers<AddJobFormValues>) => {
     setLoading(true);
 
-    let currentDate = new Date();
-    currentDate.setDate(currentDate.getDate() + 1);
-    values.expires = currentDate.toISOString();
-
+    values.invitationExpireInDays = Number(values.invitationExpireInDays);
     try {
       if (!isEditMode) {
         await createJob(values);
@@ -366,7 +363,7 @@ export const AddJob = () => {
                             <Slider
                               className="max-w-full"
                               defaultValue={5}
-                              value={values.duration}
+                              value={values.durationInMinutes}
                               label="Duration (Minutes)"
                               maxValue={20}
                               minValue={5}
@@ -375,12 +372,12 @@ export const AddJob = () => {
                               step={5}
                               onChange={(e) =>
                                 handleChange({
-                                  target: { name: 'duration', value: Number(e) },
+                                  target: { name: 'durationInMinutes', value: Number(e) },
                                 })
                               }
                             />
 
-                            <RadioGroup label="Expires" size="sm" orientation="horizontal" value={values.expires} onChange={handleChange('expires')} isInvalid={!!errors.expires && !!touched.expires} errorMessage={errors.expires}>
+                            <RadioGroup label="invitation Expire" size="sm" orientation="horizontal" value={values.invitationExpireInDays.toString()} onChange={handleChange('invitationExpireInDays')} isInvalid={!!errors.invitationExpireInDays && !!touched.invitationExpireInDays} errorMessage={errors.invitationExpireInDays}>
                               <Radio value="3">3 Days</Radio>
                               <Radio value="7">One Week</Radio>
                               <Radio value="14">Two Weeks</Radio>
