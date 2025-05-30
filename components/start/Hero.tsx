@@ -25,7 +25,7 @@ export const Hero: React.FC = () => {
       <div className="relative max-w-7xl mx-auto">
         {/* AI badge */}
 
-        <h1 className="mx-auto max-w-4xl font-display text-5xl font-medium tracking-tight leading-[1.5] text-white sm:text-7xl text-center">
+        <h1 className="mx-auto max-w-4xl font-display text-4xl sm:text-7xl font-medium tracking-tight leading-[1.5] text-white text-center">
           AI-Powered Intelligent
           <span className="relative whitespace-nowrap text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-cyan-400 px-2">
             <svg aria-hidden="true" viewBox="0 0 418 42" className="absolute top-2/3 left-0 h-[0.58em] w-full fill-purple-500/30" preserveAspectRatio="none">
