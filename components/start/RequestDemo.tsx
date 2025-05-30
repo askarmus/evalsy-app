@@ -94,7 +94,7 @@ export default function RequestDemo() {
             <Card className="rounded-3xl bg-white/5 p-8 text-white border border-slate-700 shadow-md">
               <CardHeader className="pb-0 pt-4   flex flex-col items-start mb-3">
                 <p className="text-xl font-bold text-white">Tell us about your needs</p>
-                <p className="text-sm text-slate-400">We'll get back to you within 24 hours to schedule your personalized demo.</p>
+                <p className="text-sm text-slate-400">We will get back to you within 24 hours to schedule your personalized demo.</p>
               </CardHeader>
               <CardBody className="px-1 py-1">
                 <form onSubmit={handleSubmit} className="space-y-6">
