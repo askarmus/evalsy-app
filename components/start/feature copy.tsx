@@ -3,6 +3,8 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { useState, useEffect } from 'react';
 import { FaPlus, FaUsers, FaPaperPlane, FaVideo, FaChartBar } from 'react-icons/fa';
+import Image from 'next/image';
+import { Chip } from '@heroui/react';
 
 const steps = [
   {
@@ -41,7 +43,7 @@ export default function FeatureSteps() {
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
   const [progress, setProgress] = useState<number[]>(new Array(steps.length).fill(0));
 
-  const INTERVAL_DURATION = 5000;
+  const INTERVAL_DURATION = 8000;
 
   useEffect(() => {
     const stepInterval = setInterval(() => {
@@ -68,21 +70,24 @@ export default function FeatureSteps() {
 
   return (
     <section id="pricing" className="bg-gradient-to-br from-indigo-600 via-purple-600 to-blue-700 py-20 sm:py-32">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mb-5">
         <div className="text-center">
           <h2 className="font-display text-3xl tracking-tight text-white sm:text-4xl">How AI Interviewer Works</h2>
+        </div>
+
+        <div className="text-center mt-5">
+          <Chip>{selectedStep.title}</Chip>
+
           <p className="mt-4 text-lg text-white">{selectedStep.description}</p>
         </div>
 
         <div className="mt-5">
           <div className=" overflow-hidden p-4 flex items-center justify-center">
-            <AnimatePresence mode="wait">
-              <motion.div key={selectedStep.title} initial={{ opacity: 0, x: 100, scale: 0.95 }} animate={{ opacity: 1, x: 0, scale: 1 }} exit={{ opacity: 0, x: -100, scale: 0.95 }} transition={{ duration: 0.6, ease: 'easeInOut' }} className="text-center w-full">
-                <div className="w-full flex justify-center mb-4">
-                  <motion.img src={selectedStep.image} alt={selectedStep.title} className="w-full max-w-[1350px] h-auto object-contain rounded-xl shadow-md" initial={{ scale: 1.05 }} animate={{ scale: 1 }} transition={{ duration: 0.6 }} />
-                </div>
-              </motion.div>
-            </AnimatePresence>
+            <motion.div key={selectedStep.title} initial={{ opacity: 0, x: 100, scale: 0.95 }} animate={{ opacity: 1, x: 0, scale: 1 }} exit={{ opacity: 0, x: -100, scale: 0.95 }} transition={{ duration: 0.6, ease: 'easeInOut' }} className="text-center w-full">
+              <div className="w-full flex justify-center mb-4">
+                <motion.img src={selectedStep.image} alt={selectedStep.title} className="w-full max-w-[1350px] h-auto object-contain rounded-xl shadow-md" initial={{ scale: 1.05 }} animate={{ scale: 1 }} transition={{ duration: 0.6 }} />
+              </div>
+            </motion.div>
           </div>
 
           <div className="flex justify-between gap-2 flex-wrap">
@@ -95,8 +100,8 @@ export default function FeatureSteps() {
                       setSelectedIndex(index);
                       setProgress((prev) => prev.map((_, i) => (i === index ? 0 : 0)));
                     }}
-                    className={`w-full rounded-lg px-6 py-4 flex items-center justify-center gap-3 font-semibold text-white transition duration-300
-    ${selectedIndex === index ? 'bg-gradient-to-r from-purple-500 to-indigo-600 shadow-lg' : 'bg-gradient-to-r from-purple-400 to-indigo-500 opacity-80 hover:opacity-100'}`}
+                    className={`w-full rounded-lg px-5 py-3 flex items-center justify-center gap-3 font-semibold text-white transition duration-300
+    ${selectedIndex === index ? 'bg-indigo-700 border-2 border-white shadow-md' : 'bg-indigo-500 border border-transparent hover:border-white opacity-80 hover:opacity-100'}`}
                   >
                     {/* Icon circle */}
                     <div className="w-8 h-8 rounded-full bg-white bg-opacity-20 flex items-center justify-center">
