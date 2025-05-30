@@ -78,7 +78,7 @@ export default function RequestDemo() {
               <div className="bg-slate-800/80 backdrop-blur-sm p-6 rounded-xl border border-slate-700/50">
                 <div className="flex items-center gap-2 mb-4">
                   <FaChartLine className="w-5 h-5 text-blue-400" />
-                  <h3 className="text-white font-semibold">Optimize your company's finances</h3>
+                  <h3 className="text-white font-semibold">Optimize your company&rsquo;s finances</h3>
                 </div>
                 <p className="text-slate-300 text-sm mb-4">Reduce hiring costs and maximize ROI with AI-powered recruitment</p>
                 <div className="flex flex-wrap gap-2 mb-4">
