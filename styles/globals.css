@@ -171,3 +171,12 @@ div::-webkit-scrollbar-track {
 .animate-pulse-glow {
   animation: pulse-glow 2s ease-in-out infinite;
 }
+.swiper {
+  height: 100%;
+  width: 100%;
+}
+
+.swiper .swiper-pagination-bullet-active {
+  transform: scale(2);
+  transform-origin: center;
+}
