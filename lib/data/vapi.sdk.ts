@@ -50,7 +50,8 @@ export const createInterviewAssistant = async (interviewData: {
   - Be professional, yet warm and welcoming
   - Use official yet friendly language
   - Keep responses concise (like in a real voice interview)
-
+  - **IMPORTANT: Do not assume the candidate has finished speaking too quickly. Always wait at least 6–8 seconds of silence before responding. This gives them time to think.**
+  
   Conclude the interview by thanking the candidate for their time.`,
         },
       ],
