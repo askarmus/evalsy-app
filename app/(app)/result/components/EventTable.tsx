@@ -10,7 +10,7 @@ export type Event = {
 };
 
 interface EventTableProps {
-  data: Event[];
+  data?: Event[] | null;
 }
 
 const ROWS_PER_PAGE = 5;
@@ -19,9 +19,11 @@ const EventTable: React.FC<EventTableProps> = ({ data }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [page, setPage] = useState(1);
 
+  const safeData = data ?? [];
+
   const filteredData = useMemo(() => {
-    return data?.filter((item) => item.type.toLowerCase().includes(searchTerm.toLowerCase()));
-  }, [searchTerm, data]);
+    return safeData.filter((item) => item.type.toLowerCase().includes(searchTerm.toLowerCase()));
+  }, [searchTerm, safeData]);
 
   const totalPages = Math.ceil(filteredData.length / ROWS_PER_PAGE);
 
@@ -31,7 +33,7 @@ const EventTable: React.FC<EventTableProps> = ({ data }) => {
   }, [page, filteredData]);
 
   return (
-    <div className="  ">
+    <div>
       <Input
         isClearable
         label="Search by Type"

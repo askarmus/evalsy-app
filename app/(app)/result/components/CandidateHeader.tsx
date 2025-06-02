@@ -48,7 +48,7 @@ export default function CandidateHeader({ selectedInterviewerData }: CandidateHe
             <FaExclamationCircle className="h-4 w-4 text-gray-400" />
             <div className="flex flex-col">
               <span className="text-sm text-gray-500">Fraud Risk</span>
-              <span className="text-sm font-medium">{selectedInterviewerData?.fraudProbability ?? 0}%</span>
+              <span className="text-sm font-medium">{selectedInterviewerData?.fraudProbability ?? 0} %</span>
             </div>
           </div>
         </div>
