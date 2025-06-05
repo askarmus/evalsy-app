@@ -11,6 +11,11 @@ export const updateScreeshot = async (payload: { invitationId: string; fileName:
   return response.data.data;
 };
 
+export const updateSelectionStatus = async (payload: { id: string; selectionStatus: string }) => {
+  const response = await apiClient.put('/interview/result/status', payload);
+  return response.data.data;
+};
+
 export const startInterview = async (payload: { invitationId: string }) => {
   const response = await apiClient.post('/interview/start', payload);
   return response.data.data;

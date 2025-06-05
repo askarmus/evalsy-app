@@ -1,9 +1,8 @@
 'use client';
 import React, { useState, useMemo, useEffect, useCallback, useRef } from 'react';
-import { Tabs, Tab, Card, CardBody } from '@heroui/react';
+import { Tabs, Tab, Card, CardBody, Spinner } from '@heroui/react';
 import { getAllInterviewResult, getInterviewResultById } from '@/services/interview.service';
 import EvaluationChart from './components/EvaluationChart';
-import CustomVideoPlayer from './components/CustomVideoPlayer';
 import ImageSlider from '@/components/shared/ImageSlider';
 import Sidebar from './components/Sidebar';
 import CandidateHeader from './components/CandidateHeader';
@@ -17,13 +16,13 @@ import CandidateSkeleton from './components/CandidateSkeleton';
 export default function InterviewResultList() {
   const [page, setPage] = useState(1);
   const [isLoading, setIsLoading] = useState(true); // ✅ set to true by default
+  const [isLoadingOnResultSelected, setSsLoadingOnResultSelected] = useState(false); // ✅ set to true by default
   const [filterValue, setFilterValue] = useState('');
   const [interviewResults, setInterviewResults] = useState([]);
   const [selectedInterviewerData, setSelectedInterviewerData] = useState<any>(null);
   const [selectedTab, setSelectedTab] = useState<string>('all');
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
-  const [selectedQuestion, setSelectedQuestion] = useState<any>({});
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const router = useRouter();
   const rowsPerPage = 1000;
@@ -57,14 +56,14 @@ export default function InterviewResultList() {
 
   const handleViewDetails = async (resultId: string) => {
     setSelectedId(resultId);
-    setIsLoading(true);
+    setSsLoadingOnResultSelected(true);
     try {
       const data = await getInterviewResultById(resultId);
       setSelectedInterviewerData(data);
     } catch (error) {
       console.error('Error fetching interviewer data:', error);
     } finally {
-      setIsLoading(false);
+      setSsLoadingOnResultSelected(false);
       router.replace(`/result?id=${resultId}`, { scroll: false });
     }
     try {
@@ -118,6 +117,12 @@ export default function InterviewResultList() {
 
   return (
     <div className="my-3 px-4 lg:px-6 max-w-[82rem] mx-auto w-full  ">
+      {isLoadingOnResultSelected && (
+        <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/10 backdrop-blur-sm">
+          <Spinner label="Loading, please wait..." color="primary" />
+        </div>
+      )}
+
       {isLoading && <CandidateSkeleton />}
       <div className=" ">
         {!isLoading && interviewResults.length == 0 && (
