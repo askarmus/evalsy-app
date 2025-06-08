@@ -79,7 +79,7 @@ export default function CandidateHeader({ selectedInterviewerData }: CandidateHe
           </div>
         </div>
       </div>
-      <p className="mt-4 text-sm text-gray-600">
+      <p className="mt-4 text-sm  ">
         <strong>Final Assessment </strong> {selectedInterviewerData?.finalAssessment || 'No final assessment provided.'}
       </p>
     </div>
