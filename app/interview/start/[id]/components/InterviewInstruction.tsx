@@ -29,13 +29,6 @@ const InterviewInstruction: React.FC<any> = () => {
                     {duration / 60} minutes
                   </Chip>
                 </div>
-
-                <div className="flex flex-col">
-                  <span className="text-md font-semibold">Total Questions</span>
-                  <Chip size="sm" className="mt-2" color="danger" variant="faded" radius="lg">
-                    {job.totalQuestions}
-                  </Chip>
-                </div>
               </div>
 
               <div className="mt-1 flex flex-col gap-[6px] font-xs">
