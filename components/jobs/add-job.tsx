@@ -17,7 +17,7 @@ import RichTextEditor from '../shared/RichTextEditor';
 import { DndContext, closestCenter, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy, useSortable, arrayMove } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { FaBriefcase, FaCogs, FaGripVertical, FaQuestionCircle, FaShieldAlt } from 'react-icons/fa';
+import { FaAsterisk, FaBriefcase, FaCogs, FaGripVertical, FaQuestionCircle, FaShieldAlt } from 'react-icons/fa';
 import { FraudDetectionSettings } from './components/add/FraudDetectionSettings';
 import { VerticalStepper } from './components/add/VerticalStepper';
 import { StepperHeader } from './components/add/StepperHeader';
@@ -138,8 +138,6 @@ export const AddJob = () => {
     }
   };
 
-  const pageSizes = [5, 10, 20, 30, 40, 50, 60, 70];
-
   const SortableQuestionItem = ({ question, index, handleEditQuestion, handleDeleteQuestion }: { question: Question; index: number; handleEditQuestion: (id: string) => void; handleDeleteQuestion: (id: string) => void }) => {
     const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: question.id });
     const style = { transform: CSS.Transform.toString(transform), transition };
@@ -147,11 +145,12 @@ export const AddJob = () => {
     return (
       <div ref={setNodeRef} {...attributes} style={style} className="flex items-center justify-between p-2 border-2 rounded-xl border-gray-300 dark:border-gray-600">
         <div className="flex items-center text-base min-w-0">
+          <span className={`flex items-center justify-center rounded-full w-5 h-5 mr-3 text-xs font-medium text-primary-foreground ${question.isRandom ? 'bg-blue-600' : 'bg-red-600'}`}>{index + 1}</span>
+
           <span {...listeners} className="mr-2 cursor-grab  hover:text-gray-800">
             <FaGripVertical />
           </span>
-          <span className="flex items-center justify-center bg-gray-900 text-primary-foreground rounded-full w-7 h-7 mr-3 text-sm font-medium">{index + 1}</span>
-          <span className="truncate font-semibold max-w-[200px] md:max-w-[400px]">{question.text.length > 80 ? `${question.text.substring(0, 80)}...` : question.text || 'New Question'}</span>
+          <span className="truncate font-semibold max-w-[700px]  ">{question.text.length > 80 ? `${question.text.substring(0, 130)}...` : question.text || 'New Question'}</span>
         </div>
         <div className="flex items-center gap-2 ml-4 shrink-0">
           <Tooltip content="Edit question">
@@ -357,7 +356,7 @@ export const AddJob = () => {
                           <div className="grid grid-cols-1  gap-6">
                             <div>
                               <h1 className="text-sm font-semibold  mb-0">Total verbal questions ({values.questions.length})</h1>
-                              <NumberInput variant="bordered" maxValue={values.questions.length} value={values.totalRandomVerbalQuestion} onValueChange={(val) => setFieldValue('totalRandomVerbalQuestion', val)} />
+                              <NumberInput variant="bordered" maxValue={values.questions.length} value={values.totalRandomVerbalQuestion} minValue={0} onValueChange={(val) => setFieldValue('totalRandomVerbalQuestion', val)} />
                               <p className="text-xs text-gray-400 mt-1">Random questions mean picking 5 questions out of 50 that are marked as random.</p>
                             </div>
                             <Slider

@@ -50,7 +50,7 @@ export const QuestionEditDrawer = ({ isOpen, onOpenChange, mode, initialQuestion
                     <div className="flex justify-between gap-4">
                       <div className="flex items-end flex-1">
                         <Checkbox isSelected={values.isRandom} onChange={(e) => setFieldValue('isRandom', e.target.checked)}>
-                          Random Only
+                          Optional Question
                         </Checkbox>
                       </div>
                     </div>

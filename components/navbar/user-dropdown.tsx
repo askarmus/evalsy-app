@@ -47,6 +47,9 @@ export const UserDropdown = () => {
         <DropdownItem key="logout" color="primary" onPress={handleLogout}>
           Log Out
         </DropdownItem>
+        <DropdownItem key="dark-mode" color="default">
+          <DarkModeSwitch />
+        </DropdownItem>
       </DropdownMenu>
     </Dropdown>
   );

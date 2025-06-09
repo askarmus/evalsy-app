@@ -6,6 +6,7 @@ import { AiOutlineHome, AiOutlineNotification, AiOutlineSetting, AiOutlineShoppi
 import { usePathname } from 'next/navigation';
 import { DarkLogo } from '../shared/dark-logo';
 import { DarkModeSwitch } from './darkmodeswitch';
+import { CreditManager } from '../settings/components/credits/credits/CreditManager';
 
 export const NavbarWrapper = () => {
   const currentPath = usePathname();
@@ -61,9 +62,10 @@ export const NavbarWrapper = () => {
       </NavbarContent>
 
       <NavbarContent justify="end" className="w-fit data-[justify=end]:flex-grow-0">
-        <NavbarContent>
-          <DarkModeSwitch /> <UserDropdown />
-        </NavbarContent>
+        <NavbarItem>
+          <CreditManager />
+        </NavbarItem>
+        <UserDropdown />
         <NavbarMenuToggle aria-label={isMenuOpen ? 'Close menu' : 'Open menu'} className="sm:hidden" />
       </NavbarContent>
 
