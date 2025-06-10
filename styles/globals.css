@@ -180,3 +180,8 @@ div::-webkit-scrollbar-track {
   transform: scale(2);
   transform-origin: center;
 }
+
+.job-description p {
+  margin-bottom: 20px;
+  margin-top: 20px;
+}

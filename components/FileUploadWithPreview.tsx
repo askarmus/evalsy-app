@@ -1,19 +1,25 @@
-import React, { useState } from "react";
-import { useDropzone } from "react-dropzone";
-import { showToast } from "@/app/utils/toastUtils";
-import { upload } from "@/services/company.service";
-import { CircularProgress } from "@heroui/react";
+import React, { useState } from 'react';
+import { useDropzone } from 'react-dropzone';
+import { showToast } from '@/app/utils/toastUtils';
+import { upload } from '@/services/company.service';
+import { CircularProgress } from '@heroui/react';
 
 interface FileUploadWithPreviewProps {
   onUpload: (blob: any) => void;
+  acceptedFileTypes?: { [key: string]: string[] }; // default: image/*
+  browseText?: string; // NEW: customizable browse button text
 }
 
-const FileUploadWithPreview: React.FC<FileUploadWithPreviewProps> = ({ onUpload }) => {
+const FileUploadWithPreview: React.FC<FileUploadWithPreviewProps> = ({
+  onUpload,
+  acceptedFileTypes = { 'image/*': [] },
+  browseText = 'Browse files', // Default caption
+}) => {
   const [isUploading, setUploading] = useState(false);
 
   const onDrop = async (acceptedFiles: File[]) => {
     if (!acceptedFiles || acceptedFiles.length === 0) {
-      showToast.error("No file selected for upload.");
+      showToast.error('No file selected for upload.');
       return;
     }
 
@@ -21,12 +27,12 @@ const FileUploadWithPreview: React.FC<FileUploadWithPreviewProps> = ({ onUpload 
     setUploading(true);
 
     try {
-      const blob = await upload(file); // Service call to upload the file
-      onUpload(blob); // Pass the file URL back to the parent component
-      showToast.success("File uploaded successfully!");
+      const blob = await upload(file);
+      onUpload(blob);
+      showToast.success('File uploaded successfully!');
     } catch (error) {
-      console.error("Error uploading file:", error);
-      showToast.error("File upload failed.");
+      console.error('Error uploading file:', error);
+      showToast.error('File upload failed.');
     } finally {
       setUploading(false);
     }
@@ -34,24 +40,22 @@ const FileUploadWithPreview: React.FC<FileUploadWithPreviewProps> = ({ onUpload 
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
-    accept: {
-      "image/*": [],
-    },
+    accept: acceptedFileTypes,
     maxFiles: 1,
   });
 
   return (
-    <div className='flex items-center gap-4'>
-      <div {...getRootProps()} className='flex-1 border-2 border-dashed border-primary rounded-lg p-4 text-center cursor-pointer'>
+    <div className="flex items-center gap-4">
+      <div {...getRootProps()} className="flex-1 border-2 border-dashed rounded-lg p-6 text-center cursor-pointer hover:bg-slate-100 transition-colors">
         <input {...getInputProps()} />
         {isUploading ? (
-          <div className='flex items-center justify-center gap-2 text-center'>
-            <CircularProgress aria-label='Loading...' size='sm' />
+          <div className="flex items-center justify-center gap-2 text-center">
+            <CircularProgress aria-label="Loading..." size="sm" />
             Uploading...
           </div>
         ) : (
           <div>
-            <p>Browse</p>
+            <p>{browseText}</p>
           </div>
         )}
       </div>

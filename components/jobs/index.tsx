@@ -10,7 +10,8 @@ import ConfirmDialog from '@/components/ConfirmDialog';
 import DateFormatter from '@/app/utils/DateFormatter';
 import { AiFillEdit, AiOutlineDelete, AiOutlineDiff, AiOutlinePlus, AiOutlineUserAdd, AiOutlineRollback } from 'react-icons/ai';
 import EmptyStateCards from '../shared/empty-state-cards';
-import { FaSearch } from 'react-icons/fa';
+import { FaCopy, FaSearch } from 'react-icons/fa';
+import { showToast } from '@/app/utils/toastUtils';
 
 export default function Jobs() {
   const [page, setPage] = useState(1);
@@ -98,6 +99,13 @@ export default function Jobs() {
         console.error('Error deleting Interviews:', error);
       }
     }
+  };
+
+  const handleCopyUrl = (jobId: string) => {
+    const url = `${window.location.origin}/job/${jobId}`;
+    navigator.clipboard.writeText(url).then(() => {
+      showToast.success('Job URL copied to clipboard!');
+    });
   };
 
   const handleRestore = async (jobId: string) => {
@@ -237,6 +245,11 @@ export default function Jobs() {
                                 </Button>
                               </Tooltip>
 
+                              <Tooltip content="Copy Job URL">
+                                <button aria-label="Copy URL" className="p-1 text-gray-600 hover:text-black rounded-full dark:text-gray-300 dark:hover:text-white" onClick={() => handleCopyUrl(job.id)}>
+                                  <FaCopy className="h-5 w-5" />
+                                </button>
+                              </Tooltip>
                               <Tooltip content="Send invitation">
                                 <button onClick={() => handleInviteClick(job.id)} className="p-1 text-gray-600 hover:text-black rounded-full dark:text-gray-300 dark:hover:text-white" aria-label="Send invitation">
                                   <AiOutlineUserAdd className="h-5 w-5" />
