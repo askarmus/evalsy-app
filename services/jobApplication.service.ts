@@ -1,4 +1,5 @@
 import apiClient from '@/helpers/apiClient';
+import axios from 'axios';
 
 export const createJobApplication = async (payload: any) => {
   const response = await apiClient.post('/job/apply', payload);
@@ -6,6 +7,6 @@ export const createJobApplication = async (payload: any) => {
 };
 
 export const getJobById = async (jobId: string) => {
-  const response = await apiClient.get(`/job/apply/${jobId}`);
+  const response = await axios.get(`http://localhost:5000/job/apply/${jobId}`);
   return response.data.data;
 };

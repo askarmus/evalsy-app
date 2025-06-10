@@ -1,14 +1,16 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Button, Card, CardBody, CardFooter, CardHeader, cn, Input, Textarea } from '@heroui/react';
+import { Button, Card, CardBody, CardFooter, CardHeader, Input, Textarea } from '@heroui/react';
 import { Formik, Form } from 'formik';
 import { AiOutlineCloseCircle } from 'react-icons/ai';
 import * as Yup from 'yup';
 import FileUploadWithPreview from '@/components/FileUploadWithPreview';
 import { showToast } from '@/app/utils/toastUtils';
 import { createJobApplication } from '@/services/jobApplication.service';
-import { FaBriefcase, FaUpload } from 'react-icons/fa';
+import { FaBriefcase, FaCheckCircle } from 'react-icons/fa';
+import { motion } from 'framer-motion';
+import FirebaseFileUploader from './FirebaseFileUploader';
 
 const JobApplicationSchema = Yup.object().shape({
   jobId: Yup.string().required('Job ID is required'),
@@ -18,12 +20,14 @@ const JobApplicationSchema = Yup.object().shape({
   coverLetter: Yup.string(),
 });
 
-const JobApplicationForm = ({ jobId }: { jobId: string }) => {
+const JobApplicationForm = ({ jobId, userId }: { jobId: string; userId: string }) => {
   const [uploadResumeUrl, setUploadResumeUrl] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const initialValues = {
     jobId,
+    userId,
     name: '',
     email: '',
     resumeUrl: '',
@@ -31,23 +35,33 @@ const JobApplicationForm = ({ jobId }: { jobId: string }) => {
   };
 
   const handleSubmit = async (values: typeof initialValues) => {
+    setIsSubmitting(true);
     try {
       await createJobApplication(values);
       showToast.success('Application submitted successfully!');
       setIsSubmitted(true);
     } catch (err) {
       showToast.error('Failed to submit application.');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   if (isSubmitted) {
     return (
-      <Card shadow="sm">
-        <CardBody>
-          <h2 className="text-xl font-semibold">Thank you for submitting your application!</h2>
-          <p className="mt-2 text-gray-600">We will review it shortly and get back to you.</p>
-        </CardBody>
-      </Card>
+      <div className="self-start">
+        <Card className="p-2" shadow="sm" radius="sm">
+          <CardBody>
+            <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ delay: 0.3, duration: 0.5 }} className="mb-6 inline-flex justify-center">
+              <div className="rounded-full bg-emerald-100 p-2">
+                <FaCheckCircle className="h-10 w-10 text-emerald-600" />
+              </div>
+            </motion.div>
+            <h2 className="text-xl font-semibold">Thank you for submitting your application!</h2>
+            <p className="mt-2 text-gray-600">We will review it shortly and get back to you.</p>
+          </CardBody>
+        </Card>
+      </div>
     );
   }
 
@@ -66,11 +80,17 @@ const JobApplicationForm = ({ jobId }: { jobId: string }) => {
                 <Input name="email" label="Email" value={values.email} onChange={handleChange} isInvalid={!!errors.email && touched.email} errorMessage={errors.email} />
                 <Textarea name="coverLetter" label="Tell us why you're a good fit..." value={values.coverLetter} onChange={handleChange} />
                 <div className=" ">
-                  <label htmlFor="resume" className="text-sm font-medium mb-2">
-                    Resume
-                  </label>
-                  <FileUploadWithPreview
-                    onUpload={(fileUrl) => setUploadResumeUrl(fileUrl.url)}
+                  <div className="text-sm font-medium mb-2">
+                    <label htmlFor="resume" className="text-sm font-medium mb-2">
+                      Resume
+                    </label>
+                  </div>
+
+                  <FirebaseFileUploader
+                    onUpload={(url) => {
+                      setUploadResumeUrl(url);
+                      setFieldValue('resumeUrl', url);
+                    }}
                     acceptedFileTypes={{
                       'application/pdf': [],
                       'application/msword': [], // .doc
@@ -104,7 +124,7 @@ const JobApplicationForm = ({ jobId }: { jobId: string }) => {
               </div>
             </CardBody>
             <CardFooter>
-              <Button color="primary" type="submit" className="w-full">
+              <Button color="primary" type="submit" className="w-full" isLoading={isSubmitting}>
                 <FaBriefcase className="mr-2 h-4 w-4" /> Submit Application
               </Button>
             </CardFooter>
