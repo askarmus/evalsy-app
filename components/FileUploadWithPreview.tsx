@@ -55,7 +55,7 @@ const FileUploadWithPreview: React.FC<FileUploadWithPreviewProps> = ({
           </div>
         ) : (
           <div>
-            <p>{browseText}</p>
+            <p className="text-sm text-slate-600 font-medium">{browseText}</p>
           </div>
         )}
       </div>

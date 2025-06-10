@@ -10,7 +10,7 @@ import ConfirmDialog from '@/components/ConfirmDialog';
 import DateFormatter from '@/app/utils/DateFormatter';
 import { AiFillEdit, AiOutlineDelete, AiOutlineDiff, AiOutlinePlus, AiOutlineUserAdd, AiOutlineRollback } from 'react-icons/ai';
 import EmptyStateCards from '../shared/empty-state-cards';
-import { FaCopy, FaSearch } from 'react-icons/fa';
+import { FaCopy, FaExternalLinkAlt, FaExternalLinkSquareAlt, FaEye, FaSearch } from 'react-icons/fa';
 import { showToast } from '@/app/utils/toastUtils';
 
 export default function Jobs() {
@@ -99,13 +99,6 @@ export default function Jobs() {
         console.error('Error deleting Interviews:', error);
       }
     }
-  };
-
-  const handleCopyUrl = (jobId: string) => {
-    const url = `${window.location.origin}/job/${jobId}`;
-    navigator.clipboard.writeText(url).then(() => {
-      showToast.success('Job URL copied to clipboard!');
-    });
   };
 
   const handleRestore = async (jobId: string) => {
@@ -225,7 +218,10 @@ export default function Jobs() {
                     <CardHeader className="flex justify-between items-center">
                       <div className="flex gap-5">
                         <div className="flex flex-col gap-1 items-start justify-center">
-                          <h4 className="text-xl font-bold text-gray-900 dark:text-gray-100">{job.jobTitle}</h4>
+                          <a href={`${window.location.origin}/job/${job.id}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-xl font-bold text-gray-900 dark:text-gray-100 hover:underline">
+                            {job.jobTitle}
+                            <FaExternalLinkAlt className="w-3 h-3 opacity-40" />
+                          </a>
                         </div>
                       </div>
 
@@ -245,11 +241,6 @@ export default function Jobs() {
                                 </Button>
                               </Tooltip>
 
-                              <Tooltip content="Copy Job URL">
-                                <button aria-label="Copy URL" className="p-1 text-gray-600 hover:text-black rounded-full dark:text-gray-300 dark:hover:text-white" onClick={() => handleCopyUrl(job.id)}>
-                                  <FaCopy className="h-5 w-5" />
-                                </button>
-                              </Tooltip>
                               <Tooltip content="Send invitation">
                                 <button onClick={() => handleInviteClick(job.id)} className="p-1 text-gray-600 hover:text-black rounded-full dark:text-gray-300 dark:hover:text-white" aria-label="Send invitation">
                                   <AiOutlineUserAdd className="h-5 w-5" />

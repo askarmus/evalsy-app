@@ -42,7 +42,7 @@ const JobApplicationForm = ({ jobId }: { jobId: string }) => {
 
   if (isSubmitted) {
     return (
-      <Card shadow="none">
+      <Card shadow="sm">
         <CardBody>
           <h2 className="text-xl font-semibold">Thank you for submitting your application!</h2>
           <p className="mt-2 text-gray-600">We will review it shortly and get back to you.</p>
@@ -55,7 +55,7 @@ const JobApplicationForm = ({ jobId }: { jobId: string }) => {
     <Formik initialValues={initialValues} validationSchema={JobApplicationSchema} onSubmit={handleSubmit}>
       {({ values, handleChange, setFieldValue, errors, touched }) => (
         <Form>
-          <Card className="p-0" shadow="none">
+          <Card className="p-2" shadow="sm" radius="sm">
             <CardHeader className="flex flex-col gap-1">
               <h2 className="text-lg font-semibold">Apply for Job</h2>
               <span className="text-sm text-slate-500">Fill out the form below to apply</span>
