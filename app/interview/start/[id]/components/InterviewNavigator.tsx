@@ -7,7 +7,6 @@ import CandidateInfo from './CandidateInfo';
 import PoweredBy from './PoweredBy';
 import { AntiCheat } from './AntiCheat';
 import ConfirmDialog from '@/components/ConfirmDialog';
-import Image from 'next/image';
 import { vapi } from '@/lib/data/vapi.sdk';
 import SpeakingIndicatorSoft from './SpeakingIndicator';
 import { FaMicrophone, FaMicrophoneSlash, FaTimes, FaVideo, FaVideoSlash } from 'react-icons/fa';
