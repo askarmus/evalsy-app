@@ -7,6 +7,6 @@ export const createJobApplication = async (payload: any) => {
 };
 
 export const getJobById = async (jobId: string) => {
-  const response = await axios.get(`http://localhost:5000/job/apply/${jobId}`);
+  const response = await apiClient.get(`/job/apply/${jobId}`);
   return response.data.data;
 };
