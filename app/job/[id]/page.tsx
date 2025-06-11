@@ -4,10 +4,10 @@ import { Chip, Card, CardBody, CardHeader, CardFooter } from '@heroui/react';
 import JobApplicationForm from './components/JobApplicationForm';
 import PoweredBy from '@/app/interview/start/[id]/components/PoweredBy';
 
-export async function generateMetadata({ params }: { params: { id: string } }) {
-  console.log('[generateMetadata]', params.id); // 👈 Add this
+export async function generateMetadata({ params }: { params: any }) {
+  const { id } = await params;
 
-  const job = await getJobById(params.id);
+  const job = await getJobById(id);
 
   if (!job) {
     return {
@@ -20,10 +20,10 @@ export async function generateMetadata({ params }: { params: { id: string } }) {
     description: `Job opening at ${job.user.company.name}`,
   };
 }
+export default async function JobPostingPage({ params }: { params: any }) {
+  const { id } = await params;
 
-export default async function JobPostingPage(propsPromise: Promise<{ params: { id: string } }>) {
-  const { params } = await propsPromise;
-  const jobData = await getJobById(params.id);
+  const jobData = await getJobById(id);
 
   if (!jobData) return <div className="text-center">Job not found.</div>;
 
@@ -60,7 +60,7 @@ export default async function JobPostingPage(propsPromise: Promise<{ params: { i
               </Card>
               <PoweredBy />
             </div>
-            <JobApplicationForm jobId={params.id} userId={jobData.userId} />
+            <JobApplicationForm jobId={id} userId={jobData.userId} />
           </div>
         </div>
       </div>
