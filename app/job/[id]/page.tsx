@@ -5,7 +5,7 @@ import JobApplicationForm from './components/JobApplicationForm';
 import PoweredBy from '@/app/interview/start/[id]/components/PoweredBy';
 
 export async function generateMetadata({ params }: { params: any }) {
-  const { id } = await params;
+  const { id } = params;
 
   const job = await getJobById(id);
 
@@ -18,8 +18,21 @@ export async function generateMetadata({ params }: { params: any }) {
   return {
     title: job.jobTitle,
     description: `Job opening at ${job.user.company.name}`,
+    openGraph: {
+      title: job.jobTitle,
+      description: `Job opening at ${job.user.company.name}`,
+      images: [
+        {
+          url: job.ogImageUrl || 'https://www.evalsy.com/meta/now_hiring.png',
+          width: 1200,
+          height: 630,
+          alt: job.jobTitle,
+        },
+      ],
+    },
   };
 }
+
 export default async function JobPostingPage({ params }: { params: any }) {
   const { id } = await params;
 
