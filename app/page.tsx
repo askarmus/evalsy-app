@@ -19,7 +19,7 @@ export default function Home() {
 
         <Pricing />
         <FAQ />
-        {/* <FaqHeroSection /> */}
+        <FaqHeroSection />
         <RequestDemo />
       </main>
       <Footer />

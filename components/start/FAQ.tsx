@@ -54,7 +54,7 @@ export const FAQ = () => {
           <h2 id="faq-title" className="font-display text-4xl font-bold text-white sm:text-4xl">
             What people are saying about us.
           </h2>
-          <p className="mt-4 text-lg tracking-tight text-white">If you can't find what you're looking for, email our support team and if you're lucky someone will get back to you.</p>
+          <p className="mt-4 text-lg tracking-tight text-white">If you cant find what you are looking for, email our support team and if you are lucky someone will get back to you.</p>
         </div>
         <div className="flex flex-wrap -m-4 mt-8">
           {columns.map((column, columnIndex) => (
@@ -67,7 +67,7 @@ export const FAQ = () => {
                       <span className="text-xs uppercase text-slate-100">{testimonial.name}</span>
                     </span>
                   </a>
-                  <p className="text-sm leading-relaxed text-white">"{testimonial.quote}"</p>
+                  <p className="text-sm leading-relaxed text-white">{`"${testimonial.quote}"`}</p>
                 </div>
               ))}
             </div>

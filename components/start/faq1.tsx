@@ -32,19 +32,28 @@ const faqData = [
 
 export function FaqHeroSection() {
   return (
-    <section id="pricing" className="bg-darkbase-sec py-20 sm:py-32  ">
-      <div className="container mx-auto px-4">
-        <div className="text-center">
-          <Chip className="mb-4 md:mb-6 py-1 px-2 md:py-1.5 md:px-3 text-xs font-medium border-primary/30 bg-primary/10 text-white mx-auto lg:mx-0"> Frequently Asked Questions</Chip>
-
-          <h2 className="font-display text-4xl font-bold  tracking-tight text-white sm:text-4xl mt-4">How AI Interviewer Works</h2>
+    <section id="testimonials" aria-labelledby="faq-title" className="relative overflow-hidden bg-darkbase-sec py-20 sm:py-32">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative">
+        <div className="  text-center lg:mx-0 mb-8">
+          <h2 id="faq-title" className="font-display text-4xl font-bold text-white sm:text-4xl">
+            What people are saying about us.
+          </h2>
+          <p className="mt-4 text-lg tracking-tight text-white">If you cant find what you are looking for, email our support team.</p>
         </div>
 
         <div className="max-w-3xl mx-auto">
-          <Accordion variant="splitted">
+          <Accordion variant="splitted" className="text-white">
             {faqData.map((item, index) => (
-              <AccordionItem key={index} title={item.question} className="border border-default-200 rounded-xl shadow-sm">
-                <p className="text-default-500 text-base">{item.answer}</p>
+              <AccordionItem
+                key={index}
+                title={item.question}
+                className="bg-darkbase border border-[hsl(var(--crator-border-hsl))] rounded-xl px-6 shadow-sm"
+                classNames={{
+                  title: 'text-white', // ✅ this changes the title color
+                  trigger: 'text-white', // optional: if you want the chevron icon to be white too
+                }}
+              >
+                <p className="text-white">{item.answer}</p>
               </AccordionItem>
             ))}
           </Accordion>
