@@ -12,7 +12,7 @@ export const Header: React.FC = () => {
   const { user, loading } = useAuth();
 
   return (
-    <header className="py-4" style={{ backgroundColor: '#0f172a' }}>
+    <header className="py-4 bg-darkbase">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <nav className="relative z-50 flex justify-between">
           <div className="flex items-center md:gap-x-12">
@@ -33,7 +33,7 @@ export const Header: React.FC = () => {
           </div>
           <div className="flex items-center gap-x-5 md:gap-x-8">
             {!loading && user ? (
-              <Link className="group inline-flex items-center justify-center rounded-full py-3 px-5 text-sm font-semibold focus:outline-hidden focus-visible:outline-2 focus-visible:outline-offset-2 bg-green-600 text-white hover:text-slate-100 hover:bg-green-500 active:bg-green-800 active:text-green-100 focus-visible:outline-green-600" href="/dashboard">
+              <Link className="group inline-flex items-center justify-center rounded-full py-3 px-5 text-sm font-semibold focus:outline-hidden focus-visible:outline-2 focus-visible:outline-offset-2 bg-white  hover:text-slate-100 hover:bg-green-500 active:bg-green-800 active:text-green-100 focus-visible:outline-green-600" href="/dashboard">
                 Go to Dashboard
               </Link>
             ) : (

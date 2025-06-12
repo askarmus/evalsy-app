@@ -7,17 +7,19 @@ import { FAQ } from '@/components/start/FAQ';
 import { OptimizeSection } from '@/components/start/optimize-section';
 import F2 from '@/components/start/feature';
 import RequestDemo from '@/components/start/RequestDemo';
+import { FaqHeroSection } from '@/components/start/faq1';
 
 export default function Home() {
   return (
     <>
       <Header />
-      <main>
+      <main className="bg-red  text-slate-700">
         <Hero />
-        <OptimizeSection />
         <F2 />
+
         <Pricing />
         <FAQ />
+        {/* <FaqHeroSection /> */}
         <RequestDemo />
       </main>
       <Footer />

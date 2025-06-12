@@ -1,42 +1,93 @@
-import React from "react";
-import { Logo } from "../shared/logo";
+import Link from 'next/link';
+import { Brain, Instagram, Facebook, Twitter, MapPin, Phone, Mail } from 'lucide-react';
+import { Logo } from '../shared/logo';
+import { LogoDark } from '../logo.dark';
 
-export const Footer = () => {
+export function Footer() {
+  const companyLinks = [
+    { name: 'Home', href: '/' },
+    { name: 'Pricing', href: '/#pricing' },
+    { name: 'Demo', href: '/#demo' }, // Assuming you have a demo section with this ID
+    { name: 'FAQ', href: '/#faq' },
+    { name: 'Contact Us', href: '/contact' }, // Placeholder, create this page if needed
+  ];
+
+  const socialLinks = [
+    { Icon: Instagram, href: '#', label: 'Instagram' },
+    { Icon: Facebook, href: '#', label: 'Facebook' },
+    { Icon: Twitter, href: '#', label: 'Twitter' },
+  ];
+
   return (
-    <footer className='bg-slate-50'>
-      <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
-        <div className='py-16 flex flex-col items-center'>
-          <Logo />
-          <nav className='mt-10 text-sm' aria-label='quick links'>
-            <div className='-my-1 flex justify-center gap-x-6'>
-              <a className='inline-block rounded-lg px-2 py-1 text-sm text-slate-700 hover:bg-slate-100 hover:text-slate-900' href='#features'>
-                Features
-              </a>
-              <a className='inline-block rounded-lg px-2 py-1 text-sm text-slate-700 hover:bg-slate-100 hover:text-slate-900' href='#testimonials'>
-                Testimonials
-              </a>
-              <a className='inline-block rounded-lg px-2 py-1 text-sm text-slate-700 hover:bg-slate-100 hover:text-slate-900' href='#pricing'>
-                Pricing
-              </a>
-            </div>
-          </nav>
-        </div>
-        <div className='flex flex-col items-center border-t border-slate-400/10 py-10 sm:flex-row-reverse sm:justify-between'>
-          <div className='flex gap-x-6'>
-            <a className='group' aria-label='TaxPal on X' href='#'>
-              <svg className='h-6 w-6 fill-slate-500 group-hover:fill-slate-700' aria-hidden='true' viewBox='0 0 24 24'>
-                <path d='M13.3174 10.7749L19.1457 4H17.7646L12.7039 9.88256L8.66193 4H4L10.1122 12.8955L4 20H5.38119L10.7254 13.7878L14.994 20H19.656L13.3171 10.7749H13.3174ZM11.4257 12.9738L10.8064 12.0881L5.87886 5.03974H8.00029L11.9769 10.728L12.5962 11.6137L17.7652 19.0075H15.6438L11.4257 12.9742V12.9738Z' />
-              </svg>
-            </a>
-            <a className='group' aria-label='TaxPal on GitHub' href='#'>
-              <svg className='h-6 w-6 fill-slate-500 group-hover:fill-slate-700' aria-hidden='true' viewBox='0 0 24 24'>
-                <path d='M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.02 10.02 0 0 0 22 12.017C22 6.484 17.522 2 12 2Z' />
-              </svg>
-            </a>
+    <footer className="bg-darkbase-sec  py-16 lg:py-20  ">
+      <div className="container mx-auto px-4 md:px-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8">
+          {/* Column 1: Brand & Copyright */}
+          <div className="space-y-4 text-white">
+            <Link href="/" className="flex items-center space-x-2.5 mb-3">
+              <LogoDark />
+            </Link>
+            <p className="text-sm">
+              © {new Date().getFullYear()} Evalsy.
+              <br />
+              All rights reserved.
+            </p>
+            <p className="text-xs opacity-70">AI-Powered Recruitment Solutions.</p>
           </div>
-          <p className='mt-6 text-sm text-slate-500 sm:mt-0'>Copyright © {new Date().getFullYear().toString()} Evalsy. All rights reserved.</p>
+
+          {/* Column 2: Get in touch */}
+          <div className="space-y-3 text-white">
+            <h3 className="text-lg font-semibold text-white mb-4">Get in touch</h3>
+            <a href="mailto:hello@evalsy.com" className="flex items-start space-x-2.5 hover:text-white transition-colors group">
+              <Mail className="h-5 w-5 mt-0.5 text-white group-hover:text-white transition-colors" />
+              <span>hello@evalsy.com</span>
+            </a>
+            <a href="tel:+15551234567" className="flex items-start space-x-2.5 hover:text-white transition-colors group">
+              <Phone className="h-5 w-5 mt-0.5 text-white group-hover:text-white transition-colors" />
+              <span>(555) 123-4567</span>
+            </a>
+            <div className="flex items-start text-white space-x-2.5">
+              <MapPin className="h-5 w-5 mt-0.5 text-white flex-shrink-0" />
+              <span>
+                123 Innovation Drive
+                <br />
+                Tech City, CA 90210
+              </span>
+            </div>
+          </div>
+
+          {/* Column 3: Company Links */}
+          <div className="space-y-3">
+            <h3 className="text-lg font-semibold text-white mb-4">Company</h3>
+            <ul className="space-y-2.5">
+              {companyLinks.map((link) => (
+                <li key={link.name}>
+                  <Link href={link.href} className="hover:text-white text-white pb-0.5 border-b border-transparent hover:border-primary/50">
+                    {link.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Column 4: Follow us */}
+          <div className="space-y-3">
+            <h3 className="text-lg font-semibold text-white  mb-4">Follow us on social media</h3>
+            <p className="text-sm mb-4 text-white">Stay connected and updated on our latest projects and insights.</p>
+            <div className="flex space-x-3 text-white">
+              {socialLinks.map((social) => (
+                <Link key={social.label} href={social.href} aria-label={social.label} target="_blank" rel="noopener noreferrer" className="flex h-10 w-10 items-center justify-center rounded-full bg-[hsl(var(--crator-surface-hsl))] hover:bg-primary hover: transition-all duration-300 group">
+                  <social.Icon className="h-5 w-5 text-muted-foreground group-hover: transition-colors" />
+                </Link>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-16 border-t border-color-gray-800 pt-8 text-center text-white text-sm">
+          <p>&copy; {new Date().getFullYear()} Evalsy. Built with AI, for smarter hiring.</p>
         </div>
       </div>
     </footer>
   );
-};
+}
