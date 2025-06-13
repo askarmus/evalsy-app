@@ -3,7 +3,7 @@
 import { LoginSchema } from '@/helpers/schemas';
 import { LoginFormType } from '@/helpers/types';
 import { getCurrentUser, loginUser } from '@/services/authService';
-import { Button, Input } from '@heroui/react';
+import { Button, Card, CardBody, CardHeader, Input } from '@heroui/react';
 import { Formik } from 'formik';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -52,7 +52,7 @@ export const Login = () => {
         <div className="flex">
           <Logo />
         </div>
-        <h2 className="mt-20 text-2xl font-semibold ">Sign in to your account</h2>
+
         {/* <p className='mt-2 text-sm  '>
           Don’t have an account?{" "}
           <Link href='/signup' className='font-medium text-blue-600 hover:underline'>
@@ -63,21 +63,26 @@ export const Login = () => {
 
         <Formik initialValues={initialValues} validationSchema={LoginSchema} onSubmit={handleLogin}>
           {({ values, errors, touched, handleChange, handleSubmit }) => (
-            <>
-              <div className="mt-10 grid grid-cols-1 gap-y-8">
-                <Input variant="bordered" label="Email" type="email" value={values.email} isInvalid={!!errors.email && !!touched.email} errorMessage={errors.email} onChange={handleChange('email')} />
-                <Input variant="bordered" label="Password" type="password" value={values.password} isInvalid={!!errors.password && !!touched.password} errorMessage={errors.password} onChange={handleChange('password')} />
+            <Card shadow="sm" radius="md" className="p-4 mt-6">
+              <CardHeader>
+                <h2 className=" text-2xl font-semibold ">Sign in to your account</h2>
+              </CardHeader>
+              <CardBody>
+                <div className="mt-10 grid grid-cols-1 gap-y-8">
+                  <Input variant="bordered" label="Email" type="email" value={values.email} isInvalid={!!errors.email && !!touched.email} errorMessage={errors.email} onChange={handleChange('email')} />
+                  <Input variant="bordered" label="Password" type="password" value={values.password} isInvalid={!!errors.password && !!touched.password} errorMessage={errors.password} onChange={handleChange('password')} />
 
-                <Button onPress={() => handleSubmit()} radius="full" isLoading={isSubmitting} color="primary">
-                  Login
-                </Button>
-                <p className="mt-2 text-sm text-gray-700">
-                  <Link href="/forgetpassword" className="font-medium text-blue-600 hover:underline">
-                    Forget Password?
-                  </Link>
-                </p>
-              </div>
-            </>
+                  <Button onPress={() => handleSubmit()} radius="full" isLoading={isSubmitting} color="primary">
+                    Login
+                  </Button>
+                  <p className="mt-2 text-sm text-gray-700">
+                    <Link href="/forgetpassword" className="font-medium text-blue-600 hover:underline">
+                      Forget Password?
+                    </Link>
+                  </p>
+                </div>
+              </CardBody>
+            </Card>
           )}
         </Formik>
       </main>

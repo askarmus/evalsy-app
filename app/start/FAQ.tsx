@@ -47,7 +47,7 @@ export default function FAQ() {
               <AccordionItem
                 key={index}
                 title={item.question}
-                className="bg-darkbase border border-[hsl(var(--crator-border-hsl))] rounded-xl px-6 shadow-sm"
+                className="bg-darkbase   rounded-xl px-6 shadow-sm"
                 classNames={{
                   title: 'text-white', // ✅ this changes the title color
                   trigger: 'text-white', // optional: if you want the chevron icon to be white too

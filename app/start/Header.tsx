@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure } from '@heroui/react';
+import { Modal, ModalContent, ModalHeader, ModalBody, useDisclosure } from '@heroui/react';
 import { LogoDark } from '@/components/logo.dark';
 
 import Link from 'next/link';
@@ -12,7 +12,7 @@ export const Header: React.FC = () => {
   const { user, loading } = useAuth();
 
   return (
-    <header className="py-4 bg-darkbase">
+    <header className="py-4  " style={{ backgroundColor: '#130f1e' }}>
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <nav className="relative z-50 flex justify-between">
           <div className="flex items-center md:gap-x-12">

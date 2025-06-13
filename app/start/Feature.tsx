@@ -71,7 +71,6 @@ export default function Feature() {
     <section id="features" className="bg-darkbase py-8  ">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mb-5">
         <div className="text-center">
-          <Chip>{selectedStep.title}</Chip>
           <h2 className="font-display text-4xl font-bold  tracking-tight text-white sm:text-4xl mt-4">How AI Interviewer Works</h2>
         </div>
 

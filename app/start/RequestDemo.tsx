@@ -46,13 +46,12 @@ export default function RequestDemo() {
     <section id="shedule-demo" className="min-h-screen bg-darkbase  flex items-center justify-center p-4 md:p-8">
       <div className="w-full max-w-6xl">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-          <div className="hidden lg:block relative h-full   rounded-2xl overflow-hidden">
-            <div className="relative z-10 p-8 h-full flex flex-col justify-between">
-              <div className="  mb-2">
-                <div className="  mb-12">
-                  <h2 className="font-display text-4xl font-bold text-white sm:text-4xl">Request your personalized demo</h2>
-                  <p className="mt-4 text-lg text-white ">Only pay for what you use — credits are flexible, fair, and never expire.</p>
-                </div>
+          <div className="hidden lg:block relative h-full rounded-2xl overflow-hidden">
+            <div className="relative z-10 p-8 h-full flex flex-col justify-center">
+              <div className="mb-12">
+                <div className="inline-block bg-[#26242e] px-4 py-1 rounded-full text-white text-sm font-semibold mb-5">Demo</div>
+                <h2 className="font-display text-4xl font-bold text-white sm:text-4xl">Request your personalized demo</h2>
+                <p className="mt-4 text-lg text-white">Only pay for what you use — credits are flexible, fair, and never expire.</p>
               </div>
             </div>
           </div>
