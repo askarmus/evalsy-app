@@ -1,11 +1,10 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { cn } from '@heroui/react';
-import SpeakingIndicator from '@/app/interview/start/[id]/components/SpeakingIndicator';
+import { motion } from 'framer-motion';
+import { ChevronRight } from 'lucide-react';
 
-const tabs = [
+const data = [
   {
     id: 'finances',
     label: 'FINANCES',
@@ -88,68 +87,122 @@ const tabs = [
   },
 ];
 
-export function OptimizeSection() {
-  const [activeTab, setActiveTab] = useState(0);
+export default function Home() {
+  const [activeTab, setActiveTab] = useState(data[0].id);
+  const [isPaused, setIsPaused] = useState(false);
 
+  // Auto-rotate tabs every 5 seconds
   useEffect(() => {
-    const interval = setInterval(() => {
-      setActiveTab((prev) => (prev + 1) % tabs.length);
-    }, 5000);
-    return () => clearInterval(interval);
-  }, []);
+    if (isPaused) return;
 
-  const currentTab = tabs[activeTab];
+    const interval = setInterval(() => {
+      const currentIndex = data.findIndex((item) => item.id === activeTab);
+      const nextIndex = (currentIndex + 1) % data.length;
+      setActiveTab(data[nextIndex].id);
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [activeTab, isPaused]);
+
+  const activeItem = data.find((item) => item.id === activeTab) || data[0];
 
   return (
-    <section id="testimonials" aria-labelledby="faq-title" className="relative overflow-hidden bg-slate-50 py-24">
-      <img alt="" loading="lazy" width={1558} height={946} decoding="async" data-nimg={1} className="absolute top-0 left-1/2 max-w-none -translate-y-1/4 translate-x-[-30%]" src="/background-faqs.55d2e36a.jpg" style={{ color: 'transparent' }} />
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative">
-        <div className="">
-          <div className="flex justify-center mb-8">
-            <div className="inline-flex bg-gray-800  rounded-full p-1.5">
-              {tabs.map((tab, index) => (
-                <button key={tab.id} onClick={() => setActiveTab(index)} className={cn('relative px-4 py-2 rounded-full text-xs font-medium transition-colors duration-200', activeTab === index ? 'text-white' : 'text-gray-600 hover:text-gray-800')}>
-                  {activeTab === index && <motion.div layoutId="activeTabBg" className="absolute inset-0 bg-[#2563eb] rounded-full" transition={{ type: 'spring', duration: 0.6 }} />}
-                  <span className="relative z-10 text-white">{tab.label}</span>
+    <main className="min-h-screen bg-[#121217] py-12 px-4 sm:px-6 lg:px-8 text-gray-200">
+      <div className="max-w-6xl mx-auto">
+        <div className="mb-12">
+          {/* Header Content - Now Full Width */}
+          <div className="max-w-4xl mx-auto">
+            <div className="inline-block px-4 py-1.5 bg-[#1e1e24] rounded-full text-sm font-medium text-gray-300 mb-6">Our partners</div>
+            <h1 className="text-4xl lg:text-5xl font-bold text-white mb-4">
+              Transform Your Hiring Process with <span className="text-blue-400">Evalsy AI</span>
+            </h1>
+            <p className="text-lg text-gray-400 mb-8">See how our AI-powered recruitment platform outperforms traditional hiring methods across key metrics</p>
+
+            {/* Tab Navigation */}
+            <div className="flex flex-wrap gap-2">
+              {data.map((item) => (
+                <button
+                  key={item.id}
+                  onClick={() => {
+                    setActiveTab(item.id);
+                    setIsPaused(true);
+                    // Resume auto-rotation after 10 seconds of inactivity
+                    setTimeout(() => setIsPaused(false), 10000);
+                  }}
+                  onMouseEnter={() => setIsPaused(true)}
+                  onMouseLeave={() => setIsPaused(false)}
+                  className={`px-6 py-3 rounded-full font-medium text-sm transition-all duration-200 ${activeTab === item.id ? 'bg-blue-500 text-white shadow-lg shadow-blue-900/30' : 'bg-[#1e1e24] text-gray-300 hover:bg-[#2a2a33]'}`}
+                >
+                  {item.label}
                 </button>
               ))}
             </div>
           </div>
-          <div className=" ">
-            <AnimatePresence mode="wait">
-              <motion.div key={currentTab.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.5 }} className="text-center mb-12">
-                <h2 className="font-display text-2xl tracking-tight text-gray-900 mb-4 sm:text-4xl md:text-4xl">{currentTab.title}</h2>
-                <p className="text-gray-600 max-w-2xl mx-auto">{currentTab.description}</p>
-              </motion.div>
-            </AnimatePresence>
+        </div>
 
-            <div className="grid md:grid-cols-2 gap-20">
-              <AnimatePresence mode="wait">
-                <motion.div key={`left-${currentTab.id}`} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }} transition={{ duration: 0.5 }} className=" p-6 flex flex-col items-center     rounded-3xl bg-gray-800 p-8 text-white border border-slate-700 shadow-md">
-                  <h3 className="text-gray-100 text-xl font-medium mb-8">{currentTab.comparison.traditional.title}</h3>
-                  <div className="text-gray-900 text-4xl font-bold mb-2 text-1xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-cyan-400">{currentTab.comparison.traditional.value}</div>
-                  <div className="text-gray-300">{currentTab.comparison.traditional.unit}</div>
-                </motion.div>
-              </AnimatePresence>
+        <motion.div key={activeTab} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }} className="bg-[#1e1e24] rounded-2xl shadow-xl overflow-hidden" onMouseEnter={() => setIsPaused(true)} onMouseLeave={() => setIsPaused(false)}>
+          <div className="p-8 md:p-12">
+            <h2 className="text-3xl font-bold text-white mb-3">{activeItem.title}</h2>
+            <p className="text-gray-400 mb-8 text-lg">{activeItem.description}</p>
 
-              <AnimatePresence mode="wait">
-                <motion.div key={`right-${currentTab.id}`} initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.5 }} className=" p-6 flex  flex-col items-center relative overflow-hidden p-6  rounded-3xl bg-gray-800 p-8 text-white border border-slate-700 shadow-md">
-                  <div className="absolute top-0 right-0 bg-[#2563eb] text-white text-xs font-bold px-3 py-1 rounded-bl-lg">AI-POWERED</div>
-                  <h3 className="text-gray-100 text-xl font-medium mb-8">{currentTab.comparison.ai.title}</h3>
-                  <div className="text-[#2563eb] text-4xl font-bold mb-2 text-1xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-cyan-400">{currentTab.comparison.ai.value}</div>
-                  <div className="text-gray-300">{currentTab.comparison.ai.unit}</div>
-                </motion.div>
-              </AnimatePresence>
-            </div>
+            <div className="grid md:grid-cols-2 gap-8">
+              {/* Traditional Method */}
+              <div className="bg-[#16161c] rounded-xl p-6 relative">
+                <div className="absolute top-0 right-0 bg-[#2a2a33] text-gray-300 px-4 py-1 rounded-bl-lg rounded-tr-lg text-sm font-medium">Traditional</div>
+                <h3 className="text-xl font-semibold text-gray-300 mt-4">{activeItem.comparison.traditional.title}</h3>
+                <div className="mt-6 mb-4">
+                  <span className="text-4xl font-bold text-gray-200">{activeItem.comparison.traditional.value}</span>
+                  <span className="text-gray-400 ml-2">{activeItem.comparison.traditional.unit}</span>
+                </div>
+                <div className="h-2 w-full bg-[#2a2a33] rounded-full"></div>
+              </div>
 
-            <div className="mt-8 text-center">
-              <div className=" px-6 py-3">
-                <span className="text-gray-600">{currentTab.comparison.savings}</span>, <span className="text-gray-900">{currentTab.comparison.tagline}</span>
+              {/* Evalsy AI Method */}
+              <div className="bg-[#16161c] rounded-xl p-6 relative">
+                <div className="absolute top-0 right-0 bg-blue-600 text-white px-4 py-1 rounded-bl-lg rounded-tr-lg text-sm font-medium">AI-Powered</div>
+                <h3 className="text-xl font-semibold text-blue-400 mt-4">{activeItem.comparison.ai.title}</h3>
+                <div className="mt-6 mb-4">
+                  <span className="text-4xl font-bold text-blue-400">{activeItem.comparison.ai.value}</span>
+                  <span className="text-blue-600 ml-2">{activeItem.comparison.ai.unit}</span>
+                </div>
+                <div className="h-2 w-full bg-[#2a2a33] rounded-full">
+                  <div className="h-2 bg-blue-500 rounded-full w-3/4"></div>
+                </div>
               </div>
             </div>
+
+            {/* Savings Highlight */}
+            <div className="mt-10 bg-gradient-to-r from-blue-600 to-blue-500 rounded-xl p-6 text-white flex flex-col md:flex-row justify-between items-center">
+              <div>
+                <h3 className="text-2xl font-bold mb-2">{activeItem.comparison.savings}</h3>
+                <p className="text-blue-100">{activeItem.comparison.tagline}</p>
+              </div>
+              <a href="#shedule-demo" className="mt-4 md:mt-0 bg-white text-blue-700 px-6 py-3 rounded-full font-medium flex items-center group transition-all hover:bg-gray-100">
+                Request a Demo
+                <ChevronRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              </a>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Bottom Navigation */}
+        <div className="mt-10 flex justify-center">
+          <div className="flex space-x-2">
+            {data.map((item) => (
+              <button
+                key={item.id}
+                onClick={() => {
+                  setActiveTab(item.id);
+                  setIsPaused(true);
+                  setTimeout(() => setIsPaused(false), 10000);
+                }}
+                className={`w-3 h-3 rounded-full transition-all ${activeTab === item.id ? 'bg-blue-500 w-6' : 'bg-gray-700 hover:bg-gray-600'}`}
+                aria-label={`View ${item.label} information`}
+              />
+            ))}
           </div>
         </div>
       </div>
-    </section>
+    </main>
   );
 }

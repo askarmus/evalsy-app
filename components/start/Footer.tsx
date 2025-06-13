@@ -7,9 +7,8 @@ export function Footer() {
   const companyLinks = [
     { name: 'Home', href: '/' },
     { name: 'Pricing', href: '/#pricing' },
-    { name: 'Demo', href: '/#demo' }, // Assuming you have a demo section with this ID
+    { name: 'Demo', href: '/#shedule-demo' }, // Assuming you have a demo section with this ID
     { name: 'FAQ', href: '/#faq' },
-    { name: 'Contact Us', href: '/contact' }, // Placeholder, create this page if needed
   ];
 
   const socialLinks = [
@@ -21,7 +20,7 @@ export function Footer() {
   return (
     <footer className="bg-darkbase-sec  py-16 lg:py-20  ">
       <div className="container mx-auto px-4 md:px-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 lg:gap-8">
           {/* Column 1: Brand & Copyright */}
           <div className="space-y-4 text-white">
             <Link href="/" className="flex items-center space-x-2.5 mb-3">
@@ -37,21 +36,41 @@ export function Footer() {
 
           {/* Column 2: Get in touch */}
           <div className="space-y-3 text-white">
-            <h3 className="text-lg font-semibold text-white mb-4">Get in touch</h3>
+            <h3 className="text-lg font-semibold text-white mb-4">Singapore</h3>
             <a href="mailto:hello@evalsy.com" className="flex items-start space-x-2.5 hover:text-white transition-colors group">
               <Mail className="h-5 w-5 mt-0.5 text-white group-hover:text-white transition-colors" />
-              <span>hello@evalsy.com</span>
+              <span>team@evalsy.com</span>
             </a>
             <a href="tel:+15551234567" className="flex items-start space-x-2.5 hover:text-white transition-colors group">
               <Phone className="h-5 w-5 mt-0.5 text-white group-hover:text-white transition-colors" />
-              <span>(555) 123-4567</span>
+              <span>+65 6123 4567</span>
             </a>
             <div className="flex items-start text-white space-x-2.5">
               <MapPin className="h-5 w-5 mt-0.5 text-white flex-shrink-0" />
               <span>
-                123 Innovation Drive
+                2 Havelock Road,
                 <br />
-                Tech City, CA 90210
+                #05-10 Havelock II
+              </span>
+            </div>
+          </div>
+
+          <div className="space-y-3 text-white">
+            <h3 className="text-lg font-semibold text-white mb-4">Sri Lanka</h3>
+            <a href="mailto:hello@evalsy.com" className="flex items-start space-x-2.5 hover:text-white transition-colors group">
+              <Mail className="h-5 w-5 mt-0.5 text-white group-hover:text-white transition-colors" />
+              <span>team@evalsy.com</span>
+            </a>
+            <a href="tel:+15551234567" className="flex items-start space-x-2.5 hover:text-white transition-colors group">
+              <Phone className="h-5 w-5 mt-0.5 text-white group-hover:text-white transition-colors" />
+              <span>(+947)79059394</span>
+            </a>
+            <div className="flex items-start text-white space-x-2.5">
+              <MapPin className="h-5 w-5 mt-0.5 text-white flex-shrink-0" />
+              <span>
+                12 Access Tower,
+                <br />
+                Union Place, Colombo
               </span>
             </div>
           </div>

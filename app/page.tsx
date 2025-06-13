@@ -3,11 +3,11 @@ import { Header } from '@/components/start/Header';
 import { Hero } from '@/components/start/Hero';
 import { Pricing } from '@/components/start/Pricing';
 import { Footer } from '@/components/start/Footer';
-import { FAQ } from '@/components/start/FAQ';
-import { OptimizeSection } from '@/components/start/optimize-section';
-import F2 from '@/components/start/feature';
+import { Testimonials } from '@/components/start/testimonials';
 import RequestDemo from '@/components/start/RequestDemo';
-import { FaqHeroSection } from '@/components/start/faq1';
+import Feature from '@/components/start/feature';
+import OptimizeSection from '@/components/start/optimize-section';
+import FAQ from '@/components/start/faq';
 
 export default function Home() {
   return (
@@ -15,11 +15,11 @@ export default function Home() {
       <Header />
       <main className="bg-red  text-slate-700">
         <Hero />
-        <F2 />
-
+        <OptimizeSection />
+        <Feature />
         <Pricing />
+        <Testimonials />
         <FAQ />
-        <FaqHeroSection />
         <RequestDemo />
       </main>
       <Footer />

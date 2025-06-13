@@ -126,7 +126,7 @@ export default function RequestDemo() {
                     onChange={handleInputChange}
                   />
 
-                  <Button isLoading={isSubmiting} type="submit" size="lg" className="mt-8 inline-flex items-center justify-center rounded-full bg-white  py-4 px-8 font-medium   hover:text-white  hover:bg-slate-600 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-700" endContent={<FaArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />}>
+                  <Button isLoading={isSubmiting} type="submit" size="lg" className="mt-8 inline-flex items-center justify-center rounded-full bg-white text-black py-4 px-8 font-medium hover:text-white hover:bg-slate-600 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-700" endContent={<FaArrowRight className="w-4 h-4 hover:translate-x-1 transition-transform" />}>
                     Request Demo
                   </Button>
                 </form>

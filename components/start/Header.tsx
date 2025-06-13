@@ -29,11 +29,14 @@ export const Header: React.FC = () => {
               <a className="inline-block rounded-lg px-2 py-1 text-md text-white" href="#pricing">
                 Pricing
               </a>
+              <a className="inline-block rounded-lg px-2 py-1 text-md text-white" href="#faq">
+                FAQ
+              </a>
             </div>
           </div>
           <div className="flex items-center gap-x-5 md:gap-x-8">
             {!loading && user ? (
-              <Link className="group inline-flex items-center justify-center rounded-full py-3 px-5 text-sm font-semibold focus:outline-hidden focus-visible:outline-2 focus-visible:outline-offset-2 bg-white  hover:text-slate-100 hover:bg-green-500 active:bg-green-800 active:text-green-100 focus-visible:outline-green-600" href="/dashboard">
+              <Link className="inline-flex items-center justify-center rounded-full py-3 px-5 text-sm font-semibold focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 bg-white text-black hover:text-white hover:bg-green-500 active:bg-green-800 active:text-green-100 focus-visible:outline-green-600" href="/dashboard">
                 Go to Dashboard
               </Link>
             ) : (
@@ -45,7 +48,7 @@ export const Header: React.FC = () => {
                 </div>
 
                 <a className="group inline-flex items-center justify-center rounded-full py-3 px-5 text-sm font-semibold focus:outline-hidden focus-visible:outline-2 focus-visible:outline-offset-2 bg-blue-600 text-white hover:text-slate-100 hover:bg-blue-500 active:bg-blue-800 active:text-blue-100 focus-visible:outline-blue-600" href="#shedule-demo">
-                  Book a Demo
+                  Let&apos;s talk
                 </a>
                 {/* <Link className="group inline-flex items-center justify-center rounded-full py-3 px-5 text-sm font-semibold focus:outline-hidden focus-visible:outline-2 focus-visible:outline-offset-2 bg-blue-600 text-white hover:text-slate-100 hover:bg-blue-500 active:bg-blue-800 active:text-blue-100 focus-visible:outline-blue-600" href="/signup">
                   <span>

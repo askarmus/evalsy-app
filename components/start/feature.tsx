@@ -1,9 +1,8 @@
 'use client';
 
-import { AnimatePresence, motion } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useState, useEffect } from 'react';
 import { FaPlus, FaUsers, FaPaperPlane, FaVideo, FaChartBar } from 'react-icons/fa';
-import Image from 'next/image';
 import { Chip } from '@heroui/react';
 
 const steps = [
@@ -39,7 +38,7 @@ const steps = [
   },
 ];
 
-export default function FeatureSteps() {
+export default function Feature() {
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
   const [progress, setProgress] = useState<number[]>(new Array(steps.length).fill(0));
 
@@ -69,7 +68,7 @@ export default function FeatureSteps() {
   const selectedStep = steps[selectedIndex];
 
   return (
-    <section id="pricing" className="bg-darkbase py-8  ">
+    <section id="features" className="bg-darkbase py-8  ">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mb-5">
         <div className="text-center">
           <Chip>{selectedStep.title}</Chip>
