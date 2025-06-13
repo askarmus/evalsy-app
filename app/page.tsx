@@ -5,9 +5,9 @@ import { Pricing } from '@/components/start/Pricing';
 import { Footer } from '@/components/start/Footer';
 import { Testimonials } from '@/components/start/testimonials';
 import RequestDemo from '@/components/start/RequestDemo';
-import Feature from '@/components/start/feature';
 import OptimizeSection from '@/components/start/optimize-section';
-import FAQ from '@/components/start/faq';
+import Feature from '@/components/start/Feature';
+import FAQ from '@/components/start/FAQ';
 
 export default function Home() {
   return (
