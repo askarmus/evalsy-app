@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { Brain, Instagram, Facebook, Twitter, MapPin, Phone, Mail } from 'lucide-react';
-import { Logo } from '../shared/logo';
-import { LogoDark } from '../logo.dark';
+import { Logo } from '../../components/shared/logo';
+import { LogoDark } from '../../components/logo.dark';
 
 export function Footer() {
   const companyLinks = [
