@@ -111,8 +111,8 @@ export default function Home() {
       <div className="max-w-6xl mx-auto">
         <div className="mb-12">
           {/* Header Content - Now Full Width */}
-          <div className="max-w-4xl mx-auto">
-            <div className="inline-block px-4 py-1.5 bg-[#1e1e24] rounded-full text-sm font-medium text-gray-300 mb-6">Our partners</div>
+          <div className="max-w-6xl mx-auto">
+            <div className="inline-block px-4 py-1.5 bg-[#1e1e24] rounded-full text-sm font-medium text-gray-300 mb-6">Cost saving</div>
             <h1 className="text-4xl lg:text-5xl font-bold text-white mb-4">
               Transform Your Hiring Process with <span className="text-blue-400">Evalsy AI</span>
             </h1>
