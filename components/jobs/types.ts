@@ -10,6 +10,14 @@ export interface AddJobFormValues {
   prompt?: string;
   invitationExpireInDays: number;
   durationInMinutes: number;
+  workplaceType: string;
+  country?: string;
+  city?: string;
+  currency: string;
+  minSalary: number;
+  maxSalary: number;
+  showSalaryInDescription: boolean;
+
   fraudDetection: {
     tabSwitch: boolean;
     rightClick: boolean;

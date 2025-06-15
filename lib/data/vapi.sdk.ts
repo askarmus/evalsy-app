@@ -9,9 +9,32 @@ export const createInterviewAssistant = async (interviewData: {
   role: string;
   level: string;
   userName: string; // Added userName parameter
+  minSalary: number;
+  maxSalary: number;
+  currency: string;
 }) => {
   // Format the questions for the prompt
-  const formattedQuestions = '- ' + interviewData.questions.map((q) => q.text).join('\n- ');
+
+  const insertIndex = 1;
+
+  const packageQuestions: Question[] = [
+    {
+      text: `We typically offer a compensation range between ${interviewData.minSalary}–${interviewData.maxSalary} ${interviewData.currency}. Does this align with your expectations?`,
+    },
+    {
+      text: 'Could you please share your current compensation (including currency)?',
+    },
+    {
+      text: 'What is your expected salary or compensation range for this role?',
+    },
+    {
+      text: 'Are there any specific benefits or perks that are important to you (e.g., ESOPs, remote work, healthcare, bonuses)?',
+    },
+  ];
+
+  const fullQuestionList: Question[] = [...interviewData.questions.slice(0, insertIndex), ...packageQuestions, ...interviewData.questions.slice(insertIndex)];
+
+  const formattedQuestions = '- ' + fullQuestionList.map((q) => q.text).join('\n- ');
 
   //Add the required properties according to CreateAssistantDTO type
   return vapi.start({

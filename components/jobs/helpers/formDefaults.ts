@@ -15,7 +15,15 @@ export const defaultJobFormValues: AddJobFormValues = {
       isRandom: false,
     },
   ],
-  experienceLevel: 'beginner',
+  experienceLevel: '',
+  workplaceType: '',
+  country: '',
+  city: '',
+  currency: '',
+  minSalary: 0,
+  maxSalary: 0,
+  showSalaryInDescription: false,
+
   description: '',
   fraudDetection: {
     tabSwitch: true,

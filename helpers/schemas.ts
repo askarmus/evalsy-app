@@ -43,6 +43,14 @@ export const AddJobSchema = Yup.object()
   .shape({
     jobTitle: Yup.string().required('Title is required'),
     totalRandomVerbalQuestion: Yup.number().required(),
+    workplaceType: Yup.string().required('Workplace type is required'),
+    country: Yup.string().required('Country is required'),
+    city: Yup.string().required('City is required'),
+    currency: Yup.string().required('Currency is required'),
+    minSalary: Yup.number().min(0, 'Must be at least 0').required('Minimum salary is required'),
+    maxSalary: Yup.number().moreThan(Yup.ref('minSalary'), 'Must be greater than minimum salary').required('Maximum salary is required'),
+    showSalaryInDescription: Yup.boolean(),
+
     description: Yup.string()
       .transform((value) => value.replace(/<[^>]+>/g, '').trim()) // Strip HTML tags
       .min(20, 'Description must be at least 20 characters long')

@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { Brain, Instagram, Facebook, Twitter, MapPin, Phone, Mail } from 'lucide-react';
 import { Logo } from '../../components/shared/logo';
 import { LogoDark } from '../../components/logo.dark';
+import PoweredBy from '../interview/start/[id]/components/PoweredBy';
 
 export function Footer() {
   const companyLinks = [
@@ -104,7 +105,7 @@ export function Footer() {
         </div>
 
         <div className="mt-16 border-t border-color-gray-800 pt-8 text-center text-white text-sm">
-          <p>&copy; {new Date().getFullYear()} Evalsy. Built with AI, for smarter hiring.</p>
+          <PoweredBy />
         </div>
       </div>
     </footer>

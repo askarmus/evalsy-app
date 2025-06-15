@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
-import { Button, Card, CardBody, Input, NumberInput, Tooltip, Textarea, RadioGroup, Radio, Slider } from '@heroui/react';
+import { Button, Card, CardBody, Input, NumberInput, Tooltip, Textarea, RadioGroup, Radio, Slider, Checkbox, Select, SelectItem, Autocomplete } from '@heroui/react';
 import { Formik, FormikHelpers } from 'formik';
 import { showToast } from '@/app/utils/toastUtils';
 import { createJob, generateJobDescriptionFromAI, getJobById, updateJob } from '@/services/job.service';
@@ -22,6 +22,7 @@ import { FraudDetectionSettings } from './components/add/FraudDetectionSettings'
 import { VerticalStepper } from './components/add/VerticalStepper';
 import { StepperHeader } from './components/add/StepperHeader';
 import { defaultJobFormValues } from './helpers/formDefaults';
+import { currencyOptions } from '@/services/currency.service';
 
 export const AddJob = () => {
   const router = useRouter();
@@ -42,6 +43,8 @@ export const AddJob = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [completedSteps, setCompletedSteps] = useState<number[]>([]);
   const [invalidSteps, setInvalidSteps] = useState<number[]>([]);
+  const [availableCities, setAvailableCities] = useState<string[]>([]);
+  const [selectedCountry, setSelectedCountry] = useState<string>('');
 
   const stepsData = [
     {
@@ -81,6 +84,25 @@ export const AddJob = () => {
   }, [id]);
 
   const [formReady, setFormReady] = useState(!isEditMode);
+
+  const workplaceOptions = [
+    { id: 'onsite', name: 'Onsite' },
+    { id: 'remote', name: 'Remote' },
+    { id: 'hybrid', name: 'Hybrid' },
+  ];
+
+  const countryOptions = [
+    { id: 'US', name: 'United States' },
+    { id: 'IN', name: 'India' },
+    { id: 'GB', name: 'United Kingdom' },
+    { id: 'LK', name: 'Sri Lanka' },
+  ];
+
+  const experienceOptions = [
+    { id: 'beginner', name: 'Beginner' },
+    { id: 'intermediate', name: 'Intermediate' },
+    { id: 'expert', name: 'Expert' },
+  ];
 
   useEffect(() => {
     if (isEditMode) {
@@ -277,6 +299,75 @@ export const AddJob = () => {
                             </div>
                             <h1 className="text-sm font-semibold   mb-0">Role Name</h1>
                             <Input variant="bordered" value={values.jobTitle} onChange={handleChange('jobTitle')} isInvalid={!!errors.jobTitle && !!touched.jobTitle} errorMessage={errors.jobTitle} />
+
+                            {/* Workplace Type */}
+
+                            <div className="grid grid-cols-2 gap-3">
+                              <Select variant="bordered" label="Workplace Type" items={workplaceOptions} isInvalid={!!errors.workplaceType && !!touched.workplaceType} errorMessage={errors.workplaceType} selectedKeys={[values.workplaceType]} onSelectionChange={(key) => setFieldValue('workplaceType', Array.from(key)[0])}>
+                                {(item) => <SelectItem key={item.id}>{item.name}</SelectItem>}
+                              </Select>
+
+                              <Select
+                                variant="bordered"
+                                label="Experience Level"
+                                items={experienceOptions}
+                                isInvalid={!!errors.experienceLevel && !!touched.experienceLevel}
+                                errorMessage={errors.experienceLevel}
+                                selectedKeys={values.experienceLevel ? [values.experienceLevel] : []} // <-- handle empty case
+                                onSelectionChange={(key) => setFieldValue('experienceLevel', Array.from(key)[0] || '')}
+                              >
+                                {(item) => <SelectItem key={item.id}>{item.name}</SelectItem>}
+                              </Select>
+                            </div>
+
+                            <h1 className="text-sm font-semibold">Salary Range(this will help you you narrow down selecton process)</h1>
+
+                            <div className="grid grid-cols-3 gap-3">
+                              <Select
+                                variant="bordered"
+                                label="Currency"
+                                placeholder="Select a currency" // ✅ required when using labelPlacement="outside"
+                                labelPlacement="outside"
+                                isInvalid={!!errors.currency && !!touched.currency}
+                                errorMessage={errors.currency}
+                                items={currencyOptions}
+                                selectedKeys={values.currency ? [values.currency] : []}
+                                onSelectionChange={(key) => setFieldValue('currency', Array.from(key)[0])}
+                              >
+                                {(item) => <SelectItem key={item.code}>{item.name}</SelectItem>}
+                              </Select>
+
+                              <Input variant="bordered" min={0} isInvalid={!!errors.minSalary && !!touched.minSalary} errorMessage={errors.minSalary} label="Min Salary" labelPlacement="outside" placeholder="Min" type="number" value={values.minSalary?.toString() || ''} onChange={handleChange('minSalary')} />
+
+                              <Input variant="bordered" isInvalid={!!errors.maxSalary && !!touched.maxSalary} errorMessage={errors.maxSalary} label="Max Salary" labelPlacement="outside" placeholder="Max" type="number" value={values.maxSalary?.toString() || ''} onChange={handleChange('maxSalary')} />
+                            </div>
+
+                            <h1 className="text-sm font-semibold">Location</h1>
+
+                            <div className="grid grid-cols-2 gap-3">
+                              <Select
+                                variant="bordered"
+                                label="Country"
+                                isInvalid={!!errors.country && !!touched.country}
+                                errorMessage={errors.country}
+                                items={countryOptions}
+                                selectedKeys={[values.country!]}
+                                onSelectionChange={(key) => {
+                                  const selected = Array.from(key)[0] || '';
+                                  setFieldValue('country', selected);
+                                  setFieldValue('city', '');
+                                  setSelectedCountry(selected.toString());
+                                }}
+                              >
+                                {(item) => <SelectItem key={item.id}>{item.name}</SelectItem>}
+                              </Select>
+
+                              <Input variant="bordered" isInvalid={!!errors.city && !!touched.city} errorMessage={errors.city} label="City" placeholder="city" value={values.city?.toString() || ''} onChange={handleChange('city')} />
+                            </div>
+
+                            <Checkbox isSelected={values.showSalaryInDescription} onValueChange={(val) => setFieldValue('showSalaryInDescription', val)}>
+                              Show salary range in job description
+                            </Checkbox>
 
                             <div className="mb-5 flex items-center gap-[5px] mb-3 md:mb-4 ">
                               <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="none" viewBox="0 0 16 16">
