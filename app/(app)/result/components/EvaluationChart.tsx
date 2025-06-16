@@ -12,8 +12,8 @@ const EvaluationChart = ({ data }: { data: any }) => {
       {data?.categoryScores?.map(({ name, score, comment }) => {
         return (
           <div key={name} className="grid grid-cols-12 gap-2 items-center">
-            <span className="col-span-5 text-xs capitalize">{name}:</span>
-            <div className="col-span-5">
+            <span className="col-span-7 text-xs capitalize">{name}:</span>
+            <div className="col-span-3">
               <div className="h-2 w-full rounded-full bg-gray-200">
                 <div className={`h-2 rounded-full ${getScoreBarColor(score)}`} style={{ width: score }}></div>
               </div>

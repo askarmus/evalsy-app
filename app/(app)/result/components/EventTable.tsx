@@ -34,18 +34,6 @@ const EventTable: React.FC<EventTableProps> = ({ data }) => {
 
   return (
     <div>
-      <Input
-        isClearable
-        label="Search by Type"
-        placeholder="e.g., RIGHT_CLICK"
-        className="mb-4"
-        value={searchTerm}
-        onValueChange={(val) => {
-          setSearchTerm(val);
-          setPage(1); // reset to first page on search
-        }}
-      />
-
       <Table aria-label="Event Table">
         <TableHeader>
           <TableColumn>Type</TableColumn>

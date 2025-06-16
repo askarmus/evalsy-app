@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useMemo, useEffect, useCallback, useRef } from 'react';
-import { Tabs, Tab, Card, CardBody, Spinner } from '@heroui/react';
+import { Tabs, Tab, Card, CardBody, Spinner, CircularProgress, CardFooter, Chip } from '@heroui/react';
 import { getAllInterviewResult, getInterviewResultById } from '@/services/interview.service';
 import EvaluationChart from './components/EvaluationChart';
 import ImageSlider from '@/components/shared/ImageSlider';
@@ -12,6 +12,7 @@ import EventTable from './components/EventTable';
 import EmptyStateCards from '@/components/shared/empty-state-cards';
 import AudioPlayerWithHighlight from './components/TranscriptPlayer';
 import CandidateSkeleton from './components/CandidateSkeleton';
+import { HiringGradeUtil } from '@/app/utils/hiring-grade.util';
 
 export default function InterviewResultList() {
   const [page, setPage] = useState(1);
@@ -160,6 +161,144 @@ export default function InterviewResultList() {
                     <CandidateHeader selectedInterviewerData={selectedInterviewerData} />
                   </CardBody>
                 </Card>
+
+                {/* <div className="flex items-center gap-2">
+            <FaCalendar className="h-4 w-4 text-gray-400" />
+            <div className="flex flex-col">
+              <span className="text-sm text-gray-500">Completed</span>
+              <span className="text-sm font-medium">{DateFormatter.formatDate(selectedInterviewerData?.statusUpdateAt, true)}</span>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <FaCheckCircle className="h-4 w-4 text-gray-400" />
+            <div className="flex flex-col">
+              <span className="text-sm text-gray-500">Score</span>
+              <span className="text-sm font-medium">{Math.floor(selectedInterviewerData?.totalScore)}</span>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <FaCheckCircle className="h-4 w-4 text-gray-400" />
+            <div className="flex flex-col">
+              <span className="text-sm text-gray-500">Hire Rec.</span>
+              <span className="text-sm font-medium">
+                <RatingChips weight={selectedInterviewerData?.totalScore} />
+              </span>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <FaExclamationCircle className="h-4 w-4 text-gray-400" />
+            <div className="flex flex-col">
+              <span className="text-sm text-gray-500">Fraud Risk</span>
+              <span className="text-sm font-medium">{selectedInterviewerData?.fraudProbability ?? 0} %</span>
+            </div>
+          </div> */}
+                <div className="grid grid-cols-5 gap-4 mb-4">
+                  <Card shadow="none" className="  p-0">
+                    <CardBody>
+                      <div className="text-sm text-gray-600 mb-1">Current Salary</div>
+                      <div className="font-semibold text-gray-900">2500 LKR</div>
+                    </CardBody>
+                  </Card>
+                  <Card shadow="none" className="  p-0">
+                    <CardBody>
+                      <div className="text-sm text-gray-600 mb-1">Expected Salary</div>
+                      <div className="font-semibold text-gray-900">3500 USD</div>
+                    </CardBody>
+                  </Card>
+                  <Card shadow="none" className="  p-0">
+                    <CardBody>
+                      <div className="text-sm text-gray-600 mb-1">Total Experience</div>
+                      <div className="font-semibold text-gray-900">2 yrs & 4 months</div>
+                    </CardBody>
+                  </Card>
+                  <Card shadow="none" className="  p-0">
+                    <CardBody>
+                      <div className="text-sm text-gray-600 mb-1">Fraud Risk</div>
+                      <div className="font-semibold text-gray-900">{selectedInterviewerData?.fraudProbability ?? 0}%</div>
+                    </CardBody>
+                  </Card>
+                  <Card shadow="none" className="  p-0">
+                    <CardBody>
+                      <div className="text-sm text-gray-600 mb-1">Score</div>
+                      <div className="font-semibold text-gray-900">{selectedInterviewerData?.totalScore}</div>
+                    </CardBody>
+                  </Card>
+                </div>
+
+                <div className="grid grid-cols-3 gap-4 mb-5">
+                  {/* Technical Score */}
+                  {/* <Card shadow="none" className="  p-2">
+                    <CardBody>
+                      <div className="flex items-center justify-between mb-6">
+                        <h3 className="text-lg font-semibold text-gray-900">Technical Score</h3>
+                        sss
+                      </div>
+
+                      <div className="flex flex-col items-center">
+                        <CircularProgress
+                          color={HiringGradeUtil.getHiringRecommendation(selectedInterviewerData?.totalScore || 0).color}
+                          classNames={{
+                            svg: 'w-32 h-32  ',
+                            track: 'stroke-gray-400',
+                            value: 'text-xl font-semibold  ',
+                          }}
+                          showValueLabel={true}
+                          strokeWidth={4}
+                          value={selectedInterviewerData?.totalScore}
+                        />
+                      </div>
+                    </CardBody>
+                  </Card> */}
+                  <Card className="   ">
+                    <CardBody className="justify-center items-center pb-0">
+                      <CircularProgress
+                        color={HiringGradeUtil.getHiringRecommendation(selectedInterviewerData?.totalScore || 0).color}
+                        classNames={{
+                          svg: 'w-32 h-32 drop-shadow-none',
+                          track: 'stroke-gray-200',
+                          value: 'text-2xl font-semibold ',
+                        }}
+                        showValueLabel={true}
+                        strokeWidth={4}
+                        value={selectedInterviewerData?.totalScore}
+                      />
+                    </CardBody>
+                    <CardFooter className="justify-center items-center pt-0">
+                      <Chip size="sm" color={HiringGradeUtil.getHiringRecommendation(selectedInterviewerData?.totalScore || 0).color} variant="bordered">
+                        {HiringGradeUtil.getHiringRecommendation(selectedInterviewerData?.totalScore || 0).recommendation}
+                      </Chip>
+                    </CardFooter>
+                  </Card>
+                  {/* Communication Score */}
+                  <Card shadow="none" className="  p-2">
+                    <CardBody>
+                      <div className="flex items-center justify-between mb-6">
+                        <h3 className="text-lg font-semibold text-gray-900">Overall Score</h3>
+                        dsd
+                      </div>
+
+                      <div className="flex flex-col items-center">{selectedInterviewerData && <EvaluationChart data={selectedInterviewerData} />}</div>
+                    </CardBody>
+                  </Card>
+
+                  {/* AI Summary */}
+                  <Card shadow="none" className="  p-2">
+                    <CardBody>
+                      <div className="flex items-center gap-2 mb-6">
+                        <div className="w-6 h-6 bg-green-100 rounded flex items-center justify-center">
+                          <span className="text-green-600 text-sm">🤖</span>
+                        </div>
+                        <h3 className="text-lg font-semibold text-gray-900">AI Final Assessment</h3>
+                      </div>
+
+                      <div className="space-y-4 text-xs">{selectedInterviewerData?.finalAssessment || 'No final assessment provided.'}</div>
+                    </CardBody>
+                  </Card>
+                </div>
+
                 <Card shadow="none">
                   <CardBody>
                     <div className="flex gap-4">
@@ -183,29 +322,21 @@ export default function InterviewResultList() {
 
                 <Card shadow="none" className="mt-4 p-2">
                   <CardBody>
-                    <Tabs>
-                      <Tab key="overall" title="Overall Performence">
-                        <div className="grid grid-cols-[1fr_auto_1fr] gap-5">
-                          <div className="space-y-5">
-                            <div>
-                              <h2 className="text-lg font-semibold mb-4">Overall Performence</h2>
-                              {selectedInterviewerData && <EvaluationChart data={selectedInterviewerData} />}
-                            </div>
-                          </div>
-
-                          {/* Divider */}
-                          <div className="w-px bg-gray-300 " />
-
-                          <div className="space-y-5">
-                            <FeedbackCard data={selectedInterviewerData} />
-                          </div>
+                    <div className="grid grid-cols-[1fr_auto_1fr] gap-5">
+                      <div className="space-y-5">
+                        <div>
+                          <h2 className="text-lg font-semibold mb-4">Fraud Events</h2>
+                          <EventTable data={selectedInterviewerData?.fraudEvents} />
                         </div>
-                      </Tab>
+                      </div>
 
-                      <Tab key="fraud" title="Fraud Risk">
-                        <EventTable data={selectedInterviewerData?.fraudEvents} />
-                      </Tab>
-                    </Tabs>
+                      {/* Divider */}
+                      <div className="w-px bg-gray-300 " />
+
+                      <div className="space-y-5">
+                        <FeedbackCard data={selectedInterviewerData} />
+                      </div>
+                    </div>
                   </CardBody>
                 </Card>
               </div>

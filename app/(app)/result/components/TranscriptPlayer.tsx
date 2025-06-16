@@ -1,9 +1,23 @@
 import { useState, useRef, useEffect } from 'react';
 
-export default function AudioPlayerWithHighlight({ transcript, recordingUrl }) {
+interface TranscriptItem {
+  secondsFromStart: number;
+  message: string;
+  role: 'user' | 'bot';
+}
+
+interface AudioPlayerWithHighlightProps {
+  transcript: TranscriptItem[];
+  recordingUrl: string;
+}
+
+export default function AudioPlayerWithHighlight({ transcript, recordingUrl }: AudioPlayerWithHighlightProps) {
   const audioRef = useRef<HTMLAudioElement>(null);
   const transcriptContainerRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(-1);
+
+  // Remove the first item from the transcript
+  const filteredTranscript = transcript.slice(1);
 
   // Update active sentence based on currentTime
   useEffect(() => {
@@ -11,7 +25,7 @@ export default function AudioPlayerWithHighlight({ transcript, recordingUrl }) {
 
     const updateActiveSentence = () => {
       const time = audioRef.current?.currentTime || 0;
-      const newActiveIndex = transcript.findLastIndex((item) => item.secondsFromStart <= time);
+      const newActiveIndex = filteredTranscript.findLastIndex((item) => item.secondsFromStart <= time);
 
       if (newActiveIndex !== activeIndex) {
         setActiveIndex(newActiveIndex);
@@ -45,7 +59,7 @@ export default function AudioPlayerWithHighlight({ transcript, recordingUrl }) {
     return () => {
       audioRef.current?.removeEventListener('timeupdate', updateActiveSentence);
     };
-  }, [activeIndex, transcript]);
+  }, [activeIndex, filteredTranscript]);
 
   return (
     <div className="container">
@@ -54,7 +68,7 @@ export default function AudioPlayerWithHighlight({ transcript, recordingUrl }) {
       </div>
 
       <div className="transcript" ref={transcriptContainerRef}>
-        {transcript.map((item, index) => (
+        {filteredTranscript.map((item, index) => (
           <p
             key={index}
             id={`sentence-${index}`}
