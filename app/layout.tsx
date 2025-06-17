@@ -8,11 +8,15 @@ import { GoogleAnalytic } from '@/components/GoogleAnalytic';
 export const metadata: Metadata = {
   title: 'Evalsy - AI-Powered Intelligent Interview Automation',
   description: 'From resume-to-role matching to dynamic interview creation, Evalsy helps you find top talent faster—boosting efficiency and reducing hiring friction.',
+  icons: {
+    icon: '/favicon-32x32.png', // Direct path to favicon.ico
+  },
   openGraph: {
     title: 'Evalsy - AI-Powered Intelligent Interview Automation',
     description: '75% Faster Hiring • 80% Cost Savings • 99% Match Accuracy. Evalsy makes hiring smart, fast, and scalable.',
     url: 'https://www.Evalsy.com', // Replace with your actual domain
     siteName: 'Evalsy',
+
     images: [
       {
         url: 'https://www.evalsy.com/og-image.jpg', // Replace with your image path
