@@ -25,7 +25,15 @@ export default function AudioPlayerWithHighlight({ transcript, recordingUrl }: A
 
     const updateActiveSentence = () => {
       const time = audioRef.current?.currentTime || 0;
-      const newActiveIndex = filteredTranscript.findLastIndex((item) => item.secondsFromStart <= time);
+
+      // Manual replacement for findLastIndex
+      let newActiveIndex = -1;
+      for (let i = filteredTranscript.length - 1; i >= 0; i--) {
+        if (filteredTranscript[i].secondsFromStart <= time) {
+          newActiveIndex = i;
+          break;
+        }
+      }
 
       if (newActiveIndex !== activeIndex) {
         setActiveIndex(newActiveIndex);
@@ -39,16 +47,13 @@ export default function AudioPlayerWithHighlight({ transcript, recordingUrl }: A
 
       if (!container || !activeElement) return;
 
-      // Calculate positions
       const containerRect = container.getBoundingClientRect();
       const elementRect = activeElement.getBoundingClientRect();
       const containerTop = containerRect.top;
       const elementRelativeTop = elementRect.top - containerTop;
 
-      // Calculate desired scroll position
       const scrollTo = container.scrollTop + elementRelativeTop - container.clientHeight / 2;
 
-      // Smooth scroll within the container only
       container.scrollTo({
         top: scrollTo,
         behavior: 'smooth',
