@@ -18,7 +18,7 @@ export const NavbarWrapper = () => {
       position="sticky"
       isBordered
       onMenuOpenChange={setIsMenuOpen}
-      className="w-full bg-[#1E293B] text-[#F1F5F9]"
+      className="w-full bg-[#130f1e] text-[#F1F5F9]"
       classNames={{
         wrapper: 'w-full max-w-full',
       }}
