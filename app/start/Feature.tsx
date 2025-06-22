@@ -68,7 +68,7 @@ export default function Feature() {
   const selectedStep = steps[selectedIndex];
 
   return (
-    <section id="features" className="bg-darkbase py-8  ">
+    <section id="features" className="bg-darkbase py-20 sm:py-32 ">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mb-5">
         <div className="text-center">
           <h2 className="font-display text-4xl font-bold  tracking-tight text-white sm:text-4xl mt-4">How AI Interviewer Works</h2>

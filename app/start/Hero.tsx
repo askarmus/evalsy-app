@@ -6,7 +6,7 @@ import TypewriterEffect from './TypewriterEffect';
 
 export function Hero() {
   return (
-    <section className={cn('relative pb-12 md:pb-24 bg-[#14101f] overflow-hidden min-h-[calc(100vh-20rem)] flex items-center', 'transition-opacity duration-1000 ease-out')}>
+    <section className={cn('relative pb-12 md:pb-24 bg-[#1c1829] overflow-hidden min-h-[calc(100vh-20rem)] flex items-center', 'transition-opacity duration-1000 ease-out')}>
       <div className="container mx-auto px-4 sm:px-6 relative z-10">
         <div className="bg-[#1c1829] mt-4 md:mt-8 p-6 sm:p-10 md:p-28 rounded-3xl shadow-2xl border border-white/5 relative overflow-hidden">
           {/* Polygon Overlay */}
