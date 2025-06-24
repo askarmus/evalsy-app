@@ -63,20 +63,22 @@ export const Login = () => {
 
         <Formik initialValues={initialValues} validationSchema={LoginSchema} onSubmit={handleLogin}>
           {({ values, errors, touched, handleChange, handleSubmit }) => (
-            <Card shadow="sm" radius="md" className="p-4 mt-6">
+            <Card shadow="none" radius="md" className="p-4 mt-6 border-2 border-black bg-white rounded-xl">
               <CardHeader>
-                <h2 className=" text-2xl font-semibold ">Sign in to your account</h2>
+                <h2 className=" text-2xl font-semibold " style={{ fontFamily: 'Courier, monospace' }}>
+                  Sign in to your account
+                </h2>
               </CardHeader>
               <CardBody>
-                <div className="mt-10 grid grid-cols-1 gap-y-8">
+                <div className="mt-5 grid grid-cols-1 gap-y-8">
                   <Input variant="bordered" label="Email" type="email" value={values.email} isInvalid={!!errors.email && !!touched.email} errorMessage={errors.email} onChange={handleChange('email')} />
                   <Input variant="bordered" label="Password" type="password" value={values.password} isInvalid={!!errors.password && !!touched.password} errorMessage={errors.password} onChange={handleChange('password')} />
 
-                  <Button onPress={() => handleSubmit()} radius="full" isLoading={isSubmitting} color="primary">
+                  <Button onPress={() => handleSubmit()} isLoading={isSubmitting} className="text-white  bg-black py-4 px-8 font-medium">
                     Login
                   </Button>
                   <p className="mt-2 text-sm text-gray-700">
-                    <Link href="/forgetpassword" className="font-medium text-blue-600 hover:underline">
+                    <Link href="/forgetpassword" className="font-medium text-black-600 hover:underline">
                       Forget Password?
                     </Link>
                   </p>

@@ -199,13 +199,17 @@ export default function InterviewResultList() {
                   <Card shadow="none" className="  p-0">
                     <CardBody>
                       <div className="text-sm text-gray-600 mb-1">Current Salary</div>
-                      <div className="font-semibold text-gray-900">2500 LKR</div>
+                      <div className="font-semibold text-gray-900">
+                        {selectedInterviewerData?.currentSalary?.amount ?? 0} {selectedInterviewerData?.currentSalary?.currency}
+                      </div>
                     </CardBody>
                   </Card>
                   <Card shadow="none" className="  p-0">
                     <CardBody>
                       <div className="text-sm text-gray-600 mb-1">Expected Salary</div>
-                      <div className="font-semibold text-gray-900">3500 USD</div>
+                      <div className="font-semibold text-gray-900">
+                        {selectedInterviewerData?.expectedSalary?.amount ?? 0} {selectedInterviewerData?.expectedSalary?.currency ?? 0}
+                      </div>
                     </CardBody>
                   </Card>
                   <Card shadow="none" className="  p-0">

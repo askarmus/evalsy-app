@@ -49,29 +49,34 @@ export default function RequestDemo() {
           <div className="hidden lg:block relative h-full rounded-2xl overflow-hidden">
             <div className="relative z-10 p-8 h-full flex flex-col justify-center">
               <div className="mb-12">
-                <div className="inline-block bg-[#26242e] px-4 py-1 rounded-full text-white text-sm font-semibold mb-5">Demo</div>
-                <h2 className="font-display text-4xl font-bold text-white sm:text-4xl">Request your personalized demo</h2>
-                <p className="mt-4 text-lg text-white">Only pay for what you use — credits are flexible, fair, and never expire.</p>
+                <div className="inline-block   px-4 py-1 border-2 border-black rounded-full mb-5">Demo</div>
+                <div className="space-y-4">
+                  <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl" style={{ fontFamily: 'Courier, monospace' }}>
+                    Request your personalized demo
+                  </h2>
+                  <p className="text-lg text-gray-700 max-w-md">Only pay for what you use — credits are flexible, fair, and never expire.</p>
+                </div>
               </div>
             </div>
           </div>
           <div>
-            <Card className="rounded-3xl bg-white/5 p-8 text-white   shadow-md">
+            <Card shadow="none" className="border-2 border-black rounded-lg  bg-white p-4">
               <CardHeader className="pb-0 pt-4   flex flex-col items-start mb-3">
-                <p className="text-xl font-bold text-white">Tell us about your needs</p>
-                <p className="text-sm text-slate-400">We will get back to you within 24 hours to schedule your personalized demo.</p>
+                <p className="text-xl font-bold ">Tell us about your needs</p>
+                <p className="text-sm">We will get back to you within 24 hours to schedule your personalized demo.</p>
               </CardHeader>
               <CardBody className="px-1 py-1">
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <Input
                     name="fullName"
                     label="Full Name"
-                    placeholder="Enter your full name"
+                    labelPlacement="inside"
+                    size="sm"
                     isRequired
                     variant="bordered"
                     radius="sm"
                     classNames={{
-                      inputWrapper: 'bg-white text-black border-slate-300',
+                      inputWrapper: 'bg-white text-black border-slate-600',
                       input: 'text-black placeholder:text-slate-500',
                     }}
                     value={formData.fullName}
@@ -80,14 +85,15 @@ export default function RequestDemo() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <Input
                       name="email"
+                      size="sm"
                       type="email"
                       label="Email Address"
-                      placeholder="you@company.com"
+                      labelPlacement="inside"
                       isRequired
                       variant="bordered"
                       radius="sm"
                       classNames={{
-                        inputWrapper: 'bg-white text-black border-slate-300',
+                        inputWrapper: 'bg-white text-black border-slate-600',
                         input: 'text-black placeholder:text-slate-500',
                       }}
                       value={formData.email}
@@ -97,13 +103,13 @@ export default function RequestDemo() {
                     <Input
                       name="mobile"
                       label="Mobile Number"
-                      placeholder="+1 555 123 4567"
+                      size="sm"
                       isRequired
                       type="tel"
                       variant="bordered"
                       radius="sm"
                       classNames={{
-                        inputWrapper: 'bg-white text-black border-slate-300',
+                        inputWrapper: 'bg-white text-black border-slate-600',
                         input: 'text-black placeholder:text-slate-500',
                       }}
                       value={formData.mobile}
@@ -118,24 +124,24 @@ export default function RequestDemo() {
                     variant="bordered"
                     radius="sm"
                     classNames={{
-                      inputWrapper: 'bg-white text-black border-slate-300',
+                      inputWrapper: 'bg-white text-black border-slate-600',
                       input: 'text-black placeholder:text-slate-500',
                     }}
                     value={formData.company}
                     onChange={handleInputChange}
                   />
 
-                  <Button isLoading={isSubmiting} type="submit" size="lg" className="mt-8 inline-flex items-center justify-center rounded-full bg-white text-black py-4 px-8 font-medium hover:text-white hover:bg-slate-600 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-700" endContent={<FaArrowRight className="w-4 h-4 hover:translate-x-1 transition-transform" />}>
+                  <Button radius="sm" isLoading={isSubmiting} type="submit" size="md" className="mt-8 text-white  bg-black py-4 px-8 font-medium hover: hover:bg-slate-600 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-700" endContent={<FaArrowRight className="w-4 h-4 text-white hover:translate-x-1 transition-transform" />}>
                     Request Demo
                   </Button>
                 </form>
               </CardBody>
             </Card>
             <div className="mt-8">
-              <div className="flex flex-wrap items-center justify-start gap-4 md:gap-6 text-slate-400 text-sm">
+              <div className="flex flex-wrap items-center justify-start gap-4 md:gap-6 text-sm">
                 {['No commitment required', 'Free consultation', '24h response time'].map((text) => (
                   <div key={text} className="flex items-center gap-2">
-                    <FaCheckCircle className="w-4 h-4 text-gray-400" />
+                    <FaCheckCircle className="w-4 h-4  " />
                     <span>{text}</span>
                   </div>
                 ))}

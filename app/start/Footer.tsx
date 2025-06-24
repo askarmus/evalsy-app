@@ -19,131 +19,155 @@ export function Footer() {
   ];
 
   return (
-    <footer
-      className="wow fadeInUp relative z-10 bg-[#090E34] pt-20 lg:pt-[100px]"
-      data-wow-delay=".15s"
-      style={{
-        visibility: 'visible',
-        animationDelay: '0.15s',
-        animationName: 'fadeInUp',
-      }}
-    >
-      <div className="container px-4 mx-auto">
-        <div className="flex flex-wrap -mx-4">
-          <div className="w-full px-4 sm:w-1/2 md:w-1/2 lg:w-4/12 xl:w-3/12">
-            <div className="w-full mb-10">
-              <a href="javascript:void(0)" className="mb-6 inline-block max-w-[160px]">
-                <img src="/final-dark.png" alt="logo" className="max-w-full" />
-              </a>
-              <p className="mb-8 max-w-[270px] text-base text-gray-300">We create digital experiences for brands and companies by using technology.</p>
-            </div>
+    <footer className="w-full py-12 bg-[#E0FFF0] border-t-2 border-black">
+      <div className="container px-4 md:px-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
+          {/* Brand Section */}
+          <div className="lg:col-span-1 space-y-4">
+            <Link href="/" className="flex items-center space-x-2">
+              <span className="text-2xl font-bold text-black" style={{ fontFamily: 'Courier, monospace' }}>
+                SparkCard
+              </span>
+            </Link>
+            <p className="text-gray-700 text-sm leading-relaxed">We create financial experiences for students and young adults by using innovative technology and transparent practices.</p>
           </div>
-          <div className="w-full px-4 sm:w-1/2 md:w-1/2 lg:w-2/12 xl:w-2/12">
-            <div className="w-full mb-10 space-y-3 text-gray-300">
-              <h4 className="text-lg font-semibold text-white mb-9">Singapore</h4>
-              <a href="mailto:hello@evalsy.com" className="flex items-start space-x-2.5 hover:text-gray-300 transition-colors group">
-                <Mail className="h-5 w-5 mt-0.5 text-gray-300 group-hover:text-gray-300 transition-colors" />
-                <span>team@evalsy.com</span>
-              </a>
-              <a href="tel:+15551234567" className="flex items-start space-x-2.5 hover:text-gray-300 transition-colors group">
-                <Phone className="h-5 w-5 mt-0.5 text-gray-300 group-hover:text-gray-300 transition-colors" />
-                <span>+65 6123 4567</span>
-              </a>
-              <div className="flex items-start text-gray-300 space-x-2.5">
-                <MapPin className="h-5 w-5 mt-0.5 text-gray-300 flex-shrink-0" />
-                <span>
-                  2 Havelock Road,
-                  <br />
-                  #05-10 Havelock II
-                </span>
-              </div>
-            </div>
-          </div>
-          <div className="w-full px-4 sm:w-1/2 md:w-1/2 lg:w-3/12 xl:w-2/12">
-            <div className="w-full mb-10 space-y-3 text-gray-300">
-              <h4 className="text-lg font-semibold text-white mb-9">Sri Lanka</h4>
 
-              <a href="mailto:hello@evalsy.com" className="flex items-start space-x-2.5 hover:text-gray-300 transition-colors group">
-                <Mail className="h-5 w-5 mt-0.5 text-gray-300 group-hover:text-gray-300 transition-colors" />
-                <span>team@evalsy.com</span>
-              </a>
-              <a href="tel:+15551234567" className="flex items-start space-x-2.5 hover:text-gray-300 transition-colors group">
-                <Phone className="h-5 w-5 mt-0.5 text-gray-300 group-hover:text-gray-300 transition-colors" />
-                <span>(+947)79059394</span>
-              </a>
-              <div className="flex items-start text-gray-300 space-x-2.5">
-                <MapPin className="h-5 w-5 mt-0.5 text-gray-300 flex-shrink-0" />
-                <span>
-                  12 Access Tower,
-                  <br />
-                  Union Place, Colombo
-                </span>
+          {/* Sydney Office */}
+          <div className="space-y-4">
+            <h4 className="text-lg font-semibold text-black">Sydney</h4>
+            <div className="space-y-3">
+              <div className="flex items-center space-x-3">
+                <div className="p-1 bg-[#98FB98] rounded-full border border-black">
+                  <Mail className="h-3 w-3 text-black" />
+                </div>
+                <Link href="mailto:team@sparkcard.com" className="text-gray-700 hover:text-black text-sm">
+                  team@sparkcard.com
+                </Link>
               </div>
-            </div>
-          </div>
-          <div className="w-full px-4 sm:w-1/2 md:w-1/2 lg:w-3/12 xl:w-2/12">
-            <div className="w-full mb-10">
-              <h4 className="text-lg font-semibold text-white mb-9">Company</h4>
-              <ul className="space-y-2.5">
-                {companyLinks.map((link) => (
-                  <li key={link.name}>
-                    <Link href={link.href} className="hover:text-gray-300 text-gray-300 pb-0.5 border-b border-transparent hover:border-primary/50">
-                      {link.name}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-          <div className="w-full px-4 md:w-2/3 lg:w-6/12 xl:w-3/12">
-            <div className="w-full mb-10">
-              <h4 className="text-lg font-semibold text-white mb-9">Follow us on social media</h4>
-
-              <p className="text-sm mb-4 text-gray-300">Stay connected and updated on our latest projects and insights.</p>
-              <div className="flex space-x-3 text-gray-300">
-                {socialLinks.map((social) => (
-                  <Link key={social.label} href={social.href} aria-label={social.label} target="_blank" rel="noopener noreferrer" className="flex h-10 w-10 items-center justify-center rounded-full bg-[hsl(var(--crator-surface-hsl))] hover:bg-primary hover: transition-all duration-300 group">
-                    <social.Icon className="h-5 w-5 text-muted-foreground group-hover: transition-colors" />
-                  </Link>
-                ))}
+              <div className="flex items-center space-x-3">
+                <div className="p-1 bg-[#98FB98] rounded-full border border-black">
+                  <Phone className="h-3 w-3 text-black" />
+                </div>
+                <Link href="tel:+61234567890" className="text-gray-700 hover:text-black text-sm">
+                  +61 2 3456 7890
+                </Link>
               </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="mt-12 border-t border-[#8890A4]/40 py-8 lg:mt-[60px]">
-        <div className="container px-4 mx-auto">
-          <div className="flex flex-wrap -mx-4">
-            <div className="w-full px-4 md:w-2/3 lg:w-1/2">
-              <div className="my-1">
-                <div className="flex items-center justify-center -mx-3 md:justify-start">
-                  <a href="javascript:void(0)" className="px-3 text-base text-gray-300 hover:text-gray-300 hover:underline">
-                    Privacy policy
-                  </a>
-                  <a href="javascript:void(0)" className="px-3 text-base text-gray-300 hover:text-gray-300 hover:underline">
-                    Legal notice
-                  </a>
-                  <a href="javascript:void(0)" className="px-3 text-base text-gray-300 hover:text-gray-300 hover:underline">
-                    Terms of service
-                  </a>
+              <div className="flex items-start space-x-3">
+                <div className="p-1 bg-[#98FB98] rounded-full border border-black mt-0.5">
+                  <MapPin className="h-3 w-3 text-black" />
+                </div>
+                <div className="text-gray-700 text-sm">
+                  <p>Level 15, 1 Martin Place,</p>
+                  <p>Sydney NSW 2000</p>
                 </div>
               </div>
             </div>
-            <div className="w-full px-4 md:w-1/3 lg:w-1/2">
-              <div className="flex justify-center my-1 md:justify-end">
-                <PoweredBy />
+          </div>
+
+          {/* Melbourne Office */}
+          <div className="space-y-4">
+            <h4 className="text-lg font-semibold text-black">Melbourne</h4>
+            <div className="space-y-3">
+              <div className="flex items-center space-x-3">
+                <div className="p-1 bg-[#98FB98] rounded-full border border-black">
+                  <Mail className="h-3 w-3 text-black" />
+                </div>
+                <Link href="mailto:team@sparkcard.com" className="text-gray-700 hover:text-black text-sm">
+                  team@sparkcard.com
+                </Link>
+              </div>
+              <div className="flex items-center space-x-3">
+                <div className="p-1 bg-[#98FB98] rounded-full border border-black">
+                  <Phone className="h-3 w-3 text-black" />
+                </div>
+                <Link href="tel:+61387654321" className="text-gray-700 hover:text-black text-sm">
+                  +61 3 8765 4321
+                </Link>
+              </div>
+              <div className="flex items-start space-x-3">
+                <div className="p-1 bg-[#98FB98] rounded-full border border-black mt-0.5">
+                  <MapPin className="h-3 w-3 text-black" />
+                </div>
+                <div className="text-gray-700 text-sm">
+                  <p>Suite 200, 120 Collins Street,</p>
+                  <p>Melbourne VIC 3000</p>
+                </div>
               </div>
             </div>
           </div>
+
+          {/* Company Links */}
+          <div className="space-y-4">
+            <h4 className="text-lg font-semibold text-black">Company</h4>
+            <ul className="space-y-2">
+              <li>
+                <Link className="text-gray-700 hover:text-black text-sm transition-colors hover:underline" href="#features">
+                  Home
+                </Link>
+              </li>
+              <li>
+                <Link className="text-gray-700 hover:text-black text-sm transition-colors hover:underline" href="#pricing">
+                  Pricing
+                </Link>
+              </li>
+              <li>
+                <Link className="text-gray-700 hover:text-black text-sm transition-colors hover:underline" href="#cta">
+                  Demo
+                </Link>
+              </li>
+              <li>
+                <Link className="text-gray-700 hover:text-black text-sm transition-colors hover:underline" href="#faq">
+                  FAQ
+                </Link>
+              </li>
+              <li>
+                <Link className="text-gray-700 hover:text-black text-sm transition-colors hover:underline" href="/about">
+                  About Us
+                </Link>
+              </li>
+              <li>
+                <Link className="text-gray-700 hover:text-black text-sm transition-colors hover:underline" href="/careers">
+                  Careers
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Social Media */}
+          <div className="space-y-4">
+            <h4 className="text-lg font-semibold text-black">Follow us on social media</h4>
+            <p className="text-gray-700 text-sm leading-relaxed">Stay connected and updated on our latest features, financial tips, and community insights.</p>
+            <div className="flex space-x-4">
+              <Link href="https://instagram.com/sparkcard" className="p-2 bg-white border-2 border-black rounded-full hover:bg-[#98FB98] transition-colors">
+                <Instagram className="h-5 w-5 text-black" />
+              </Link>
+              <Link href="https://facebook.com/sparkcard" className="p-2 bg-white border-2 border-black rounded-full hover:bg-[#98FB98] transition-colors">
+                <Facebook className="h-5 w-5 text-black" />
+              </Link>
+              <Link href="https://twitter.com/sparkcard" className="p-2 bg-white border-2 border-black rounded-full hover:bg-[#98FB98] transition-colors">
+                <Twitter className="h-5 w-5 text-black" />
+              </Link>
+            </div>
+          </div>
         </div>
-      </div>
-      <div>
-        <span className="absolute left-0 top-0 z-[-1]">
-          <img src="/shape-1.svg" alt="" />
-        </span>
-        <span className="absolute bottom-0 right-0 z-[-1]">
-          <img src="/shape-3.svg" alt="" />
-        </span>
+
+        {/* Bottom Section */}
+        <div className="mt-12 pt-8 border-t-2 border-black">
+          <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+            <p className="text-sm text-gray-700">© 2023 SparkCard. All rights reserved.</p>
+            <div className="flex space-x-6">
+              <Link className="text-sm text-gray-700 hover:text-black transition-colors hover:underline" href="/privacy">
+                Privacy Policy
+              </Link>
+              <Link className="text-sm text-gray-700 hover:text-black transition-colors hover:underline" href="/terms">
+                Terms of Service
+              </Link>
+              <Link className="text-sm text-gray-700 hover:text-black transition-colors hover:underline" href="/cookies">
+                Cookie Policy
+              </Link>
+            </div>
+          </div>
+        </div>
       </div>
     </footer>
   );

@@ -211,36 +211,20 @@ div::-webkit-scrollbar-track {
   margin-bottom: 16px;
 }
 .bg-darkbase {
-  background-color: #19181f;
+  background-color: #98fb98;
 }
 
 .bg-darkbase-sec {
-  background-color: #24212b;
+  background-color: #f0fff4;
 }
-.dHctdGV4dC1kYXJrLTcwMA {
-  --tw-text-opacity: 1;
-  color: rgb(35 32 42 / var(--tw-text-opacity));
+@media (min-width: 1400px) {
+  .container {
+    max-width: 1400px;
+  }
 }
-.dHctdy0xLzQ {
-  width: 25%;
-}
-.dHctaC1mdWxs {
-  height: 100%;
-}
-.dHctei0yMA {
-  z-index: 20;
-}
-.dHctcmlnaHQtMS80 {
-  right: 25%;
-}
-.dHctaW5zZXQteS0w {
-  top: 0;
-  bottom: 0;
-}
-.dHctYWJzb2x1dGU {
-  position: absolute;
-}
-.dHctdGV4dC1kYXJrLTcwMA {
-  --tw-text-opacity: 1;
-  color: rgb(35 32 42 / var(--tw-text-opacity));
+
+.container {
+  width: 100%;
+  margin-right: auto;
+  margin-left: auto;
 }

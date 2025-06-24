@@ -28,8 +28,8 @@ export const ValidProcessedCard = ({ file, onDelete, onViewDetails, isLoading = 
           </div>
         </div>
       </div>
-      <Button color="primary" isLoading={isLoading} onPress={() => onViewDetails(file.resumeId)} radius="full" variant="solid" size="sm" isDisabled={isLoading}>
-        Analysis
+      <Button color="default" isLoading={isLoading} onPress={() => onViewDetails(file.resumeId)} radius="full" variant="solid" size="sm" isDisabled={isLoading}>
+        View Analysis
       </Button>
     </CardHeader>
     <CardFooter className="gap-3 pt-0">

@@ -12,9 +12,30 @@ const Chart = dynamic(() => import('../charts/steam'), {
 });
 
 const widgetConfig = {
-  'Open Interview': { icon: <AiOutlineFileSearch className="text-white text-2xl" />, bgColor: 'bg-primary' },
-  'Pending Invitation': { icon: <AiOutlineUserSwitch className="text-white text-2xl" />, bgColor: 'bg-yellow-500' },
-  'Completed Interview': { icon: <AiOutlineCheckCircle className="text-2xl text-white" />, bgColor: 'bg-primary' },
+  'Open Interview': {
+    icon: (
+      <div className="rounded-full bg-[#98FB98] p-1 mb-4 border-1 border-black">
+        <AiOutlineUserSwitch className="text-1xl" />
+      </div>
+    ),
+    bgColor: 'bg-primary',
+  },
+  'Pending Invitation': {
+    icon: (
+      <div className="rounded-full bg-[#98FB98] p-1 mb-4 border-1 border-black">
+        <AiOutlineUserSwitch className="text-1xl" />
+      </div>
+    ),
+    bgColor: 'bg-primary',
+  },
+  'Completed Interview': {
+    icon: (
+      <div className="rounded-full bg-[#98FB98] p-1 mb-4 border-1 border-black">
+        <AiOutlineCheckCircle className="text-1xl" />
+      </div>
+    ),
+    bgColor: 'bg-primary',
+  },
 };
 
 export const Content = () => {
@@ -42,14 +63,18 @@ export const Content = () => {
         <div className="mt-6 gap-6 flex flex-col w-full">
           {/* Card Section Top */}
           <div className="flex flex-col gap-2">
-            <h3 className="text-2xl font-semibold mb-3">Hiring Pipeline Overview</h3>
+            <h3 className="text-2xl font-semibold mb-3" style={{ fontFamily: 'Courier, monospace' }}>
+              Hiring Pipeline Overview
+            </h3>
             <div className="grid md:grid-cols-2 grid-cols-1 2xl:grid-cols-3 gap-5 justify-center w-full">{loading ? Array.from({ length: 3 }).map((_, index) => <Skeleton key={index} className="h-24 w-full rounded-xl" />) : widgetData.map((data, index) => <DashboardWidjet key={index} data={data} />)}</div>
           </div>
 
           {/* Chart */}
           <div className="h-full flex flex-col gap-2">
-            <h3 className="text-2xl font-semibold mb-3">Trend analytics</h3>
-            <Card shadow="none" className="p-4">
+            <h3 className="text-2xl font-semibold mb-3" style={{ fontFamily: 'Courier, monospace' }}>
+              Trend analytics
+            </h3>
+            <Card shadow="none" radius="md" className="   border-2 border-black   rounded-xl w-full">
               <CardBody>
                 <Chart />
               </CardBody>
@@ -59,7 +84,9 @@ export const Content = () => {
 
         {/* Left Section */}
         <div className="mt-4 gap-2 flex flex-col xl:max-w-md w-full">
-          <h3 className="text-2xl font-semibold mb-3">Recent Interviwers</h3>
+          <h3 className="text-2xl font-semibold mb-3" style={{ fontFamily: 'Courier, monospace' }}>
+            Recent Interviwers
+          </h3>
           <div className="flex flex-col justify-center gap-4 flex-wrap md:flex-nowrap md:flex-col">
             <RecentInterviews />
           </div>

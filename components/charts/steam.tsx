@@ -110,7 +110,7 @@ export default function TrendAnalyticsChart() {
         color: isDark ? '#F3F4F6' : '#111827',
       },
     },
-    colors: ['#3b82f6'],
+    colors: ['#98fb98'],
   };
   const series = [
     {

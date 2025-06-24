@@ -11,10 +11,10 @@ type Props = {
 };
 
 const iconMap = {
-  totalCandidates: <FaUsers className="h-7 w-7 text-slate-900 dark:text-slate-100 mr-4 flex-shrink-0" />,
-  avgMatchScore: <FaChartBar className="h-7 w-7 text-slate-900 dark:text-slate-100 mr-4 flex-shrink-0" />,
-  topCandidatesPercent: <FaStar className="h-7 w-7 text-slate-900 dark:text-slate-100 mr-4 flex-shrink-0" />,
-  rejectedCandidates: <FaUserSlash className="h-7 w-7 text-slate-900 dark:text-slate-100 mr-4 flex-shrink-0" />,
+  totalCandidates: <FaUsers className="h-7 w-7 text-green-600 dark:text-slate-100 mr-4 flex-shrink-0" />,
+  avgMatchScore: <FaChartBar className="h-7 w-7 text-green-600 dark:text-slate-100 mr-4 flex-shrink-0" />,
+  topCandidatesPercent: <FaStar className="h-7 w-7 text-green-600 dark:text-slate-100 mr-4 flex-shrink-0" />,
+  rejectedCandidates: <FaUserSlash className="h-7 w-7 text-green-600 dark:text-slate-100 mr-4 flex-shrink-0" />,
 };
 
 export default function ResumeStatsGrid({ resumeStats }: Props) {
@@ -48,14 +48,14 @@ export default function ResumeStatsGrid({ resumeStats }: Props) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
       {cards.map((card, idx) => (
-        <Card key={idx} className="overflow-hidden" radius="sm" shadow="sm">
+        <Card key={idx} className="border-2 border-black rounded-xl    " radius="sm" shadow="none">
           <div className="flex items-center p-3">
             {iconMap[card.key as keyof typeof iconMap]}
             <div className="min-w-0">
               <div className="text-[20px] font-medium  mb-1  truncate">{card.title}</div>
               <div className="flex items-baseline">
                 <span className="text-xl font-bold mr-2">{card.value}</span>
-                <span className="text-xs text-slate-500 truncate">{card.subtitle}</span>
+                <span className="text-xs   truncate">{card.subtitle}</span>
               </div>
             </div>
           </div>

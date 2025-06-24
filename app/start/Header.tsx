@@ -1,104 +1,87 @@
 'use client';
 
-import React from 'react';
-import { Modal, ModalContent, ModalHeader, ModalBody, useDisclosure } from '@heroui/react';
+import { useState } from 'react';
+import NextLink from 'next/link';
+import { Navbar, NavbarBrand, NavbarContent, NavbarItem, Button, Link, Drawer, DrawerContent } from '@heroui/react';
+import { Menu, X } from 'lucide-react';
 import { LogoDark } from '@/components/logo.dark';
 
-import Link from 'next/link';
-import { useAuth } from '@/hooks/useAuth';
+export function Header() {
+  const [isOpen, setIsOpen] = useState(false);
 
-export const Header: React.FC = () => {
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const { user, loading } = useAuth();
+  const navigationItems = [
+    { href: '#how-it-work', label: 'How It Works' },
+    { href: '#features', label: 'Features' },
+    { href: '#pricing', label: 'Pricing' },
+    { href: '#faq', label: 'FAQ' },
+    { href: '#testimonials', label: 'Testimonials' },
+  ];
+
+  const closeMenu = () => setIsOpen(false);
 
   return (
-    <header className="py-4  " style={{ backgroundColor: '#130f1e' }}>
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <nav className="relative z-50 flex justify-between">
-          <div className="flex items-center md:gap-x-12">
-            <a aria-label="Home" href="#">
-              <LogoDark />
-            </a>
-            <div className="hidden md:flex md:gap-x-6">
-              <a className="inline-block rounded-lg px-2 py-1 text-md text-slate-700 text-white" href="#features">
-                Features
-              </a>
-              <a className="inline-block rounded-lg px-2 py-1 text-md text-slate-700 text-white" href="#testimonials">
-                Testimonials
-              </a>
-              <a className="inline-block rounded-lg px-2 py-1 text-md text-white" href="#pricing">
-                Pricing
-              </a>
-              <a className="inline-block rounded-lg px-2 py-1 text-md text-white" href="#faq">
-                FAQ
-              </a>
-            </div>
-          </div>
-          <div className="flex items-center gap-x-5 md:gap-x-8">
-            {!loading && user ? (
-              <Link className="inline-flex items-center justify-center rounded-full py-3 px-5 text-sm font-semibold focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 bg-white text-black hover:text-white hover:bg-green-500 active:bg-green-800 active:text-green-100 focus-visible:outline-green-600" href="/dashboard">
-                Go to Dashboard
+    <header className="sticky top-0 z-50 w-full border-b-2 border-black bg-[#98FB98] backdrop-blur supports-[backdrop-filter]:bg-[#98FB98]/95">
+      <Navbar maxWidth="2xl" className="bg-transparent px-4 md:px-6" height="4rem">
+        {/* Brand / Logo */}
+        <NavbarBrand>
+          <NextLink href="/" className="flex items-center space-x-2">
+            <LogoDark />
+          </NextLink>
+        </NavbarBrand>
+
+        {/* Desktop Links */}
+        <NavbarContent className="hidden md:flex gap-6 lg:gap-8" justify="center">
+          {navigationItems.map((item) => (
+            <NavbarItem key={item.href}>
+              <Link as={NextLink} href={item.href} className="text-sm font-medium text-black hover:text-gray-700 transition-colors hover:underline underline-offset-4">
+                {item.label}
               </Link>
-            ) : (
-              <>
-                <div className="hidden md:block">
-                  <Link className="inline-block rounded-lg px-2 py-1 text-md text-white" href="/login">
-                    Sign in
-                  </Link>
-                </div>
+            </NavbarItem>
+          ))}
+        </NavbarContent>
 
-                <a className="group inline-flex items-center justify-center rounded-full py-3 px-5 text-sm font-semibold focus:outline-hidden focus-visible:outline-2 focus-visible:outline-offset-2 bg-blue-600 text-white hover:text-slate-100 hover:bg-blue-500 active:bg-blue-800 active:text-blue-100 focus-visible:outline-blue-600" href="#shedule-demo">
-                  Let&apos;s talk
-                </a>
-                {/* <Link className="group inline-flex items-center justify-center rounded-full py-3 px-5 text-sm font-semibold focus:outline-hidden focus-visible:outline-2 focus-visible:outline-offset-2 bg-blue-600 text-white hover:text-slate-100 hover:bg-blue-500 active:bg-blue-800 active:text-blue-100 focus-visible:outline-blue-600" href="/signup">
-                  <span>
-                    Get started <span className="hidden lg:inline">today</span>
-                  </span>
-                </Link> */}
-              </>
-            )}
+        {/* Desktop CTA */}
+        <NavbarContent justify="end" className="hidden md:flex">
+          <Button as={NextLink} href="#shedule-demo" variant="bordered" className="border-2 border-black bg-white text-black hover:bg-gray-100">
+            Shedule a Demo
+          </Button>
+        </NavbarContent>
 
-            <div className="-mr-1 md:hidden">
-              <button onClick={onOpen} className="relative z-10 flex h-8 w-8 items-center justify-center focus:outline-hidden" type="button">
-                <svg aria-hidden="true" className="h-3.5 w-3.5 overflow-visible stroke-slate-700" fill="none" strokeWidth="2" strokeLinecap="round">
-                  <path d="M0 1H14M0 7H14M0 13H14" className={`origin-center transition ${isOpen ? 'scale-90 opacity-0' : ''}`} />
-                  <path d="M2 2L12 12M12 2L2 12" className={`origin-center transition ${isOpen ? '' : 'scale-90 opacity-0'}`} />
-                </svg>
-              </button>
+        {/* Mobile Menu Button */}
+        <Button className="md:hidden text-black hover:bg-[#7FE67F]" onPress={() => setIsOpen(true)} aria-label="Toggle menu" size="sm" variant="light">
+          <Menu className="h-6 w-6" />
+        </Button>
+      </Navbar>
+
+      {/* Mobile Drawer */}
+      <Drawer isOpen={isOpen} onClose={closeMenu} placement="right">
+        <DrawerContent className="w-[300px] bg-[#F0FFF4] border-l-2 border-black">
+          <div className="flex flex-col h-full p-4">
+            {/* Header */}
+            <div className="flex items-center justify-between pb-6 border-b-2 border-black">
+              <NextLink href="/" onClick={closeMenu} className="flex items-center space-x-2">
+                <LogoDark />
+              </NextLink>
+            </div>
+
+            {/* Nav Items */}
+            <nav className="flex flex-col gap-4 py-6 flex-1">
+              {navigationItems.map((item) => (
+                <Link key={item.href} as={NextLink} href={item.href} onClick={closeMenu} className="text-lg font-medium text-black hover:text-gray-700 transition-colors py-2 px-4 rounded hover:bg-[#98FB98] border-2 border-transparent hover:border-black">
+                  {item.label}
+                </Link>
+              ))}
+            </nav>
+
+            {/* CTA */}
+            <div className="pt-6 border-t-2 border-black">
+              <Button as={NextLink} href="#shedule-demo" className="w-full bg-[#98FB98] text-black border-2 border-black hover:bg-[#7FE67F]" onClick={closeMenu}>
+                Shedule a Demo
+              </Button>
             </div>
           </div>
-        </nav>
-      </div>
-      <div className="md:hidden">
-        <Modal isOpen={isOpen} onOpenChange={onOpenChange} placement="top" size="sm">
-          <ModalContent>
-            {(onClose) => (
-              <>
-                <ModalHeader className="flex justify-between items-center"></ModalHeader>
-                <ModalBody>
-                  <nav className="flex flex-col gap-y-4">
-                    <a className="inline-block rounded-lg px-2 py-1 text-sm text-slate-700 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white" href="#features" onClick={onClose}>
-                      Features
-                    </a>
-                    <a className="inline-block rounded-lg px-2 py-1 text-sm text-slate-700 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white" href="#testimonials" onClick={onClose}>
-                      Testimonials
-                    </a>
-                    <a className="inline-block rounded-lg px-2 py-1 text-sm text-slate-700 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white" href="#pricing" onClick={onClose}>
-                      Pricing
-                    </a>
-                    <a className="inline-block rounded-lg px-2 py-1 text-sm text-slate-700 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white" href="/login" onClick={onClose}>
-                      Sign in
-                    </a>
-                    {/* <a className='group inline-flex items-center justify-center rounded-full py-2 px-4 text-sm font-semibold bg-blue-600 text-white hover:text-slate-100 hover:bg-blue-500 active:bg-blue-800 active:text-blue-100 dark:bg-blue-500 dark:hover:bg-blue-400 dark:active:bg-blue-700' href='/signup' onClick={onClose}>
-                      Get started
-                    </a> */}
-                  </nav>
-                </ModalBody>
-              </>
-            )}
-          </ModalContent>
-        </Modal>
-      </div>
+        </DrawerContent>
+      </Drawer>
     </header>
   );
-};
+}

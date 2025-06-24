@@ -21,12 +21,14 @@ interface StepperHeaderProps {
 export const StepperHeader: React.FC<StepperHeaderProps> = ({ isEditMode, currentStep, stepsData, completedSteps, invalidSteps }) => {
   return (
     <>
-      <h2 className="text-xl font-semibold">{isEditMode ? 'Edit Interview' : 'Add Interview'}</h2>
-      <Card shadow="sm" className="p-2">
+      <h2 className="text-xl font-semibold" style={{ fontFamily: 'Courier, monospace' }}>
+        {isEditMode ? 'Edit Interview' : 'Add Interview'}
+      </h2>
+      <Card shadow="sm" className="border-2s border-gray-500 rounded-lg   p-4">
         <CardBody>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-primary-400 flex items-center justify-center">
+              <div className="w-10 h-10 rounded-full bg-black flex items-center justify-center">
                 <FaRegEdit className="w-5 h-5 text-white" />
               </div>
               <div>
@@ -47,18 +49,18 @@ export const StepperHeader: React.FC<StepperHeaderProps> = ({ isEditMode, curren
                       </svg>
                     </div>
                   ) : idx === currentStep ? (
-                    <div className="w-6 h-6 rounded-full border-2 border-primary-400 flex items-center justify-center">
-                      <div className="w-2 h-2 rounded-full bg-primary"></div>
+                    <div className="w-6 h-6 rounded-full border-2 border-green-500 flex items-center justify-center">
+                      <div className="w-2 h-2 rounded-full bg-green-500"></div>
                     </div>
                   ) : invalidSteps.includes(idx) ? (
                     <div className="w-6 h-6 rounded-full border-2 border-red-500 flex items-center justify-center">
                       <div className="w-2 h-2 rounded-full bg-red-500"></div>
                     </div>
                   ) : (
-                    <div className="w-6 h-6 rounded-full border-2 border-gray-300"></div>
+                    <div className="w-6 h-6 rounded-full border-2 border-green-300"></div>
                   )}
 
-                  {idx < stepsData.length - 1 && <div className={`w-3 h-0.5 ${completedSteps.includes(idx) ? 'bg-green-100' : invalidSteps.includes(idx) ? 'bg-red-200' : 'bg-gray-200'}`}></div>}
+                  {idx < stepsData.length - 1 && <div className={`w-3 h-0.5 ${completedSteps.includes(idx) ? 'bg-green-100' : invalidSteps.includes(idx) ? 'bg-red-200' : 'bg-green-200'}`}></div>}
                 </div>
               ))}
             </div>

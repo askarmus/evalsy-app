@@ -6,10 +6,6 @@ import Underline from '@tiptap/extension-underline';
 import { CodeBlockLowlight } from '@tiptap/extension-code-block-lowlight';
 import { createLowlight } from 'lowlight';
 
-import javascript from 'highlight.js/lib/languages/javascript';
-import typescript from 'highlight.js/lib/languages/typescript';
-import python from 'highlight.js/lib/languages/python';
-
 import { Button } from '@heroui/react';
 import { AiOutlineBold, AiOutlineItalic, AiOutlineUnderline, AiOutlineUnorderedList, AiOutlineOrderedList, AiOutlineCode } from 'react-icons/ai';
 import { useEffect } from 'react';
@@ -21,10 +17,6 @@ interface RichTextEditorProps {
 
 export default function RichTextEditor({ value, onChange }: RichTextEditorProps) {
   const lowlight = createLowlight();
-
-  lowlight.register('javascript', javascript);
-  lowlight.register('typescript', typescript);
-  lowlight.register('python', python);
 
   const editor = useEditor({
     extensions: [

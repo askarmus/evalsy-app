@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useLockedBody } from '../hooks/useBodyLock';
-import { NavbarWrapper } from '../navbar/navbar';
+import { Header } from '../navbar/navbar';
 
 interface Props {
   children: React.ReactNode;
@@ -18,7 +18,7 @@ export const Layout = ({ children }: Props) => {
 
   return (
     <section>
-      <NavbarWrapper />
+      <Header />
       {children}
     </section>
   );

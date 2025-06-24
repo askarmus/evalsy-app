@@ -133,14 +133,16 @@ export default function Jobs() {
     <div className="  my-10 px-4 lg:px-6 max-w-[80rem] mx-auto w-full flex flex-col gap-4">
       <Breadcrumb items={breadcrumbItems} />
 
-      <h3 className="text-xl font-semibold">All Interviews</h3>
+      <h3 className="text-xl font-semibold" style={{ fontFamily: 'Courier, monospace' }}>
+        All Interviews
+      </h3>
 
       <div className="flex justify-between flex-wrap gap-4 items-center">
         <div className="flex items-center gap-3 flex-wrap md:flex-nowrap">
           <Input
             onChange={(e) => onSearchChange(e.target.value)}
             isClearable
-            className="max-w-md"
+            className="max-w-md   border-black  "
             placeholder="Search jobs"
             defaultValue=""
             startContent={<FaSearch />}
@@ -187,7 +189,7 @@ export default function Jobs() {
             />
           </Tabs>
 
-          <Button color="primary" size="sm" onPress={() => router.push('/interviews/add')} endContent={<AiOutlinePlus />}>
+          <Button color="primary" className=" text-white  bg-black " size="sm" onPress={() => router.push('/interviews/add')} endContent={<AiOutlinePlus />}>
             Create New Interview
           </Button>
         </div>
@@ -214,7 +216,7 @@ export default function Jobs() {
             ) : (
               <>
                 {items.map((job: any) => (
-                  <Card key={job.id} shadow="none" className="P-3">
+                  <Card key={job.id} shadow="none" className="P-3 border-2 border-black rounded-xl ">
                     <CardHeader className="flex justify-between items-center">
                       <div className="flex gap-5">
                         <div className="flex flex-col gap-1 items-start justify-center">
@@ -230,31 +232,31 @@ export default function Jobs() {
                           {selectedTab === 'inactive' ? (
                             <Tooltip content="Restore job">
                               <button aria-label="Restore" className="p-1 text-gray-600 hover:text-black rounded-full" onClick={() => handleRestore(job.id)}>
-                                <AiOutlineRollback className="h-5 w-5" />
+                                <AiOutlineRollback className="h-5 w-5 text-black" />
                               </button>
                             </Tooltip>
                           ) : (
                             <>
                               <Tooltip content="Manage Resume">
-                                <Button size="sm" radius="full" variant="bordered" startContent={<AiOutlineDiff className="h-5 w-5" />} aria-label="manage" onPress={() => handleManageResumeClick(job.id)}>
+                                <Button size="sm" radius="full" variant="bordered" startContent={<AiOutlineDiff className="h-5 w-5 text-black" />} aria-label="manage" onPress={() => handleManageResumeClick(job.id)}>
                                   Candidate
                                 </Button>
                               </Tooltip>
 
                               <Tooltip content="Send invitation">
-                                <button onClick={() => handleInviteClick(job.id)} className="p-1 text-gray-600 hover:text-black rounded-full dark:text-gray-300 dark:hover:text-white" aria-label="Send invitation">
+                                <button onClick={() => handleInviteClick(job.id)} className="p-1 text-black hover:text-black rounded-full dark:text-gray-300 dark:hover:text-white" aria-label="Send invitation">
                                   <AiOutlineUserAdd className="h-5 w-5" />
                                 </button>
                               </Tooltip>
 
                               <Tooltip content="Edit job">
-                                <button aria-label="Edit" className="p-1 text-gray-600 hover:text-black rounded-full dark:text-gray-300 dark:hover:text-white" onClick={() => router.push(`/interviews/edit/${job.id}`)}>
+                                <button aria-label="Edit" className="p-1 text-black hover:text-black rounded-full dark:text-gray-300 dark:hover:text-white" onClick={() => router.push(`/interviews/edit/${job.id}`)}>
                                   <AiFillEdit className="h-5 w-5" />
                                 </button>
                               </Tooltip>
 
                               <Tooltip content="Delete job">
-                                <button aria-label="Delete" className="p-1 text-gray-600 hover:text-black rounded-full dark:text-gray-300 dark:hover:text-white" onClick={() => handleDeleteClick(job.id)}>
+                                <button aria-label="Delete" className="p-1 text-black hover:text-black rounded-full dark:text-gray-300 dark:hover:text-white" onClick={() => handleDeleteClick(job.id)}>
                                   <AiOutlineDelete className="h-5 w-5" />
                                 </button>
                               </Tooltip>
@@ -286,9 +288,9 @@ export default function Jobs() {
                       <div className="mt-2 ml-auto">
                         <ul className="flex gap-4 flex-wrap">
                           {job.invitationStatusCount?.map((item, index) => (
-                            <li key={index} className="flex items-center gap-2 bg-gray-100 px-3 py-1 rounded-full shadow-sm hover:bg-gray-200 transition">
-                              <span className="text-sm text-blue-600 dark:text-blue-400">{item.status}:</span>
-                              <span className="text-sm text-blue-600 dark:text-blue-400">{item.count}</span>
+                            <li key={index} className="flex items-center gap-2 bg-green-100 px-3 py-1 rounded-full shadow-sm hover:bg-gray-200 transition">
+                              <span className="text-sm font-semibold text-black-600 dark:text-blue-900">{item.status}:</span>
+                              <span className="text-sm text-black-600 dark:text-blue-900">{item.count}</span>
                             </li>
                           ))}
                         </ul>
@@ -297,7 +299,17 @@ export default function Jobs() {
                   </Card>
                 ))}
 
-                <Pagination showControls color="primary" variant="bordered" size="sm" page={page} total={pages} onChange={(page) => setPage(page)} />
+                <Pagination
+                  color="primary"
+                  classNames={{
+                    item: 'w-8 h-8 text-small bg-red  ',
+                    cursor: 'bg-black    ',
+                  }}
+                  size="sm"
+                  page={page}
+                  total={pages}
+                  onChange={(page) => setPage(page)}
+                />
               </>
             )}
 

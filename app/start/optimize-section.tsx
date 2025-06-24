@@ -1,208 +1,155 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { ChevronRight } from 'lucide-react';
+import { useState } from 'react';
 
-const data = [
-  {
-    id: 'finances',
-    label: 'FINANCES',
-    title: "Optimize your company's finances",
-    description: 'Reduce hiring costs and maximize ROI with AI-powered recruitment',
-    comparison: {
-      traditional: {
-        title: 'Traditional Hiring',
-        value: '$20',
-        unit: 'per hire',
+import { ArrowRight, DollarSign, Clock, Target, Zap, TrendingUp, Users, CheckCircle, BarChart3 } from 'lucide-react';
+import { Badge, Button, Card, CardBody, Chip } from '@heroui/react';
+
+export function OptimizationComparison() {
+  const [activeTab, setActiveTab] = useState('quality');
+
+  const data = [
+    {
+      id: 'finances',
+      label: 'FINANCES',
+      icon: <DollarSign className="h-8 w-8" />,
+      title: 'Smart Financial Optimization',
+      description: 'Reduce hiring costs and maximize ROI with AI-powered recruitment',
+      steps: [
+        { icon: <BarChart3 className="h-6 w-6" />, title: 'Analyze Costs', desc: 'Track traditional hiring expenses' },
+        { icon: <Zap className="h-6 w-6" />, title: 'AI Automation', desc: 'Deploy smart screening tools' },
+        { icon: <TrendingUp className="h-6 w-6" />, title: 'Save Money', desc: 'Reduce cost per hire by 80%' },
+      ],
+      comparison: {
+        traditional: { title: 'Traditional Hiring', value: '$20', unit: 'per hire' },
+        ai: { title: 'SparkCard AI', value: '$0.8', unit: 'per hire' },
+        savings: '80% Cost Savings',
+        tagline: 'Automate. Cut. Save.',
       },
-      ai: {
-        title: 'Evalsy AI',
-        value: '$0.8',
-        unit: 'per hire',
-      },
-      savings: '80% Cost Savings',
-      tagline: 'Automate. Cut. Save.',
     },
-  },
-  {
-    id: 'time',
-    label: 'TIME',
-    title: "Optimize your company's time",
-    description: 'Accelerate your hiring process without sacrificing quality',
-    comparison: {
-      traditional: {
-        title: 'Traditional Hiring',
-        value: '42 days',
-        unit: 'time-to-hire',
+    {
+      id: 'time',
+      label: 'TIME',
+      icon: <Clock className="h-8 w-8" />,
+      title: 'Accelerated Hiring Timeline',
+      description: 'Speed up your hiring process without sacrificing quality',
+      steps: [
+        { icon: <Users className="h-6 w-6" />, title: 'Instant Screening', desc: 'AI reviews resumes in seconds' },
+        { icon: <CheckCircle className="h-6 w-6" />, title: 'Quick Matching', desc: 'Find perfect candidates fast' },
+        { icon: <Zap className="h-6 w-6" />, title: 'Rapid Hiring', desc: 'Complete process in 10 days' },
+      ],
+      comparison: {
+        traditional: { title: 'Traditional Hiring', value: '42 days', unit: 'time-to-hire' },
+        ai: { title: 'SparkCard AI', value: '10 days', unit: 'time-to-hire' },
+        savings: '75% Faster Hiring',
+        tagline: 'Streamline. Accelerate. Win.',
       },
-      ai: {
-        title: 'Evalsy AI',
-        value: '10 days',
-        unit: 'time-to-hire',
-      },
-      savings: '75% Faster Hiring',
-      tagline: 'Streamline. Accelerate. Win.',
     },
-  },
-  {
-    id: 'quality',
-    label: 'QUALITY',
-    title: "Optimize your company's talent quality",
-    description: 'Find the perfect candidates with precision matching',
-    comparison: {
-      traditional: {
-        title: 'Manual Screening',
-        value: '65%',
-        unit: 'match rate',
+    {
+      id: 'quality',
+      label: 'QUALITY',
+      icon: <Target className="h-8 w-8" />,
+      title: 'Precision Talent Matching',
+      description: 'Find the perfect candidates with AI-powered precision matching',
+      steps: [
+        {
+          icon: <BarChart3 className="h-6 w-6" />,
+          title: 'Skill Analysis',
+          desc: 'Deep dive into candidate abilities',
+        },
+        { icon: <Target className="h-6 w-6" />, title: 'Perfect Match', desc: 'AI finds ideal culture fit' },
+        { icon: <CheckCircle className="h-6 w-6" />, title: 'Quality Hire', desc: '99% accuracy in matching' },
+      ],
+      comparison: {
+        traditional: { title: 'Manual Screening', value: '65%', unit: 'match rate' },
+        ai: { title: 'SparkCard AI', value: '99%', unit: 'match rate' },
+        savings: '99% Match Accuracy',
+        tagline: 'Analyze. Learn. Hire.',
       },
-      ai: {
-        title: 'Evalsy AI',
-        value: '99%',
-        unit: 'match rate',
-      },
-      savings: '99% Match Accuracy',
-      tagline: 'Analyze. Learn. Hire.',
     },
-  },
-  {
-    id: 'efficiency',
-    label: 'EFFICIENCY',
-    title: "Optimize your company's efficiency",
-    description: 'Process more candidates in less time with AI automation',
-    comparison: {
-      traditional: {
-        title: 'Manual Process',
-        value: '25',
-        unit: 'candidates/day',
+    {
+      id: 'efficiency',
+      label: 'EFFICIENCY',
+      icon: <Zap className="h-8 w-8" />,
+      title: 'Maximum Processing Power',
+      description: 'Process more candidates in less time with AI automation',
+      steps: [
+        { icon: <Users className="h-6 w-6" />, title: 'Bulk Processing', desc: 'Handle hundreds of resumes' },
+        { icon: <Zap className="h-6 w-6" />, title: 'Smart Sorting', desc: 'AI ranks candidates instantly' },
+        { icon: <TrendingUp className="h-6 w-6" />, title: 'Scale Up', desc: 'Process 100+ candidates daily' },
+      ],
+      comparison: {
+        traditional: { title: 'Manual Process', value: '25', unit: 'candidates/day' },
+        ai: { title: 'SparkCard AI', value: '100+', unit: 'candidates/day' },
+        savings: '100 Candidates Sorted',
+        tagline: 'Instant. Smart. Precise.',
       },
-      ai: {
-        title: 'Evalsy AI',
-        value: '100+',
-        unit: 'candidates/day',
-      },
-      savings: '100 Candidates Sorted',
-      tagline: 'Instant. Smart. Precise.',
     },
-  },
-];
+  ];
 
-export default function Home() {
-  const [activeTab, setActiveTab] = useState(data[0].id);
-  const [isPaused, setIsPaused] = useState(false);
-
-  // Auto-rotate tabs every 5 seconds
-  useEffect(() => {
-    if (isPaused) return;
-
-    const interval = setInterval(() => {
-      const currentIndex = data.findIndex((item) => item.id === activeTab);
-      const nextIndex = (currentIndex + 1) % data.length;
-      setActiveTab(data[nextIndex].id);
-    }, 5000);
-
-    return () => clearInterval(interval);
-  }, [activeTab, isPaused]);
-
-  const activeItem = data.find((item) => item.id === activeTab) || data[0];
+  const currentData = data.find((item) => item.id === activeTab) || data[2];
 
   return (
-    <main className="min-h-screen bg-[#121217] py-12 px-4 sm:px-6 lg:px-8 text-gray-200">
-      <div className="max-w-6xl mx-auto">
-        <div className="mb-12">
-          {/* Header Content - Now Full Width */}
-          <div className="max-w-6xl mx-auto">
-            <div className="inline-block px-4 py-1.5 bg-[#1e1e24] rounded-full text-sm font-medium text-gray-300 mb-6">Cost saving</div>
-            <h1 className="text-4xl lg:text-5xl font-bold text-white mb-4">
-              Transform Your Hiring Process with <span className="text-blue-400">Evalsy AI</span>
-            </h1>
-            <p className="text-lg text-gray-400 mb-8">See how our AI-powered recruitment platform outperforms traditional hiring methods across key metrics</p>
-
-            {/* Tab Navigation */}
-            <div className="flex flex-wrap gap-2">
-              {data.map((item) => (
-                <button
-                  key={item.id}
-                  onClick={() => {
-                    setActiveTab(item.id);
-                    setIsPaused(true);
-                    // Resume auto-rotation after 10 seconds of inactivity
-                    setTimeout(() => setIsPaused(false), 10000);
-                  }}
-                  onMouseEnter={() => setIsPaused(true)}
-                  onMouseLeave={() => setIsPaused(false)}
-                  className={`px-6 py-3 rounded-full font-medium text-sm transition-all duration-200 ${activeTab === item.id ? 'bg-blue-500 text-white shadow-lg shadow-blue-900/30' : 'bg-[#1e1e24] text-gray-300 hover:bg-[#2a2a33]'}`}
-                >
-                  {item.label}
-                </button>
-              ))}
-            </div>
-          </div>
+    <section className="w-full py-10 md:py-16 lg:py-20 bg-[#E0FFF0] overflow-hidden">
+      <div className="container px-4 md:px-6">
+        {/* Header */}
+        <div className="text-center mb-10">
+          <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl mb-4" style={{ fontFamily: 'Courier, monospace' }}>
+            Transform Hiring with <span className="text-[#98FB98]">Evalsy</span>
+          </h2>
         </div>
 
-        <motion.div key={activeTab} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }} className="bg-[#1e1e24] rounded-2xl shadow-xl overflow-hidden" onMouseEnter={() => setIsPaused(true)} onMouseLeave={() => setIsPaused(false)}>
-          <div className="p-8 md:p-12">
-            <h2 className="text-3xl font-bold text-white mb-3">{activeItem.title}</h2>
-            <p className="text-gray-400 mb-8 text-lg">{activeItem.description}</p>
+        {/* Tab Navigation */}
+        <div className="flex flex-wrap justify-center gap-2 mb-10">
+          {data.map((item) => (
+            <Button key={item.id} variant={activeTab === item.id ? 'solid' : 'bordered'} onClick={() => setActiveTab(item.id)} className={`px-6 py-2 text-sm font-medium border-2 rounded-full transition-all flex items-center gap-2 ${activeTab === item.id ? 'bg-[#98FB98] text-black border-[#98FB98] hover:bg-[#7FE67F]' : 'bg-transparent text-black border-black hover:border-[#98FB98] hover:bg-[#98FB98] hover:text-black'}`}>
+              {item.icon}
+              {item.label}
+            </Button>
+          ))}
+        </div>
 
-            <div className="grid md:grid-cols-2 gap-8">
-              {/* Traditional Method */}
-              <div className="bg-[#16161c] rounded-xl p-6 relative">
-                <div className="absolute top-0 right-0 bg-[#2a2a33] text-gray-300 px-4 py-1 rounded-bl-lg rounded-tr-lg text-sm font-medium">Traditional</div>
-                <h3 className="text-xl font-semibold text-gray-300 mt-4">{activeItem.comparison.traditional.title}</h3>
-                <div className="mt-6 mb-4">
-                  <span className="text-4xl font-bold text-gray-200">{activeItem.comparison.traditional.value}</span>
-                  <span className="text-gray-400 ml-2">{activeItem.comparison.traditional.unit}</span>
-                </div>
-                <div className="h-2 w-full bg-[#2a2a33] rounded-full"></div>
+        {/* Main Content */}
+        <div className="max-w-6xl mx-auto">
+          {/* Steps */}
+
+          {/* Results Comparison */}
+          <Card className="bg-white border-2 border-black rounded-xl mb-6">
+            <CardBody className="p-6 md:p-8">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10 relative">
+                {currentData.steps.map((step, index) => (
+                  <div key={index} className="flex flex-col items-center text-center">
+                    <div className="rounded-full bg-[#98FB98] p-4 mb-4 border-2 border-black">{step.icon}</div>
+                    <h4 className="text-lg font-bold mb-2">{step.title}</h4>
+                    <p className="text-gray-700">{step.desc}</p>
+                  </div>
+                ))}
               </div>
-
-              {/* Evalsy AI Method */}
-              <div className="bg-[#16161c] rounded-xl p-6 relative">
-                <div className="absolute top-0 right-0 bg-blue-600 text-white px-4 py-1 rounded-bl-lg rounded-tr-lg text-sm font-medium">AI-Powered</div>
-                <h3 className="text-xl font-semibold text-blue-400 mt-4">{activeItem.comparison.ai.title}</h3>
-                <div className="mt-6 mb-4">
-                  <span className="text-4xl font-bold text-blue-400">{activeItem.comparison.ai.value}</span>
-                  <span className="text-blue-600 ml-2">{activeItem.comparison.ai.unit}</span>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Traditional */}
+                <div className="text-center p-6 bg-gray-50 rounded-xl border-2 border-gray-200">
+                  <Chip variant="faded" className="mb-4 bg-gray-200 text-gray-700 border-gray-300">
+                    Before
+                  </Chip>
+                  <h5 className="font-bold mb-2">{currentData.comparison.traditional.title}</h5>
+                  <div className="text-3xl font-bold text-gray-600 mb-1">{currentData.comparison.traditional.value}</div>
+                  <p className="text-sm text-gray-500">{currentData.comparison.traditional.unit}</p>
                 </div>
-                <div className="h-2 w-full bg-[#2a2a33] rounded-full">
-                  <div className="h-2 bg-blue-500 rounded-full w-3/4"></div>
+
+                {/* AI */}
+                <div className="text-center p-6 bg-[#98FB98] rounded-xl border-2 border-[#98FB98]">
+                  <Chip variant="solid" className="mb-4 bg-white text-black border-black">
+                    After
+                  </Chip>
+                  <h5 className="font-bold mb-2">{currentData.comparison.ai.title}</h5>
+                  <div className="text-3xl font-bold text-black mb-1">{currentData.comparison.ai.value}</div>
+                  <p className="text-sm text-gray-700">{currentData.comparison.ai.unit}</p>
                 </div>
               </div>
-            </div>
-
-            {/* Savings Highlight */}
-            <div className="mt-10 bg-gradient-to-r from-blue-600 to-blue-500 rounded-xl p-6 text-white flex flex-col md:flex-row justify-between items-center">
-              <div>
-                <h3 className="text-2xl font-bold mb-2">{activeItem.comparison.savings}</h3>
-                <p className="text-blue-100">{activeItem.comparison.tagline}</p>
-              </div>
-              <a href="#shedule-demo" className="mt-4 md:mt-0 bg-white text-blue-700 px-6 py-3 rounded-full font-medium flex items-center group transition-all hover:bg-gray-100">
-                Request a Demo
-                <ChevronRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </a>
-            </div>
-          </div>
-        </motion.div>
-
-        {/* Bottom Navigation */}
-        <div className="mt-10 flex justify-center">
-          <div className="flex space-x-2">
-            {data.map((item) => (
-              <button
-                key={item.id}
-                onClick={() => {
-                  setActiveTab(item.id);
-                  setIsPaused(true);
-                  setTimeout(() => setIsPaused(false), 10000);
-                }}
-                className={`w-3 h-3 rounded-full transition-all ${activeTab === item.id ? 'bg-blue-500 w-6' : 'bg-gray-700 hover:bg-gray-600'}`}
-                aria-label={`View ${item.label} information`}
-              />
-            ))}
-          </div>
+            </CardBody>
+          </Card>
         </div>
       </div>
-    </main>
+    </section>
   );
 }

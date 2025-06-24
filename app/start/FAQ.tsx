@@ -2,6 +2,7 @@
 
 import { Accordion, AccordionItem, Button, Chip, cn } from '@heroui/react';
 import { HelpCircle } from 'lucide-react';
+import { FaArrowRight, FaCheckDouble, FaSortAlphaDownAlt } from 'react-icons/fa';
 
 const faqData = [
   {
@@ -32,28 +33,22 @@ const faqData = [
 
 export default function FAQ() {
   return (
-    <section id="faq" aria-labelledby="faq-title" className="relative overflow-hidden bg-darkbase-sec py-20 sm:py-32">
+    <section id="faq" aria-labelledby="faq-title" className="w-full py-12 md:py-24 lg:py-32 bg-[#F0FFF4]">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative">
         <div className="  text-center lg:mx-0 mb-8">
-          <h2 id="faq-title" className="font-display text-4xl font-bold text-white sm:text-4xl">
-            What people are saying about us.
+          <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-center mb-5" style={{ fontFamily: 'Courier, monospace' }}>
+            Frequently Asked Questions
           </h2>
-          <p className="mt-4 text-lg tracking-tight text-white">If you cant find what you are looking for, email our support team.</p>
+          <p className="mt-4 text-lg tracking-tighter" style={{ fontFamily: 'Courier, monospace' }}>
+            If you cant find what you are looking for, email our support team.
+          </p>
         </div>
 
         <div className="max-w-3xl mx-auto">
-          <Accordion variant="splitted" className="text-white">
+          <Accordion variant="splitted" className="w-full space-y-4">
             {faqData.map((item, index) => (
-              <AccordionItem
-                key={index}
-                title={item.question}
-                className="bg-darkbase   rounded-xl px-6 shadow-sm"
-                classNames={{
-                  title: 'text-white', // ✅ this changes the title color
-                  trigger: 'text-white', // optional: if you want the chevron icon to be white too
-                }}
-              >
-                <p className="text-white">{item.answer}</p>
+              <AccordionItem indicator={<FaArrowRight className="text-gray-900" />} key={index} title={item.question} className="border-2 border-black rounded-lg bg-white px-6 font-semibold hover:no-underline">
+                <p>{item.answer}</p>
               </AccordionItem>
             ))}
           </Accordion>

@@ -214,7 +214,7 @@ const ResumeUploader = ({ jobid, onViewDetails, onDelete, existingResume }: Resu
     <div className="">
       <div {...getRootProps()}>
         <input {...getInputProps()} className="hidden" aria-label="Upload resume file" />
-        <Card radius="sm" shadow="sm" className="w-full mb-8 border-2 border-dashed cursor-pointer transition-colors hover:bg-slate-50 hover:border-slate-400 dark:hover:bg-slate-800 dark:hover:border-slate-600">
+        <Card radius="sm" shadow="sm" className="w-full mb-8 border-2 border-dashed border-black cursor-pointer transition-colors hover:bg-slate-50 hover:border-slate-400 dark:hover:bg-slate-800 dark:hover:border-slate-600">
           <CardBody className="flex flex-row items-center justify-between py-4 px-6">
             <div className="flex items-center">
               <div className="rounded-full bg-slate-100 p-2 mr-4 dark:bg-slate-800">
@@ -222,7 +222,7 @@ const ResumeUploader = ({ jobid, onViewDetails, onDelete, existingResume }: Resu
               </div>
               <div>
                 <h3 className="text-sm font-medium text-slate-800 dark:text-slate-100">Drag & drop resume files here</h3>
-                <p className="text-xs text-slate-500 dark:text-slate-400">
+                <p className="text-xs  ">
                   Supported formats: <strong>.pdf, .doc, .docx</strong>. Upload <strong>1–20 files</strong> at a time. Duplicate files will be skipped. Please wait for current uploads and processing to finish before uploading more.
                 </p>
               </div>
@@ -236,7 +236,7 @@ const ResumeUploader = ({ jobid, onViewDetails, onDelete, existingResume }: Resu
         </Card>
       </div>
 
-      <Card radius="sm" shadow="sm" className="p-4">
+      <Card shadow="none" className="p-4 border-2 border-black rounded-xl">
         <CardBody>
           <ResumeFilters
             searchTerm={searchTerm}

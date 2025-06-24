@@ -2,39 +2,66 @@
 
 import { motion } from 'framer-motion';
 import { useState, useEffect } from 'react';
-import { FaPlus, FaUsers, FaPaperPlane, FaVideo, FaChartBar } from 'react-icons/fa';
-import { Chip } from '@heroui/react';
+import { FaPlus, FaUsers, FaPaperPlane, FaVideo, FaChartBar, FaPlay } from 'react-icons/fa';
+import { Badge, Button, Card, CardBody, Chip, CircularProgress } from '@heroui/react';
+import { CircularProgress1 } from './CircularProgress';
+
+const statistics = [
+  {
+    percentage: '46%',
+    description: 'Companies using AI in their hiring process achieve more successful hires.',
+    source: 'Harvard Business Review',
+    logo: 'HBR',
+  },
+  {
+    percentage: '20%',
+    description: 'More efficient hiring with AI-powered tools, helping businesses scale faster and smarter.',
+    source: 'McKinsey & Company',
+    logo: 'M&C',
+  },
+  {
+    percentage: '81%',
+    description: 'of companies are now allocating more resources toward automated recruiting tools to stay competitive.',
+    source: 'USC',
+    logo: 'USC',
+  },
+];
 
 const steps = [
   {
     icon: FaPlus,
-    title: 'Create Interview',
+    title: 'Create',
     description: 'Easily design and configure interview questions tailored to your job role. Choose from templates or build your own custom flow.',
     image: '/feature-screen/create-interview.png',
+    active: true,
   },
   {
     icon: FaUsers,
     title: 'Shortlist',
     description: 'Efficiently review and filter applicants to identify the most qualified candidates based on resumes and initial screening.',
     image: '/feature-screen/shortlist.png',
+    active: false,
   },
   {
     icon: FaPaperPlane,
     title: 'Send Invitations',
     description: 'Quickly send personalized interview invitations to shortlisted candidates with automated scheduling and reminders.',
     image: '/feature-screen/invitation.png',
+    active: false,
   },
   {
     icon: FaVideo,
     title: 'Interviewing',
     description: 'Conduct asynchronous or live AI-powered interview sessions to assess candidate responses with speed and consistency.',
     image: '/feature-screen/online-interview.png',
+    active: false,
   },
   {
     icon: FaChartBar,
     title: 'View Results',
     description: 'Gain insights through detailed analytics, score breakdowns, and performance summaries to make data-driven hiring decisions.',
     image: '/feature-screen/interview-result.png',
+    active: false,
   },
 ];
 
@@ -68,53 +95,57 @@ export default function Feature() {
   const selectedStep = steps[selectedIndex];
 
   return (
-    <section id="features" className="bg-darkbase py-20 sm:py-32 ">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mb-5">
-        <div className="text-center">
-          <h2 className="font-display text-4xl font-bold  tracking-tight text-white sm:text-4xl mt-4">How AI Interviewer Works</h2>
-        </div>
+    <section id="how-it-work" className="w-full py-12 md:py-24 lg:py-32 bg-darkbase">
+      <div className="container px-4 md:px-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Left Section - How AI Interviewer Works */}
+          <div className="lg:col-span-2">
+            <Card className="border-2 border-black bg-white rounded-lg overflow-hidden">
+              <CardBody className="p-8">
+                <h2 className="text-2xl md:text-3xl font-bold mb-4 text-black" style={{ fontFamily: 'Courier, monospace' }}>
+                  How AI Interviewer Works
+                </h2>
+                <p className="mb-4 text-sm"> {steps[selectedIndex].description}</p>
 
-        <div className="text-center mt-5">
-          <p className="mt-4 text-lg text-white">{selectedStep.description}</p>
-        </div>
-
-        <div className="mt-8">
-          <div className="flex justify-between gap-2 flex-wrap">
-            {steps.map((step, index) => {
-              const Icon = step.icon;
-              return (
-                <div key={index} className="flex-1 min-w-[40px]">
-                  <button
-                    onClick={() => {
-                      setSelectedIndex(index);
-                      setProgress((prev) => prev.map((_, i) => (i === index ? 0 : 0)));
-                    }}
-                    className={`w-full rounded-full px-4 py-2 flex items-center justify-center gap-3   text-white transition duration-300
-    ${selectedIndex === index ? 'bg-darkbase border-1 border-white shadow-md' : 'bg-darkbase-sec border border-transparent hover:border-white opacity-80 hover:opacity-100'}`}
-                  >
-                    {/* Icon circle */}
-                    <div className="w-8 h-8 rounded-full bg-white bg-opacity-20 flex items-center justify-center">
-                      <Icon className="text-white text-sm" />
-                    </div>
-
-                    {/* Text and progress bar – hidden on small devices */}
-                    <div className="hidden sm:flex flex-col items-start">
-                      <span className="truncate text-xs">{step.title}</span>
-                      <div className="w-full h-1 bg-white bg-opacity-20 rounded overflow-hidden mt-1">
-                        <motion.div className="h-full bg-white" style={{ width: `${progress[index]}%` }} transition={{ duration: 0.25 }} />
-                      </div>
-                    </div>
-                  </button>
+                {/* Video Player Area */}
+                <div className="bg-gray-100 rounded-lg mb-8 aspect-video flex items-center justify-center border-2 border-gray-200">
+                  <div className="w-full flex justify-center mb-4 p-1">
+                    <img src={selectedStep.image} alt={selectedStep.title} className="w-full max-w-[900px] h-auto object-contain  " />
+                  </div>
                 </div>
-              );
-            })}
+
+                {/* Process Steps */}
+                <div className="flex flex-wrap gap-2 md:gap-4">
+                  {steps.map((step, index) => (
+                    <div key={index} className="flex items-center gap-2">
+                      <CircularProgress1 lable={(index + 1).toString()} size={33} progress={progress[index]} />
+                      <span className={`text-sm font-medium ${step.active ? 'text-black' : 'text-gray-600'}`}>{step.title}</span>
+                      {index < steps.length - 1 && <div className="hidden md:block w-4 h-px bg-gray-300 mx-2" />}
+                    </div>
+                  ))}
+                </div>
+              </CardBody>
+            </Card>
           </div>
-          <div className=" overflow-hidden p-4 mt-6 flex items-center justify-center">
-            <motion.div key={selectedStep.title} initial={{ opacity: 0, x: 100, scale: 0.95 }} animate={{ opacity: 1, x: 0, scale: 1 }} exit={{ opacity: 0, x: -100, scale: 0.95 }} transition={{ duration: 0.6, ease: 'easeInOut' }} className="text-center w-full">
-              <div className="w-full flex justify-center mb-4">
-                <motion.img src={selectedStep.image} alt={selectedStep.title} className="w-full max-w-[900px] h-auto object-contain rounded-xl shadow-md" initial={{ scale: 1.05 }} animate={{ scale: 1 }} transition={{ duration: 0.6 }} />
-              </div>
-            </motion.div>
+
+          {/* Right Section - Statistics */}
+          <div className="space-y-6">
+            {statistics.map((stat, index) => (
+              <Card key={index} className="border-2 border-black bg-white rounded-lg">
+                <CardBody className="p-6">
+                  <div className="mb-4">
+                    <h3 className="text-3xl md:text-4xl font-bold text-black mb-2" style={{ fontFamily: 'Courier, monospace' }}>
+                      {stat.percentage}
+                    </h3>
+                    <p className="text-gray-700 text-sm leading-relaxed">{stat.description}</p>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-8 h-6 bg-black text-white text-xs font-bold flex items-center justify-center rounded">{stat.logo}</div>
+                    <span className="text-xs text-gray-600 font-medium">{stat.source}</span>
+                  </div>
+                </CardBody>
+              </Card>
+            ))}
           </div>
         </div>
       </div>

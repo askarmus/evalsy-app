@@ -5,17 +5,17 @@ import { Pricing } from '@/app/start/Pricing';
 import { Footer } from '@/app/start/Footer';
 import { Testimonials } from '@/app/start/testimonials';
 import RequestDemo from '@/app/start/RequestDemo';
-import OptimizeSection from '@/app/start/optimize-section';
+import { OptimizationComparison } from '@/app/start/optimize-section';
 import Feature from '@/app/start/Feature';
 import FAQ from '@/app/start/FAQ';
 
 export default function Home() {
   return (
-    <>
+    <div className="flex min-h-screen flex-col bg-[#f0fff4] text-black">
       <Header />
-      <main className="bg-red  text-slate-700">
+      <main className="flex-1">
         <Hero />
-        <OptimizeSection />
+        <OptimizationComparison />
         <Feature />
         <Pricing />
         <Testimonials />
@@ -23,6 +23,6 @@ export default function Home() {
         <RequestDemo />
       </main>
       <Footer />
-    </>
+    </div>
   );
 }

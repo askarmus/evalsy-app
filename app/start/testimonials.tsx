@@ -50,24 +50,24 @@ export const Testimonials = () => {
   return (
     <section id="testimonials" aria-labelledby="faq-title" className="relative overflow-hidden bg-darkbase py-20 sm:py-32">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative">
-        <div className="mx-auto max-w-2xl lg:mx-0">
-          <h2 id="faq-title" className="font-display text-4xl font-bold text-white sm:text-4xl">
+        <div className="mx-auto max-w-3xl lg:mx-0">
+          <h2 id="faq-title" className="font-display text-4xl font-bold  sm:text-4xl" style={{ fontFamily: 'Courier, monospace' }}>
             What people are saying about us.
           </h2>
-          <p className="mt-4 text-lg tracking-tight text-white">If you cant find what you are looking for, email our support team and if you are lucky someone will get back to you.</p>
+          <p className="mt-4 text-lg tracking-tight ">If you cant find what you are looking for, email our support team and if you are lucky someone will get back to you.</p>
         </div>
         <div className="flex flex-wrap -m-4 mt-8">
           {columns.map((column, columnIndex) => (
             <div key={columnIndex} className="w-full p-4 md:w-1/3">
               {column.map((testimonial) => (
-                <div key={testimonial.id} className="p-6   bg-darkbase-sec shadow-xl rounded-3xl mb-4">
+                <div key={testimonial.id} className="p-6 p-4 border-2 border-black rounded-lg bg-white mb-4">
                   <a className="inline-flex items-center mb-2">
                     <img alt="blog" src={testimonial.image} className="flex-shrink-0 object-cover object-center w-8 h-8 rounded-full" />
                     <span className="flex flex-col flex-grow pl-4">
-                      <span className="text-xs uppercase text-slate-100">{testimonial.name}</span>
+                      <span className="text-xs uppercase  ">{testimonial.name}</span>
                     </span>
                   </a>
-                  <p className="text-sm leading-relaxed text-white">{`"${testimonial.quote}"`}</p>
+                  <p className="text-sm leading-relaxed ">{`"${testimonial.quote}"`}</p>
                 </div>
               ))}
             </div>

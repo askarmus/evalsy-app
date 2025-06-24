@@ -18,7 +18,7 @@ interface VerticalStepperProps {
 
 export const VerticalStepper: React.FC<VerticalStepperProps> = ({ steps, currentStep, formReady, onStepChange }) => {
   return (
-    <Card shadow="sm" className="p-4  ">
+    <Card shadow="sm" className="border-2 border-gray-500 rounded-lg    p-4">
       <CardBody>
         <div className=" ">
           {steps.map((step, index) => (
@@ -30,7 +30,7 @@ export const VerticalStepper: React.FC<VerticalStepperProps> = ({ steps, current
                 if (valid) onStepChange(index);
               }}
               className={`py-2 px-4 flex items-center gap-3 cursor-pointer px-1 m-1 rounded-xl 
-            ${currentStep === index ? 'bg-gray-100 dark:bg-gray-800 rounded-xl' : 'hover:bg-gray-100 dark:hover:bg-gray-800 rounded-xl'}`}
+            ${currentStep === index ? 'bg-green-100 dark:bg-gray-800 rounded-xl' : 'hover:bg-gray-100 dark:hover:bg-gray-800 rounded-xl'}`}
             >
               {step.icon}
               <div>

@@ -13,8 +13,6 @@ export const createInterviewAssistant = async (interviewData: {
   maxSalary: number;
   currency: string;
 }) => {
-  // Format the questions for the prompt
-
   const insertIndex = 1;
 
   const packageQuestions: Question[] = [
@@ -36,7 +34,6 @@ export const createInterviewAssistant = async (interviewData: {
 
   const formattedQuestions = '- ' + fullQuestionList.map((q) => q.text).join('\n- ');
 
-  //Add the required properties according to CreateAssistantDTO type
   return vapi.start({
     name: 'Evalsy AI Interviewer',
     transcriber: {
@@ -67,6 +64,7 @@ export const createInterviewAssistant = async (interviewData: {
 
   Interview Guidelines:
   - Address the candidate by name (${interviewData.userName})
+  - Keep your questions and replies concise, like in a real-time voice interview
   - Listen actively to responses and acknowledge them before moving forward
   - Ask follow-up questions if a response is vague or requires more detail
   - Keep the conversation flowing naturally

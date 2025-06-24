@@ -24,6 +24,7 @@ export const ResumeFilters = ({ searchTerm, onSearchChange, selectedRecommendati
         <div className="min-w-[200px]">
           <Slider
             size="sm"
+            color="foreground"
             aria-label="Experience Range"
             label={`Experience `}
             minValue={0}

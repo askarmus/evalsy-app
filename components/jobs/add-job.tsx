@@ -48,22 +48,22 @@ export const AddJob = () => {
 
   const stepsData = [
     {
-      icon: <FaBriefcase className="w-5 h-5 text-xl text-primary-300" />,
+      icon: <FaBriefcase className="w-5 h-5 text-xl text-green-500" />,
       title: 'Job Info',
       description: 'Overview of job roles and responsibilities',
     },
     {
-      icon: <FaQuestionCircle className="w-5 h-5 text-xl text-primary-300" />,
+      icon: <FaQuestionCircle className="w-5 h-5 text-xl text-green-500" />,
       title: 'Questions',
       description: 'Common questions related to job applications',
     },
     {
-      icon: <FaCogs className="w-5 h-5 text-xl text-primary-300" />,
+      icon: <FaCogs className="w-5 h-5 text-xl text-green-500" />,
       title: 'Settings',
       description: 'Miscellaneous configurations and settings',
     },
     {
-      icon: <FaShieldAlt className="w-5 h-5 text-xl text-primary-300" />,
+      icon: <FaShieldAlt className="w-5 h-5 text-xl text-green-500" />,
       title: 'Fraud Detection',
       description: 'Monitor and prevent fraudulent activities',
     },
@@ -165,7 +165,7 @@ export const AddJob = () => {
     const style = { transform: CSS.Transform.toString(transform), transition };
 
     return (
-      <div ref={setNodeRef} {...attributes} style={style} className="flex items-center justify-between p-2 border-2 rounded-xl border-gray-300 dark:border-gray-600">
+      <div ref={setNodeRef} {...attributes} style={style} className="flex items-center justify-between p-2 border-2 rounded-xl border-black ">
         <div className="flex items-center text-base min-w-0">
           <span className={`flex items-center justify-center rounded-full w-5 h-5 mr-3 text-xs font-medium text-primary-foreground ${question.isRandom ? 'bg-blue-600' : 'bg-red-600'}`}>{index + 1}</span>
 
@@ -288,13 +288,13 @@ export const AddJob = () => {
                   />
                 </div>
                 <div>
-                  <Card shadow="sm" className="p-2">
+                  <Card shadow="none" className="border-2 border-gray-500 rounded-lg    p-4">
                     <CardBody>
                       {currentStep === 0 && (
                         <>
                           <div className="space-y-4">
                             <div className="mb-5 flex items-center gap-[5px] mb-3 md:mb-4 ">
-                              <FaBriefcase className="w-5 h-5 text-xl text-primary-400" />
+                              <FaBriefcase className="w-5 h-5 text-xl text-black" />
                               <h1 className=" text-xl/[24px] font-semibold text-tertiary  md:text-[20px]/[24px]">Job Details</h1>
                             </div>
                             <h1 className="text-sm font-semibold   mb-0">Role Name</h1>
@@ -507,13 +507,13 @@ export const AddJob = () => {
                 </div>
               </div>
 
-              <div className="fixed bottom-0 left-0 right-0 z-50 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 p-2 flex justify-end mt-8">
+              <div className="fixed bottom-0 left-0 border-t-2 border-black right-0 z-50  dark:border-gray-700 bg-white dark:bg-gray-900 p-2 flex justify-end mt-8">
                 <div className="mx-auto flex w-full max-w-[90rem] items-center px-5 xl:px-8 xl2:px-[60px] xl2:!pr-[60px] justify-between">
                   {currentStep > 0 ? <Button onPress={() => setCurrentStep(currentStep - 1)}>Previous</Button> : <div></div>}
 
                   <div className="flex gap-2">
                     {isEditMode && (
-                      <Button color="primary" size="lg" onPress={() => formRef.current.handleSubmit()} isLoading={loading}>
+                      <Button className="bg-black text-white" size="lg" onPress={() => formRef.current.handleSubmit()} isLoading={loading}>
                         Save
                       </Button>
                     )}
@@ -522,7 +522,7 @@ export const AddJob = () => {
                       <Button
                         size="lg"
                         variant="solid"
-                        color="primary"
+                        className="bg-black text-white"
                         onPress={async () => {
                           const valid = await validateStep();
                           if (valid) setCurrentStep(currentStep + 1);
@@ -532,7 +532,7 @@ export const AddJob = () => {
                       </Button>
                     ) : (
                       !isEditMode && (
-                        <Button color="primary" size="lg" isLoading={loading} onPress={() => formRef.current.handleSubmit()}>
+                        <Button size="lg" className="bg-black text-white" isLoading={loading} onPress={() => formRef.current.handleSubmit()}>
                           Save & Activate
                         </Button>
                       )
