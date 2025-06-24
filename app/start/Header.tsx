@@ -11,7 +11,7 @@ export function Header() {
 
   const navigationItems = [
     { href: '#how-it-work', label: 'How It Works' },
-    { href: '#features', label: 'Features' },
+    { href: '#cost-analysis', label: 'Cost Analysis' },
     { href: '#pricing', label: 'Pricing' },
     { href: '#faq', label: 'FAQ' },
     { href: '#testimonials', label: 'Testimonials' },

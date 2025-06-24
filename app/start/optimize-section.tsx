@@ -90,7 +90,7 @@ export function OptimizationComparison() {
   const currentData = data.find((item) => item.id === activeTab) || data[2];
 
   return (
-    <section className="w-full py-10 md:py-16 lg:py-20 bg-[#E0FFF0] overflow-hidden">
+    <section id="cost-analysis" className="w-full py-10 md:py-16 lg:py-20 bg-[#E0FFF0] overflow-hidden">
       <div className="container px-4 md:px-6">
         {/* Header */}
         <div className="text-center mb-10">
