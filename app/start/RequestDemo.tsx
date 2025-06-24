@@ -54,7 +54,7 @@ export default function RequestDemo() {
                   <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl" style={{ fontFamily: 'Courier, monospace' }}>
                     Request your personalized demo
                   </h2>
-                  <p className="text-lg text-gray-700 max-w-md">Only pay for what you use — credits are flexible, fair, and never expire.</p>
+                  <p className="text-lg   max-w-md">Only pay for what you use — credits are flexible, fair, and never expire.</p>
                 </div>
               </div>
             </div>
@@ -62,8 +62,8 @@ export default function RequestDemo() {
           <div>
             <Card shadow="none" className="border-2 border-black rounded-lg  bg-white p-4">
               <CardHeader className="pb-0 pt-4   flex flex-col items-start mb-3">
-                <p className="text-xl font-bold ">Tell us about your needs</p>
-                <p className="text-sm">We will get back to you within 24 hours to schedule your personalized demo.</p>
+                <p className="text-xl font-bold text-black">Tell us about your needs</p>
+                <p className="text-sm text-black">We will get back to you within 24 hours to schedule your personalized demo.</p>
               </CardHeader>
               <CardBody className="px-1 py-1">
                 <form onSubmit={handleSubmit} className="space-y-6">

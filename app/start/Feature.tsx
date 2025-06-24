@@ -105,7 +105,7 @@ export default function Feature() {
                 <h2 className="text-2xl md:text-3xl font-bold mb-4 text-black" style={{ fontFamily: 'Courier, monospace' }}>
                   How AI Interviewer Works
                 </h2>
-                <p className="mb-4 text-sm"> {steps[selectedIndex].description}</p>
+                <p className="mb-4 text-sm text-black"> {steps[selectedIndex].description}</p>
 
                 {/* Video Player Area */}
                 <div className="bg-gray-100 rounded-lg mb-8 aspect-video flex items-center justify-center border-2 border-gray-200">

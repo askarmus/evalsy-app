@@ -45,7 +45,12 @@ export function Hero() {
   ];
 
   return (
-    <section className="relative w-full py-12 md:py-24 lg:py-32 xl:py-32 overflow-hidden bg-gradient-to-br from-[#F0FFF4] via-[#E0FFF0] to-[#98FB98]/20">
+    <section
+      className="relative w-full py-12 md:py-24 lg:py-32 xl:py-32   p-4 overflow-hidden "
+      style={{
+        background: 'linear-gradient(77.27deg, rgba(215, 245, 197, 0.4) -3.12%, rgba(248, 248, 248, 0.6) 51.71%, rgb(232, 246, 223) 106.27%)',
+      }}
+    >
       {/* Background Elements */}
       <div className="absolute inset-0 overflow-hidden">
         {/* Animated Gradient Orbs */}

@@ -47,7 +47,7 @@ export default function FAQ() {
         <div className="max-w-3xl mx-auto">
           <Accordion variant="splitted" className="w-full space-y-4">
             {faqData.map((item, index) => (
-              <AccordionItem indicator={<FaArrowRight className="text-gray-900" />} key={index} title={item.question} className="border-2 border-black rounded-lg bg-white px-6 font-semibold hover:no-underline">
+              <AccordionItem indicator={<FaArrowRight className="text-gray-900" />} key={index} title={<span className="text-black">{item.question}</span>} className="border-2 text-black border-black rounded-lg bg-white px-6 font-semibold hover:no-underline">
                 <p>{item.answer}</p>
               </AccordionItem>
             ))}

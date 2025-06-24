@@ -12,13 +12,13 @@ export function OptimizationComparison() {
     {
       id: 'finances',
       label: 'FINANCES',
-      icon: <DollarSign className="h-8 w-8" />,
+      icon: <DollarSign className="h-6 w-6" />,
       title: 'Smart Financial Optimization',
       description: 'Reduce hiring costs and maximize ROI with AI-powered recruitment',
       steps: [
-        { icon: <BarChart3 className="h-6 w-6" />, title: 'Analyze Costs', desc: 'Track traditional hiring expenses' },
-        { icon: <Zap className="h-6 w-6" />, title: 'AI Automation', desc: 'Deploy smart screening tools' },
-        { icon: <TrendingUp className="h-6 w-6" />, title: 'Save Money', desc: 'Reduce cost per hire by 80%' },
+        { icon: <BarChart3 className="h-6 w-6 text-black" />, title: 'Analyze Costs', desc: 'Track traditional hiring expenses' },
+        { icon: <Zap className="h-6 w-6 text-black" />, title: 'AI Automation', desc: 'Deploy smart screening tools' },
+        { icon: <TrendingUp className="h-6 w-6 text-black" />, title: 'Save Money', desc: 'Reduce cost per hire by 80%' },
       ],
       comparison: {
         traditional: { title: 'Traditional Hiring', value: '$20', unit: 'per hire' },
@@ -30,13 +30,13 @@ export function OptimizationComparison() {
     {
       id: 'time',
       label: 'TIME',
-      icon: <Clock className="h-8 w-8" />,
+      icon: <Clock className="h-6 w-6" />,
       title: 'Accelerated Hiring Timeline',
       description: 'Speed up your hiring process without sacrificing quality',
       steps: [
-        { icon: <Users className="h-6 w-6" />, title: 'Instant Screening', desc: 'AI reviews resumes in seconds' },
-        { icon: <CheckCircle className="h-6 w-6" />, title: 'Quick Matching', desc: 'Find perfect candidates fast' },
-        { icon: <Zap className="h-6 w-6" />, title: 'Rapid Hiring', desc: 'Complete process in 10 days' },
+        { icon: <Users className="h-6 w-6 text-black" />, title: 'Instant Screening', desc: 'AI reviews resumes in seconds' },
+        { icon: <CheckCircle className="h-6 w-6 text-black" />, title: 'Quick Matching', desc: 'Find perfect candidates fast' },
+        { icon: <Zap className="h-6 w-6 text-black" />, title: 'Rapid Hiring', desc: 'Complete process in 10 days' },
       ],
       comparison: {
         traditional: { title: 'Traditional Hiring', value: '42 days', unit: 'time-to-hire' },
@@ -48,17 +48,17 @@ export function OptimizationComparison() {
     {
       id: 'quality',
       label: 'QUALITY',
-      icon: <Target className="h-8 w-8" />,
+      icon: <Target className="h-6 w-6 text-black" />,
       title: 'Precision Talent Matching',
       description: 'Find the perfect candidates with AI-powered precision matching',
       steps: [
         {
-          icon: <BarChart3 className="h-6 w-6" />,
+          icon: <BarChart3 className="h-6 w-6 text-black" />,
           title: 'Skill Analysis',
           desc: 'Deep dive into candidate abilities',
         },
-        { icon: <Target className="h-6 w-6" />, title: 'Perfect Match', desc: 'AI finds ideal culture fit' },
-        { icon: <CheckCircle className="h-6 w-6" />, title: 'Quality Hire', desc: '99% accuracy in matching' },
+        { icon: <Target className="h-6 w-6 text-black" />, title: 'Perfect Match', desc: 'AI finds ideal culture fit' },
+        { icon: <CheckCircle className="h-6 w-6 text-black" />, title: 'Quality Hire', desc: '99% accuracy in matching' },
       ],
       comparison: {
         traditional: { title: 'Manual Screening', value: '65%', unit: 'match rate' },
@@ -70,7 +70,7 @@ export function OptimizationComparison() {
     {
       id: 'efficiency',
       label: 'EFFICIENCY',
-      icon: <Zap className="h-8 w-8" />,
+      icon: <Zap className="h-6 w-6" />,
       title: 'Maximum Processing Power',
       description: 'Process more candidates in less time with AI automation',
       steps: [
@@ -120,20 +120,20 @@ export function OptimizationComparison() {
                 {currentData.steps.map((step, index) => (
                   <div key={index} className="flex flex-col items-center text-center">
                     <div className="rounded-full bg-[#98FB98] p-4 mb-4 border-2 border-black">{step.icon}</div>
-                    <h4 className="text-lg font-bold mb-2">{step.title}</h4>
-                    <p className="text-gray-700">{step.desc}</p>
+                    <h4 className="text-lg  text-black font-bold mb-2">{step.title}</h4>
+                    <p className="text-black">{step.desc}</p>
                   </div>
                 ))}
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Traditional */}
                 <div className="text-center p-6 bg-gray-50 rounded-xl border-2 border-gray-200">
-                  <Chip variant="faded" className="mb-4 bg-gray-200 text-gray-700 border-gray-300">
+                  <Chip variant="faded" className="mb-4 bg-gray-200 text-black  border-gray-300">
                     Before
                   </Chip>
-                  <h5 className="font-bold mb-2">{currentData.comparison.traditional.title}</h5>
-                  <div className="text-3xl font-bold text-gray-600 mb-1">{currentData.comparison.traditional.value}</div>
-                  <p className="text-sm text-gray-500">{currentData.comparison.traditional.unit}</p>
+                  <h5 className="font-bold mb-2 text-black">{currentData.comparison.traditional.title}</h5>
+                  <div className="text-3xl font-bold  text-black  mb-1">{currentData.comparison.traditional.value}</div>
+                  <p className="text-sm text-black">{currentData.comparison.traditional.unit}</p>
                 </div>
 
                 {/* AI */}
@@ -141,7 +141,7 @@ export function OptimizationComparison() {
                   <Chip variant="solid" className="mb-4 bg-white text-black border-black">
                     After
                   </Chip>
-                  <h5 className="font-bold mb-2">{currentData.comparison.ai.title}</h5>
+                  <h5 className="font-bold mb-2 text-black">{currentData.comparison.ai.title}</h5>
                   <div className="text-3xl font-bold text-black mb-1">{currentData.comparison.ai.value}</div>
                   <p className="text-sm text-gray-700">{currentData.comparison.ai.unit}</p>
                 </div>

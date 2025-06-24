@@ -48,9 +48,9 @@ export default function RequestDemoHero() {
       <CardHeader className="pb-0 pt-4   flex flex-col items-start ">
         <div className="flex gap-2  items-start mb-4">
           <div className="rounded-full bg-[#98FB98] p-1 mb-4 border-2 border-black">
-            <Zap className="h-6 w-6" />
+            <Zap className="h-6 w-6 text-black" />
           </div>
-          <p className="text-2xl font-bold ">Request a Demo</p>
+          <p className="text-2xl font-bold text-black ">Request a Demo</p>
         </div>
       </CardHeader>
       <CardBody className="px-1 py-1">
