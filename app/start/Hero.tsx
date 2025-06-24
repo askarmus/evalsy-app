@@ -95,7 +95,7 @@ export function Hero() {
 
               {/* Typewriter Effect */}
               <div className="flex items-center gap-2">
-                <span className="text-xl md:text-2xl font-semibold text-gray-700">It's</span>
+                <span className="text-xl md:text-2xl font-semibold text-gray-700">It&apos;s</span>
                 <span className="text-xl md:text-2xl font-bold text-[#598b59] border-r-2 border-[#98FB98] pr-1 min-w-[120px]">{currentText}</span>
               </div>
             </div>
