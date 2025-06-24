@@ -3,7 +3,7 @@ import { Card, CardBody, CardHeader, Skeleton } from '@heroui/react';
 const JobListItemSkeleton = () => {
   return (
     <>
-      <Card shadow="none" className="P-3 border-2 border-black rounded-xl ">
+      <Card shadow="sm" radius="md" className="P-3  ">
         <CardHeader className="flex items-center w-full">
           <div className="w-full">
             <Skeleton className="h-5 w-full" />
@@ -12,7 +12,7 @@ const JobListItemSkeleton = () => {
           </div>
         </CardHeader>
       </Card>{' '}
-      <Card shadow="none" className="P-3 border-2 border-black rounded-xl mt-6">
+      <Card shadow="sm" radius="md" className="P-3  mt-6">
         <CardHeader className="flex items-center w-full">
           <div className="w-full">
             <Skeleton className="h-5 w-full" />
@@ -21,7 +21,7 @@ const JobListItemSkeleton = () => {
           </div>
         </CardHeader>
       </Card>{' '}
-      <Card shadow="none" className="P-3 border-2 border-black rounded-xl mt-6">
+      <Card shadow="sm" radius="md" className="P-3   mt-6">
         <CardHeader className="flex items-center w-full">
           <div className="w-full">
             <Skeleton className="h-5 w-full" />
@@ -30,7 +30,7 @@ const JobListItemSkeleton = () => {
           </div>
         </CardHeader>
       </Card>
-      <Card shadow="none" className="P-3 border-2 border-black rounded-xl mt-6">
+      <Card shadow="sm" radius="sm" className="P-3 ">
         <CardHeader className="flex items-center w-full">
           <div className="w-full">
             <Skeleton className="h-5 w-full" />

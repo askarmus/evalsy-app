@@ -63,7 +63,7 @@ export const Login = () => {
 
         <Formik initialValues={initialValues} validationSchema={LoginSchema} onSubmit={handleLogin}>
           {({ values, errors, touched, handleChange, handleSubmit }) => (
-            <Card shadow="none" radius="md" className="p-4 mt-6 border-2 border-black bg-white rounded-xl">
+            <Card shadow="sm" radius="md" className="p-4 mt-6   rounded-xl">
               <CardHeader>
                 <h2 className=" text-2xl font-semibold " style={{ fontFamily: 'Courier, monospace' }}>
                   Sign in to your account

@@ -74,7 +74,7 @@ export const Content = () => {
             <h3 className="text-2xl font-semibold mb-3" style={{ fontFamily: 'Courier, monospace' }}>
               Trend analytics
             </h3>
-            <Card shadow="none" radius="md" className="   border-2 border-black   rounded-xl w-full">
+            <Card shadow="sm" radius="md" className="   w-full">
               <CardBody>
                 <Chart />
               </CardBody>

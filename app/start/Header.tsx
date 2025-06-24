@@ -20,7 +20,7 @@ export function Header() {
   const closeMenu = () => setIsOpen(false);
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b-2 border-black bg-[#98FB98] backdrop-blur supports-[backdrop-filter]:bg-[#98FB98]/95">
+    <header className="sticky top-0 z-50 w-full border-b-2 border-black bg-[#303030] backdrop-blur supports-[backdrop-filter]:bg-[#303030]">
       <Navbar maxWidth="2xl" className="bg-transparent px-4 md:px-6" height="4rem">
         {/* Brand / Logo */}
         <NavbarBrand>
@@ -33,7 +33,7 @@ export function Header() {
         <NavbarContent className="hidden md:flex gap-6 lg:gap-8" justify="center">
           {navigationItems.map((item) => (
             <NavbarItem key={item.href}>
-              <Link as={NextLink} href={item.href} className="text-sm font-medium text-black hover:text-gray-700 transition-colors hover:underline underline-offset-4">
+              <Link as={NextLink} href={item.href} className="text-sm font-medium text-white hover:text-gray-200 transition-colors hover:underline underline-offset-4">
                 {item.label}
               </Link>
             </NavbarItem>
@@ -42,7 +42,7 @@ export function Header() {
 
         {/* Desktop CTA */}
         <NavbarContent justify="end" className="hidden md:flex">
-          <Button as={NextLink} href="#shedule-demo" variant="bordered" className="border-2 border-black bg-white text-black hover:bg-gray-100">
+          <Button as={NextLink} href="#shedule-demo" variant="bordered" className="border-2 border-black bg-[#98FB98] text-black hover:bg-gray-100">
             Shedule a Demo
           </Button>
         </NavbarContent>

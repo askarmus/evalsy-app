@@ -288,7 +288,7 @@ export const AddJob = () => {
                   />
                 </div>
                 <div>
-                  <Card shadow="none" className="border-2 border-gray-500 rounded-lg    p-4">
+                  <Card shadow="sm" radius="md" className="p-4">
                     <CardBody>
                       {currentStep === 0 && (
                         <>

@@ -214,7 +214,7 @@ const ResumeUploader = ({ jobid, onViewDetails, onDelete, existingResume }: Resu
     <div className="">
       <div {...getRootProps()}>
         <input {...getInputProps()} className="hidden" aria-label="Upload resume file" />
-        <Card radius="sm" shadow="sm" className="w-full mb-8 border-2 border-dashed border-black cursor-pointer transition-colors hover:bg-slate-50 hover:border-slate-400 dark:hover:bg-slate-800 dark:hover:border-slate-600">
+        <Card radius="sm" shadow="sm" className="w-full mb-8 border-2 border-dashed  cursor-pointer transition-colors hover:bg-slate-50 hover:border-slate-400 dark:hover:bg-slate-800 dark:hover:border-slate-600">
           <CardBody className="flex flex-row items-center justify-between py-4 px-6">
             <div className="flex items-center">
               <div className="rounded-full bg-slate-100 p-2 mr-4 dark:bg-slate-800">
@@ -236,7 +236,7 @@ const ResumeUploader = ({ jobid, onViewDetails, onDelete, existingResume }: Resu
         </Card>
       </div>
 
-      <Card shadow="none" className="p-4 border-2 border-black rounded-xl">
+      <Card shadow="sm" className="p-4 ">
         <CardBody>
           <ResumeFilters
             searchTerm={searchTerm}

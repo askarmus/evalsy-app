@@ -38,7 +38,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={clsx('font-sans antialiased', fontSans.className, 'scroll-smooth', 'bg-darkbase-sec dark:bg-black', 'min-h-screen h-full')}>
+      <body className={clsx('font-sans antialiased', fontSans.className, 'scroll-smooth', 'bg-gray-100 dark:bg-black', 'min-h-screen h-full')}>
         <GoogleAnalytic />
         <Providers>{children}</Providers>
       </body>

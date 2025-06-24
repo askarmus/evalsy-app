@@ -33,12 +33,12 @@ export const UserDropdown = () => {
       <NavbarItem>
         <DropdownTrigger>
           <User
-            className="cursor-pointer text-gray-900"
+            className="cursor-pointer text-white"
             avatarProps={{
               name: getInitials(user?.name),
               className: 'bg-gray-900 text-white dark:bg-gray-900',
             }}
-            description={<span className="text-gray-700">Signed in as</span>}
+            description={<span className="text-gray-100">Signed in as</span>}
             name={!loading ? truncateText(user?.name || '', 15) || 'User' : 'Loading user......'}
           />
         </DropdownTrigger>

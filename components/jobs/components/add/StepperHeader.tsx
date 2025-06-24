@@ -24,7 +24,7 @@ export const StepperHeader: React.FC<StepperHeaderProps> = ({ isEditMode, curren
       <h2 className="text-xl font-semibold" style={{ fontFamily: 'Courier, monospace' }}>
         {isEditMode ? 'Edit Interview' : 'Add Interview'}
       </h2>
-      <Card shadow="sm" className="border-2s border-gray-500 rounded-lg   p-4">
+      <Card shadow="sm" radius="md" className=" p-4">
         <CardBody>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">

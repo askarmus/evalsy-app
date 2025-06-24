@@ -12,7 +12,7 @@ export const CreditBalanceCardSticky = ({ onTopUpClick }: CreditBalanceCardStick
     <div className=" p-0">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <div className="text-sm font-bold text-xs dark:text-black">{loading ? <Spinner size="sm" /> : credits} Credits Available</div>
+          <div className="text-sm font-bold text-xs text-white dark:text-white">{loading ? <Spinner size="sm" /> : credits} Credits Available</div>
           <Button size="sm" className="bg-white dark:text-black " onPress={onTopUpClick}>
             Top Up
           </Button>

@@ -24,7 +24,7 @@ export function Header() {
   const closeMenu = () => setIsOpen(false);
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b-2 border-black bg-[#98FB98] backdrop-blur supports-[backdrop-filter]:bg-[#98FB98]/95">
+    <header className="sticky top-0 z-50 w-full   bg-[#303030] backdrop-blur supports-[backdrop-filter]:bg-[#303030]/95">
       <Navbar maxWidth="2xl" className="bg-transparent px-4 md:px-6" height="4rem">
         {/* Logo */}
         <NavbarBrand>
@@ -37,7 +37,7 @@ export function Header() {
         <NavbarContent className="hidden md:flex gap-6 lg:gap-8" justify="center">
           {navItems.map((item) => (
             <NavbarItem key={item.href} isActive={pathname === item.href}>
-              <Link as={NextLink} href={item.href} className={`flex items-center gap-2 text-sm font-medium ${pathname === item.href ? 'text-black underline' : 'text-black hover:text-gray-700'} transition-colors hover:underline underline-offset-4`}>
+              <Link as={NextLink} href={item.href} className={`flex items-center gap-2   text-sm font-medium ${pathname === item.href ? 'text-white underline' : 'text-white hover:text-gray-300'} transition-colors hover:underline underline-offset-4`}>
                 {item.icon}
                 {item.label}
               </Link>

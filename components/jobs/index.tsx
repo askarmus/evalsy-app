@@ -26,11 +26,6 @@ export default function Jobs() {
   const [isConfirmDialogOpen, setConfirmDialogOpen] = useState(false);
   const router = useRouter();
 
-  const breadcrumbItems = [
-    { name: 'Dashboard', link: '/' },
-    { name: 'Interviews', link: '' },
-  ];
-
   const fetchJobs = async () => {
     setIsLoading(true);
     try {
@@ -131,8 +126,6 @@ export default function Jobs() {
 
   return (
     <div className="  my-10 px-4 lg:px-6 max-w-[80rem] mx-auto w-full flex flex-col gap-4">
-      <Breadcrumb items={breadcrumbItems} />
-
       <h3 className="text-xl font-semibold" style={{ fontFamily: 'Courier, monospace' }}>
         All Interviews
       </h3>
@@ -216,7 +209,7 @@ export default function Jobs() {
             ) : (
               <>
                 {items.map((job: any) => (
-                  <Card key={job.id} shadow="none" className="P-3 border-2 border-black rounded-xl ">
+                  <Card key={job.id} shadow="sm" radius="sm" className="P-3 ">
                     <CardHeader className="flex justify-between items-center">
                       <div className="flex gap-5">
                         <div className="flex flex-col gap-1 items-start justify-center">

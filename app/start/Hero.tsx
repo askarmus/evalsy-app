@@ -48,15 +48,11 @@ export function Hero() {
     <section
       className="relative w-full py-12 md:py-24 lg:py-32 xl:py-32   p-4 overflow-hidden "
       style={{
-        background: 'linear-gradient(77.27deg, rgba(215, 245, 197, 0.4) -3.12%, rgba(248, 248, 248, 0.6) 51.71%, rgb(232, 246, 223) 106.27%)',
+        background: 'linear-gradient(77.27deg, #fff5ed 0%, rgba(255, 245, 237, 0.5) 51.71%, rgba(255, 245, 237, 0) 100%)',
       }}
     >
       {/* Background Elements */}
       <div className="absolute inset-0 overflow-hidden">
-        {/* Animated Gradient Orbs */}
-        <div className="absolute top-20 left-10 w-72 h-72 bg-[#98FB98]/30 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-20 right-10 w-96 h-96 bg-[#98FB98]/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
-
         {/* Grid Pattern */}
         <div className="absolute inset-0 opacity-5">
           <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
@@ -75,11 +71,6 @@ export function Hero() {
           {/* Left Content */}
           <div className="flex flex-col space-y-8">
             {/* Badge */}
-            <div className="flex items-center gap-2">
-              <Chip startContent={<Sparkles className="h-4 w-4 mr-2" />} className="bg-[#98FB98] text-black border-2 border-black hover:bg-[#7FE67F] px-4 py-2 rounded-full">
-                AI-Powered Platform
-              </Chip>
-            </div>
 
             {/* Main Heading */}
             <div className="space-y-4">
