@@ -5,7 +5,7 @@ export const Logo = () => (
   <>
     {/* Light Mode Logo */}
 
-    <img src="/final-dark.png" className="max-h-[35px] w-auto dark:hidden" alt="evalsy Logo" />
+    <img src="/final-light.png" className="max-h-[35px] w-auto dark:hidden" alt="evalsy Logo" />
 
     {/* Dark Mode Logo */}
 

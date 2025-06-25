@@ -14,6 +14,12 @@ export const defaultJobFormValues: AddJobFormValues = {
       expectedScore: 20,
       isRandom: false,
     },
+    {
+      id: nanoid(),
+      text: 'Could you please share your current salary along with the currency? Additionally, what are your salary expectations for this role?',
+      expectedScore: 20,
+      isRandom: false,
+    },
   ],
   experienceLevel: '',
   workplaceType: '',

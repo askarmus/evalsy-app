@@ -66,7 +66,7 @@ export function Header() {
               <NextLink href="/dashboard" onClick={closeMenu} className="flex items-center space-x-2">
                 <LogoDark />
               </NextLink>
-              <Button onClick={closeMenu} size="sm" variant="light" className="text-black">
+              <Button onPress={closeMenu} size="sm" variant="light" className="text-black">
                 <X className="w-5 h-5" />
               </Button>
             </div>

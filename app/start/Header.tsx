@@ -5,9 +5,11 @@ import NextLink from 'next/link';
 import { Navbar, NavbarBrand, NavbarContent, NavbarItem, Button, Link, Drawer, DrawerContent } from '@heroui/react';
 import { Menu, X } from 'lucide-react';
 import { LogoDark } from '@/components/logo.dark';
+import { useAuth } from '@/hooks/useAuth';
 
 export function Header() {
   const [isOpen, setIsOpen] = useState(false);
+  const { user, loading } = useAuth();
 
   const navigationItems = [
     { href: '#how-it-work', label: 'How It Works' },
@@ -40,15 +42,26 @@ export function Header() {
           ))}
         </NavbarContent>
 
-        {/* Desktop CTA */}
-        <NavbarContent justify="end" className="hidden md:flex">
-          <Button as={NextLink} href="#shedule-demo" variant="bordered" className="border-2 border-black bg-[#98FB98] text-black hover:bg-gray-100">
-            Shedule a Demo
-          </Button>
+        {/* Desktop CTA / Auth Section */}
+        <NavbarContent justify="end" className="hidden md:flex items-center gap-4">
+          {!loading && user ? (
+            <Button as={NextLink} href="/dashboard" variant="bordered" className="border-2 border-black bg-[#98FB98] text-black hover:bg-gray-100">
+              Go to Dashboard
+            </Button>
+          ) : (
+            <>
+              <Link className="inline-block rounded-lg px-2 py-1 text-md text-white" href="/login">
+                Sign in
+              </Link>
+              <Button as={NextLink} href="#shedule-demo" variant="bordered" className="border-2 border-black bg-[#98FB98] text-black hover:bg-gray-100">
+                Shedule a Demo
+              </Button>
+            </>
+          )}
         </NavbarContent>
 
         {/* Mobile Menu Button */}
-        <Button className="md:hidden text-black hover:bg-[#7FE67F]" onPress={() => setIsOpen(true)} aria-label="Toggle menu" size="sm" variant="light">
+        <Button className="md:hidden text-white hover:bg-[#7FE67F]" onPress={() => setIsOpen(true)} aria-label="Toggle menu" size="sm" variant="light">
           <Menu className="h-6 w-6" />
         </Button>
       </Navbar>
@@ -60,7 +73,7 @@ export function Header() {
             {/* Header */}
             <div className="flex items-center justify-between pb-6 border-b-2 border-black">
               <NextLink href="/" onClick={closeMenu} className="flex items-center space-x-2">
-                <LogoDark />
+                <img src="/final-light.png" className="max-h-[40px] w-auto   dark:block" alt="evalsy logo" />
               </NextLink>
             </div>
 
@@ -73,11 +86,22 @@ export function Header() {
               ))}
             </nav>
 
-            {/* CTA */}
-            <div className="pt-6 border-t-2 border-black">
-              <Button as={NextLink} href="#shedule-demo" className="w-full bg-[#98FB98] text-black border-2 border-black hover:bg-[#7FE67F]" onClick={closeMenu}>
-                Shedule a Demo
-              </Button>
+            {/* CTA / Auth Section */}
+            <div className="pt-6 border-t-2 border-black flex flex-col gap-4">
+              {!loading && user ? (
+                <Link href="/dashboard" onClick={closeMenu} className="inline-flex items-center justify-center rounded-full py-3 px-5 text-sm font-semibold focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 bg-white text-black hover:text-white hover:bg-green-500 active:bg-green-800 active:text-green-100 focus-visible:outline-green-600">
+                  Go to Dashboard
+                </Link>
+              ) : (
+                <>
+                  <Link href="/login" onClick={closeMenu} className="text-md text-black underline text-center">
+                    Sign in
+                  </Link>
+                  <a className="group inline-flex items-center justify-center rounded-full py-3 px-5 text-sm font-semibold focus:outline-hidden focus-visible:outline-2 focus-visible:outline-offset-2 bg-blue-600 text-white hover:text-slate-100 hover:bg-blue-500 active:bg-blue-800 active:text-blue-100 focus-visible:outline-blue-600" href="#shedule-demo" onClick={closeMenu}>
+                    Let&apos;s talk
+                  </a>
+                </>
+              )}
             </div>
           </div>
         </DrawerContent>

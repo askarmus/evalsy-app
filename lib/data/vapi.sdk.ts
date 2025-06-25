@@ -9,31 +9,11 @@ export const createInterviewAssistant = async (interviewData: {
   role: string;
   level: string;
   userName: string; // Added userName parameter
-  minSalary: number;
-  maxSalary: number;
-  currency: string;
 }) => {
-  const insertIndex = 1;
+  // Format the questions for the prompt
+  const formattedQuestions = '- ' + interviewData.questions.map((q) => q.text).join('\n- ');
 
-  const packageQuestions: Question[] = [
-    {
-      text: `We typically offer a compensation range between ${interviewData.minSalary}–${interviewData.maxSalary} ${interviewData.currency}. Does this align with your expectations?`,
-    },
-    {
-      text: 'Could you please share your current compensation (including currency)?',
-    },
-    {
-      text: 'What is your expected salary or compensation range for this role?',
-    },
-    {
-      text: 'Are there any specific benefits or perks that are important to you (e.g., ESOPs, remote work, healthcare, bonuses)?',
-    },
-  ];
-
-  const fullQuestionList: Question[] = [...interviewData.questions.slice(0, insertIndex), ...packageQuestions, ...interviewData.questions.slice(insertIndex)];
-
-  const formattedQuestions = '- ' + fullQuestionList.map((q) => q.text).join('\n- ');
-
+  //Add the required properties according to CreateAssistantDTO type
   return vapi.start({
     name: 'Evalsy AI Interviewer',
     transcriber: {
@@ -64,7 +44,6 @@ export const createInterviewAssistant = async (interviewData: {
 
   Interview Guidelines:
   - Address the candidate by name (${interviewData.userName})
-  - Keep your questions and replies concise, like in a real-time voice interview
   - Listen actively to responses and acknowledge them before moving forward
   - Ask follow-up questions if a response is vague or requires more detail
   - Keep the conversation flowing naturally
