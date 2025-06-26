@@ -21,9 +21,7 @@ interface StepperHeaderProps {
 export const StepperHeader: React.FC<StepperHeaderProps> = ({ isEditMode, currentStep, stepsData, completedSteps, invalidSteps }) => {
   return (
     <>
-      <h2 className="text-xl font-semibold" style={{ fontFamily: 'Courier, monospace' }}>
-        {isEditMode ? 'Edit Interview' : 'Add Interview'}
-      </h2>
+      <h2 className="text-xl font-semibold">{isEditMode ? 'Edit Interview' : 'Add Interview'}</h2>
       <Card shadow="sm" radius="md" className=" p-4">
         <CardBody>
           <div className="flex items-center justify-between">

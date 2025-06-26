@@ -11,11 +11,15 @@ import FAQ from '@/app/start/FAQ';
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen flex-col bg-[#f0fff4] text-black">
-      <Header />
+    <div className="flex min-h-screen flex-col  text-black">
       <main className="flex-1">
-        <Hero />
-        <OptimizationComparison />
+        <Header />
+
+        <div className=" bg-[url('/02.svg')] bg-cover bg-center">
+          <Hero />
+          <OptimizationComparison />
+        </div>
+
         <Feature />
         <Pricing />
         <Testimonials />

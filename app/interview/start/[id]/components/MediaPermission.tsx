@@ -137,20 +137,7 @@ export default function MediaPermission({ onPermissionChange }: { onPermissionCh
               </Card>
 
               <div className="flex flex-col">
-                {micDeviceLabel && (
-                  <Alert
-                    hideIcon
-                    className="mb-4 text-xs"
-                    color="default"
-                    title={
-                      <>
-                        Microphone in use: <strong>{micDeviceLabel}</strong>
-                      </>
-                    }
-                  />
-                )}
-
-                <Card shadow="sm">
+                <Card shadow="sm" className="mb-4">
                   <CardBody>
                     <Button onPress={testMic} isDisabled={isTestingMic} color="warning">
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
@@ -167,6 +154,18 @@ export default function MediaPermission({ onPermissionChange }: { onPermissionCh
                     )}
                   </CardBody>
                 </Card>
+                {micDeviceLabel && (
+                  <Alert
+                    hideIcon
+                    className="mb-4 text-xs"
+                    color="default"
+                    title={
+                      <>
+                        Microphone in use: <strong>{micDeviceLabel}</strong>
+                      </>
+                    }
+                  />
+                )}
               </div>
             </div>
           </CardBody>

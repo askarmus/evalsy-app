@@ -71,7 +71,7 @@ export const CreditTransactionTable = () => {
             <DateRangePicker label="Filter by Date" placeholder="Select range" value={dateRange} onChange={setDateRange} size="sm" />
           </div>
 
-          <Button onPress={handleExport} color="primary" startContent={<FaFileDownload />} className="w-full sm:w-auto">
+          <Button onPress={handleExport} color="primary" startContent={<FaFileDownload />} className="w-full sm:w-auto bg-black text-white">
             Export CSV
           </Button>
         </div>

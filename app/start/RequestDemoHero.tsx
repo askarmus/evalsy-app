@@ -44,11 +44,11 @@ export default function RequestDemoHero() {
   };
 
   return (
-    <Card shadow="none" className="border-2 border-black rounded-3xl bg-white p-4">
+    <Card shadow="none" className="border-2 border-black rounded-3xl bg-[#e1cff5] p-4">
       <CardHeader className="pb-0 pt-4   flex flex-col items-start ">
         <div className="flex gap-2  items-start mb-4">
-          <div className="rounded-full bg-[#98FB98] p-1 mb-4 border-2 border-black">
-            <Zap className="h-6 w-6 text-black" />
+          <div className="rounded-full   p-1 mb-4 border-2 border-[#3534ff]">
+            <Zap className="h-6 w-6 text-[#3534ff]" />
           </div>
           <p className="text-2xl font-bold text-black ">Request a Demo</p>
         </div>
@@ -119,7 +119,7 @@ export default function RequestDemoHero() {
             onChange={handleInputChange}
           />
 
-          <Button radius="sm" isLoading={isSubmiting} type="submit" size="md" className="mt-8 text-white  bg-black py-4 px-8 font-medium hover: hover:bg-slate-600 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-700" endContent={<FaArrowRight className="w-4 h-4 text-white hover:translate-x-1 transition-transform" />}>
+          <Button radius="sm" isLoading={isSubmiting} type="submit" size="md" className="mt-8 text-white  bg-[#3534ff] py-4 px-8 font-medium hover: hover:bg-slate-600 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-700" endContent={<FaArrowRight className="w-4 h-4 text-white hover:translate-x-1 transition-transform" />}>
             Submit
           </Button>
         </form>

@@ -65,9 +65,7 @@ export const Login = () => {
           {({ values, errors, touched, handleChange, handleSubmit }) => (
             <Card shadow="sm" radius="md" className="p-4 mt-6   rounded-xl">
               <CardHeader>
-                <h2 className=" text-2xl font-semibold " style={{ fontFamily: 'Courier, monospace' }}>
-                  Sign in to your account
-                </h2>
+                <h2 className=" text-2xl font-semibold ">Sign in to your account</h2>
               </CardHeader>
               <CardBody>
                 <div className="mt-5 grid grid-cols-1 gap-y-8">

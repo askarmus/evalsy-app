@@ -47,7 +47,6 @@ const CompanySettingsPage = () => {
 
               {activeTab === 'subscriptions' && (
                 <CreditProvider>
-                  <CreditManager />
                   <CreditBalanceCard />
                 </CreditProvider>
               )}

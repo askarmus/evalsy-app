@@ -22,8 +22,8 @@ export function Header() {
   const closeMenu = () => setIsOpen(false);
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b-2 border-black bg-[#303030] backdrop-blur supports-[backdrop-filter]:bg-[#303030]">
-      <Navbar maxWidth="2xl" className="bg-transparent px-4 md:px-6" height="4rem">
+    <header className="sticky top-0 z-50 w-full border-b-2 border-black bg-[#0B0A33]  ">
+      <Navbar maxWidth="xl" className="bg-transparent px-4 md:px-6" height="3.5rem">
         {/* Brand / Logo */}
         <NavbarBrand>
           <NextLink href="/" className="flex items-center space-x-2">
@@ -32,7 +32,7 @@ export function Header() {
         </NavbarBrand>
 
         {/* Desktop Links */}
-        <NavbarContent className="hidden md:flex gap-6 lg:gap-8" justify="center">
+        <NavbarContent className="hidden md:flex  " justify="center">
           {navigationItems.map((item) => (
             <NavbarItem key={item.href}>
               <Link as={NextLink} href={item.href} className="text-sm font-medium text-white hover:text-gray-200 transition-colors hover:underline underline-offset-4">
@@ -45,7 +45,7 @@ export function Header() {
         {/* Desktop CTA / Auth Section */}
         <NavbarContent justify="end" className="hidden md:flex items-center gap-4">
           {!loading && user ? (
-            <Button as={NextLink} href="/dashboard" variant="bordered" className="border-2 border-black bg-[#98FB98] text-black hover:bg-gray-100">
+            <Button as={NextLink} href="/dashboard" variant="bordered" className="border-2 border-black bg-[#3534ff] text-white hover:bg-gray-100">
               Go to Dashboard
             </Button>
           ) : (
@@ -53,7 +53,7 @@ export function Header() {
               <Link className="inline-block rounded-lg px-2 py-1 text-md text-white" href="/login">
                 Sign in
               </Link>
-              <Button as={NextLink} href="#shedule-demo" variant="bordered" className="border-2 border-black bg-[#98FB98] text-black hover:bg-gray-100">
+              <Button as={NextLink} href="#shedule-demo" variant="bordered" className="border-2 border-black  bg-[#3534ff]  text-white hover:bg-gray-100">
                 Shedule a Demo
               </Button>
             </>

@@ -44,21 +44,21 @@ const steps = [
   },
   {
     icon: FaPaperPlane,
-    title: 'Send Invitations',
+    title: 'Invite',
     description: 'Quickly send personalized interview invitations to shortlisted candidates with automated scheduling and reminders.',
     image: '/feature-screen/invitation.png',
     active: false,
   },
   {
     icon: FaVideo,
-    title: 'Interviewing',
+    title: 'Interview',
     description: 'Conduct asynchronous or live AI-powered interview sessions to assess candidate responses with speed and consistency.',
     image: '/feature-screen/online-interview.png',
     active: false,
   },
   {
     icon: FaChartBar,
-    title: 'View Results',
+    title: 'Results',
     description: 'Gain insights through detailed analytics, score breakdowns, and performance summaries to make data-driven hiring decisions.',
     image: '/feature-screen/interview-result.png',
     active: false,
@@ -95,16 +95,14 @@ export default function Feature() {
   const selectedStep = steps[selectedIndex];
 
   return (
-    <section id="how-it-work" className="w-full py-12 md:py-24 lg:py-32 bg-darkbase">
+    <section id="how-it-work" className="w-full py-12 md:py-24 lg:py-32 bg-white  ">
       <div className="container px-4 md:px-6">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Left Section - How AI Interviewer Works */}
           <div className="lg:col-span-2">
-            <Card className="border-2 border-black bg-white rounded-lg overflow-hidden">
+            <Card className="border-2 border-black bg-white rounded-xl overflow-hidden">
               <CardBody className="p-8">
-                <h2 className="text-2xl md:text-3xl font-bold mb-4 text-black" style={{ fontFamily: 'Courier, monospace' }}>
-                  How AI Interviewer Works
-                </h2>
+                <h2 className="text-2xl md:text-3xl  text-4xl font-semibold  sm:text-4xl text-[#262626] mb-4">How AI Interviewer Works</h2>
                 <p className="mb-4 text-sm text-black"> {steps[selectedIndex].description}</p>
 
                 {/* Video Player Area */}
@@ -131,12 +129,10 @@ export default function Feature() {
           {/* Right Section - Statistics */}
           <div className="space-y-6">
             {statistics.map((stat, index) => (
-              <Card key={index} className="border-2 border-black bg-white rounded-lg">
+              <Card key={index} className="border-2 border-black bg-white rounded-xl">
                 <CardBody className="p-6">
                   <div className="mb-4">
-                    <h3 className="text-3xl md:text-4xl font-bold text-black mb-2" style={{ fontFamily: 'Courier, monospace' }}>
-                      {stat.percentage}
-                    </h3>
+                    <h3 className="text-3xl md:text-4xl font-bold text-black mb-2">{stat.percentage}</h3>
                     <p className="text-gray-700 text-sm leading-relaxed">{stat.description}</p>
                   </div>
                   <div className="flex items-center gap-2">

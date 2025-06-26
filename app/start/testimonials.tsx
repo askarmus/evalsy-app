@@ -48,10 +48,10 @@ export const Testimonials = () => {
   ];
 
   return (
-    <section id="testimonials" aria-labelledby="faq-title" className="relative overflow-hidden bg-darkbase py-20 sm:py-32">
+    <section id="testimonials" aria-labelledby="faq-title" className="relative overflow-hidden bg-white py-20 sm:py-32">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative">
         <div className="mx-auto max-w-3xl lg:mx-0">
-          <h2 id="faq-title" className="font-display text-4xl font-bold  sm:text-4xl" style={{ fontFamily: 'Courier, monospace' }}>
+          <h2 id="faq-title" className="font-display text-4xl font-semibold  sm:text-4xl text-[#262626]">
             What people are saying about us.
           </h2>
           <p className="mt-4 text-lg tracking-tight ">If you cant find what you are looking for, email our support team and if you are lucky someone will get back to you.</p>

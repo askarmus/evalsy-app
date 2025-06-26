@@ -33,15 +33,11 @@ const faqData = [
 
 export default function FAQ() {
   return (
-    <section id="faq" aria-labelledby="faq-title" className="w-full py-12 md:py-24 lg:py-32 bg-[#F0FFF4]">
+    <section id="faq" aria-labelledby="faq-title" className="w-full py-12 md:py-24 lg:py-32 bg-gradient-6">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative">
         <div className="  text-center lg:mx-0 mb-8">
-          <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-center mb-5" style={{ fontFamily: 'Courier, monospace' }}>
-            Frequently Asked Questions
-          </h2>
-          <p className="mt-4 text-lg tracking-tighter" style={{ fontFamily: 'Courier, monospace' }}>
-            If you cant find what you are looking for, email our support team.
-          </p>
+          <h2 className="   text-4xl font-semibold  sm:text-4xl text-[#262626] text-center mb-5">Frequently Asked Questions</h2>
+          <p className="mt-4 text-lg tracking-tighter">If you cant find what you are looking for, email our support team.</p>
         </div>
 
         <div className="max-w-3xl mx-auto">

@@ -219,7 +219,7 @@ div::-webkit-scrollbar-track {
 }
 @media (min-width: 1400px) {
   .container {
-    max-width: 1400px;
+    max-width: 1200px;
   }
 }
 
@@ -227,4 +227,7 @@ div::-webkit-scrollbar-track {
   width: 100%;
   margin-right: auto;
   margin-left: auto;
+}
+.bg-gradient-6 {
+  background: linear-gradient(180deg, #f5f5ff 0%, rgba(255, 255, 255, 0) 100%);
 }

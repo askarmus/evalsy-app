@@ -39,32 +39,14 @@ export function Hero() {
   }, [currentText, currentIndex, isDeleting, phrases]);
 
   const stats = [
-    { icon: <Users className="h-5 w-5" />, value: '10K+', label: 'Interviews completed' },
-    { icon: <TrendingUp className="h-5 w-5" />, value: '254858', label: 'HR manhours saved' },
-    { icon: <DollarSign className="h-5 w-5" />, value: '1M', label: 'Cost Saved' },
+    { icon: <Users className="h-5 w-5 text-[#3534ff]" />, value: '10K+', label: 'Interviews completed' },
+    { icon: <TrendingUp className="h-5 w-5 text-[#3534ff]" />, value: '254858', label: 'HR manhours saved' },
+    { icon: <DollarSign className="h-5 w-5 text-[#3534ff]" />, value: '1M', label: 'Cost Saved' },
   ];
 
   return (
-    <section
-      className="relative w-full py-12 md:py-24 lg:py-32 xl:py-32   p-4 overflow-hidden "
-      style={{
-        background: 'linear-gradient(77.27deg, #fff5ed 0%, rgba(255, 245, 237, 0.5) 51.71%, rgba(255, 245, 237, 0) 100%)',
-      }}
-    >
+    <section className="relative w-full py-12 md:py-24 lg:py-32 xl:py-32   p-4 overflow-hidden ">
       {/* Background Elements */}
-      <div className="absolute inset-0 overflow-hidden">
-        {/* Grid Pattern */}
-        <div className="absolute inset-0 opacity-5">
-          <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
-                <path d="M 40 0 L 0 0 0 40" fill="none" stroke="currentColor" strokeWidth="1" />
-              </pattern>
-            </defs>
-            <rect width="100%" height="100%" fill="url(#grid)" />
-          </svg>
-        </div>
-      </div>
 
       <div className="container relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
@@ -74,17 +56,9 @@ export function Hero() {
 
             {/* Main Heading */}
             <div className="space-y-4">
-              <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl leading-tight" style={{ fontFamily: 'Courier, monospace' }}>
-                Tired of manuall
-                <svg className="absolute -bottom-2 left-0 w-full h-3 text-[#98FB98]/30" viewBox="0 0 200 12" fill="currentColor">
-                  <path d="M0,8 Q50,0 100,8 T200,8 L200,12 L0,12 Z" />
-                </svg>
-                <span className=" relative">
-                  interviews?
-                  <svg className="absolute -bottom-2 left-0 w-full h-3 text-[#98FB98]/60" viewBox="0 0 200 12" fill="currentColor">
-                    <path d="M0,8 Q50,0 100,8 T200,8 L200,12 L0,12 Z" />
-                  </svg>
-                </span>
+              <h1 className="text-5xl font-bold   sm:text-5xl md:text-6xl lg:text-7xl  text-[#262626]">
+                Tired of Manuall <br></br>
+                <span className=" relative text-[#3534ff]">Interviews?</span>
               </h1>
               {/* Description */}
               <p className="text-lg md:text-xl text-gray-700 max-w-2xl leading-relaxed">Let AI Interviewer handle video screenings on autopilot.</p>
@@ -92,7 +66,7 @@ export function Hero() {
               {/* Typewriter Effect */}
               <div className="flex items-center gap-2">
                 <span className="text-xl md:text-2xl font-semibold text-gray-700">It&apos;s</span>
-                <span className="text-xl md:text-2xl font-bold text-[#598b59] border-r-2 border-[#98FB98] pr-1 min-w-[120px]">{currentText}</span>
+                <span className="text-xl md:text-2xl font-bold text-[#3534ff]   pr-1 min-w-[120px]">{currentText}</span>
               </div>
             </div>
 
@@ -108,7 +82,7 @@ export function Hero() {
             <div className="flex flex-wrap gap-8 pt-8 border-t border-gray-200">
               {stats.map((stat, index) => (
                 <div key={index} className="flex items-center gap-3">
-                  <div className="p-2 bg-[#98FB98] rounded-full border border-black">{stat.icon}</div>
+                  <div className="p-2   rounded-full border border-[#3534ff]">{stat.icon}</div>
                   <div>
                     <div className="text-2xl font-bold text-black">{stat.value}</div>
                     <div className="text-sm text-gray-600">{stat.label}</div>

@@ -1,24 +1,37 @@
-import { Avatar, Chip } from '@heroui/react';
+import { Chip } from '@heroui/react';
 import React from 'react';
 import InterviewTimer from './InterviewTimer';
 import { useInterviewStore } from '../stores/useInterviewStore';
-import { Logo } from '@/components/shared/logo';
-import { FaBriefcase, FaBuilding } from 'react-icons/fa';
+import { FaBriefcase } from 'react-icons/fa';
+import { Building, Clock, User } from 'lucide-react';
 
-const CandidateInfo: React.FC<any> = ({ candidate, company, job, addTopPadding = true }) => {
-  const { phase } = useInterviewStore();
+const CandidateInfo: React.FC<any> = ({ job, addTopPadding = true }) => {
+  const { phase, duration, company } = useInterviewStore();
   return (
     <div className="flex justify-between items-start w-full  ">
-      {/* Left Content: Candidate Info */}
-      <div className={`flex flex-col p-6   w-full`}>
-        <div className="flex justify-between items-start">
-          <div className="flex gap-2 items-start">
-            <img src="/logo-icon.png" className="max-h-[25px] " alt="evalsy Logo" /> <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">AI Interview</h2>
-            <Chip size="sm" color="default" variant="bordered" startContent={<FaBriefcase className="ml-1" />}>
-              {job.jobTitle}
-            </Chip>{' '}
-          </div>
+      <div className={`flex flex-col p-4   w-full`}>
+        <div className="flex items-center justify-between">
+          <div className="space-y-2">
+            <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100"> {job.jobTitle}</h2>
 
+            <div className="flex items-center space-x-4">
+              <div className="flex items-center text-sm text-gray-600">
+                <Clock className="w-4 h-4 mr-1" />
+                Duration: {duration / 60} minutes
+              </div>
+              <div className="flex items-center text-sm text-gray-600">
+                <Building className="w-4 h-4 mr-1" />
+                {company?.name}
+              </div>
+            </div>
+          </div>
+          <div className="text-right">
+            <div className="text-3xl font-bold text-green-600"> {duration / 60} </div>
+            <div className="text-sm text-gray-500">minutes</div>
+          </div>
+        </div>
+
+        <div className="flex justify-between items-start">
           <div>
             {phase === 'in-progress' && (
               <>

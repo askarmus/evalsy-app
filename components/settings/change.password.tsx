@@ -55,8 +55,8 @@ const ChangePassword = () => {
               </div>
             </CardBody>
             <CardFooter>
-              <Button type="submit" isLoading={isLoading} color="primary">
-                Update Password
+              <Button type="submit" isLoading={isLoading} color="primary" className="bg-black text-white">
+                Update password
               </Button>
             </CardFooter>
           </Card>
