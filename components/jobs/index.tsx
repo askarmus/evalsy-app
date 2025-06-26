@@ -180,7 +180,7 @@ export default function Jobs() {
             />
           </Tabs>
 
-          <Button color="primary" className=" text-white  bg-black " size="sm" onPress={() => router.push('/interviews/add')} endContent={<AiOutlinePlus />}>
+          <Button color="primary" className=" text-white  bg-[#100145] " size="sm" onPress={() => router.push('/interviews/add')} endContent={<AiOutlinePlus />}>
             Create New Interview
           </Button>
         </div>

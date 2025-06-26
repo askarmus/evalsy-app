@@ -111,7 +111,7 @@ const CompanySettings = () => {
               </div>
             </CardBody>
             <CardFooter>
-              <Button type="submit" isLoading={isLoading} color="primary" className="bg-black text-white hover:bg-gray-800">
+              <Button type="submit" isLoading={isLoading} color="primary" className="bg-[#100145] text-white hover:bg-gray-800">
                 Save Settings
               </Button>
             </CardFooter>

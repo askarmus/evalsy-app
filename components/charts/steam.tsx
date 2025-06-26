@@ -102,7 +102,6 @@ export default function TrendAnalyticsChart() {
       },
     },
     title: {
-      text: 'Trend Analytics by Job Title',
       align: 'center',
       style: {
         fontSize: '18px',
@@ -110,8 +109,9 @@ export default function TrendAnalyticsChart() {
         color: isDark ? '#F3F4F6' : '#111827',
       },
     },
-    colors: ['#98fb98'],
+    colors: ['#3534ff'], // Updated here
   };
+
   const series = [
     {
       name: 'Percentage',

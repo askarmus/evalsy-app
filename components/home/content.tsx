@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { RecentInterviews } from './recent-interviews';
 import { DashboardWidjet } from './dashboard.widget';
-import { AiOutlineUserSwitch, AiOutlineFileSearch, AiOutlineCheckCircle } from 'react-icons/ai';
+import { AiOutlineUserSwitch, AiOutlineCheckCircle } from 'react-icons/ai';
 import { hiringPipelineOverview } from '@/services/dashboard.service';
 import { Card, CardBody, Skeleton } from '@heroui/react';
 
@@ -14,24 +14,24 @@ const Chart = dynamic(() => import('../charts/steam'), {
 const widgetConfig = {
   'Open Interview': {
     icon: (
-      <div className="rounded-full bg-[#98FB98] p-1 mb-4 border-1 border-black">
-        <AiOutlineUserSwitch className="text-1xl" />
+      <div className="rounded-full border-[#3534ff] p-1 mb-4 border-1  ">
+        <AiOutlineUserSwitch className="text-2xl" />
       </div>
     ),
     bgColor: 'bg-primary',
   },
   'Pending Invitation': {
     icon: (
-      <div className="rounded-full bg-[#98FB98] p-1 mb-4 border-1 border-black">
-        <AiOutlineUserSwitch className="text-1xl" />
+      <div className="rounded-full   p-1 mb-4 border-1 border-[#3534ff]">
+        <AiOutlineUserSwitch className="text-2xl" />
       </div>
     ),
     bgColor: 'bg-primary',
   },
   'Completed Interview': {
     icon: (
-      <div className="rounded-full bg-[#98FB98] p-1 mb-4 border-1 border-black">
-        <AiOutlineCheckCircle className="text-1xl" />
+      <div className="rounded-full   p-1 mb-4 border-1 border-[#3534ff]">
+        <AiOutlineCheckCircle className="text-2xl" />
       </div>
     ),
     bgColor: 'bg-primary',
@@ -80,8 +80,7 @@ export const Content = () => {
 
         {/* Left Section */}
         <div className="mt-4 gap-2 flex flex-col xl:max-w-md w-full">
-          <h3 className="text-2xl font-semibold mb-3">Recent Interviwers</h3>
-          <div className="flex flex-col justify-center gap-4 flex-wrap md:flex-nowrap md:flex-col">
+          <div className="flex flex-col justify-center gap-4 flex-wrap md:flex-nowrap md:flex-col mt-14">
             <RecentInterviews />
           </div>
         </div>

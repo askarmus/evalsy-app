@@ -20,16 +20,11 @@ export const TopUpCreditsModal = ({ modal }: TopUpCreditsModalProps) => {
 
   return (
     <Modal isOpen={isOpen} onOpenChange={onOpenChange} placement="center" size="2xl">
-      <ModalContent>
+      <ModalContent className="p-4">
         {(onClose) => (
           <>
             <ModalHeader className="text-xl font-bold">Top Up Credits</ModalHeader>
             <CreditPackageList onBuy={handleBuy} />
-            <ModalFooter>
-              <Button variant="light" onPress={onClose}>
-                Close
-              </Button>
-            </ModalFooter>
           </>
         )}
       </ModalContent>

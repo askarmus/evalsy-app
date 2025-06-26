@@ -1,7 +1,6 @@
 'use client';
 
 import { Layout } from '@/components/layout/layout';
-import { CreditManager } from '@/components/settings/components/credits/credits/CreditManager';
 import { Logo } from '@/components/shared/logo';
 import { AuthContext } from '@/context/AuthContext';
 import { CreditProvider } from '@/context/CreditContext';
@@ -22,7 +21,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     );
   }
 
-  // If not authenticated after loading, prevent render (user already redirected)
   if (!authenticated) {
     return null; // Don't render anything, wait for redirect
   }

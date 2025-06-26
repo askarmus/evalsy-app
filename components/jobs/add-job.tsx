@@ -522,7 +522,7 @@ export const AddJob = () => {
                       <Button
                         size="lg"
                         variant="solid"
-                        className="bg-black text-white"
+                        className="bg-[#100145] text-white"
                         onPress={async () => {
                           const valid = await validateStep();
                           if (valid) setCurrentStep(currentStep + 1);
@@ -532,7 +532,7 @@ export const AddJob = () => {
                       </Button>
                     ) : (
                       !isEditMode && (
-                        <Button size="lg" className="bg-black text-white" isLoading={loading} onPress={() => formRef.current.handleSubmit()}>
+                        <Button size="lg" className="bg-[#100145] text-white" isLoading={loading} onPress={() => formRef.current.handleSubmit()}>
                           Save & Activate
                         </Button>
                       )

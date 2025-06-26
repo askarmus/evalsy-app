@@ -99,7 +99,7 @@ export const SendInvitationDrawer: React.FC<SendInvitationDrawerProps> = ({ isOp
                   />
 
                   <div className="mt-6">
-                    <Button color="primary" className="mr-2 bg-black text-white" isLoading={loading} onPress={handleSubmit as any}>
+                    <Button color="primary" className="mr-2 bg-[#100145] text-white" isLoading={loading} onPress={handleSubmit as any}>
                       Send
                     </Button>
                     <Button

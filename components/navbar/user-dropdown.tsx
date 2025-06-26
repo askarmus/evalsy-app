@@ -36,7 +36,7 @@ export const UserDropdown = () => {
             className="cursor-pointer text-white"
             avatarProps={{
               name: getInitials(user?.name),
-              className: 'bg-gray-900 text-white dark:bg-gray-900',
+              className: 'bg-gray-500 text-white dark:bg-gray-900',
             }}
             description={<span className="text-gray-100">Signed in as</span>}
             name={!loading ? truncateText(user?.name || '', 15) || 'User' : 'Loading user......'}
