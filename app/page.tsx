@@ -1,4 +1,6 @@
-import React from 'react';
+'use client';
+
+import React, { useEffect } from 'react';
 import { Header } from '@/app/start/Header';
 import { Hero } from '@/app/start/Hero';
 import { Pricing } from '@/app/start/Pricing';
@@ -12,16 +14,14 @@ import Companies from './start/Company';
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen flex-col  text-black">
+    <div className="flex min-h-screen flex-col text-black">
       <main className="flex-1">
         <Header />
-
-        <div className=" bg-[url('/02.svg')] bg-cover bg-center">
+        <div className="bg-[url('/02.svg')] bg-cover bg-center">
           <Hero />
           <Companies />
           <OptimizationComparison />
         </div>
-
         <Feature />
         <Pricing />
         <Testimonials />
