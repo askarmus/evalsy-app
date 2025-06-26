@@ -114,7 +114,7 @@ export function OptimizationComparison() {
           {/* Steps */}
 
           {/* Results Comparison */}
-          <Card className="bg-white border-2 border-black rounded-xl mb-6">
+          <Card className="bg-white border-2 border-black rounded-3xl mb-6">
             <CardBody className="p-6 md:p-8">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10 relative">
                 {currentData.steps.map((step, index) => (

@@ -28,19 +28,19 @@ export function Footer() {
             <Link href="/" className="flex items-center space-x-2">
               <LogoDarkWhite />
             </Link>
-            <p className="text-white text-sm leading-relaxed">We create financial experiences for students and young adults by using innovative technology and transparent practices.</p>
+            <p className="text-white text-sm leading-relaxed">Evalsy - AI-Powered Intelligent Interview Automation.</p>
           </div>
 
           {/* Sydney Office */}
           <div className="space-y-4">
-            <h4 className="text-lg font-semibold text-white">Sydney</h4>
+            <h4 className="text-lg font-semibold text-white">Sri Lanka</h4>
             <div className="space-y-3">
               <div className="flex items-center space-x-3">
                 <div className="p-1  rounded-full border border-white">
                   <Mail className="h-3 w-3 text-white" />
                 </div>
-                <Link href="mailto:team@sparkcard.com" className="text-white hover:text-white text-sm">
-                  team@sparkcard.com
+                <Link href="mailto:team@evalsy.com" className="text-white hover:text-white text-sm">
+                  team@evalsy.com
                 </Link>
               </div>
               <div className="flex items-center space-x-3">
@@ -48,7 +48,7 @@ export function Footer() {
                   <Phone className="h-3 w-3 text-white" />
                 </div>
                 <Link href="tel:+61234567890" className="text-white hover:text-white text-sm">
-                  +61 2 3456 7890
+                  +94 7790 5939 4
                 </Link>
               </div>
               <div className="flex items-start space-x-3">
@@ -65,14 +65,14 @@ export function Footer() {
 
           {/* Melbourne Office */}
           <div className="space-y-4">
-            <h4 className="text-lg font-semibold text-white">Melbourne</h4>
+            <h4 className="text-lg font-semibold text-white">Singapore</h4>
             <div className="space-y-3">
               <div className="flex items-center space-x-3">
                 <div className="p-1  rounded-full border border-white">
                   <Mail className="h-3 w-3 text-white" />
                 </div>
-                <Link href="mailto:team@sparkcard.com" className="text-white hover:text-white text-sm">
-                  team@sparkcard.com
+                <Link href="mailto:team@evalsy.com" className="text-white hover:text-white text-sm">
+                  team@evalsy.com
                 </Link>
               </div>
               <div className="flex items-center space-x-3">
@@ -100,8 +100,13 @@ export function Footer() {
             <h4 className="text-lg font-semibold text-white">Company</h4>
             <ul className="space-y-2">
               <li>
-                <Link className="text-white hover:text-white text-sm transition-colors hover:underline" href="#features">
-                  Home
+                <Link className="text-white hover:text-white text-sm transition-colors hover:underline" href="#how-it-work">
+                  How It Works
+                </Link>
+              </li>
+              <li>
+                <Link className="text-white hover:text-white text-sm transition-colors hover:underline" href="#cost-analysis">
+                  Cost Analysis
                 </Link>
               </li>
               <li>
@@ -110,23 +115,13 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link className="text-white hover:text-white text-sm transition-colors hover:underline" href="#cta">
-                  Demo
-                </Link>
-              </li>
-              <li>
                 <Link className="text-white hover:text-white text-sm transition-colors hover:underline" href="#faq">
                   FAQ
                 </Link>
               </li>
               <li>
-                <Link className="text-white hover:text-white text-sm transition-colors hover:underline" href="/about">
-                  About Us
-                </Link>
-              </li>
-              <li>
-                <Link className="text-white hover:text-white text-sm transition-colors hover:underline" href="/careers">
-                  Careers
+                <Link className="text-white hover:text-white text-sm transition-colors hover:underline" href="#testimonials">
+                  Testimonials
                 </Link>
               </li>
             </ul>
@@ -135,15 +130,15 @@ export function Footer() {
           {/* Social Media */}
           <div className="space-y-4">
             <h4 className="text-lg font-semibold text-white">Follow us on social media</h4>
-            <p className="text-white text-sm leading-relaxed">Stay connected and updated on our latest features, financial tips, and community insights.</p>
+            <p className="text-white text-sm leading-relaxed">Stay connected and updated on our latest features and community insights.</p>
             <div className="flex space-x-4">
-              <Link href="https://instagram.com/sparkcard" className="p-2   border-2 border-white rounded-full hover: transition-colors">
+              <Link href="https://instagram.com/evalsy" className="p-2   border-2 border-white rounded-full hover: transition-colors">
                 <Instagram className="h-5 w-5 text-white" />
               </Link>
-              <Link href="https://facebook.com/sparkcard" className="p-2   border-2 border-white rounded-full hover: transition-colors">
+              <Link href="https://facebook.com/evalsy" className="p-2   border-2 border-white rounded-full hover: transition-colors">
                 <Facebook className="h-5 w-5 text-white" />
               </Link>
-              <Link href="https://twitter.com/sparkcard" className="p-2   border-2 border-white rounded-full hover: transition-colors">
+              <Link href="https://twitter.com/evalsy" className="p-2   border-2 border-white rounded-full hover: transition-colors">
                 <Twitter className="h-5 w-5 text-white" />
               </Link>
             </div>
@@ -153,7 +148,7 @@ export function Footer() {
         {/* Bottom Section */}
         <div className="mt-12 pt-8 border-t-2 border-white">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-            <p className="text-sm text-white">© 2023 SparkCard. All rights reserved.</p>
+            <p className="text-sm text-white">© 2025 Evalsy. All rights reserved.</p>
             <div className="flex space-x-6">
               <Link className="text-sm text-white hover:text-white transition-colors hover:underline" href="/privacy">
                 Privacy Policy

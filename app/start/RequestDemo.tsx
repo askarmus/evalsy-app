@@ -43,7 +43,7 @@ export default function RequestDemo() {
   };
 
   return (
-    <section id="shedule-demo" className="  bg-darkbase  flex items-center justify-center  py-20 sm:py-32">
+    <section id="shedule-demo" className="  bg-darkbase  flex items-center justify-center p-4 py-20 sm:py-32">
       <div className="w-full max-w-6xl">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
           <div className="hidden lg:block relative h-full rounded-2xl overflow-hidden">
@@ -120,7 +120,6 @@ export default function RequestDemo() {
                   <Input
                     name="company"
                     label="Company Name"
-                    placeholder="Your company name"
                     variant="bordered"
                     radius="sm"
                     classNames={{

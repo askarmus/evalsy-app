@@ -62,7 +62,7 @@ export default function RequestDemoHero() {
             size="sm"
             isRequired
             variant="bordered"
-            radius="sm"
+            radius="lg"
             classNames={{
               inputWrapper: 'bg-white text-black border-slate-600',
               input: 'text-black placeholder:text-slate-500',
@@ -79,7 +79,7 @@ export default function RequestDemoHero() {
               labelPlacement="inside"
               isRequired
               variant="bordered"
-              radius="sm"
+              radius="lg"
               classNames={{
                 inputWrapper: 'bg-white text-black border-slate-600',
                 input: 'text-black placeholder:text-slate-500',
@@ -95,7 +95,7 @@ export default function RequestDemoHero() {
               isRequired
               type="tel"
               variant="bordered"
-              radius="sm"
+              radius="lg"
               classNames={{
                 inputWrapper: 'bg-white text-black border-slate-600',
                 input: 'text-black placeholder:text-slate-500',
@@ -108,9 +108,8 @@ export default function RequestDemoHero() {
           <Input
             name="company"
             label="Company Name"
-            placeholder="Your company name"
             variant="bordered"
-            radius="sm"
+            radius="lg"
             classNames={{
               inputWrapper: 'bg-white text-black border-slate-600',
               input: 'text-black placeholder:text-slate-500',
