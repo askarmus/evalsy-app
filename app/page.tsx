@@ -8,6 +8,7 @@ import RequestDemo from '@/app/start/RequestDemo';
 import { OptimizationComparison } from '@/app/start/optimize-section';
 import Feature from '@/app/start/Feature';
 import FAQ from '@/app/start/FAQ';
+import Companies from './start/Company';
 
 export default function Home() {
   return (
@@ -17,6 +18,7 @@ export default function Home() {
 
         <div className=" bg-[url('/02.svg')] bg-cover bg-center">
           <Hero />
+          <Companies />
           <OptimizationComparison />
         </div>
 

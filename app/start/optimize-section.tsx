@@ -3,7 +3,7 @@
 import { useState } from 'react';
 
 import { ArrowRight, DollarSign, Clock, Target, Zap, TrendingUp, Users, CheckCircle, BarChart3 } from 'lucide-react';
-import { Badge, Button, Card, CardBody, Chip } from '@heroui/react';
+import { Badge, Button, Card, CardBody, Chip, Divider } from '@heroui/react';
 
 export function OptimizationComparison() {
   const [activeTab, setActiveTab] = useState('quality');
