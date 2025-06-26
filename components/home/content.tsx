@@ -13,28 +13,19 @@ const Chart = dynamic(() => import('../charts/steam'), {
 
 const widgetConfig = {
   'Open Interview': {
-    icon: (
-      <div className="rounded-full border-[#3534ff] p-1 mb-4 border-1  ">
-        <AiOutlineUserSwitch className="text-2xl" />
-      </div>
-    ),
+    icon: <AiOutlineUserSwitch className="text-2xl text-white" />,
     bgColor: 'bg-primary',
+    textColor: 'text-white',
   },
   'Pending Invitation': {
-    icon: (
-      <div className="rounded-full   p-1 mb-4 border-1 border-[#3534ff]">
-        <AiOutlineUserSwitch className="text-2xl" />
-      </div>
-    ),
-    bgColor: 'bg-primary',
+    icon: <AiOutlineUserSwitch className="text-2xl" />,
+    bgColor: 'bg-default',
+    textColor: 'text-black',
   },
   'Completed Interview': {
-    icon: (
-      <div className="rounded-full   p-1 mb-4 border-1 border-[#3534ff]">
-        <AiOutlineCheckCircle className="text-2xl" />
-      </div>
-    ),
-    bgColor: 'bg-primary',
+    icon: <AiOutlineCheckCircle className="text-2xl text-white" />,
+    bgColor: 'bg-success',
+    textColor: 'text-white',
   },
 };
 
@@ -70,7 +61,7 @@ export const Content = () => {
           {/* Chart */}
           <div className="h-full flex flex-col gap-2">
             <h3 className="text-2xl font-semibold mb-3">Trend analytics</h3>
-            <Card shadow="sm" radius="md" className="   w-full">
+            <Card shadow="md" radius="md" className=" p-4  w-full">
               <CardBody>
                 <Chart />
               </CardBody>
