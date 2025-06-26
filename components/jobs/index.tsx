@@ -279,9 +279,9 @@ export default function Jobs() {
                       <div className="mt-2 ml-auto">
                         <ul className="flex gap-4 flex-wrap">
                           {job.invitationStatusCount?.map((item, index) => (
-                            <li key={index} className="flex items-center gap-2 bg-green-100 px-3 py-1 rounded-full shadow-sm hover:bg-gray-200 transition">
-                              <span className="text-sm font-semibold text-black-600 dark:text-blue-900">{item.status}:</span>
-                              <span className="text-sm text-black-600 dark:text-blue-900">{item.count}</span>
+                            <li key={index} className="flex items-center gap-2 border-1 border-[#3534ff] px-3 py-1 rounded-full shadow-sm hover:bg-gray-200 transition">
+                              <span className="text-sm font-semibold text-[#3534ff] dark:text-blue-900">{item.status}:</span>
+                              <span className="text-sm text-[#3534ff] dark:text-blue-900">{item.count}</span>
                             </li>
                           ))}
                         </ul>
@@ -294,7 +294,7 @@ export default function Jobs() {
                   color="primary"
                   classNames={{
                     item: 'w-8 h-8 text-small bg-red  ',
-                    cursor: 'bg-black    ',
+                    cursor: 'bg-[#100145]    ',
                   }}
                   size="sm"
                   page={page}
