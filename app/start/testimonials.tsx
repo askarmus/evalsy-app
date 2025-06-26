@@ -4,39 +4,46 @@ export const Testimonials = () => {
   const testimonials = [
     {
       id: 1,
-      name: 'James Miller',
-      image: 'https://randomuser.me/api/portraits/men/32.jpg',
-      quote: 'Hiring has never been this smooth! With AI automation, we filled roles faster than ever. Truly effortless and efficient!',
+      quote: 'Hiring has never been this smooth! With AI automation, we now find top talent faster than ever. Truly effortless and efficient.',
+      name: 'Jessica Moore',
+      jobTitle: 'Head of Talent, New York',
+
+      image: '/images/testimonials/jessica-moore.jpg',
     },
     {
       id: 2,
-      name: 'Lucy Henderson',
-      image: 'https://randomuser.me/api/portraits/men/45.jpg',
-      quote: 'I was blown away by how simple the hiring process became. The AI did the heavy lifting, letting me focus on choosing the best candidates.',
+      quote: 'From pipeline to onboarding, the trend in our hiring success has skyrocketed, especially when paired with Evalsy’s AI Interviewer.',
+      name: 'Cheryl Tan',
+      jobTitle: 'HR Manager',
+      image: '/images/testimonials/cheryl-tan.jpg',
     },
     {
       id: 3,
-      name: 'Michael Lee',
-      image: 'https://randomuser.me/api/portraits/men/76.jpg',
-      quote: 'From endless paperwork to streamlined hiring—this AI tool transformed our recruitment. Its like having an extra HR team!',
+      quote: 'We used to waste weeks screening resumes. The AI makes hiring so much faster I wonder how we worked without it.',
+      name: 'Naveen Rajapaksa',
+      jobTitle: 'Recruitment Director',
+      image: '/images/testimonials/naveen-rajapaksa.jpg',
     },
     {
       id: 4,
-      name: 'Sophia Turner',
-      image: 'https://randomuser.me/api/portraits/women/12.jpg',
-      quote: 'Effortless is an understatement. The AI handled everything from screening to scheduling, saving us hours of manual work.',
+      quote: 'I was blown away by how simple the hiring process became. The AI did the heavy lifting, letting me focus on choosing the best candidates.',
+      name: 'Mei Ling Ong',
+      jobTitle: 'Hiring Lead',
+      image: '/images/testimonials/mei-ling-ong.jpg',
     },
     {
       id: 5,
-      name: 'David Nguyen',
-      image: 'https://randomuser.me/api/portraits/men/84.jpg',
-      quote: 'What used to take weeks now takes days. The AI makes hiring so simple that I wonder how we ever managed without it.',
+      quote: 'Evalsy is an AI game-changer. The AI handled everything from screening to scheduling, saving us hours of manual work.',
+      name: 'Brandon Scott',
+      jobTitle: 'HR Operations',
+      image: '/images/testimonials/brandon-scott.jpg',
     },
     {
       id: 6,
-      name: 'Emily Clark',
-      image: 'https://randomuser.me/api/portraits/women/67.jpg',
-      quote: "This tool turned hiring chaos into clarity. With AI automation, we found top talent without breaking a sweat! It's a complete game-changer for our team.",
+      quote: 'This tool transformed how we hire entire teams. With AI automation, we found top talent without breaking a sweat. It’s a complete game changer for our team.',
+      name: 'Siti Nurhaliza',
+      jobTitle: 'Talent Ops',
+      image: '/images/testimonials/siti-nurhaliza.jpg',
     },
   ];
 
@@ -64,7 +71,8 @@ export const Testimonials = () => {
                   <a className="inline-flex items-center mb-2">
                     <img alt="blog" src={testimonial.image} className="flex-shrink-0 object-cover object-center w-8 h-8 rounded-full" />
                     <span className="flex flex-col flex-grow pl-4">
-                      <span className="text-xs uppercase  ">{testimonial.name}</span>
+                      <span className="text-sm font-semibold    ">{testimonial.name}</span>
+                      <span className="text-xs    ">{testimonial.jobTitle}</span>
                     </span>
                   </a>
                   <p className="text-sm leading-relaxed ">{`"${testimonial.quote}"`}</p>

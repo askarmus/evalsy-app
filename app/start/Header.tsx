@@ -54,7 +54,7 @@ export function Header() {
                 Sign in
               </Link>
               <Button as={NextLink} href="#shedule-demo" variant="bordered" className="border-2 border-black  bg-[#3534ff]  text-white hover:bg-gray-100">
-                Shedule a Demo
+                Schedule a Demo
               </Button>
             </>
           )}

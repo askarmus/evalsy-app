@@ -6,32 +6,31 @@ import clsx from 'clsx';
 import { GoogleAnalytic } from '@/components/GoogleAnalytic';
 
 export const metadata: Metadata = {
-  title: 'Evalsy - AI-Powered Intelligent Interview Automation',
-  description: 'From resume-to-role matching to dynamic interview creation, Evalsy helps you find top talent faster—boosting efficiency and reducing hiring friction.',
+  title: 'Evalsy – AI Interview Platform for Smarter, Faster Hiring',
+  description: 'Automate your hiring with Evalsy’s AI interview platform. Screen candidates 75% faster, reduce costs by 80%, and achieve 99% match accuracy. Try a free demo today.',
   icons: {
-    icon: '/favicon-32x32.png', // Direct path to favicon.ico
+    icon: '/favicon-32x32.png',
   },
   openGraph: {
-    title: 'Evalsy - AI-Powered Intelligent Interview Automation',
-    description: '75% Faster Hiring • 80% Cost Savings • 99% Match Accuracy. Evalsy makes hiring smart, fast, and scalable.',
-    url: 'https://www.Evalsy.com', // Replace with your actual domain
+    title: 'Evalsy – AI Interview Platform for Smarter, Faster Hiring',
+    description: 'Evalsy automates interviews and screens candidates using AI — saving 80% hiring costs and improving match accuracy to 99%. Hire better, faster.',
+    url: 'https://www.evalsy.com',
     siteName: 'Evalsy',
-
     images: [
       {
-        url: 'https://www.evalsy.com/og-image.jpg', // Replace with your image path
+        url: 'https://www.evalsy.com/og-image.jpg',
         width: 1200,
         height: 630,
-        alt: 'Evalsy – AI Interview Automation',
+        alt: 'Evalsy – AI Interview Platform',
       },
     ],
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Evalsy - AI-Powered Intelligent Interview Automation',
-    description: 'Smarter hiring with Evalsy. 75% faster, 80% cheaper, 99% match accuracy.',
-    images: ['https://www.Evalsy.com/og-image.jpg'], // Same or different image
+    title: 'Evalsy – Smarter Hiring with AI Interviews',
+    description: 'Screen candidates 75% faster and improve hiring accuracy with Evalsy’s AI-powered interview automation. Try a free demo today.',
+    images: ['https://www.evalsy.com/og-image.jpg'],
   },
 };
 

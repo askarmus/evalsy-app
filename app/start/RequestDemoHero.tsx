@@ -50,7 +50,7 @@ export default function RequestDemoHero() {
           <div className="rounded-full   p-1 mb-4 border-2 border-[#3534ff]">
             <Zap className="h-6 w-6 text-[#3534ff]" />
           </div>
-          <p className="text-2xl font-bold text-black ">Request a Demo</p>
+          <p className="text-2xl font-bold text-black ">Request a Free Demo</p>
         </div>
       </CardHeader>
       <CardBody className="px-1 py-1">

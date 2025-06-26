@@ -7,27 +7,27 @@ import { FaArrowRight, FaCheckDouble, FaSortAlphaDownAlt } from 'react-icons/fa'
 const faqData = [
   {
     question: 'What is Evalsy and how does it work?',
-    answer: 'Evalsy is an AI-powered recruitment platform that automates candidate screening, conducts intelligent interviews, and provides data-driven insights to help you hire the best talent faster.',
+    answer: 'Evalsy is an AI-powered video interviewing platform that automates candidate screening, analysis, and hiring decisions using real-time conversational AI.',
   },
   {
     question: 'How does the AI interviewing process work?',
-    answer: 'Our AI conducts initial interviews via text or voice, asking role-specific questions and follow-ups based on candidate responses.',
+    answer: 'Candidates record their responses to AI-led questions, where natural language processing and behavioral analytics evaluate their performance.',
   },
   {
-    question: 'Is Evalsy suitable for all company sizes?',
-    answer: 'Yes, Evalsy is designed to scale for startups to enterprises, adapting to your recruitment workflow.',
+    question: 'Is Evalsy suitable for companies of all sizes?',
+    answer: 'Yes, from startups to large enterprises, our scalable AI interview solution supports any hiring volume.',
   },
   {
-    question: 'How does Evalsy ensure fairness and reduce bias in hiring?',
-    answer: 'Evalsy uses objective data like skills and performance and supports anonymized screening to reduce bias.',
+    question: 'How does Evalsy reduce bias and ensure fairness?',
+    answer: 'Our platform uses standardized scoring algorithms and objective data to evaluate each candidate fairly, without the influence of unconscious bias.',
   },
   {
-    question: 'What kind of roles can Evalsy help recruit for?',
-    answer: 'Evalsy supports roles across industries, including tech, marketing, sales, and support — with customizable assessments.',
+    question: 'What roles can Evalsy help recruit for?',
+    answer: 'Evalsy can support hiring for a wide range of roles, from customer support to technical positions, or any job that requires interview-based screening.',
   },
   {
-    question: 'How does the credit-based pricing work?',
-    answer: 'You buy credits for actions like screenings or interviews. Credits don’t expire, and a free trial includes complimentary credits.',
+    question: 'How does credit-based pricing work?',
+    answer: 'Credits are used for interviews, with one credit covering a five-minute AI video interview. They never expire and offer flexible usage.',
   },
 ];
 

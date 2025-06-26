@@ -57,11 +57,11 @@ export function Hero() {
             {/* Main Heading */}
             <div className="space-y-4">
               <h1 className="text-5xl font-bold   sm:text-5xl md:text-6xl lg:text-7xl  text-[#262626]">
-                Tired of Manuall <br></br>
+                Tired of Manual <br></br>
                 <span className=" relative text-[#3534ff]">Interviews?</span>
               </h1>
               {/* Description */}
-              <p className="text-lg md:text-xl text-gray-700 max-w-2xl leading-relaxed">Let AI Interviewer handle video screenings on autopilot.</p>
+              <p className="text-lg md:text-xl text-gray-700 max-w-2xl leading-relaxed">Let our AI-powered video screening platform take over. fully automated candidate interviews, available 24/7</p>
 
               {/* Typewriter Effect */}
               <div className="flex items-center gap-2">
@@ -74,7 +74,7 @@ export function Hero() {
             <div className="flex flex-col sm:flex-row gap-4">
               <Button variant="bordered" size="lg" className="border-2 border-black text-black hover:bg-black hover:text-white px-8 py-4 rounded-full text-lg font-semibold group">
                 <Play className="h-5 w-5 mr-2 group-hover:scale-110 transition-transform" />
-                Watch Demo
+                Watch Live Demo
               </Button>
             </div>
 

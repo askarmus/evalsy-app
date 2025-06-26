@@ -95,7 +95,7 @@ export function OptimizationComparison() {
         {/* Header */}
         <div className="text-center mb-10">
           <h2 className="text-4xl font-semibold  sm:text-4xl text-[#262626] tracking-tighter sm:text-4xl md:text-4xl mb-4">
-            Transform Hiring with <span className="text-[#3534ff]">Evalsy</span>
+            Transform Your Hiring Process with <span className="text-[#3534ff]">Evalsy</span>
           </h2>
         </div>
 

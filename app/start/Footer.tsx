@@ -56,8 +56,8 @@ export function Footer() {
                   <MapPin className="h-3 w-3 text-white" />
                 </div>
                 <div className="text-white text-sm">
-                  <p>Level 15, 1 Martin Place,</p>
-                  <p>Sydney NSW 2000</p>
+                  <p>Level 15, Access Tower,</p>
+                  <p>Colombo - 15</p>
                 </div>
               </div>
             </div>
@@ -80,7 +80,7 @@ export function Footer() {
                   <Phone className="h-3 w-3 text-white" />
                 </div>
                 <Link href="tel:+61387654321" className="text-white hover:text-white text-sm">
-                  +61 3 8765 4321
+                  +64 3 8765 4321
                 </Link>
               </div>
               <div className="flex items-start space-x-3">
@@ -88,8 +88,8 @@ export function Footer() {
                   <MapPin className="h-3 w-3 text-white" />
                 </div>
                 <div className="text-white text-sm">
-                  <p>Suite 200, 120 Collins Street,</p>
-                  <p>Melbourne VIC 3000</p>
+                  <p>2 Havelock Road,</p>
+                  <p>#05-10 Havelock II</p>
                 </div>
               </div>
             </div>

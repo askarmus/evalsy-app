@@ -8,20 +8,20 @@ import { CircularProgress1 } from './CircularProgress';
 
 const statistics = [
   {
-    percentage: '46%',
-    description: 'Companies using AI in their hiring process achieve more successful hires.',
+    percentage: '57%',
+    description: '46% of recruiters report improved hiring success rates using AI video screening.',
     source: 'Harvard Business Review',
     logo: 'HBR',
   },
   {
     percentage: '20%',
-    description: 'More efficient hiring with AI-powered tools, helping businesses scale faster and smarter.',
+    description: '20% increase in interviewing efficiency reported by hiring teams',
     source: 'McKinsey & Company',
     logo: 'M&C',
   },
   {
     percentage: '81%',
-    description: 'of companies are now allocating more resources toward automated recruiting tools to stay competitive.',
+    description: '81% adoption rate among companies shifting to recruitment automation',
     source: 'USC',
     logo: 'USC',
   },
@@ -30,35 +30,35 @@ const statistics = [
 const steps = [
   {
     icon: FaPlus,
-    title: 'Create',
+    title: 'Create your interview',
     description: 'Easily design and configure interview questions tailored to your job role. Choose from templates or build your own custom flow.',
     image: '/feature-screen/create-interview.png',
     active: true,
   },
   {
     icon: FaUsers,
-    title: 'Shortlist',
+    title: 'Shortlist top candidates',
     description: 'Efficiently review and filter applicants to identify the most qualified candidates based on resumes and initial screening.',
     image: '/feature-screen/shortlist.png',
     active: false,
   },
   {
     icon: FaPaperPlane,
-    title: 'Invite',
+    title: 'Invite candidates ',
     description: 'Quickly send personalized interview invitations to shortlisted candidates with automated scheduling and reminders.',
     image: '/feature-screen/invitation.png',
     active: false,
   },
   {
     icon: FaVideo,
-    title: 'Interview',
+    title: 'AI-powered interview',
     description: 'Conduct asynchronous or live AI-powered interview sessions to assess candidate responses with speed and consistency.',
     image: '/feature-screen/online-interview.png',
     active: false,
   },
   {
     icon: FaChartBar,
-    title: 'Results',
+    title: 'Results with AI insights',
     description: 'Gain insights through detailed analytics, score breakdowns, and performance summaries to make data-driven hiring decisions.',
     image: '/feature-screen/interview-result.png',
     active: false,
@@ -103,7 +103,7 @@ export default function Feature() {
             <Card className="border-2 border-black bg-white rounded-xl overflow-hidden">
               <CardBody className="p-8">
                 <h2 className="text-2xl md:text-3xl  text-4xl font-semibold  sm:text-4xl text-[#262626] mb-4">How AI Interviewer Works</h2>
-                <p className="mb-4 text-sm text-black"> {steps[selectedIndex].description}</p>
+                <p className="mb-4 text-md text-black"> Discover how Evalsy’s AI-powered video interviewing platform revolutionizes hiring: from candidate creation through interview to results automatically and with consistent evaluation.</p>
 
                 {/* Video Player Area */}
                 <div className="bg-gray-100 rounded-lg mb-8 aspect-video flex items-center justify-center border-2 border-gray-200">
@@ -134,10 +134,6 @@ export default function Feature() {
                   <div className="mb-4">
                     <h3 className="text-3xl md:text-4xl font-bold text-black mb-2">{stat.percentage}</h3>
                     <p className="text-gray-700 text-sm leading-relaxed">{stat.description}</p>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="w-8 h-6 bg-black text-white text-xs font-bold flex items-center justify-center rounded">{stat.logo}</div>
-                    <span className="text-xs text-gray-600 font-medium">{stat.source}</span>
                   </div>
                 </CardBody>
               </Card>
