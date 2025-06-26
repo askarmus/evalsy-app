@@ -51,7 +51,7 @@ const companies: Company[] = [
 
 export default function Companies() {
   return (
-    <section id="how-it-work" className="w-full py-6">
+    <section id="how-it-work" className="w-full py-0">
       <div className="max-w-screen-xl mx-auto text-center">
         <p className="text-xs     tracking-[0.13em] text-gray-500 mb-0">A few trusted companies around the world</p>
 
