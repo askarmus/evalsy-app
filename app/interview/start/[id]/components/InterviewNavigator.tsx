@@ -131,7 +131,6 @@ const InterviewNavigator: React.FC = () => {
   return (
     <div className="min-h-screen flex items-center justify-center  ">
       <div className="w-full max-w-screen-lg mx-auto px-6 py-8">
-        <InterviewNavbar company={company} />
         <AntiCheat invitationId={invitationId} fraudDetection={job.fraudDetection} />
         <Card className="w-full p-0 mt-4  ">
           <CardBody className="p-0">

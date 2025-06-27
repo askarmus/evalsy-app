@@ -9,7 +9,7 @@ const CandidateInfo: React.FC<any> = ({ job, addTopPadding = true }) => {
   const { phase, duration, company } = useInterviewStore();
   return (
     <div className="flex justify-between items-start w-full  ">
-      <div className={`flex flex-col p-4   w-full`}>
+      <div className={`flex flex-col p-6   w-full`}>
         <div className="flex items-center justify-between">
           <div className="space-y-2">
             <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100"> {job.jobTitle}</h2>
@@ -26,13 +26,6 @@ const CandidateInfo: React.FC<any> = ({ job, addTopPadding = true }) => {
             </div>
           </div>
           <div className="text-right">
-            <div className="text-3xl font-bold text-green-600"> {duration / 60} </div>
-            <div className="text-sm text-gray-500">minutes</div>
-          </div>
-        </div>
-
-        <div className="flex justify-between items-start">
-          <div>
             {phase === 'in-progress' && (
               <>
                 <InterviewTimer />
