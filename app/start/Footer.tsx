@@ -20,7 +20,7 @@ export function Footer() {
   ];
 
   return (
-    <footer className="w-full py-12 bg-[#3534ff]  ">
+    <footer className="w-full py-12 section_footer  ">
       <div className="container px-4 md:px-6">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
           {/* Brand Section */}

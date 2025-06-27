@@ -44,7 +44,7 @@ export default function RequestDemoHero() {
   };
 
   return (
-    <Card shadow="none" className="border-2 border-black rounded-3xl bg-[#e1cff5] p-4">
+    <Card shadow="none" className="border-1 border-gray-300 rounded-3xl bg-[url('/66cf226f15f01e88921e897a_Ellipse%202449-1.svg')] bg-cover bg-top p-4">
       <CardHeader className="pb-0 pt-4   flex flex-col items-start ">
         <div className="flex gap-2  items-start mb-4">
           <div className="rounded-full   p-1 mb-4 border-2 border-[#3534ff]">

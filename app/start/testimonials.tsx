@@ -67,7 +67,7 @@ export const Testimonials = () => {
           {columns.map((column, columnIndex) => (
             <div key={columnIndex} className="w-full p-4 md:w-1/3">
               {column.map((testimonial) => (
-                <div key={testimonial.id} className="p-6 p-4 border-2 border-black rounded-lg bg-white mb-4">
+                <div key={testimonial.id} className="p-6  shadow-2xl rounded-2xl bg-white mb-4">
                   <a className="inline-flex items-center mb-2">
                     <img alt="blog" src={testimonial.image} className="flex-shrink-0 object-cover object-center w-8 h-8 rounded-full" />
                     <span className="flex flex-col flex-grow pl-4">

@@ -43,7 +43,7 @@ export default function RequestDemo() {
   };
 
   return (
-    <section id="shedule-demo" className="  bg-darkbase  flex items-center justify-center p-4 py-20 sm:py-32">
+    <section id="shedule-demo" className="  bg-white  flex items-center justify-center p-4 py-20 sm:py-32">
       <div className="w-full max-w-6xl">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
           <div className="hidden lg:block relative h-full rounded-2xl overflow-hidden">
@@ -60,7 +60,7 @@ export default function RequestDemo() {
             </div>
           </div>
           <div>
-            <Card shadow="none" className="border-2 border-black rounded-lg  bg-white p-4">
+            <Card shadow="none" className=" shadow-2xl rounded-2xl  bg-white p-4">
               <CardHeader className="pb-0 pt-4   flex flex-col items-start mb-3">
                 <p className="text-xl font-bold text-black">Tell us about your needs</p>
                 <p className="text-sm text-black">We will get back to you within 24 hours to schedule your personalized demo.</p>

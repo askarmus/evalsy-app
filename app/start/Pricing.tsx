@@ -7,12 +7,14 @@ export const Pricing = () => {
     <section id="pricing" className="bg-gradient-6 py-20 sm:py-32">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="text-center">
-          <h2 className="font-display text-4xl font-semibold  sm:text-4xl text-[#262626]">Simple, Usage-Based Pricing for AI Interviewing</h2>
+          <h2 className="font-display text-4xl font-semibold  sm:text-4xl text-[#262626]">
+            Simple, <span className="gradients-primary-2-text-hard">Usage-Based Pricing </span>for AI Interviewing
+          </h2>
           <p className="mt-4 text-lg  ">Start for free no credit card required and pay only for what you use. Our flexible credit system ensures you never waste features.</p>
         </div>
         <div className="mt-16 grid grid-cols-1 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 gap-x-6">
           {/* Free Trial */}
-          <div className=" p-8 border-2 border-black rounded-lg  bg-white">
+          <div className=" p-8 shadow-2xl rounded-2xl  bg-white">
             <h3 className="text-2xl font-semibold">Free Trial</h3>
             <p className="mt-2 text-sm ">Get started with no risk — no credit card required.</p>
             <ul className="mt-6 space-y-4 text-sm">
@@ -36,7 +38,7 @@ export const Pricing = () => {
           </div>
 
           {/* Credit Packages */}
-          <div className="p-8 border-2 border-black rounded-lg  bg-white">
+          <div className="p-8 shadow-2xl rounded-2xl  bg-white">
             <h3 className="text-2xl font-semibold">Credit Packages</h3>
             <p className="mt-2 text-sm  ">Buy once, use anytime — credits never expire.</p>
             <ul className="mt-6 space-y-4 text-sm">
@@ -60,7 +62,7 @@ export const Pricing = () => {
           </div>
 
           {/* Credit Usage */}
-          <div className="border-2 border-black rounded-lg  bg-white p-8">
+          <div className="shadow-2xl rounded-2xl  bg-white p-8">
             <h3 className="text-2xl font-semibold">Pay-as-You-Go</h3>
             <p className="mt-2 text-sm">Pay only for the time and services you use.</p>
             <ul className="mt-6 space-y-4 text-sm">

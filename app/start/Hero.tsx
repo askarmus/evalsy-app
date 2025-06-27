@@ -58,7 +58,7 @@ export function Hero() {
             <div className="space-y-4">
               <h1 className="text-5xl font-bold   sm:text-5xl md:text-6xl lg:text-7xl  text-[#262626]">
                 Tired of Manual <br></br>
-                <span className=" relative text-[#3534ff]">Interviews?</span>
+                <span className=" relative gradients-primary-2-text-hard">Interviews?</span>
               </h1>
               {/* Description */}
               <p className="text-lg md:text-xl text-gray-700 max-w-2xl leading-relaxed">Let our AI-powered video screening platform take over. fully automated candidate interviews, available 24/7</p>

@@ -53,9 +53,10 @@ export default function Companies() {
   return (
     <section id="how-it-work" className="w-full py-0">
       <div className="max-w-screen-xl mx-auto text-center">
-        <p className="text-xs     tracking-[0.13em] text-gray-500 mb-0">A few trusted companies around the world</p>
-
-        <Card shadow="none" className="p-1  max-w-3xl mx-auto bg-transparent  ">
+        <h1 className="text-3xl font-semibold tracking-tight mt-4  ">
+          <span className="gradients-primary-2-text"> 50+</span> Forbes 2000 Companies
+        </h1>
+        <Card shadow="none" className="p-1  max-w-3xl mx-auto  mt-6">
           <CardBody className="p-1">
             <div className="w-full flex justify-center">
               <div className="grid grid-cols-2 gap-0 xs:grid-cols-3 sm:grid-cols-3 md:grid-cols-6 lg:grid-cols-6">

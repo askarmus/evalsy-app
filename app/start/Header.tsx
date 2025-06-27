@@ -23,7 +23,7 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b-2 border-black bg-[#0B0A33]  ">
-      <Navbar maxWidth="xl" className="bg-transparent px-4 md:px-6" height="3.5rem">
+      <Navbar maxWidth="xl" className="bg-transparent px-4 md:px-6" height="4rem">
         {/* Brand / Logo */}
         <NavbarBrand>
           <NextLink href="/" className="flex items-center space-x-2">

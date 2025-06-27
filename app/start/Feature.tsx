@@ -95,14 +95,16 @@ export default function Feature() {
   const selectedStep = steps[selectedIndex];
 
   return (
-    <section id="how-it-work" className="w-full py-12 md:py-24 lg:py-32 bg-white  ">
+    <section id="how-it-work" className="w-full py-12 md:py-24 lg:py-32 bg-[url('/678666d67e0cc60610341212_Waves.svg')] bg-cover bg-center  ">
       <div className="container px-4 md:px-6">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Left Section - How AI Interviewer Works */}
           <div className="lg:col-span-2">
-            <Card className="border-2 border-black bg-white rounded-xl overflow-hidden">
+            <Card className="shadow-2xl rounded-2xl overflow-hidden">
               <CardBody className="p-8">
-                <h2 className="text-2xl md:text-3xl  text-4xl font-semibold  sm:text-4xl text-[#262626] mb-4">How AI Interviewer Works</h2>
+                <h2 className="text-2xl md:text-3xl  text-4xl font-semibold  sm:text-4xl text-[#262626] mb-4">
+                  How AI <span className="gradients-primary-2-text-hard">Interviewer</span> Works
+                </h2>
                 <p className="mb-4 text-md text-black"> Discover how Evalsy’s AI-powered video interviewing platform revolutionizes hiring: from candidate creation through interview to results automatically and with consistent evaluation.</p>
 
                 {/* Video Player Area */}
@@ -129,10 +131,10 @@ export default function Feature() {
           {/* Right Section - Statistics */}
           <div className="space-y-6">
             {statistics.map((stat, index) => (
-              <Card key={index} className="border-2 border-black bg-white rounded-xl">
+              <Card key={index} className="shadow-xl  bg-white rounded-xl">
                 <CardBody className="p-6">
                   <div className="mb-4">
-                    <h3 className="text-3xl md:text-4xl font-bold text-black mb-2">{stat.percentage}</h3>
+                    <h3 className="text-3xl md:text-4xl font-bold text-black mb-2 gradients-primary-2-text">{stat.percentage}</h3>
                     <p className="text-gray-700 text-sm leading-relaxed">{stat.description}</p>
                   </div>
                 </CardBody>
