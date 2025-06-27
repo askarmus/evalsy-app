@@ -48,22 +48,22 @@ export const AddJob = () => {
 
   const stepsData = [
     {
-      icon: <FaBriefcase className="w-5 h-5 text-xl text-green-500" />,
+      icon: <FaBriefcase className="w-5 h-5 text-xl text-gray-900" />,
       title: 'Job Info',
       description: 'Overview of job roles and responsibilities',
     },
     {
-      icon: <FaQuestionCircle className="w-5 h-5 text-xl text-green-500" />,
+      icon: <FaQuestionCircle className="w-5 h-5 text-xl text-gray-900" />,
       title: 'Questions',
       description: 'Common questions related to job applications',
     },
     {
-      icon: <FaCogs className="w-5 h-5 text-xl text-green-500" />,
+      icon: <FaCogs className="w-5 h-5 text-xl text-gray-900" />,
       title: 'Settings',
       description: 'Miscellaneous configurations and settings',
     },
     {
-      icon: <FaShieldAlt className="w-5 h-5 text-xl text-green-500" />,
+      icon: <FaShieldAlt className="w-5 h-5 text-xl text-gray-900" />,
       title: 'Fraud Detection',
       description: 'Monitor and prevent fraudulent activities',
     },
@@ -507,20 +507,26 @@ export const AddJob = () => {
                 </div>
               </div>
 
-              <div className="fixed bottom-0 left-0 border-t-2 border-black right-0 z-50  dark:border-gray-700 bg-white dark:bg-gray-900 p-2 flex justify-end mt-8">
+              <div className="fixed bottom-0 left-0 border-[#100145] right-0 z-50  dark:border-gray-700 bg-white dark:bg-gray-900 p-2 flex justify-end mt-8">
                 <div className="mx-auto flex w-full max-w-[90rem] items-center px-5 xl:px-8 xl2:px-[60px] xl2:!pr-[60px] justify-between">
-                  {currentStep > 0 ? <Button onPress={() => setCurrentStep(currentStep - 1)}>Previous</Button> : <div></div>}
+                  {currentStep > 0 ? (
+                    <Button size="md" onPress={() => setCurrentStep(currentStep - 1)}>
+                      Previous
+                    </Button>
+                  ) : (
+                    <div></div>
+                  )}
 
                   <div className="flex gap-2">
                     {isEditMode && (
-                      <Button className="bg-black text-white" size="lg" onPress={() => formRef.current.handleSubmit()} isLoading={loading}>
+                      <Button className="bg-[#100145] text-white" size="md" onPress={() => formRef.current.handleSubmit()} isLoading={loading}>
                         Save
                       </Button>
                     )}
 
                     {currentStep < stepsData.length - 1 ? (
                       <Button
-                        size="lg"
+                        size="md"
                         variant="solid"
                         className="bg-[#100145] text-white"
                         onPress={async () => {
@@ -532,7 +538,7 @@ export const AddJob = () => {
                       </Button>
                     ) : (
                       !isEditMode && (
-                        <Button size="lg" className="bg-[#100145] text-white" isLoading={loading} onPress={() => formRef.current.handleSubmit()}>
+                        <Button size="md" className="bg-[#100145] text-white" isLoading={loading} onPress={() => formRef.current.handleSubmit()}>
                           Save & Activate
                         </Button>
                       )

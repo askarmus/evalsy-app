@@ -1,12 +1,10 @@
 'use client';
 
 import { Drawer, DrawerBody, DrawerFooter, DrawerHeader, DrawerContent, Button, Select, SelectItem, Checkbox, Textarea, Input } from '@heroui/react';
-import { Formik, FormikErrors } from 'formik';
+import { Formik } from 'formik';
 import { AddJobSchema } from '@/helpers/schemas';
 import { nanoid } from 'nanoid';
 import { ArraySchema } from 'yup';
-import RichTextEditor from '../../../shared/RichTextEditor';
-import { languages } from '@/config/languages';
 
 interface QuestionEditDrawerProps {
   isOpen: boolean;
@@ -64,7 +62,7 @@ export const QuestionEditDrawer = ({ isOpen, onOpenChange, mode, initialQuestion
                   <Button variant="light" color="danger" onPress={onClose}>
                     Cancel
                   </Button>
-                  <Button color="primary" onPress={() => handleSubmit()}>
+                  <Button className="bg-[#100145] text-white" onPress={() => handleSubmit()}>
                     {isEdit ? 'Update Changes' : 'Add Question'}
                   </Button>
                 </DrawerFooter>

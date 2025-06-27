@@ -20,25 +20,31 @@ export const VerticalStepper: React.FC<VerticalStepperProps> = ({ steps, current
   return (
     <Card shadow="sm" radius="md" className="p-4">
       <CardBody>
-        <div className=" ">
-          {steps.map((step, index) => (
-            <div
-              key={index}
-              onClick={async () => {
-                if (!formReady || index === currentStep) return;
-                const valid = await onStepChange(index);
-                if (valid) onStepChange(index);
-              }}
-              className={`py-2 px-4 flex items-center gap-3 cursor-pointer px-1 m-1 rounded-xl 
-            ${currentStep === index ? 'bg-green-100 dark:bg-gray-800 rounded-xl' : 'hover:bg-gray-100 dark:hover:bg-gray-800 rounded-xl'}`}
-            >
-              {step.icon}
-              <div>
-                <div className="text-base font-semibold text-gray-900 dark:text-white">{step.title}</div>
-                <div className="text-xs text-gray-600 dark:text-gray-400">{step.description}</div>
+        <div>
+          {steps.map((step, index) => {
+            const isActive = index === currentStep;
+
+            return (
+              <div
+                key={index}
+                onClick={async () => {
+                  if (!formReady || isActive) return;
+                  const valid = await onStepChange(index);
+                  if (valid) onStepChange(index);
+                }}
+                className={`
+              py-2 mb-4 px-4 flex items-center gap-2 cursor-pointer m-1 rounded-xl transition-colors
+              ${isActive ? 'bg-blue-600 text-white dark:bg-blue-500' : 'bg-gray-100 text-gray-800 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600'}
+            `}
+              >
+                <div className={`w-5 h-5 text-xl ${isActive ? 'text-white' : 'text-gray-900 dark:text-gray-200'}`}>{step.icon}</div>
+                <div>
+                  <div className="text-base font-semibold">{step.title}</div>
+                  <div className="text-xs">{step.description}</div>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </CardBody>
     </Card>

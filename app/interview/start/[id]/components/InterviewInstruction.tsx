@@ -17,7 +17,7 @@ const InterviewInstruction: React.FC<any> = () => {
   return (
     <div className="min-h-screen flex items-center justify-center">
       <main className="w-full max-w-screen-lg mx-auto px-6 py-8">
-        <Card shadow="sm" radius="md" className="p-4 mt-6">
+        <Card shadow="lg" radius="lg" className="p-4 mt-6">
           <CandidateInfo candidate={candidate} company={company} job={job} addTopPadding={false} />
 
           {!showMicTest && (
@@ -49,22 +49,18 @@ const InterviewInstruction: React.FC<any> = () => {
           )}
           <CardFooter>
             <div className="flex items-center justify-between w-full">
-              <div className="space-y-2">
-                <h3 className="text-lg font-semibold"> Ready to Begin?</h3>
-                <p className="text-sm">Test your video and microphone before starting the interview</p>
-              </div>
               {showMicTest && (
-                <Button size="lg" onPress={startInterview} color="success" isLoading={isLoading} isDisabled={status !== 'granted'} variant="solid" radius="full">
+                <Button size="md" onPress={startInterview} color="success" isLoading={isLoading} isDisabled={status !== 'granted'} variant="solid" radius="full">
                   Start Interview
                 </Button>
               )}
 
               {!showMicTest && (
-                <Button isLoading={isLoading} onPress={() => setShowMicTest(true)} size="lg" className="bg-black text-white">
+                <Button isLoading={isLoading} onPress={() => setShowMicTest(true)} size="md" className="bg-black text-white">
                   <div className="flex items-center space-x-2">
                     <Video className="w-4 h-4" />
                     <Mic className="w-4 h-4" />
-                    <span>Test Setup</span>
+                    <span>Next: Test your mic and video</span>
                     <ChevronRight className="w-4 h-4" />
                   </div>
                 </Button>

@@ -61,7 +61,7 @@ export default function MediaPermission({ onPermissionChange }: { onPermissionCh
       };
 
       setIsTestingMic(true);
-      setCountdown(5);
+      setCountdown(3);
       mediaRecorder.start();
 
       const countdownInterval = setInterval(() => {
@@ -74,7 +74,7 @@ export default function MediaPermission({ onPermissionChange }: { onPermissionCh
 
       setTimeout(() => {
         mediaRecorder.stop();
-      }, 5000);
+      }, 3000);
     } catch (err) {
       console.error('Mic test error:', err);
       setIsTestingMic(false);
@@ -143,7 +143,7 @@ export default function MediaPermission({ onPermissionChange }: { onPermissionCh
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                         <path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3zm-7 9a7 7 0 0014 0M5 10v1a7 7 0 0014 0v-1M12 19v4m-4 0h8" />
                       </svg>
-                      {isTestingMic ? `Testing Mic... (${countdown}s)` : 'Test Microphone (5 sec)'}
+                      {isTestingMic ? `Testing Mic... (${countdown}s)` : 'Test Microphone (3 sec)'}
                     </Button>
 
                     {micAudioUrl && (
