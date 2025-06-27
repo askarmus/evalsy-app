@@ -265,8 +265,41 @@ div::-webkit-scrollbar-track {
     0 0;
   background-repeat: no-repeat, no-repeat;
   background-size: auto, auto;
-  border-top-left-radius: 80px;
-  border-top-right-radius: 80px;
+
   padding-top: 5rem;
   padding-bottom: 3.125rem;
+}
+
+.on-home-v2 {
+  background-image: url(/67851a8956b556fa4fdfc9a2_Backgdound2.svg);
+  background-position: 50% 35%;
+  background-repeat: no-repeat;
+}
+
+.on-home-v22 {
+  background-color: #fff0;
+  background-image: linear-gradient(250deg, #0000000a, #66666614);
+  border: 1px solid #ffffff1a;
+}
+
+.home_v2-hero-bg {
+  z-index: -1;
+
+  background-color: #150c24;
+  background-image: url(/66bf4f8d63169d6989cb0ac7_Ellipse%202484.svg.svg), url(/66bf4f56351de63e0958dad0_Ellipse%202453.svg);
+  background-position:
+    100% 0,
+    0 0;
+  background-repeat: no-repeat, no-repeat;
+  background-size: auto, auto;
+  justify-content: center;
+  align-items: stretch;
+
+  inset: 0% 0% 96px;
+}
+.hero-heading-styling {
+  -webkit-text-fill-color: transparent;
+  background-image: linear-gradient(90deg, #8e2d12, #851297);
+  -webkit-background-clip: text;
+  background-clip: text;
 }

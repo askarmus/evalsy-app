@@ -54,7 +54,7 @@ export default function Companies() {
     <section id="how-it-work" className="w-full py-0">
       <div className="max-w-screen-xl mx-auto text-center">
         <h1 className="text-3xl font-semibold tracking-tight mt-4  ">
-          <span className="gradients-primary-2-text"> 50+</span> Forbes 2000 Companies
+          Trusted by <span className="gradients-primary-2-text"> 50+</span> leading HR teams worldwides
         </h1>
         <Card shadow="none" className="p-1  max-w-3xl mx-auto  mt-6">
           <CardBody className="p-1">
