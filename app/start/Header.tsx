@@ -45,7 +45,7 @@ export function Header() {
         {/* Desktop CTA / Auth Section */}
         <NavbarContent justify="end" className="hidden md:flex items-center gap-4">
           {!loading && user ? (
-            <Button as={NextLink} href="/dashboard" variant="bordered" className="border-2 border-black bg-[#3534ff] text-white hover:bg-gray-100">
+            <Button as={NextLink} href="/dashboard" variant="bordered" className="border-2 border-black bg-[#3534ff] text-white  ">
               Go to Dashboard
             </Button>
           ) : (
@@ -53,7 +53,7 @@ export function Header() {
               <Link className="inline-block rounded-lg px-2 py-1 text-md text-white" href="/login">
                 Sign in
               </Link>
-              <Button as={NextLink} href="#shedule-demo" variant="bordered" className="border-2 border-black  bg-[#3534ff]  text-white hover:bg-gray-100">
+              <Button as={NextLink} href="#shedule-demo" variant="bordered" className="border-2 border-black  bg-[#3534ff]  text-white  ">
                 Schedule a Demo
               </Button>
             </>
