@@ -1,5 +1,6 @@
 import { useCredits } from '@/context/CreditContext';
-import { Button, Spinner } from '@heroui/react';
+import { Button, Chip, Spinner } from '@heroui/react';
+import { AiFillDollarCircle } from 'react-icons/ai';
 
 type CreditBalanceCardStickyProps = {
   onTopUpClick: () => void;
@@ -12,9 +13,11 @@ export const CreditBalanceCardSticky = ({ onTopUpClick }: CreditBalanceCardStick
     <div className=" p-0">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <div className="text-sm font-bold text-xs text-white dark:text-white">{loading ? <Spinner size="sm" /> : credits} Credits Available</div>
+          <Chip color="warning" startContent={<AiFillDollarCircle />}>
+            {loading ? <Spinner size="sm" /> : credits} Credits
+          </Chip>
           <Button size="sm" className="bg-white dark:text-black " onPress={onTopUpClick}>
-            Top Up
+            Buy Credits
           </Button>
         </div>
       </div>

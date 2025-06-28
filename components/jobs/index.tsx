@@ -207,7 +207,7 @@ export default function Jobs() {
             ) : (
               <>
                 {items.map((job: any) => (
-                  <Card key={job.id} shadow="sm" radius="sm" className="P-3 ">
+                  <Card key={job.id} shadow="md" radius="md" className="P-4 ">
                     <CardHeader className="flex justify-between items-center">
                       <div className="flex gap-5">
                         <div className="flex flex-col gap-1 items-start justify-center">
