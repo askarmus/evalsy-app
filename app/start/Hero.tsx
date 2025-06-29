@@ -49,24 +49,25 @@ export function Hero() {
       {/* Background Elements */}
 
       <div className="container relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          {/* Left Content */}
-          <div className="flex flex-col space-y-8">
+        <div className="flex flex-col lg:flex-row gap-12 items-center">
+          {/* Left Content - 60% width on large screens */}
+          <div className="w-full lg:w-[68%] flex flex-col space-y-8">
             {/* Badge */}
 
             {/* Main Heading */}
             <div className="space-y-4">
-              <h1 className="text-5xl font-bold   sm:text-5xl md:text-6xl lg:text-7xl  text-[#262626]">
-                Tired of Manual <br></br>
-                <span className=" relative text-[#3534ff]">Interviews?</span>
+              <h1 className="text-5xl sm:text-6xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-[#262626]">
+                Tired of Manual <br />
+                <span className="gradients-primary-2-text-hard">Interviews?</span>
               </h1>
+
               {/* Description */}
               <p className="text-lg md:text-xl text-gray-700 max-w-2xl leading-relaxed">Let our AI-powered video screening platform take over. fully automated candidate interviews, available 24/7</p>
 
               {/* Typewriter Effect */}
               <div className="flex items-center gap-2">
                 <span className="text-xl md:text-2xl font-semibold text-gray-700">It&apos;s</span>
-                <span className="text-xl md:text-2xl font-bold text-[#3534ff]   pr-1 min-w-[120px]">{currentText}</span>
+                <span className="text-xl md:text-2xl font-bold text-[#3534ff] pr-1 min-w-[120px]">{currentText}</span>
               </div>
             </div>
 
@@ -82,7 +83,7 @@ export function Hero() {
             <div className="flex flex-wrap gap-8 pt-8 border-t border-gray-200">
               {stats.map((stat, index) => (
                 <div key={index} className="flex items-center gap-3">
-                  <div className="p-2   rounded-full border border-[#3534ff]">{stat.icon}</div>
+                  <div className="p-2 rounded-full border border-[#3534ff]">{stat.icon}</div>
                   <div>
                     <div className="text-2xl font-bold text-black">{stat.value}</div>
                     <div className="text-sm text-gray-600">{stat.label}</div>
@@ -92,8 +93,8 @@ export function Hero() {
             </div>
           </div>
 
-          {/* Right Visual - AI Interview Platform */}
-          <div className="relative lg:pl-36">
+          {/* Right Visual - 40% width on large screens */}
+          <div className="w-full lg:w-[32%] relative lg:pl-18">
             <RequestDemoHero />
           </div>
         </div>
