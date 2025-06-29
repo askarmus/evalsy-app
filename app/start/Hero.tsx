@@ -56,9 +56,9 @@ export function Hero() {
 
             {/* Main Heading */}
             <div className="space-y-4">
-              <h1 className="text-5xl sm:text-6xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-[#262626]">
+              <h1 className="text-5xl sm:text-6xl md:text-6xl lg:text-7xl xl:text-7xl font-bold hero-heading-styling-2">
                 Tired of Manual <br />
-                <span className="gradients-primary-2-text-hard">Interviews?</span>
+                Interviews?
               </h1>
 
               {/* Description */}
