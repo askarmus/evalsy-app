@@ -12,7 +12,6 @@ export const createInterviewAssistant = async (interviewData: {
 }) => {
   // Format the questions for the prompt
   const formattedQuestions = '- ' + interviewData.questions.map((q) => q.text).join('\n- ');
-
   //Add the required properties according to CreateAssistantDTO type
   return vapi.start({
     name: 'Evalsy AI Interviewer',
@@ -45,6 +44,7 @@ export const createInterviewAssistant = async (interviewData: {
   Interview Guidelines:
   - Address the candidate by name (${interviewData.userName})
   - Listen actively to responses and acknowledge them before moving forward
+   
   - Ask follow-up questions if a response is vague or requires more detail
   - Keep the conversation flowing naturally
   - Be professional, yet warm and welcoming

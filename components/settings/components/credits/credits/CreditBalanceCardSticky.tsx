@@ -16,7 +16,7 @@ export const CreditBalanceCardSticky = ({ onTopUpClick }: CreditBalanceCardStick
           <Chip color="warning" startContent={<AiFillDollarCircle />}>
             {loading ? <Spinner size="sm" /> : credits} Credits
           </Chip>
-          <Button size="sm" className="bg-white dark:text-black " onPress={onTopUpClick}>
+          <Button size="sm" radius="full" color="secondary" onPress={onTopUpClick}>
             Buy Credits
           </Button>
         </div>

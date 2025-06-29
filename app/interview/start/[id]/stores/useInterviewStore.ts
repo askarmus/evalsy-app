@@ -63,12 +63,10 @@ export const useInterviewStore = create<InterviewState>()((set, get) => ({
       set({ phase: 'skeleton-loading' });
 
       const data = await getInvitationDetails(id as string);
-
       if (data?.status === 'expired') {
         set({ phase: 'expired', isLoading: false });
         return;
       }
-
       set({ invitationId: id });
       set({
         phase: data.phase,
@@ -92,12 +90,9 @@ export const useInterviewStore = create<InterviewState>()((set, get) => ({
         userName: candidate?.name,
         role: job?.jobTitle,
         level: job?.experienceLevel,
-        maxSalary: job?.maxSalary || 0,
-        minSalary: job?.minSalary || 0,
-        currency: job?.currency || 'USD',
       };
 
-      const call = await createInterviewAssistant({ ...baseInterviewData, questions });
+      const call = await createInterviewAssistant({ ...baseInterviewData, questions: resposne.questions });
       if (call?.id) {
         await updateVapiCallId({ invitationId, callId: call.id });
       } else {

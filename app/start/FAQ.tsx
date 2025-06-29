@@ -36,7 +36,9 @@ export default function FAQ() {
     <section id="faq" aria-labelledby="faq-title" className="w-full py-12 md:py-24 lg:py-32 bg-gradient-6">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative">
         <div className="  text-center lg:mx-0 mb-8">
-          <h2 className="   text-4xl font-semibold  sm:text-4xl text-[#262626] text-center mb-5">Frequently Asked Questions</h2>
+          <h2 className="   text-4xl font-semibold  sm:text-4xl text-[#262626] text-center mb-5">
+            Frequently Asked <span className="gradients-primary-2-text-hard">Questions</span>
+          </h2>
           <p className="mt-4 text-lg tracking-tighter">If you cant find what you are looking for, email our support team.</p>
         </div>
 

@@ -56,7 +56,7 @@ export default function Companies() {
         <h1 className="text-2xl font-semibold tracking-tight mt-4  ">
           Trusted by <span className="gradients-primary-2-text"> 50+</span> leading HR teams worldwides
         </h1>
-        <Card shadow="none" className="p-1  max-w-3xl mx-auto  mt-6">
+        <Card shadow="none" className="p-1  max-w-3xl mx-auto  mt-6 bg-white">
           <CardBody className="p-1">
             <div className="w-full flex justify-center">
               <div className="grid grid-cols-2 gap-0 xs:grid-cols-3 sm:grid-cols-3 md:grid-cols-6 lg:grid-cols-6">

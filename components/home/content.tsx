@@ -13,14 +13,14 @@ const Chart = dynamic(() => import('../charts/steam'), {
 
 const widgetConfig = {
   'Open Interview': {
-    icon: <AiOutlineUserSwitch className="text-2xl text-white" />,
+    icon: <AiOutlineUserSwitch className="text-2xl text-white drak:white" />,
     bgColor: 'bg-primary',
     textColor: 'text-white',
   },
   'Pending Invitation': {
     icon: <AiOutlineUserSwitch className="text-2xl" />,
     bgColor: 'bg-default',
-    textColor: 'text-black',
+    textColor: 'text-black drak:white',
   },
   'Completed Interview': {
     icon: <AiOutlineCheckCircle className="text-2xl text-white" />,

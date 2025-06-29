@@ -52,7 +52,7 @@ export default function RequestDemo() {
                 <div className="inline-block   px-4 py-1 border-2 border-black rounded-full mb-5">Demo</div>
                 <div className="space-y-4">
                   <h2 className="text-4xl font-semibold  sm:text-4xl text-[#262626]  sm:text-4xl md:text-4xl">
-                    Request your <br></br> personalized demo
+                    Request Your <br></br> <span className="gradients-primary-2-text-hard">Personalized</span> Demo
                   </h2>
                   <p className="text-lg   max-w-md">Only pay for what you use — credits are flexible, fair, and never expire.</p>
                 </div>

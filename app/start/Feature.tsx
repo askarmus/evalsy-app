@@ -100,9 +100,9 @@ export default function Feature() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Left Section - How AI Interviewer Works */}
           <div className="lg:col-span-2">
-            <Card className="shadow-2xl rounded-2xl overflow-hidden">
+            <Card className="shadow-2xl rounded-2xl overflow-hidden bg-white">
               <CardBody className="p-8">
-                <h2 className="text-2xl md:text-3xl  text-4xl font-semibold  sm:text-4xl text-[#262626] mb-4">
+                <h2 className="text-2xl md:text-3xl  text-4xl font-semibold   sm:text-4xl text-[#262626] mb-4">
                   How AI <span className="gradients-primary-2-text-hard">Interviewer</span> Works
                 </h2>
                 <p className="mb-4 text-md text-black"> Discover how Evalsy’s AI-powered video interviewing platform revolutionizes hiring: from candidate creation through interview to results automatically and with consistent evaluation.</p>

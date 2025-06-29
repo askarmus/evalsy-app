@@ -58,7 +58,7 @@ export default function TrendAnalyticsChart() {
       background: 'transparent',
     },
     theme: {
-      mode: isDark ? 'dark' : 'light',
+      mode: 'dark',
     },
     xaxis: {
       categories,
