@@ -118,7 +118,7 @@ export default function RequestDemoHero() {
             onChange={handleInputChange}
           />
 
-          <Button radius="sm" isLoading={isSubmiting} type="submit" size="md" className="mt-8 text-white  bg-[#3534ff] py-4 px-8 font-medium hover: hover:bg-slate-600 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-700" endContent={<FaArrowRight className="w-4 h-4 text-white hover:translate-x-1 transition-transform" />}>
+          <Button radius="md" isLoading={isSubmiting} type="submit" size="md" className="mt-8 text-white  btn-gradient py-4 px-8 font-medium hover: hover:bg-slate-600 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-700" endContent={<FaArrowRight className="w-4 h-4 text-white hover:translate-x-1 transition-transform" />}>
             Submit
           </Button>
         </form>

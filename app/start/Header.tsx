@@ -45,7 +45,7 @@ export function Header() {
         {/* Desktop CTA / Auth Section */}
         <NavbarContent justify="end" className="hidden md:flex items-center gap-4">
           {!loading && user ? (
-            <Button as={NextLink} href="/dashboard" variant="bordered" className="border-2 border-black bg-[#3534ff] text-white  ">
+            <Button as={NextLink} href="/dashboard" variant="bordered" radius="md" className="border-2 border-black  btn-gradient text-white  ">
               Go to Dashboard
             </Button>
           ) : (
