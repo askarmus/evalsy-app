@@ -13,9 +13,12 @@ export const ResumeAnalyseDrawer: React.FC<{ isOpen: boolean; onClose: () => voi
   const [isDrawerOpen, setDrawerOpen] = useState(false);
 
   const handleCloseDrawer = () => setDrawerOpen(false);
-  const handleInviteClick = () => setDrawerOpen(true);
+  const handleInviteClick = () => {
+    setDrawerOpen(true);
+  };
   if (!resumeData) return null;
-  const { contact, current_role, experience, education, soft_skills, red_flags, job_match, decision_summary, skill_experience, jobId } = resumeData.analysisResults;
+  const { contact, current_role, experience, education, soft_skills, red_flags, job_match, decision_summary, skill_experience } = resumeData.analysisResults;
+  const { jobId } = resumeData;
 
   return (
     <>

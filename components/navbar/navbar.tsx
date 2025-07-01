@@ -5,7 +5,7 @@ import NextLink from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Navbar, NavbarBrand, NavbarContent, NavbarItem, Button, Link, Drawer, DrawerContent } from '@heroui/react';
 import { Menu, X } from 'lucide-react';
-import { AiOutlineHome, AiOutlineShopping, AiOutlineNotification, AiOutlineSetting } from 'react-icons/ai';
+import { AiOutlineHome, AiOutlineShopping, AiOutlineNotification, AiOutlineSetting, AiOutlineMail } from 'react-icons/ai';
 import { LogoDark } from '@/components/logo.dark';
 import { UserDropdown } from './user-dropdown';
 import { CreditManager } from '../settings/components/credits/credits/CreditManager';
@@ -18,6 +18,7 @@ export function Header() {
     { href: '/dashboard', label: 'Dashboard', icon: <AiOutlineHome /> },
     { href: '/interviews/list', label: 'Interview', icon: <AiOutlineShopping /> },
     { href: '/result', label: 'Result', icon: <AiOutlineNotification /> },
+    { href: '/invitations', label: 'Invitations', icon: <AiOutlineMail /> },
     { href: '/company/settings', label: 'Settings', icon: <AiOutlineSetting /> },
   ];
 

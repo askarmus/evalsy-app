@@ -1,12 +1,13 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { Button, Input, Radio, RadioGroup, Slider, Textarea } from '@heroui/react';
-import { Drawer, DrawerContent, DrawerHeader, DrawerBody, DrawerFooter } from '@heroui/react';
+import { Autocomplete, AutocompleteItem, Button, Input, Textarea } from '@heroui/react';
+import { Drawer, DrawerContent, DrawerHeader, DrawerBody } from '@heroui/react';
 import { Formik } from 'formik';
 import { getInvitations, sendInvitation } from '@/services/invitation.service';
 import { showToast } from '@/app/utils/toastUtils';
 import { Invitation, SentInvitationsTable } from './components/SentInvitationsTable';
 import { SendInvitationSchema } from '@/helpers/schemas';
 import { useCredits } from '@/context/CreditContext';
+import { getAllJobs } from '@/services/job.service';
 
 interface SendInvitationDrawerProps {
   isOpen: boolean;
@@ -18,13 +19,21 @@ interface SendInvitationDrawerProps {
 
 export const SendInvitationDrawer: React.FC<SendInvitationDrawerProps> = ({ isOpen, onClose, jobId, email, name }) => {
   const [invitations, setInvitations] = useState<Invitation[]>([]);
+  const [jobLookup, setJobLookup] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const { credits, refreshCredits } = useCredits();
+  const [selectedJobId, setSelectedJobId] = useState<string | null>(null);
+
+  useEffect(() => {
+    setSelectedJobId(jobId);
+  }, [jobId]);
+
   const fetchInvitations = useCallback(async () => {
-    if (jobId) {
-      const result = await getInvitations(jobId);
-      setInvitations(result);
-    }
+    const invitations = await getInvitations(jobId!);
+    setInvitations(invitations);
+
+    const jobs = await getAllJobs();
+    setJobLookup(jobs);
   }, [jobId]);
 
   useEffect(() => {
@@ -45,7 +54,7 @@ export const SendInvitationDrawer: React.FC<SendInvitationDrawerProps> = ({ isOp
       currentDate.setDate(currentDate.getDate() + 1);
       values.expires = currentDate;
 
-      const result = await sendInvitation({ ...values, jobId: jobId! });
+      const result = await sendInvitation({ ...values, jobId: selectedJobId });
       await refreshCredits();
 
       const newInvitation = {
@@ -84,6 +93,26 @@ export const SendInvitationDrawer: React.FC<SendInvitationDrawerProps> = ({ isOp
               <DrawerHeader>Send Invitation</DrawerHeader>
               <DrawerBody>
                 <div className="flex flex-col gap-4 mb-6">
+                  <Autocomplete
+                    label="Select a job"
+                    onSelectionChange={async (value) => {
+                      if (value) {
+                        setInvitations([]);
+
+                        setSelectedJobId(value.toString());
+                        setFieldValue('jobId', value);
+                        const result = await getInvitations(value.toString());
+                        setInvitations(result);
+                      }
+                    }}
+                    selectedKey={selectedJobId ?? undefined}
+                    className="w-full"
+                  >
+                    {jobLookup.map((job) => (
+                      <AutocompleteItem key={job.id.toString()}>{job.jobTitle}</AutocompleteItem>
+                    ))}
+                  </Autocomplete>
+
                   <Input label="Name" value={values.name} onChange={handleChange('name')} isInvalid={!!errors.name && !!touched.name} errorMessage={errors.name} />
                   <Input label="Email" value={values.email} onChange={handleChange('email')} isInvalid={!!errors.email && !!touched.email} errorMessage={errors.email} />
                   <Textarea
@@ -121,7 +150,7 @@ export const SendInvitationDrawer: React.FC<SendInvitationDrawerProps> = ({ isOp
                 </div>
 
                 {/* Table */}
-                <SentInvitationsTable invitations={invitations} />
+                {(jobId != '0' || invitations) && <SentInvitationsTable invitations={invitations} />}
               </DrawerBody>
             </>
           )}

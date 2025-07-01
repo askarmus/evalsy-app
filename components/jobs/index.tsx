@@ -3,15 +3,13 @@ import { Button, Input, Pagination, Chip, Card, CardFooter, CardHeader, Tooltip,
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { getAllJobs, deleteJob } from '@/services/job.service';
 import { SendInvitationDrawer } from './send-invitation';
-import { Breadcrumb } from '../bread.crumb';
 import { useRouter } from 'next/navigation';
 import JobListItemSkeleton from './components/job.listItem.skeleton';
 import ConfirmDialog from '@/components/ConfirmDialog';
 import DateFormatter from '@/app/utils/DateFormatter';
 import { AiFillEdit, AiOutlineDelete, AiOutlineDiff, AiOutlinePlus, AiOutlineUserAdd, AiOutlineRollback } from 'react-icons/ai';
 import EmptyStateCards from '../shared/empty-state-cards';
-import { FaCopy, FaExternalLinkAlt, FaExternalLinkSquareAlt, FaEye, FaSearch } from 'react-icons/fa';
-import { showToast } from '@/app/utils/toastUtils';
+import { FaExternalLinkAlt, FaSearch } from 'react-icons/fa';
 
 export default function Jobs() {
   const [page, setPage] = useState(1);

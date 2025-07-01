@@ -1,0 +1,184 @@
+'use client';
+
+import { Table, TableBody, TableCell, TableHeader, TableRow, TableColumn, Pagination, Input, DateRangePicker, RangeValue, CardBody, Card, Chip, Button } from '@heroui/react';
+import React, { useEffect, useMemo, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { SendInvitationDrawer } from '@/components/jobs/send-invitation';
+import { getAllInvitation } from '@/services/invitation.service';
+import { DateValue, parseDate } from '@internationalized/date';
+import DateFormatter from '@/app/utils/DateFormatter';
+import { AiOutlineSend } from 'react-icons/ai';
+
+interface Job {
+  id: string;
+  jobTitle: string;
+  experienceLevel: string;
+  durationInMinutes: number;
+}
+
+interface Invitation {
+  id: string;
+  name: string;
+  email: string;
+  sentOn: string;
+  job: Job;
+  statusUpdateAt: string;
+  status: string;
+  expire: string;
+}
+
+export default function Invitations() {
+  const [page, setPage] = useState<number>(1);
+  const [isLoading, setIsLoading] = useState(true);
+  const [invitations, setInvitations] = useState<Invitation[]>([]);
+  const [searchTerm, setSearchTerm] = useState('');
+  const rowsPerPage = 8;
+  const [selectedJobId, setSelectedJobId] = useState<string | null>(null);
+  const [isDrawerOpen, setDrawerOpen] = useState(false);
+  const [dateRange, setDateRange] = useState<RangeValue<DateValue> | null>(null);
+
+  const router = useRouter();
+
+  useEffect(() => {
+    const fetchInvitations = async () => {
+      setIsLoading(true);
+      try {
+        const data = await getAllInvitation();
+        setInvitations(data);
+      } catch (error) {
+        console.error('Error fetching invitations:', error);
+      }
+      setIsLoading(false);
+    };
+    fetchInvitations();
+  }, []);
+
+  useEffect(() => {
+    setPage(1);
+  }, [searchTerm, dateRange]);
+
+  const filteredData = useMemo(() => {
+    return invitations.filter((inv) => {
+      const matchesSearch = inv.name.toLowerCase().includes(searchTerm.toLowerCase()) || inv.email.toLowerCase().includes(searchTerm.toLowerCase()) || inv.job.jobTitle.toLowerCase().includes(searchTerm.toLowerCase());
+
+      const sentDate = new Date(inv.sentOn);
+      const withinDateRange = !dateRange || (dateRange.start && dateRange.end && sentDate >= new Date(dateRange.start.toString()) && sentDate <= new Date(dateRange.end.toString()));
+
+      return matchesSearch && withinDateRange;
+    });
+  }, [invitations, searchTerm, dateRange]);
+
+  const totalPages = Math.max(1, Math.ceil(filteredData.length / rowsPerPage));
+  const paginatedData = filteredData.slice((page - 1) * rowsPerPage, page * rowsPerPage);
+
+  const handleInviteClick = (jobId: string | null) => {
+    setSelectedJobId(jobId);
+    setDrawerOpen(true);
+  };
+
+  const getStatusColor = (status: string) => {
+    switch (status.toLowerCase()) {
+      case 'pending':
+        return 'default';
+      case 'started':
+        return 'primary';
+      case 'completed':
+        return 'success';
+      default:
+        return 'default';
+    }
+  };
+
+  const isExpired = (expire: string, statusUpdateAt: string | null | undefined) => {
+    if (!expire || statusUpdateAt) return false;
+    const now = new Date();
+    const expiryDate = new Date(expire);
+    return expiryDate < now;
+  };
+
+  const handleCloseDrawer = () => {
+    setSelectedJobId(null);
+    setDrawerOpen(false);
+  };
+
+  return (
+    <div className="my-10 px-4 lg:px-6 max-w-[80rem] mx-auto w-full flex flex-col gap-6">
+      <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
+        <h3 className="text-xl font-semibold">All Invitations</h3>
+        <Button color="primary" className=" text-white  bg-[#100145] " size="sm" onPress={() => handleInviteClick(null)} endContent={<AiOutlineSend />}>
+          Send Invitation
+        </Button>
+      </div>
+      <Card className="p-4">
+        <CardBody>
+          <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
+            <Input labelPlacement="outside" label="Search By" placeholder="Search by name, email, or job title" className="w-full sm:max-w-sm" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
+
+            <DateRangePicker labelPlacement="outside" label="Filter by Sent Date" value={dateRange} onChange={setDateRange} />
+          </div>
+        </CardBody>
+      </Card>
+
+      <div className="rounded-md border">
+        <Table>
+          <TableHeader>
+            <TableColumn>ROLE</TableColumn>
+
+            <TableColumn>DURATION</TableColumn>
+            <TableColumn>SENT ON</TableColumn>
+            <TableColumn>EXPIRE</TableColumn>
+            <TableColumn>STATUS</TableColumn>
+            <TableColumn>STATUS UPDATED </TableColumn>
+          </TableHeader>
+          <TableBody className="p-4" isLoading={isLoading}>
+            {paginatedData.map((invitation) => (
+              <TableRow key={invitation.id}>
+                <TableCell>
+                  <div className="flex flex-col">
+                    <p className="text-bold text-sm capitalize"> {invitation.name}</p>
+                    <p className="text-bold text-sm capitalize text-default-400"> {invitation.job.jobTitle}</p>
+                  </div>
+                </TableCell>
+
+                <TableCell>{invitation.job.durationInMinutes} min</TableCell>
+                <TableCell> {DateFormatter.formatDate(invitation.sentOn)}</TableCell>
+                <TableCell>
+                  {isExpired(invitation.expire, invitation.statusUpdateAt) ? (
+                    <Chip color="danger" size="sm" variant="flat">
+                      Expired
+                    </Chip>
+                  ) : (
+                    DateFormatter.formatDate(invitation.expire)
+                  )}
+                </TableCell>
+
+                <TableCell>
+                  <Chip className="capitalize" color={getStatusColor(invitation.status)} size="sm" variant="flat">
+                    {invitation?.status}
+                  </Chip>
+                </TableCell>
+                <TableCell> {invitation.statusUpdateAt ? new Date(invitation.statusUpdateAt).toLocaleString() : '--'}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+
+      <div className="flex justify-end">
+        <Pagination
+          color="primary"
+          classNames={{
+            item: 'w-8 h-8 text-small bg-red  ',
+            cursor: 'bg-[#100145]    ',
+          }}
+          size="sm"
+          total={totalPages}
+          page={page}
+          onChange={(newPage) => setPage(newPage)}
+        />
+      </div>
+
+      <SendInvitationDrawer isOpen={isDrawerOpen} onClose={handleCloseDrawer} jobId={selectedJobId} />
+    </div>
+  );
+}
