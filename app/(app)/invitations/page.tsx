@@ -7,7 +7,7 @@ import { SendInvitationDrawer } from '@/components/jobs/send-invitation';
 import { getAllInvitation } from '@/services/invitation.service';
 import { DateValue, parseDate } from '@internationalized/date';
 import DateFormatter from '@/app/utils/DateFormatter';
-import { AiOutlineSend } from 'react-icons/ai';
+import { AiOutlineCheckCircle, AiOutlineClockCircle, AiOutlinePlayCircle, AiOutlineSend, AiOutlineStop } from 'react-icons/ai';
 
 interface Job {
   id: string;
@@ -101,6 +101,11 @@ export default function Invitations() {
     setDrawerOpen(false);
   };
 
+  const pendingCount = filteredData.filter((i) => i.status.toLowerCase() === 'pending').length;
+  const startedCount = filteredData.filter((i) => i.status.toLowerCase() === 'started').length;
+  const completedCount = filteredData.filter((i) => i.status.toLowerCase() === 'completed').length;
+  const expiredCount = filteredData.filter((i) => isExpired(i.expire, i.statusUpdateAt)).length;
+
   return (
     <div className="my-10 px-4 lg:px-6 max-w-[80rem] mx-auto w-full flex flex-col gap-6">
       <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
@@ -109,15 +114,50 @@ export default function Invitations() {
           Send Invitation
         </Button>
       </div>
-      <Card className="p-4">
-        <CardBody>
-          <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
-            <Input labelPlacement="outside" label="Search By" placeholder="Search by name, email, or job title" className="w-full sm:max-w-sm" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
 
-            <DateRangePicker labelPlacement="outside" label="Filter by Sent Date" value={dateRange} onChange={setDateRange} />
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-4">
+        {/* Pending */}
+        <div className="flex items-center justify-between px-4 py-4 rounded-xl bg-white dark:bg-gray-900 shadow-sm">
+          <div className="flex items-center gap-2">
+            <AiOutlineClockCircle className="text-yellow-500 text-lg" />
+            <span className="text-sm font-medium text-gray-600 dark:text-gray-300">Pending</span>
           </div>
-        </CardBody>
-      </Card>
+          <span className="text-lg font-semibold text-gray-900 dark:text-white">{pendingCount}</span>
+        </div>
+
+        {/* Started */}
+        <div className="flex items-center justify-between px-4 py-4 rounded-xl bg-white dark:bg-gray-900 shadow-sm">
+          <div className="flex items-center gap-2">
+            <AiOutlinePlayCircle className="text-blue-500 text-lg" />
+            <span className="text-sm font-medium text-gray-600 dark:text-gray-300">Started</span>
+          </div>
+          <span className="text-lg font-semibold text-gray-900 dark:text-white">{startedCount}</span>
+        </div>
+
+        {/* Completed */}
+        <div className="flex items-center justify-between px-4 py-4 rounded-xl bg-white dark:bg-gray-900 shadow-sm">
+          <div className="flex items-center gap-2">
+            <AiOutlineCheckCircle className="text-green-500 text-lg" />
+            <span className="text-sm font-medium text-gray-600 dark:text-gray-300">Completed</span>
+          </div>
+          <span className="text-lg font-semibold text-gray-900 dark:text-white">{completedCount}</span>
+        </div>
+
+        {/* Expired */}
+        <div className="flex items-center justify-between px-4 py-4 rounded-xl bg-white dark:bg-gray-900 shadow-sm">
+          <div className="flex items-center gap-2">
+            <AiOutlineStop className="text-red-500 text-lg" />
+            <span className="text-sm font-medium text-gray-600 dark:text-gray-300">Expired</span>
+          </div>
+          <span className="text-lg font-semibold text-gray-900 dark:text-white">{expiredCount}</span>
+        </div>
+      </div>
+
+      <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
+        <Input labelPlacement="outside" label="Search By" variant="bordered" placeholder="Search by name, email, or job title" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
+
+        <DateRangePicker variant="bordered" labelPlacement="outside" label="Filter by Sent Date" value={dateRange} onChange={setDateRange} />
+      </div>
 
       <div className="rounded-md border">
         <Table>
