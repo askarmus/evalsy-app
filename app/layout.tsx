@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     siteName: 'Evalsy',
     images: [
       {
-        url: 'https://www.evalsy.com/og-image.jpg',
+        url: 'https://www.evalsy.com/og-image-new.jpg',
         width: 1200,
         height: 630,
         alt: 'Evalsy – AI Interview Platform',
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Evalsy – Smarter Hiring with AI Interviews',
     description: 'Screen candidates 75% faster...',
-    images: ['https://www.evalsy.com/og-image.jpg'],
+    images: ['https://www.evalsy.com/og-image-new.jpg'],
   },
 };
 
