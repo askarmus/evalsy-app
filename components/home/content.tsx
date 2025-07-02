@@ -6,6 +6,10 @@ import { DashboardWidjet } from './dashboard.widget';
 import { AiOutlineUserSwitch, AiOutlineCheckCircle } from 'react-icons/ai';
 import { hiringPipelineOverview } from '@/services/dashboard.service';
 import { Card, CardBody, Skeleton } from '@heroui/react';
+import CandidateRadarChart from '../charts/CandidateRadarChart';
+import ScoreOverTimeChart from '../charts/ScoreOverTimeChart';
+import AverageScoreByJob from '../charts/AverageScoreByJob';
+import CategoryAveragesChart from '../charts/CategoryAveragesChart';
 
 const Chart = dynamic(() => import('../charts/steam'), {
   ssr: false,
@@ -72,6 +76,19 @@ export const Content = () => {
         {/* Left Section */}
         <div className="mt-4 gap-2 flex flex-col xl:max-w-md w-full">
           <div className="flex flex-col justify-center gap-4 flex-wrap md:flex-nowrap md:flex-col mt-14">
+            <Card shadow="md" radius="md" className=" p-4  w-full">
+              <CardBody>
+                <CategoryAveragesChart
+                  data={[
+                    { name: 'CS', averageScore: 65 },
+                    { name: 'TK', averageScore: 45 },
+                    { name: 'PS', averageScore: 52 },
+                    { name: 'CF', averageScore: 61 },
+                    { name: 'CC', averageScore: 58 },
+                  ]}
+                />
+              </CardBody>
+            </Card>
             <RecentInterviews />
           </div>
         </div>
