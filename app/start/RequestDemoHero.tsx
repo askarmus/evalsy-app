@@ -44,7 +44,7 @@ export default function RequestDemoHero() {
   };
 
   return (
-    <Card shadow="none" className="  rounded-3xl p-8 border border-white/10 shadow-lg  p-4">
+    <Card shadow="none" className="  rounded-3xl p-8 border border-white/10 shadow-lg bg-white p-4">
       <CardHeader className="pb-0 pt-4   flex flex-col items-start ">
         <div className="flex gap-2  items-start mb-4">
           <div className="rounded-full   p-1 mb-4 border-2 border-purple-500/80">

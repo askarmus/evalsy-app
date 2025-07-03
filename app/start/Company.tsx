@@ -12,12 +12,6 @@ type Company = {
 
 const companies: Company[] = [
   {
-    alt: 'Aquip Logo',
-    width: 120,
-    height: 40,
-    src: '/company-logo/AQUIP logo-02-BANNER.png',
-  },
-  {
     alt: 'Singapore startup Logo',
     width: 82,
     height: 23,
@@ -34,6 +28,12 @@ const companies: Company[] = [
     width: 80,
     height: 25,
     src: '/company-logo/virtusa.png',
+  },
+  {
+    alt: 'Glencore Logo',
+    width: 90,
+    height: 40,
+    src: '/company-logo/glencore.svg',
   },
   {
     alt: 'Whatfix Logo',
