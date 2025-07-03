@@ -56,9 +56,28 @@ export function Hero() {
 
             {/* Main Heading */}
             <div className="space-y-4">
-              <h1 className="text-5xl sm:text-6xl md:text-6xl lg:text-7xl xl:text-7xl font-bold hero-heading-styling-2">
-                Tired of Manual <br />
-                Interviews?
+              <h1 className="text-6xl lg:text-7xl font-black leading-tight" style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
+                <span
+                  className="bg-gradient-to-r from-purple-600 via-purple-700 to-indigo-800 bg-clip-text text-transparent"
+                  style={{
+                    backgroundSize: '200% 200%',
+                    backgroundPosition: '46.04% 50%',
+                    willChange: 'auto',
+                  }}
+                >
+                  Let AI Handle Your
+                </span>
+                <br />
+                <span
+                  className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent"
+                  style={{
+                    backgroundSize: '200% 200%',
+                    backgroundPosition: '73.96% 50%',
+                    willChange: 'auto',
+                  }}
+                >
+                  Interviews
+                </span>
               </h1>
 
               {/* Description */}
@@ -67,13 +86,13 @@ export function Hero() {
               {/* Typewriter Effect */}
               <div className="flex items-center gap-2">
                 <span className="text-xl md:text-2xl font-semibold text-gray-700">It&apos;s</span>
-                <span className="text-xl md:text-2xl font-bold text-[#3534ff] pr-1 min-w-[120px]">{currentText}</span>
+                <span className="text-xl md:text-2xl font-bold bg-gradient-to-r from-pink-400 via-purple-400 to-blue-400 bg-clip-text text-transparent pr-1 min-w-[120px]">{currentText}</span>
               </div>
             </div>
 
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4">
-              <Button variant="bordered" size="lg" className="border-2 border-black text-black hover:bg-black hover:text-white px-8 py-4 rounded-full text-lg font-semibold group">
+              <Button variant="bordered" size="lg" className="border-2 border-purple-500/50 text-purple-500 hover:bg-purple-500/20 px-8 py-4 text-lg font-semibold rounded-full backdrop-blur-sm bg-transparent">
                 <Play className="h-5 w-5 mr-2 group-hover:scale-110 transition-transform" />
                 Watch Live Demo
               </Button>
@@ -85,7 +104,7 @@ export function Hero() {
                 <div key={index} className="flex items-center gap-3">
                   <div className="p-2 rounded-full border border-[#3534ff]">{stat.icon}</div>
                   <div>
-                    <div className="text-2xl font-bold text-black">{stat.value}</div>
+                    <div className="text-2xl font-bold text-[]">{stat.value}</div>
                     <div className="text-sm text-gray-600">{stat.label}</div>
                   </div>
                 </div>

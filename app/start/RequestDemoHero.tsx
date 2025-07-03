@@ -44,13 +44,13 @@ export default function RequestDemoHero() {
   };
 
   return (
-    <Card shadow="none" className="border-2 border-[#c820d8] rounded-3xl bg-[url('/66cf226f15f01e88921e897a_Ellipse%202449-1.svg')] bg-cover bg-top p-4">
+    <Card shadow="none" className="  rounded-3xl p-8 border border-white/10 shadow-lg  p-4">
       <CardHeader className="pb-0 pt-4   flex flex-col items-start ">
         <div className="flex gap-2  items-start mb-4">
-          <div className="rounded-full   p-1 mb-4 border-2 border-[#3534ff]">
-            <Zap className="h-6 w-6 text-[#3534ff]" />
+          <div className="rounded-full   p-1 mb-4 border-2 border-purple-500/80">
+            <Zap className="h-6 w-6 text-purple-500" />
           </div>
-          <p className="text-2xl font-bold text-black ">Request a Free Demo</p>
+          <p className="text-2xl font-bold text-black text-purple-500">Request a Free Demo</p>
         </div>
       </CardHeader>
       <CardBody className="px-1 py-1">
@@ -64,10 +64,22 @@ export default function RequestDemoHero() {
             variant="bordered"
             radius="lg"
             classNames={{
-              inputWrapper: 'bg-white text-black border-slate-600',
+              inputWrapper: 'bg-white text-black border-purple-500/80',
               input: 'text-black placeholder:text-slate-500',
             }}
             value={formData.fullName}
+            onChange={handleInputChange}
+          />
+          <Input
+            name="company"
+            label="Company Name"
+            variant="bordered"
+            radius="lg"
+            classNames={{
+              inputWrapper: 'bg-white text-black border-purple-500/80',
+              input: 'text-black placeholder:text-slate-500',
+            }}
+            value={formData.company}
             onChange={handleInputChange}
           />
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -81,7 +93,7 @@ export default function RequestDemoHero() {
               variant="bordered"
               radius="lg"
               classNames={{
-                inputWrapper: 'bg-white text-black border-slate-600',
+                inputWrapper: 'bg-white text-black border-purple-500/80',
                 input: 'text-black placeholder:text-slate-500',
               }}
               value={formData.email}
@@ -97,26 +109,13 @@ export default function RequestDemoHero() {
               variant="bordered"
               radius="lg"
               classNames={{
-                inputWrapper: 'bg-white text-black border-slate-600',
+                inputWrapper: 'bg-white text-black border-purple-500/80',
                 input: 'text-black placeholder:text-slate-500',
               }}
               value={formData.mobile}
               onChange={handleInputChange}
             />
           </div>
-
-          <Input
-            name="company"
-            label="Company Name"
-            variant="bordered"
-            radius="lg"
-            classNames={{
-              inputWrapper: 'bg-white text-black border-slate-600',
-              input: 'text-black placeholder:text-slate-500',
-            }}
-            value={formData.company}
-            onChange={handleInputChange}
-          />
 
           <Button radius="md" isLoading={isSubmiting} type="submit" size="md" className="mt-8 text-white  btn-gradient py-4 px-8 font-medium hover: hover:bg-slate-600 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-700" endContent={<FaArrowRight className="w-4 h-4 text-white hover:translate-x-1 transition-transform" />}>
             Submit
