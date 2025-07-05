@@ -20,7 +20,7 @@ export default function CategoryAveragesChart({ data }: Props) {
 
   const options: ApexOptions = {
     chart: { type: 'bar', toolbar: { show: false } },
-    title: { text: 'Category-wise Average Across Candidates', align: 'center' },
+    title: { text: 'Average by Category', align: 'center' },
     xaxis: {
       categories,
     },
