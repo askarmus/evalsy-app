@@ -205,10 +205,10 @@ export default function Jobs() {
             ) : (
               <>
                 {items.map((job: any) => (
-                  <Card key={job.id} shadow="md" radius="md" className="P-4 ">
+                  <Card key={job.id} shadow="md" radius="md" className="P-6">
                     <CardHeader className="flex justify-between items-center">
                       <div className="flex gap-5">
-                        <div className="flex flex-col gap-1 items-start justify-center">
+                        <div className="flex flex-col gap-2 items-start justify-center">
                           <a href={`${window.location.origin}/job/${job.id}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-xl font-bold text-gray-900 dark:text-gray-100 hover:underline">
                             {job.jobTitle}
                             <FaExternalLinkAlt className="w-3 h-3 opacity-40" />
@@ -227,7 +227,7 @@ export default function Jobs() {
                           ) : (
                             <>
                               <Tooltip content="Manage Resume">
-                                <Button size="sm" radius="full" variant="bordered" startContent={<AiOutlineDiff className="h-5 w-5 text-black" />} aria-label="manage" onPress={() => handleManageResumeClick(job.id)}>
+                                <Button size="sm" radius="full" variant="bordered" startContent={<AiOutlineDiff className="h-5 w-5 text-black dark:text-white" />} aria-label="manage" onPress={() => handleManageResumeClick(job.id)}>
                                   Candidate
                                 </Button>
                               </Tooltip>
@@ -277,10 +277,9 @@ export default function Jobs() {
                       <div className="mt-2 ml-auto">
                         <ul className="flex gap-4 flex-wrap">
                           {job.invitationStatusCount?.map((item, index) => (
-                            <li key={index} className="flex items-center gap-2 border-1 border-[#3534ff] px-3 py-1 rounded-full shadow-sm hover:bg-gray-200 transition">
-                              <span className="text-sm font-semibold text-[#3534ff] dark:text-blue-900">{item.status}:</span>
-                              <span className="text-sm text-[#3534ff] dark:text-blue-900">{item.count}</span>
-                            </li>
+                            <Chip key={index} className="  font-xs" variant="bordered" size="sm">
+                              {item.status.charAt(0).toUpperCase() + item.status.slice(1)}: <strong> {item.count} </strong>
+                            </Chip>
                           ))}
                         </ul>
                       </div>

@@ -5,28 +5,37 @@ interface TranscriptItem {
   message: string;
   role: 'user' | 'bot';
 }
-
 interface AudioPlayerWithHighlightProps {
   transcript: TranscriptItem[];
   recordingUrl: string;
+  playTrigger: boolean;
 }
 
-export default function AudioPlayerWithHighlight({ transcript, recordingUrl }: AudioPlayerWithHighlightProps) {
+export default function AudioPlayerWithHighlight({ transcript, recordingUrl, playTrigger }: AudioPlayerWithHighlightProps) {
   const audioRef = useRef<HTMLAudioElement>(null);
   const transcriptContainerRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(-1);
 
-  // Remove the first item from the transcript
-  const filteredTranscript = transcript.slice(1);
+  const filteredTranscript = transcript?.slice(1);
 
-  // Update active sentence based on currentTime
+  // 🔁 Sync audio play/pause with parent
+  useEffect(() => {
+    if (!audioRef.current) return;
+
+    if (playTrigger) {
+      audioRef.current.play();
+    } else {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+    }
+  }, [playTrigger]);
+
+  // ⏱️ Update highlighted sentence
   useEffect(() => {
     if (!audioRef.current) return;
 
     const updateActiveSentence = () => {
       const time = audioRef.current?.currentTime || 0;
-
-      // Manual replacement for findLastIndex
       let newActiveIndex = -1;
       for (let i = filteredTranscript.length - 1; i >= 0; i--) {
         if (filteredTranscript[i].secondsFromStart <= time) {
@@ -34,7 +43,6 @@ export default function AudioPlayerWithHighlight({ transcript, recordingUrl }: A
           break;
         }
       }
-
       if (newActiveIndex !== activeIndex) {
         setActiveIndex(newActiveIndex);
         scrollToActiveSentence(newActiveIndex);
@@ -44,20 +52,13 @@ export default function AudioPlayerWithHighlight({ transcript, recordingUrl }: A
     const scrollToActiveSentence = (index: number) => {
       const container = transcriptContainerRef.current;
       const activeElement = document.getElementById(`sentence-${index}`);
-
       if (!container || !activeElement) return;
 
       const containerRect = container.getBoundingClientRect();
       const elementRect = activeElement.getBoundingClientRect();
-      const containerTop = containerRect.top;
-      const elementRelativeTop = elementRect.top - containerTop;
+      const scrollTo = container.scrollTop + (elementRect.top - containerRect.top) - container.clientHeight / 2;
 
-      const scrollTo = container.scrollTop + elementRelativeTop - container.clientHeight / 2;
-
-      container.scrollTo({
-        top: scrollTo,
-        behavior: 'smooth',
-      });
+      container.scrollTo({ top: scrollTo, behavior: 'smooth' });
     };
 
     audioRef.current.addEventListener('timeupdate', updateActiveSentence);
@@ -68,12 +69,12 @@ export default function AudioPlayerWithHighlight({ transcript, recordingUrl }: A
 
   return (
     <div className="container">
-      <div className="audio-player">
+      <div className="audio-player hidden">
         <audio ref={audioRef} src={recordingUrl} controls className="w-full" />
       </div>
-
+      <h2 className="text-sm font-semibold mb-2">Transcript</h2>
       <div className="transcript" ref={transcriptContainerRef}>
-        {filteredTranscript.map((item, index) => (
+        {filteredTranscript?.map((item, index) => (
           <p
             key={index}
             id={`sentence-${index}`}

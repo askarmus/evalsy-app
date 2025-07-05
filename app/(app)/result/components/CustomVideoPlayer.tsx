@@ -1,59 +1,106 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useEffect, useState } from 'react';
 
-const CustomVideoPlayer: React.FC = () => {
+interface TranscriptItem {
+  secondsFromStart: number;
+  message: string;
+  role: 'user' | 'bot';
+}
+
+interface CustomVideoPlayerProps {
+  playTrigger: boolean;
+  stopTrigger: boolean;
+  transcript: TranscriptItem[];
+  videoUrl: string;
+  images?: string[] | null;
+}
+
+const CustomVideoPlayer: React.FC<CustomVideoPlayerProps> = ({ playTrigger, stopTrigger, transcript, videoUrl }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [progress, setProgress] = useState(0);
+  const transcriptContainerRef = useRef<HTMLDivElement>(null);
+  const [activeIndex, setActiveIndex] = useState(-1);
 
-  const togglePlay = () => {
-    const video = videoRef.current;
-    if (!video) return;
+  const filteredTranscript = transcript?.slice(1) || [];
 
-    if (video.paused) {
-      video.play();
-      setIsPlaying(true);
-    } else {
-      video.pause();
-      setIsPlaying(false);
+  // Handle play/pause
+  useEffect(() => {
+    if (playTrigger && videoRef.current) {
+      videoRef.current.play();
     }
-  };
-
-  const updateProgress = () => {
-    const video = videoRef.current;
-    if (!video) return;
-
-    const current = video.currentTime;
-    const duration = video.duration;
-    const percent = (current / duration) * 100;
-    setProgress(percent);
-  };
+  }, [playTrigger]);
 
   useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
+    if (stopTrigger && videoRef.current) {
+      videoRef.current.pause();
+      videoRef.current.currentTime = 0;
+    }
+  }, [stopTrigger]);
 
-    video.addEventListener("timeupdate", updateProgress);
-    return () => {
-      video.removeEventListener("timeupdate", updateProgress);
+  // Highlighting logic
+  useEffect(() => {
+    if (!videoRef.current) return;
+
+    const updateActiveSentence = () => {
+      const time = videoRef.current?.currentTime || 0;
+      let newActiveIndex = -1;
+      for (let i = filteredTranscript.length - 1; i >= 0; i--) {
+        if (filteredTranscript[i].secondsFromStart <= time) {
+          newActiveIndex = i;
+          break;
+        }
+      }
+      if (newActiveIndex !== activeIndex) {
+        setActiveIndex(newActiveIndex);
+        scrollToActiveSentence(newActiveIndex);
+      }
     };
-  }, []);
+
+    const scrollToActiveSentence = (index: number) => {
+      const container = transcriptContainerRef.current;
+      const activeElement = document.getElementById(`sentence-${index}`);
+      if (!container || !activeElement) return;
+
+      const containerRect = container.getBoundingClientRect();
+      const elementRect = activeElement.getBoundingClientRect();
+      const scrollTo = container.scrollTop + (elementRect.top - containerRect.top) - container.clientHeight / 2;
+
+      container.scrollTo({ top: scrollTo, behavior: 'smooth' });
+    };
+
+    videoRef.current.addEventListener('timeupdate', updateActiveSentence);
+    return () => {
+      videoRef.current?.removeEventListener('timeupdate', updateActiveSentence);
+    };
+  }, [activeIndex, filteredTranscript]);
 
   return (
-    <div className='flex flex-col space-y-4 items-start'>
-      {/* ✅ Visible Video */}
-      <video ref={videoRef} className='w-full max-w-md rounded-lg shadow' src='https://interviewer-ai-videos.s3-accelerate.amazonaws.com/sample_candidate_video/austin_00%40domain.tld/e39bd8e8-96e4-49de-a4ff-d474476f432f.mp4?AWSAccessKeyId=AKIAIXAEKUJAAA3N7HDQ&Expires=1746348875&Signature=TvN9kdVpEwr40zzYHiFqAqLcUZk%3D' crossOrigin='anonymous' playsInline />
+    <div className="max-w-5xl mx-auto  ">
+      <div className="flex flex-col md:flex-row gap-4">
+        {/* Video Section */}
 
-      {/* Custom Controls */}
-      <div className='flex items-center space-x-4'>
-        <button onClick={togglePlay} className='w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center shadow-md'>
-          <svg xmlns='http://www.w3.org/2000/svg' className='w-5 h-5 text-white' viewBox='0 0 24 24' fill='currentColor'>
-            {isPlaying ? <path d='M6 19h4V5H6v14zm8-14v14h4V5h-4z' /> : <path d='M8 5v14l11-7z' />}
-          </svg>
-        </button>
+        <div className="flex-1 rounded-lg shadow overflow-hidden" style={{ height: '330px' }}>
+          <video ref={videoRef} src={videoUrl} style={{ width: '100%', height: '100%', objectFit: 'cover' }} controls />
+        </div>
 
-        <div className='w-40 h-2 bg-gray-200 rounded flex'>
-          <div className='bg-orange-500 h-full rounded-l' style={{ width: `${progress}%` }} />
-          <div className='bg-gray-300 h-full rounded-r' style={{ width: `${100 - progress}%` }} />
+        {/* Transcript Section */}
+        <div className="flex-1">
+          <div
+            className="transcript"
+            ref={transcriptContainerRef}
+            style={{
+              maxHeight: '330px',
+              overflowY: 'auto',
+              border: '1px solid #eee',
+              padding: '15px',
+              borderRadius: '8px',
+              scrollBehavior: 'smooth',
+            }}
+          >
+            {filteredTranscript.map((item, index) => (
+              <p key={index} id={`sentence-${index}`} className={`text-xs mb-1 p-1 ${index === activeIndex ? 'bg-yellow-100 font-medium' : ''}`} style={{ color: item.role === 'bot' ? '#333' : '#0066cc' }}>
+                {item.message}
+              </p>
+            ))}
+          </div>
         </div>
       </div>
     </div>

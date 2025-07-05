@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useMemo, useEffect, useCallback, useRef } from 'react';
-import { Tabs, Tab, Card, CardBody, Spinner, CircularProgress, CardFooter, Chip } from '@heroui/react';
+import { Tabs, Tab, Card, CardBody, Spinner, CircularProgress, CardFooter, Chip, CardHeader, Button } from '@heroui/react';
 import { getAllInterviewResult, getInterviewResultById } from '@/services/interview.service';
 import EvaluationChart from './components/EvaluationChart';
 import ImageSlider from '@/components/shared/ImageSlider';
@@ -13,6 +13,8 @@ import EmptyStateCards from '@/components/shared/empty-state-cards';
 import AudioPlayerWithHighlight from './components/TranscriptPlayer';
 import CandidateSkeleton from './components/CandidateSkeleton';
 import { HiringGradeUtil } from '@/app/utils/hiring-grade.util';
+import CustomVideoPlayer from './components/CustomVideoPlayer';
+import { FaPlayCircle, FaStopCircle } from 'react-icons/fa';
 
 export default function InterviewResultList() {
   const [page, setPage] = useState(1);
@@ -28,7 +30,15 @@ export default function InterviewResultList() {
   const router = useRouter();
   const rowsPerPage = 1000;
   const searchParams = useSearchParams();
+  const [isPlaying, setIsPlaying] = useState(false);
 
+  const handlePlay = () => {
+    setIsPlaying(true);
+  };
+
+  const handleStop = () => {
+    setIsPlaying(false);
+  };
   const fetchInterviewResult = async () => {
     try {
       setIsLoading(true);
@@ -162,39 +172,6 @@ export default function InterviewResultList() {
                   </CardBody>
                 </Card>
 
-                {/* <div className="flex items-center gap-2">
-            <FaCalendar className="h-4 w-4 text-gray-400" />
-            <div className="flex flex-col">
-              <span className="text-sm text-gray-500">Completed</span>
-              <span className="text-sm font-medium">{DateFormatter.formatDate(selectedInterviewerData?.statusUpdateAt, true)}</span>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <FaCheckCircle className="h-4 w-4 text-gray-400" />
-            <div className="flex flex-col">
-              <span className="text-sm text-gray-500">Score</span>
-              <span className="text-sm font-medium">{Math.floor(selectedInterviewerData?.totalScore)}</span>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <FaCheckCircle className="h-4 w-4 text-gray-400" />
-            <div className="flex flex-col">
-              <span className="text-sm text-gray-500">Hire Rec.</span>
-              <span className="text-sm font-medium">
-                <RatingChips weight={selectedInterviewerData?.totalScore} />
-              </span>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <FaExclamationCircle className="h-4 w-4 text-gray-400" />
-            <div className="flex flex-col">
-              <span className="text-sm text-gray-500">Fraud Risk</span>
-              <span className="text-sm font-medium">{selectedInterviewerData?.fraudProbability ?? 0} %</span>
-            </div>
-          </div> */}
                 <div className="grid grid-cols-5 gap-4 mb-4">
                   <Card shadow="none" className="  p-0">
                     <CardBody>
@@ -233,29 +210,6 @@ export default function InterviewResultList() {
                 </div>
 
                 <div className="grid grid-cols-3 gap-4 mb-5">
-                  {/* Technical Score */}
-                  {/* <Card shadow="none" className="  p-2">
-                    <CardBody>
-                      <div className="flex items-center justify-between mb-6">
-                        <h3 className="text-lg font-semibold text-gray-900">Technical Score</h3>
-                        sss
-                      </div>
-
-                      <div className="flex flex-col items-center">
-                        <CircularProgress
-                          color={HiringGradeUtil.getHiringRecommendation(selectedInterviewerData?.totalScore || 0).color}
-                          classNames={{
-                            svg: 'w-32 h-32  ',
-                            track: 'stroke-gray-400',
-                            value: 'text-xl font-semibold  ',
-                          }}
-                          showValueLabel={true}
-                          strokeWidth={4}
-                          value={selectedInterviewerData?.totalScore}
-                        />
-                      </div>
-                    </CardBody>
-                  </Card> */}
                   <Card className="   ">
                     <CardBody className="justify-center items-center pb-0">
                       <CircularProgress
@@ -281,7 +235,6 @@ export default function InterviewResultList() {
                     <CardBody>
                       <div className="flex items-center justify-between mb-6">
                         <h3 className="text-lg font-semibold text-gray-900">Overall Score</h3>
-                        dsd
                       </div>
 
                       <div className="flex flex-col items-center">{selectedInterviewerData && <EvaluationChart data={selectedInterviewerData} />}</div>
@@ -304,21 +257,28 @@ export default function InterviewResultList() {
                 </div>
 
                 <Card shadow="none">
+                  <CardHeader>
+                    <div className="flex justify-between gap-2 w-full">
+                      <h2 className="text-lg font-semibold">Candidate Audio & Video Recording</h2>
+
+                      <div className="flex gap-2">
+                        {!isPlaying && (
+                          <Button color="success" radius="full" size="sm" startContent={<FaPlayCircle />} onClick={handlePlay}>
+                            Play Video
+                          </Button>
+                        )}
+                        {isPlaying && (
+                          <Button color="danger" radius="full" size="sm" startContent={<FaStopCircle />} onClick={handleStop}>
+                            Stop Video
+                          </Button>
+                        )}
+                      </div>
+                    </div>
+                  </CardHeader>
                   <CardBody>
                     <div className="flex gap-4">
-                      <div className="w-1/3">
-                        <Tabs aria-label="Options" size="sm">
-                          <Tab key="photos" title="Photos">
-                            <ImageSlider images={selectedInterviewerData?.screenshots} />
-                          </Tab>
-                          <Tab key="videos" title="Videos">
-                            <p className="text-base  mb-4">Coming soon</p>
-                            {/* <CustomVideoPlayer /> */}
-                          </Tab>
-                        </Tabs>
-                      </div>
-                      <div className="w-2/3">
-                        <AudioPlayerWithHighlight transcript={selectedInterviewerData.messages} recordingUrl={selectedInterviewerData.recordingUrl} />
+                      <div className="w-full">
+                        <CustomVideoPlayer images={selectedInterviewerData?.screenshots} videoUrl={selectedInterviewerData?.videoUrl} playTrigger={isPlaying} stopTrigger={!isPlaying} transcript={selectedInterviewerData.messages} />
                       </div>
                     </div>
                   </CardBody>

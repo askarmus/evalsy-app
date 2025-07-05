@@ -13,12 +13,17 @@ export const createInterviewAssistant = async (interviewData: {
   // Format the questions for the prompt
   const formattedQuestions = '- ' + interviewData.questions.map((q) => q.text).join('\n- ');
   //Add the required properties according to CreateAssistantDTO type
-  return vapi.start({
+
+  const call = await vapi.start({
     name: 'Evalsy AI Interviewer',
     transcriber: {
       provider: 'deepgram',
       model: 'nova-2',
       language: 'en',
+    },
+    artifactPlan: {
+      recordingEnabled: true,
+      videoRecordingEnabled: true,
     },
     voice: {
       provider: '11labs',
@@ -59,4 +64,14 @@ export const createInterviewAssistant = async (interviewData: {
     clientMessages: [],
     serverMessages: [],
   });
+
+  if (call?.id) {
+    // ✅ Trigger camera and speech start
+    vapi.send({
+      type: 'control',
+      control: 'say-first-message',
+      videoRecordingStartDelaySeconds: 1,
+    });
+  }
+  return call;
 };
