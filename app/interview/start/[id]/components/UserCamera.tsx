@@ -63,12 +63,12 @@ const UserCamera: React.FC<UserCameraProps> = ({ hideRecLabel = false, invitatio
   }, [screenshotInterval, enableCapture, isCameraOn]);
 
   return (
-    <div className="relative w-full aspect-video bg-gray-900 overflow-hidden">
+    <div className="relative w-full h-[350px] bg-gray-900 overflow-hidden">
       <div className="absolute inset-0 w-full h-full">
         {isCameraOn ? (
-          <video ref={videoRef} autoPlay playsInline className="w-full h-full object-cover" />
+          <video ref={videoRef} autoPlay playsInline className="w-full h-full object-cover " />
         ) : (
-          <div className="w-full h-full flex items-center justify-center bg-gray-900">
+          <div className="w-full h-full flex items-center justify-center bg-gray-900 ">
             <div className="flex flex-col items-center">
               <div className="relative w-28 h-28 rounded-full bg-gray-800 shadow-xl flex items-center justify-center z-10">
                 <FaVideoSlash className="w-12 h-12 text-gray-400" />

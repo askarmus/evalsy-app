@@ -1,8 +1,5 @@
 import Link from 'next/link';
-import { Brain, Instagram, Facebook, Twitter, MapPin, Phone, Mail } from 'lucide-react';
-import { Logo } from '../../components/shared/logo';
-import { LogoDark } from '../../components/logo.dark';
-import PoweredBy from '../interview/start/[id]/components/PoweredBy';
+import { Instagram, Facebook, Twitter, MapPin, Phone, Mail } from 'lucide-react';
 import { LogoDarkWhite } from '@/components/logo.dark.white';
 
 export function Footer() {

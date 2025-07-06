@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useInterviewStore } from '../stores/useInterviewStore';
 import UserCamera from './UserCamera';
-import InterviewNavbar from './InterviewNavbar';
 import { Button, Card, CardBody } from '@heroui/react';
 import CandidateInfo from './CandidateInfo';
 import PoweredBy from './PoweredBy';
@@ -45,6 +44,7 @@ const InterviewNavigator: React.FC = () => {
     };
 
     const onMessage = async (message: Message) => {
+      alert('Received message from Vapi');
       console.log('📨 Received message from Vapi:', message);
 
       if (message.type === 'transcript' && message.transcriptType === 'final') {
@@ -132,16 +132,15 @@ const InterviewNavigator: React.FC = () => {
     <div className="min-h-screen flex items-center justify-center  ">
       <div className="w-full max-w-screen-lg mx-auto px-6 py-8">
         <AntiCheat invitationId={invitationId} fraudDetection={job.fraudDetection} />
-        <Card className="w-full p-0 mt-4  ">
+        <Card shadow="lg" className="w-full p-0 mt-4  ">
           <CardBody className="p-0">
             <CandidateInfo candidate={candidate} job={job} company={company} questions={questions} invitationId={invitationId} />
             <div className="grid md:grid-cols-6 gap-0">
-              <div className="md:col-span-3  bg-gray-900  p-4   flex items-center justify-center">
-                <SpeakingIndicatorSoft isSpeaking={isSpeaking} />
-              </div>
-
-              <div className="md:col-span-3  ">
+              <div className="md:col-span-3   h-[350px] ">
                 <UserCamera isCameraOn={isCameraOn} hideRecLabel={false} invitationId={invitationId} />
+              </div>
+              <div className="md:col-span-3  bg-gray-900  p-4    flex items-center justify-center">
+                <SpeakingIndicatorSoft isSpeaking={isSpeaking} />
               </div>
             </div>
             <div className="p-4 flex items-center justify-center  rounded-b-xl  flex flex-col sm:flex-row gap-3">
@@ -161,6 +160,19 @@ const InterviewNavigator: React.FC = () => {
                         </Button>
                       </div>
                     )}
+
+                    <div className="p-4 max-h-60 overflow-y-auto bg-white border-t border-gray-200 mt-4 rounded shadow-inner">
+                      <h3 className="text-sm font-semibold mb-2 text-gray-700">Live Transcript</h3>
+                      {messages.length === 0 ? (
+                        <p className="text-xs text-gray-400">Transcript will appear here as you speak...</p>
+                      ) : (
+                        messages.map((msg, i) => (
+                          <div key={i} className="text-sm mb-1">
+                            <span className={`font-semibold ${msg.role === 'user' ? 'text-blue-600' : 'text-green-600'}`}>{msg.role === 'user' ? 'You' : 'AI'}:</span> <span className="text-gray-800">{msg.content}</span>
+                          </div>
+                        ))
+                      )}
+                    </div>
                   </div>
                 </>
               </div>
