@@ -160,19 +160,6 @@ const InterviewNavigator: React.FC = () => {
                         </Button>
                       </div>
                     )}
-
-                    <div className="p-4 max-h-60 overflow-y-auto bg-white border-t border-gray-200 mt-4 rounded shadow-inner">
-                      <h3 className="text-sm font-semibold mb-2 text-gray-700">Live Transcript</h3>
-                      {messages.length === 0 ? (
-                        <p className="text-xs text-gray-400">Transcript will appear here as you speak...</p>
-                      ) : (
-                        messages.map((msg, i) => (
-                          <div key={i} className="text-sm mb-1">
-                            <span className={`font-semibold ${msg.role === 'user' ? 'text-blue-600' : 'text-green-600'}`}>{msg.role === 'user' ? 'You' : 'AI'}:</span> <span className="text-gray-800">{msg.content}</span>
-                          </div>
-                        ))
-                      )}
-                    </div>
                   </div>
                 </>
               </div>

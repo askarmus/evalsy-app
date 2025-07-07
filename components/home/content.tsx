@@ -17,17 +17,17 @@ const Chart = dynamic(() => import('../charts/steam'), {
 
 const widgetConfig = {
   'Open Interview': {
-    icon: <AiOutlineUserSwitch className="text-2xl text-white drak:white" />,
+    icon: <AiOutlineUserSwitch className="text-2xl text-white dark:text-white" />, // ✅ fixed typo
     bgColor: 'bg-primary',
     textColor: 'text-white',
   },
   'Pending Invitation': {
-    icon: <AiOutlineUserSwitch className="text-2xl" />,
+    icon: <AiOutlineUserSwitch className="text-2xl dark:text-white" />, // ✅ added dark mode support for icon
     bgColor: 'bg-default',
-    textColor: 'text-black drak:white',
+    textColor: 'text-black dark:text-white', // ✅ correct Tailwind class
   },
   'Completed Interview': {
-    icon: <AiOutlineCheckCircle className="text-2xl text-white" />,
+    icon: <AiOutlineCheckCircle className="text-2xl text-white dark:text-white" />, // ✅ added for consistency
     bgColor: 'bg-success',
     textColor: 'text-white',
   },
