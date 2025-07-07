@@ -11,14 +11,12 @@ import { OptimizationComparison } from '@/components/start/optimize-section';
 import Feature from '@/components/start/Feature';
 import FAQ from '@/components/start/FAQ';
 import Companies from '../components/start/Company';
-import TidioChat from '../components/start/TidioChat';
 
 export default function Home() {
   return (
     <div className="flex min-h-screen flex-col text-black">
       <main className="flex-1">
         <Header />
-        <TidioChat />
 
         <div className="bg-[url('/02.svg')] bg-cover bg-center">
           <Hero />
