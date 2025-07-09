@@ -48,15 +48,15 @@ const InterviewInstruction: React.FC<any> = () => {
             </CardBody>
           )}
           <CardFooter>
-            <div className="flex items-center justify-between w-full">
+            <div className="flex items-center justify-end w-full">
               {showMicTest && (
-                <Button size="md" onPress={startInterview} color="success" isLoading={isLoading} isDisabled={status !== 'granted'} variant="solid" radius="full">
+                <Button size="md" onPress={startInterview} color="secondary" isLoading={isLoading} isDisabled={status !== 'granted'} variant="solid" radius="full">
                   Start Interview
                 </Button>
               )}
 
               {!showMicTest && (
-                <Button isLoading={isLoading} onPress={() => setShowMicTest(true)} size="md" className="bg-black text-white">
+                <Button isLoading={isLoading} onPress={() => setShowMicTest(true)} size="md" color="secondary" radius="full">
                   <div className="flex items-center space-x-2">
                     <Video className="w-4 h-4" />
                     <Mic className="w-4 h-4" />
