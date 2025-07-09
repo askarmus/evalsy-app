@@ -44,7 +44,6 @@ const InterviewNavigator: React.FC = () => {
     };
 
     const onMessage = async (message: Message) => {
-      alert('Received message from Vapi');
       console.log('📨 Received message from Vapi:', message);
 
       if (message.type === 'transcript' && message.transcriptType === 'final') {

@@ -2,6 +2,7 @@
 
 import { Alert, Button, Card, CardBody } from '@heroui/react';
 import { useEffect, useRef, useState } from 'react';
+import { FaCamera, FaCheckCircle, FaMicrophone } from 'react-icons/fa';
 
 export default function MediaPermission({ onPermissionChange }: { onPermissionChange?: (status: 'pending' | 'granted' | 'denied' | 'blocked') => void }) {
   const [permissionStatus, setPermissionStatus] = useState<'pending' | 'granted' | 'denied' | 'blocked'>('pending');
@@ -166,11 +167,26 @@ export default function MediaPermission({ onPermissionChange }: { onPermissionCh
                 color="success"
                 title={
                   <>
-                    ✅ Camera and microphone permissions granted.
-                    <br />
-                    📷 Camera: <strong>{videoRef.current?.srcObject ? 'Active' : 'Unavailable'}</strong>
-                    <br />
-                    🎤 Microphone: <strong>{micDeviceLabel || 'Active'}</strong>
+                    <div className="space-y-2 text-sm text-gray-800 dark:text-gray-100">
+                      <div className="flex items-center space-x-2 text-green-600 dark:text-green-400 font-medium">
+                        <FaCheckCircle />
+                        <span>Camera and microphone permissions granted.</span>
+                      </div>
+
+                      <div className="flex items-center space-x-2">
+                        <FaCamera className="text-gray-600 dark:text-gray-300" />
+                        <span>
+                          Camera: <strong className="text-gray-800 dark:text-gray-100">{videoRef.current?.srcObject ? 'Active' : 'Unavailable'}</strong>
+                        </span>
+                      </div>
+
+                      <div className="flex items-center space-x-2">
+                        <FaMicrophone className="text-gray-600 dark:text-gray-300" />
+                        <span>
+                          Microphone: <strong className="text-gray-800 dark:text-gray-100">{micDeviceLabel || 'Active'}</strong>
+                        </span>
+                      </div>
+                    </div>
                   </>
                 }
                 className="mb-5"

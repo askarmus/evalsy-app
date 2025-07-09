@@ -58,7 +58,6 @@ function App() {
 
     vapi.on('message', (message) => {
       console.log('Received message:', message);
-      alert('Received message: ' + JSON.stringify(message));
       // Handle different message types
       if (message.type === 'transcript') {
         if (message.transcriptType === 'final') {
