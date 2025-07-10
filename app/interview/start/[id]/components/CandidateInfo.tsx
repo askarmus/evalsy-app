@@ -6,7 +6,7 @@ import { FaBriefcase } from 'react-icons/fa';
 import { Building, Clock, User } from 'lucide-react';
 
 const CandidateInfo: React.FC<any> = ({ job, addTopPadding = true }) => {
-  const { phase, duration, company } = useInterviewStore();
+  const { phase, duration, company, candidate } = useInterviewStore();
   return (
     <div className="flex justify-between items-start w-full  ">
       <div className={`flex flex-col p-4   w-full`}>
@@ -16,12 +16,19 @@ const CandidateInfo: React.FC<any> = ({ job, addTopPadding = true }) => {
 
             <div className="flex items-center space-x-4">
               <div className="flex items-center text-sm text-gray-600">
-                <Clock className="w-4 h-4 mr-1 text-[#3534ff]" />
-                Duration: {duration / 60} minutes
+                <Chip variant="flat" size="sm" startContent={<Clock className="w-4 h-4 mr-1 text-[#3534ff]" />}>
+                  Duration: {duration / 60} minutes
+                </Chip>
               </div>
               <div className="flex items-center text-sm text-gray-600">
-                <Building className="w-4 h-4 mr-1 text-[#3534ff]" />
-                {company?.name}
+                <Chip variant="flat" size="sm" startContent={<Building className="w-4 h-4 mr-1 text-[#3534ff]" />}>
+                  {company?.name}
+                </Chip>
+              </div>
+              <div className="flex items-center text-sm text-gray-600">
+                <Chip variant="flat" size="sm" startContent={<User className="w-4 h-4 mr-1 text-[#3534ff]" />}>
+                  {candidate?.name}
+                </Chip>
               </div>
             </div>
           </div>

@@ -1,8 +1,5 @@
 'use client';
 import React, { useState } from 'react';
-import DateFormatter from '@/app/utils/DateFormatter';
-import RatingChips from './rating,chips';
-import { FaCalendar, FaCheckCircle, FaExclamationCircle } from 'react-icons/fa';
 import CandidateStatusDropdown from './CandidateStatusDropdown';
 import { updateSelectionStatus } from '@/services/interview.service';
 import { showToast } from '@/app/utils/toastUtils';

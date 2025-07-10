@@ -149,7 +149,7 @@ export default function MediaPermission({ onPermissionChange }: { onPermissionCh
   }, [permissionStatus, onPermissionChange]);
 
   return (
-    <Card shadow="sm">
+    <Card shadow="none">
       <CardBody>
         <h1 className="text-md font-bold mb-4 flex items-center gap-2">
           <svg className="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">

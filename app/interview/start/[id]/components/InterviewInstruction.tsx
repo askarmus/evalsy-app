@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import { useInterviewStore } from '../stores/useInterviewStore';
 import CandidateInfo from './CandidateInfo';
 import PoweredBy from './PoweredBy';
-import InterviewNavbar from './InterviewNavbar';
 import MediaPermission from './MediaPermission';
 import { ChevronRight, Mic, Video } from 'lucide-react';
 
@@ -12,12 +11,12 @@ const InterviewInstruction: React.FC<any> = () => {
   const [showMicTest, setShowMicTest] = useState(false);
   const [status, setStatus] = useState<'pending' | 'granted' | 'denied' | 'blocked'>('pending');
 
-  const { startInterview, setMicDeviceId, duration, isLoading, company, candidate, job } = useInterviewStore();
+  const { startInterview, isLoading, company, candidate, job } = useInterviewStore();
 
   return (
     <div className="min-h-screen flex items-center justify-center">
       <main className="w-full max-w-screen-lg mx-auto px-6 py-8">
-        <Card shadow="lg" radius="lg" className="p-4 mt-6">
+        <Card shadow="none" radius="lg" className="p-4 mt-6">
           <CandidateInfo candidate={candidate} company={company} job={job} addTopPadding={false} />
 
           {!showMicTest && (

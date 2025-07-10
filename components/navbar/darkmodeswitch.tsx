@@ -11,8 +11,7 @@ export const DarkModeSwitch = () => {
 
   return (
     <div className="flex items-center gap-2">
-      <Switch isSelected={isDark} color="primary" size="sm" onValueChange={(val) => setTheme(val ? 'dark' : 'light')} thumbIcon={({ isSelected, className }) => (isSelected ? <FaSun className={className} /> : <FaMoon className={className} />)} />
-      <span className="text-sm">{isDark ? 'Dark Mode' : 'Light Mode'}</span>
+      <Switch isSelected={isDark} color="secondary" size="sm" onValueChange={(val) => setTheme(val ? 'dark' : 'light')} thumbIcon={({ isSelected, className }) => (isSelected ? <FaSun className={className} /> : <FaMoon className={className} />)} />
     </div>
   );
 };
