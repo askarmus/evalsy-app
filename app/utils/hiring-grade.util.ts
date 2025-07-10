@@ -5,6 +5,8 @@ type HiringBadgeStyle = {
 };
 
 export class HiringGradeUtil {
+  static RECOMMENDATION_LABELS: Array<'Reject' | 'Borderline' | 'Hire' | 'Strong Hire'> = ['Reject', 'Borderline', 'Hire', 'Strong Hire'];
+
   /**
    * Evaluates a candidate's score (0-100) and returns a hiring recommendation badge.
    * - 0-40: Reject

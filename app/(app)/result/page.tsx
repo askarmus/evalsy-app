@@ -120,14 +120,34 @@ export default function InterviewResultList() {
     setPage(1);
   }, [selectedTab]);
 
+  useEffect(() => {
+    // Apply overflow hidden when this page mounts
+    document.body.style.overflow = 'hidden';
+    document.documentElement.style.overflow = 'hidden';
+
+    // Clean up on unmount (go back to normal)
+    return () => {
+      document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
+    };
+  }, []);
+
   const items = useMemo(() => {
     const start = (page - 1) * rowsPerPage;
     const end = start + rowsPerPage;
     return filteredResults.slice(start, end);
   }, [page, filteredResults]);
 
+  const items1 = Array.from({ length: 50 }, (_, i) => ({
+    id: i + 1,
+    name: `Candidate ${i + 1}`,
+    jobTitle: 'Software Engineer',
+    totalScore: Math.floor(Math.random() * 100),
+  }));
+
   return (
-    <div className="my-3 px-4 lg:px-6 max-w-[82rem] mx-auto w-full  ">
+    // Top wrapper
+    <div className="my-6 px-4 lg:px-6 max-w-[86rem] mx-auto w-full  ">
       {isLoadingOnResultSelected && (
         <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/10 backdrop-blur-sm">
           <Spinner label="Loading, please wait..." color="primary" />
@@ -152,28 +172,27 @@ export default function InterviewResultList() {
             />
           </div>
         )}
-        {!isLoading && interviewResults.length > 0 && (
-          <div className="flex h-full flex-col gap-2 xl:flex-row">
-            <aside className="flex flex-col xl:w-[320px]">
-              <div className="no-scrollbar max-h-full overflow-auto p-1 ">
-                <Card shadow="none" className="no-scrollbar max-h-full overflow-auto p-1 ">
-                  <CardBody>
-                    <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} selectedTab={selectedTab} setSelectedTab={setSelectedTab} filterValue={filterValue} setFilterValue={setFilterValue} onSearchChange={onSearchChange} isLoading={isLoading} fetchInterviewResult={fetchInterviewResult} items={items} selectedId={selectedId} handleViewDetails={handleViewDetails} />
-                  </CardBody>
-                </Card>
-              </div>
+      </div>
+
+      {!isLoading && interviewResults.length > 0 && (
+        <div className="w-full h-[100vh] overflow-hidden">
+          <div className="flex h-full">
+            {/* Sidebar */}
+            <aside className="w-[360px] min-w-[360px]   h-full overflow-y-auto">
+              <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} selectedTab={selectedTab} setSelectedTab={setSelectedTab} filterValue={filterValue} setFilterValue={setFilterValue} onSearchChange={onSearchChange} isLoading={isLoading} fetchInterviewResult={fetchInterviewResult} items={items} selectedId={selectedId} handleViewDetails={handleViewDetails} />
             </aside>
 
-            <main className="flex flex-col">
+            {/* Main Content */}
+            <main className="flex-1 overflow-y-auto h-full  ">
               <div className="p-1">
-                <Card shadow="none" className="mb-4 p-2">
+                <Card className="mb-4 p-2">
                   <CardBody>
                     <CandidateHeader selectedInterviewerData={selectedInterviewerData} />
                   </CardBody>
                 </Card>
 
                 <div className="grid grid-cols-5 gap-4 mb-4">
-                  <Card shadow="none" className="  p-0">
+                  <Card className="  p-0">
                     <CardBody>
                       <div className="text-sm text-gray-600 mb-1">Current Salary</div>
                       <div className="font-semibold text-gray-900">
@@ -181,7 +200,7 @@ export default function InterviewResultList() {
                       </div>
                     </CardBody>
                   </Card>
-                  <Card shadow="none" className="  p-0">
+                  <Card className="  p-0">
                     <CardBody>
                       <div className="text-sm text-gray-600 mb-1">Expected Salary</div>
                       <div className="font-semibold text-gray-900">
@@ -189,19 +208,19 @@ export default function InterviewResultList() {
                       </div>
                     </CardBody>
                   </Card>
-                  <Card shadow="none" className="  p-0">
+                  <Card className="  p-0">
                     <CardBody>
                       <div className="text-sm text-gray-600 mb-1">Total Experience</div>
                       <div className="font-semibold text-gray-900">2 yrs & 4 months</div>
                     </CardBody>
                   </Card>
-                  <Card shadow="none" className="  p-0">
+                  <Card className="  p-0">
                     <CardBody>
                       <div className="text-sm text-gray-600 mb-1">Fraud Risk</div>
                       <div className="font-semibold text-gray-900">{selectedInterviewerData?.fraudProbability ?? 0}%</div>
                     </CardBody>
                   </Card>
-                  <Card shadow="none" className="  p-0">
+                  <Card className="  p-0">
                     <CardBody>
                       <div className="text-sm text-gray-600 mb-1">Score</div>
                       <div className="font-semibold text-gray-900">{selectedInterviewerData?.totalScore}</div>
@@ -231,7 +250,7 @@ export default function InterviewResultList() {
                     </CardFooter>
                   </Card>
                   {/* Communication Score */}
-                  <Card shadow="none" className="  p-2">
+                  <Card className="  p-2">
                     <CardBody>
                       <div className="flex items-center justify-between mb-6">
                         <h3 className="text-lg font-semibold text-gray-900">Overall Score</h3>
@@ -242,7 +261,7 @@ export default function InterviewResultList() {
                   </Card>
 
                   {/* AI Summary */}
-                  <Card shadow="none" className="  p-2">
+                  <Card className="  p-2">
                     <CardBody>
                       <div className="flex items-center gap-2 mb-6">
                         <div className="w-6 h-6 bg-green-100 rounded flex items-center justify-center">
@@ -256,7 +275,7 @@ export default function InterviewResultList() {
                   </Card>
                 </div>
 
-                <Card shadow="none">
+                <Card>
                   <CardHeader>
                     <div className="flex justify-between gap-2 w-full">
                       <h2 className="text-lg font-semibold">Candidate Audio & Video Recording</h2>
@@ -284,7 +303,7 @@ export default function InterviewResultList() {
                   </CardBody>
                 </Card>
 
-                <Card shadow="none" className="mt-4 p-2">
+                <Card shadow="md" radius="md" className="mt-4 p-2">
                   <CardBody>
                     <div className="grid grid-cols-[1fr_auto_1fr] gap-5">
                       <div className="space-y-5">
@@ -306,8 +325,8 @@ export default function InterviewResultList() {
               </div>
             </main>
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -1,5 +1,4 @@
 export default function FeedbackCard({ data }: any) {
-  console.log('FeedbackCard data:', data);
   return (
     <section aria-label="Feedback Card">
       <h2 className="text-lg font-semibold">Areas of improvement</h2>

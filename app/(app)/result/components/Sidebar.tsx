@@ -1,8 +1,9 @@
 'use client';
 import React from 'react';
-import { Tabs, Tab, Input, Button, Avatar } from '@heroui/react';
-import { FaSearch, FaSyncAlt } from 'react-icons/fa';
-import RatingBadges from './rating,badge';
+import { Tabs, Tab, Input, Button, Avatar, DropdownTrigger, Dropdown, DropdownItem, DropdownMenu, Listbox, ListboxItem, CardBody, Card, cn, CardHeader, Badge } from '@heroui/react';
+import { FaFilter, FaSearch, FaSyncAlt } from 'react-icons/fa';
+import { HiringGradeUtil } from '@/app/utils/hiring-grade.util';
+import { ChevronRightIcon } from 'lucide-react';
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -19,26 +20,26 @@ interface SidebarProps {
   handleViewDetails: (id: string) => void;
 }
 
-export default function Sidebar({ sidebarOpen, selectedTab, setSelectedTab, filterValue, setFilterValue, onSearchChange, isLoading, fetchInterviewResult, items, selectedId, setSidebarOpen, handleViewDetails }: SidebarProps) {
+const tabKeys = ['Reject', 'Borderline', 'Hire', 'Strong Hire'];
+
+export const ListboxWrapper = ({ children }) => <div className="w-full max-w-[360px] max-h-[700px] overflow-y-auto">{children}</div>;
+
+export default function Sidebar({ selectedTab, setSelectedTab, filterValue, setFilterValue, onSearchChange, items, handleViewDetails }: SidebarProps) {
+  const filteredItems = selectedTab === 'all' ? items.filter((item) => HiringGradeUtil.getHiringRecommendation(item.totalScore).recommendation !== 'Reject') : items.filter((item) => HiringGradeUtil.getHiringRecommendation(item.totalScore).recommendation === selectedTab);
+  console.log('Filtered Items:', filteredItems);
   return (
-    <>
-      <aside className={`${sidebarOpen ? 'block' : 'hidden'} md:block `}>
-        <h3 className="text-1xl font-semibold mb-5">All Candidate </h3>
+    <Card className="m-4 mt-1">
+      <CardHeader>
+        <div className="flex flex-col gap-3">
+          {/* Title */}
+          <h2 className="text-lg font-semibold">Interviews </h2>
 
-        <div className="mb-5">
-          <Tabs aria-label="Performance Tabs" size="sm" selectedKey={selectedTab} onSelectionChange={(key) => setSelectedTab(key as string)}>
-            <Tab key="all" title={<span className="text-xs">All</span>} />
-            <Tab key="below-average" title={<span className="text-xs">Low</span>} />
-            <Tab key="average" title="Avg" />
-            <Tab key="good" title="Good" />
-            <Tab key="excellent" title="Best" />
-          </Tabs>
-
-          <div className="flex items-center mt-5">
+          {/* Controls Row */}
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
             <Input
               onChange={(e) => onSearchChange(e.target.value)}
               isClearable
-              className="max-w-md"
+              className="sm:max-w-md w-full"
               size="sm"
               placeholder="Search Result"
               value={filterValue}
@@ -50,41 +51,55 @@ export default function Sidebar({ sidebarOpen, selectedTab, setSelectedTab, filt
               }}
             />
 
-            <Button className="ml-3" isIconOnly variant="ghost" size="sm" isLoading={isLoading} onPress={fetchInterviewResult}>
-              <FaSyncAlt />
-            </Button>
+            <Dropdown aria-label="Candidate Score Filter">
+              <DropdownTrigger>
+                <Button size="sm" variant="bordered" startContent={<FaFilter />} className="capitalize w-full sm:w-auto">
+                  {selectedTab === 'all' ? 'All' : selectedTab}
+                </Button>
+              </DropdownTrigger>
+              <DropdownMenu aria-label="Candidate Score Filter" onAction={(key) => setSelectedTab(key as string)} selectedKeys={[selectedTab]} selectionMode="single">
+                <DropdownItem key="all">All</DropdownItem>
+                <DropdownItem key="Reject">Reject</DropdownItem>
+                <DropdownItem key="Borderline">Borderline</DropdownItem>
+                <DropdownItem key="Hire">Hire</DropdownItem>
+                <DropdownItem key="Strong Hire">Strong Hire</DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
           </div>
         </div>
+      </CardHeader>
 
-        <ul>
-          {items.map((data: any) => (
-            <li
-              onClick={() => handleViewDetails(data.id)}
-              key={data.id}
-              className={`flex items-center cursor-pointer justify-between border pt-2 pb-2 mb-2 pr-2 pl-2 rounded-xl transition-colors 
-    ${selectedId === data.id ? 'bg-gray-100 dark:bg-gray-800' : 'hover:bg-gray-50 dark:hover:bg-gray-700'}
-    dark:border-gray-700`}
-            >
-              <div className="flex items-center gap-2">
-                <RatingBadges weight={data.totalScore}>
-                  <Avatar name={data.name} className="h-8 w-8" src={data.image} />
-                </RatingBadges>
+      <CardBody>
+        <ListboxWrapper>
+          <Listbox aria-label="Actions" onAction={(key) => handleViewDetails(key as string)} className="border-0">
+            {filteredItems.map((data: any, index) => (
+              <ListboxItem
+                key={data.id}
+                endContent={
+                  <div className="flex items-center gap-1 text-default-400">
+                    <span className="text-small">{data.totalScore}</span>
+                    <ChevronRightIcon className="text-xl" />
+                  </div>
+                }
+                startContent={
+                  <div className="flex items-center gap-2">
+                    <div>
+                      <Badge color={HiringGradeUtil.getTechnicalHiringGrade(data.totalScore).color} content="">
+                        <Avatar name={data.name} className="h-8 w-8" src={data.image} />
+                      </Badge>
+                    </div>
 
-                <div>
-                  <h3 className="font-medium text-sm pl-2 text-gray-900 dark:text-gray-100">{data.name}</h3>
-                  <p className="text-xs text-gray-500 dark:text-gray-400 pl-2">{data.jobTitle}</p>
-                </div>
-              </div>
-
-              <div>
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-gray-400 dark:text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-              </div>
-            </li>
-          ))}
-        </ul>
-      </aside>
-    </>
+                    <div>
+                      <h3 className="font-medium text-sm pl-2 text-gray-900 dark:text-gray-100">{data.name}</h3>
+                      <p className="text-xs text-gray-500 dark:text-gray-400 pl-2">{data.jobTitle}</p>
+                    </div>
+                  </div>
+                }
+              ></ListboxItem>
+            ))}
+          </Listbox>
+        </ListboxWrapper>
+      </CardBody>
+    </Card>
   );
 }
