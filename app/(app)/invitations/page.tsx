@@ -159,7 +159,7 @@ export default function Invitations() {
         <DateRangePicker variant="bordered" labelPlacement="outside" label="Filter by Sent Date" value={dateRange} onChange={setDateRange} />
       </div>
 
-      <div className="rounded-md border">
+      <div className="  ">
         <Table>
           <TableHeader>
             <TableColumn>ROLE</TableColumn>
@@ -170,7 +170,7 @@ export default function Invitations() {
             <TableColumn>STATUS</TableColumn>
             <TableColumn>STATUS UPDATED </TableColumn>
           </TableHeader>
-          <TableBody className="p-4" isLoading={isLoading}>
+          <TableBody isLoading={isLoading}>
             {paginatedData.map((invitation) => (
               <TableRow key={invitation.id}>
                 <TableCell>
