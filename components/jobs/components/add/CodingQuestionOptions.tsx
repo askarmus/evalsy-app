@@ -60,7 +60,7 @@ export const QuestionEditDrawer = ({ isOpen, onOpenChange, mode, initialQuestion
                 {/* Footer Buttons */}
                 <DrawerFooter>
                   <Button variant="light" color="danger" onPress={onClose}>
-                    Cancel
+                    Close
                   </Button>
                   <Button className="bg-[#100145] text-white" onPress={() => handleSubmit()}>
                     {isEdit ? 'Update Changes' : 'Add Question'}

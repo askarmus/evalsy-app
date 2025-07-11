@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
-import { Button, Card, CardBody, Input, NumberInput, Tooltip, Textarea, RadioGroup, Radio, Slider, Checkbox, Select, SelectItem, Autocomplete } from '@heroui/react';
+import { Button, Card, CardBody, Input, NumberInput, Tooltip, Textarea, RadioGroup, Radio, Slider, Checkbox, Select, SelectItem, Autocomplete, AutocompleteItem } from '@heroui/react';
 import { Formik, FormikHelpers } from 'formik';
 import { showToast } from '@/app/utils/toastUtils';
 import { createJob, generateJobDescriptionFromAI, getJobById, updateJob } from '@/services/job.service';
@@ -22,7 +22,7 @@ import { FraudDetectionSettings } from './components/add/FraudDetectionSettings'
 import { VerticalStepper } from './components/add/VerticalStepper';
 import { StepperHeader } from './components/add/StepperHeader';
 import { defaultJobFormValues } from './helpers/formDefaults';
-import { currencyOptions } from '@/services/currency.service';
+import { countryOptions, currencyOptions } from '@/services/currency.service';
 
 export const AddJob = () => {
   const router = useRouter();
@@ -89,13 +89,6 @@ export const AddJob = () => {
     { id: 'onsite', name: 'Onsite' },
     { id: 'remote', name: 'Remote' },
     { id: 'hybrid', name: 'Hybrid' },
-  ];
-
-  const countryOptions = [
-    { id: 'US', name: 'United States' },
-    { id: 'IN', name: 'India' },
-    { id: 'GB', name: 'United Kingdom' },
-    { id: 'LK', name: 'Sri Lanka' },
   ];
 
   const experienceOptions = [
@@ -323,19 +316,13 @@ export const AddJob = () => {
                             <h1 className="text-sm font-semibold">Salary Range(this will help you you narrow down selecton process)</h1>
 
                             <div className="grid grid-cols-3 gap-3">
-                              <Select
-                                variant="bordered"
-                                label="Currency"
-                                placeholder="Select a currency" // ✅ required when using labelPlacement="outside"
-                                labelPlacement="outside"
-                                isInvalid={!!errors.currency && !!touched.currency}
-                                errorMessage={errors.currency}
-                                items={currencyOptions}
-                                selectedKeys={values.currency ? [values.currency] : []}
-                                onSelectionChange={(key) => setFieldValue('currency', Array.from(key)[0])}
-                              >
-                                {(item) => <SelectItem key={item.code}>{item.name}</SelectItem>}
-                              </Select>
+                              <Autocomplete label="Currency" placeholder="Select a currency" labelPlacement="outside" isInvalid={!!errors.currency && !!touched.currency} errorMessage={errors.currency} selectedKey={values.currency ?? null} onSelectionChange={(key) => setFieldValue('currency', key)} className="w-full">
+                                {currencyOptions.map((item) => (
+                                  <AutocompleteItem key={item.code} textValue={item.name}>
+                                    {item.name} ({item.symbol})
+                                  </AutocompleteItem>
+                                ))}
+                              </Autocomplete>
 
                               <Input variant="bordered" min={0} isInvalid={!!errors.minSalary && !!touched.minSalary} errorMessage={errors.minSalary} label="Min Salary" labelPlacement="outside" placeholder="Min" type="number" value={values.minSalary?.toString() || ''} onChange={handleChange('minSalary')} />
 
@@ -345,24 +332,30 @@ export const AddJob = () => {
                             <h1 className="text-sm font-semibold">Location</h1>
 
                             <div className="grid grid-cols-2 gap-3">
-                              <Select
-                                variant="bordered"
+                              <Autocomplete
                                 label="Country"
+                                placeholder="Select a country"
+                                labelPlacement="outside"
+                                variant="bordered"
                                 isInvalid={!!errors.country && !!touched.country}
                                 errorMessage={errors.country}
-                                items={countryOptions}
-                                selectedKeys={[values.country!]}
+                                selectedKey={values.country ?? null}
                                 onSelectionChange={(key) => {
-                                  const selected = Array.from(key)[0] || '';
+                                  const selected = key?.toString() || '';
                                   setFieldValue('country', selected);
-                                  setFieldValue('city', '');
-                                  setSelectedCountry(selected.toString());
+                                  setFieldValue('city', ''); // Reset city when country changes
+                                  setSelectedCountry(selected);
                                 }}
+                                className="w-full"
                               >
-                                {(item) => <SelectItem key={item.id}>{item.name}</SelectItem>}
-                              </Select>
+                                {countryOptions.map((item) => (
+                                  <AutocompleteItem key={item.id} textValue={item.name}>
+                                    {item.name}
+                                  </AutocompleteItem>
+                                ))}
+                              </Autocomplete>
 
-                              <Input variant="bordered" isInvalid={!!errors.city && !!touched.city} errorMessage={errors.city} label="City" placeholder="city" value={values.city?.toString() || ''} onChange={handleChange('city')} />
+                              <Input variant="bordered" labelPlacement="outside" isInvalid={!!errors.city && !!touched.city} errorMessage={errors.city} label="City" placeholder="city" value={values.city?.toString() || ''} onChange={handleChange('city')} />
                             </div>
 
                             <Checkbox isSelected={values.showSalaryInDescription} onValueChange={(val) => setFieldValue('showSalaryInDescription', val)}>
@@ -507,7 +500,7 @@ export const AddJob = () => {
                 </div>
               </div>
 
-              <div className="fixed bottom-0 left-0 border-[#100145] right-0 z-50  dark:border-gray-700 bg-white dark:bg-gray-900 p-2 flex justify-end mt-8">
+              <div className="fixed bottom-0 left-0 right-0 z-50 border-t border-gray-700 dark:border-gray-700 bg-white dark:bg-gray-900 p-2 flex justify-end">
                 <div className="mx-auto flex w-full max-w-[90rem] items-center px-5 xl:px-8 xl2:px-[60px] xl2:!pr-[60px] justify-between">
                   {currentStep > 0 ? (
                     <Button size="md" onPress={() => setCurrentStep(currentStep - 1)}>

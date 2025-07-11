@@ -64,7 +64,7 @@ export const QuestionEditDrawer = ({ isOpen, onOpenChange, mode, initialQuestion
 
                 <DrawerFooter>
                   <Button variant="light" color="danger" onPress={onClose}>
-                    Cancel
+                    Close
                   </Button>
                   <Button color="primary" onPress={() => handleSubmit()}>
                     {isEdit ? 'Update Changes' : 'Add Question'}
