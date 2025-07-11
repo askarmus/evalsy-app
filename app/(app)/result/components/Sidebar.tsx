@@ -1,9 +1,10 @@
 'use client';
 import React from 'react';
-import { Tabs, Tab, Input, Button, Avatar, DropdownTrigger, Dropdown, DropdownItem, DropdownMenu, Listbox, ListboxItem, CardBody, Card, cn, CardHeader, Badge } from '@heroui/react';
-import { FaFilter, FaSearch, FaSyncAlt } from 'react-icons/fa';
+import { Tabs, Tab, Input, Button, Avatar, DropdownTrigger, Dropdown, DropdownItem, DropdownMenu, Listbox, ListboxItem, CardBody, Card, cn, CardHeader, Badge, Chip } from '@heroui/react';
+import { FaCalculator, FaFilter, FaSearch, FaSyncAlt } from 'react-icons/fa';
 import { HiringGradeUtil } from '@/app/utils/hiring-grade.util';
-import { ChevronRightIcon } from 'lucide-react';
+import { ChevronRightIcon, Timer } from 'lucide-react';
+import { formatRelativeDate } from '@/app/utils/formatRelativeDate';
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -26,6 +27,7 @@ export const ListboxWrapper = ({ children }) => <div className="w-full max-w-[36
 
 export default function Sidebar({ selectedTab, setSelectedTab, filterValue, setFilterValue, onSearchChange, items, handleViewDetails }: SidebarProps) {
   const filteredItems = selectedTab === 'all' ? items.filter((item) => HiringGradeUtil.getHiringRecommendation(item.totalScore).recommendation !== 'Reject') : items.filter((item) => HiringGradeUtil.getHiringRecommendation(item.totalScore).recommendation === selectedTab);
+
   console.log('Filtered Items:', filteredItems);
   return (
     <Card className="m-4 mt-1">
@@ -77,21 +79,29 @@ export default function Sidebar({ selectedTab, setSelectedTab, filterValue, setF
                 key={data.id}
                 endContent={
                   <div className="flex items-center gap-1 text-default-400">
-                    <span className="text-small">{data.totalScore}</span>
+                    <span className="text-small">
+                      <Chip size="sm" color={HiringGradeUtil.getTechnicalHiringGrade(data.totalScore).color} className="text-[10px]">
+                        {data.totalScore}
+                      </Chip>
+                    </span>
                     <ChevronRightIcon className="text-xl" />
                   </div>
                 }
                 startContent={
                   <div className="flex items-center gap-2">
                     <div>
-                      <Badge color={HiringGradeUtil.getTechnicalHiringGrade(data.totalScore).color} content="">
-                        <Avatar name={data.name} className="h-8 w-8" src={data.image} />
-                      </Badge>
+                      {!data?.isRead && (
+                        <Badge color="success" content="">
+                          <Avatar name={data.name} className="h-8 w-8" src={data.image} />
+                        </Badge>
+                      )}
+                      {data?.isRead && <Avatar name={data.name} className="h-8 w-8" src={data.image} />}
                     </div>
 
                     <div>
                       <h3 className="font-medium text-sm pl-2 text-gray-900 dark:text-gray-100">{data.name}</h3>
                       <p className="text-xs text-gray-500 dark:text-gray-400 pl-2">{data.jobTitle}</p>
+                      <p className="text-[10px] text-blue-500 dark:text-blue-400 pl-2"> {formatRelativeDate(data.statusUpdateAt)}</p>
                     </div>
                   </div>
                 }

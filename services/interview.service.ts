@@ -16,6 +16,11 @@ export const updateSelectionStatus = async (payload: { id: string; selectionStat
   return response.data.data;
 };
 
+export const updateReadStatus = async (payload: { id: string }) => {
+  const response = await apiClient.put('/interview/result/readStatus', payload);
+  return response.data.data;
+};
+
 export const startInterview = async (payload: { invitationId: string }) => {
   const response = await apiClient.post('/interview/start', payload);
   return response.data.data;

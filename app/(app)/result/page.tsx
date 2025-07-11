@@ -1,7 +1,7 @@
 'use client';
 import React, { useState, useMemo, useEffect, useCallback, useRef } from 'react';
 import { Tabs, Tab, Card, CardBody, Spinner, CircularProgress, CardFooter, Chip, CardHeader, Button } from '@heroui/react';
-import { getAllInterviewResult, getInterviewResultById } from '@/services/interview.service';
+import { getAllInterviewResult, getInterviewResultById, updateReadStatus } from '@/services/interview.service';
 import EvaluationChart from './components/EvaluationChart';
 import ImageSlider from '@/components/shared/ImageSlider';
 import Sidebar from './components/Sidebar';
@@ -21,7 +21,7 @@ export default function InterviewResultList() {
   const [isLoading, setIsLoading] = useState(true); // ✅ set to true by default
   const [isLoadingOnResultSelected, setSsLoadingOnResultSelected] = useState(false); // ✅ set to true by default
   const [filterValue, setFilterValue] = useState('');
-  const [interviewResults, setInterviewResults] = useState([]);
+  const [interviewResults, setInterviewResults] = useState<any[]>([]);
   const [selectedInterviewerData, setSelectedInterviewerData] = useState<any>(null);
   const [selectedTab, setSelectedTab] = useState<string>('all');
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -70,6 +70,8 @@ export default function InterviewResultList() {
     setSsLoadingOnResultSelected(true);
     try {
       const data = await getInterviewResultById(resultId);
+      await updateReadStatus({ id: resultId });
+      setInterviewResults((prev) => prev.map((item) => (item.id === resultId ? { ...item, isRead: true } : item)));
       setSelectedInterviewerData(data);
     } catch (error) {
       console.error('Error fetching interviewer data:', error);
