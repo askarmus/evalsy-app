@@ -9,7 +9,6 @@ export const createInterviewAssistant = async (interviewData: {
   role: string;
   level: string;
   userName: string; // Added userName parameter
-  interviewId: string;
 }) => {
   // Format the questions for the prompt
   const formattedQuestions = '- ' + interviewData.questions.map((q) => q.text).join('\n- ');
@@ -49,7 +48,7 @@ export const createInterviewAssistant = async (interviewData: {
       useSpeakerBoost: true,
     },
     metadata: {
-      interviewId: interviewData.interviewId,
+      interviewId: 10,
     },
     firstMessage: `Hello ${interviewData.userName}! I'll be conducting your interview for the ${interviewData.role} position today. Let's get started.`,
     model: {
