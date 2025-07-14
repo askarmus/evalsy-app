@@ -9,6 +9,7 @@ export const createInterviewAssistant = async (interviewData: {
   role: string;
   level: string;
   userName: string; // Added userName parameter
+  interviewId: string;
 }) => {
   // Format the questions for the prompt
   const formattedQuestions = '- ' + interviewData.questions.map((q) => q.text).join('\n- ');
@@ -16,6 +17,19 @@ export const createInterviewAssistant = async (interviewData: {
 
   const call = await vapi.start({
     name: 'Evalsy AI Interviewer',
+    server: {
+      url: 'https://81cb5ff62a00.ngrok-free.app/webhook/vapi', // 👈 your server webhook URL
+      timeoutSeconds: 20, // optional
+
+      headers: {
+        'X-Custom-Header': 'EvalsyInterview', // optional custom headers
+      },
+      backoffPlan: {
+        type: 'exponential', // or 'fixed'
+        maxRetries: 3, // up to 10
+        baseDelaySeconds: 2, // up to 10 seconds
+      },
+    },
     transcriber: {
       provider: 'deepgram',
       model: 'nova-2',
@@ -33,6 +47,9 @@ export const createInterviewAssistant = async (interviewData: {
       speed: 0.9,
       style: 0.5,
       useSpeakerBoost: true,
+    },
+    metadata: {
+      interviewId: interviewData.interviewId,
     },
     firstMessage: `Hello ${interviewData.userName}! I'll be conducting your interview for the ${interviewData.role} position today. Let's get started.`,
     model: {

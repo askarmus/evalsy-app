@@ -103,6 +103,7 @@ function App() {
       // Start call with assistant configuration
       await vapi.start({
         // Basic assistant configuration
+
         model: {
           provider: 'openai',
           model: 'gpt-4o',
@@ -113,7 +114,12 @@ function App() {
             },
           ],
         },
+        server: {
+          url: 'https://api.evalsy.com/webhook/vapi',
+          secret: 'bac5fdb0-6065-434c-809f-5e82220e7952', // 👈 Must match what your server checks
 
+          timeoutSeconds: 20,
+        },
         // Voice configuration
         voice: {
           provider: 'vapi',
