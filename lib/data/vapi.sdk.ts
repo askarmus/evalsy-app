@@ -17,17 +17,10 @@ export const createInterviewAssistant = async (interviewData: {
   const call = await vapi.start({
     name: 'Evalsy AI Interviewer',
     server: {
-      url: 'https://81cb5ff62a00.ngrok-free.app/webhook/vapi', // 👈 your server webhook URL
-      timeoutSeconds: 20, // optional
+      url: 'https://api.evalsy.com/webhook/vapi',
+      secret: 'bac5fdb0-6065-434c-809f-5e82220e7952',
 
-      headers: {
-        'X-Custom-Header': 'EvalsyInterview', // optional custom headers
-      },
-      backoffPlan: {
-        type: 'exponential', // or 'fixed'
-        maxRetries: 3, // up to 10
-        baseDelaySeconds: 2, // up to 10 seconds
-      },
+      timeoutSeconds: 20,
     },
     transcriber: {
       provider: 'deepgram',
@@ -77,8 +70,8 @@ export const createInterviewAssistant = async (interviewData: {
         },
       ],
     },
-    clientMessages: [],
-    serverMessages: [],
+    clientMessages: ['transcript', 'status-update', 'speech-update', 'model-output'] as unknown as object[][],
+    serverMessages: ['transcript', 'status-update', 'end-of-call-report'] as unknown as object[][],
   });
 
   if (call?.id) {

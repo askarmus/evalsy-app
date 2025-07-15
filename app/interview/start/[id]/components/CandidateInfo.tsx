@@ -2,7 +2,6 @@ import { Chip } from '@heroui/react';
 import React from 'react';
 import InterviewTimer from './InterviewTimer';
 import { useInterviewStore } from '../stores/useInterviewStore';
-import { FaBriefcase } from 'react-icons/fa';
 import { Building, Clock, User } from 'lucide-react';
 
 const CandidateInfo: React.FC<any> = ({ job, addTopPadding = true }) => {
@@ -15,9 +14,9 @@ const CandidateInfo: React.FC<any> = ({ job, addTopPadding = true }) => {
             <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100"> {job.jobTitle}</h2>
 
             <div className="flex items-center space-x-4">
-              <div className="flex items-center text-sm text-gray-600">
-                <Chip variant="flat" size="sm" startContent={<Clock className="w-4 h-4 mr-1 text-[#3534ff]" />}>
-                  Duration: {duration / 60} minutes
+              <div className="flex items-center text-sm text-gray-600 ">
+                <Chip variant="flat" size="sm" startContent={<Clock className="w-4 h-4 mr-1 text-[#3534ff] " />}>
+                  {duration / 60} minutes
                 </Chip>
               </div>
               <div className="flex items-center text-sm text-gray-600">

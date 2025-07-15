@@ -82,8 +82,8 @@ const UserCamera: React.FC<UserCameraProps> = ({ hideRecLabel = false, invitatio
       <canvas ref={canvasRef} style={{ display: 'none' }} />
 
       {!hideRecLabel && enableCapture && isCameraOn && (
-        <div className="absolute top-3 right-3 bg-red-500 text-white text-xs px-2 py-1 rounded-full flex items-center gap-1">
-          <span className="h-1 w-1 rounded-full bg-white animate-pulse" />
+        <div className="absolute top-3 right-3 bg-red-500 font-bold text-white text-xs px-2 py-1 rounded-full flex items-center gap-1">
+          <span className="h-2 w-2 rounded-full bg-white animate-pulse" />
           REC
         </div>
       )}

@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { useInterviewStore } from '../stores/useInterviewStore';
 import UserCamera from './UserCamera';
-import { Button, Card, CardBody } from '@heroui/react';
+import { Avatar, Button, Card, CardBody, Divider, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerHeader, Tooltip, useDisclosure } from '@heroui/react';
 import CandidateInfo from './CandidateInfo';
 import PoweredBy from './PoweredBy';
 import { AntiCheat } from './AntiCheat';
 import ConfirmDialog from '@/components/ConfirmDialog';
 import { vapi } from '@/lib/data/vapi.sdk';
 import SpeakingIndicatorSoft from './SpeakingIndicator';
-import { FaMicrophone, FaMicrophoneSlash, FaTimes, FaVideo, FaVideoSlash } from 'react-icons/fa';
+import { FaHistory, FaMicrophone, FaMicrophoneSlash, FaTimes, FaVideo, FaVideoSlash } from 'react-icons/fa';
+import { Bot, User } from 'lucide-react';
+import clsx from 'clsx';
 
 enum CallStatus {
   INACTIVE = 'INACTIVE',
@@ -17,8 +19,9 @@ enum CallStatus {
   FINISHED = 'FINISHED',
 }
 
-interface SavedMessage {
-  role: 'user' | 'system' | 'assistant';
+interface Message {
+  time: string;
+  type: 'user' | 'assistant' | 'system';
   content: string;
 }
 
@@ -27,8 +30,20 @@ const InterviewNavigator: React.FC = () => {
   const [isConfirmDialogOpen, setConfirmDialogOpen] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [callStatus, setCallStatus] = useState<CallStatus>(CallStatus.INACTIVE);
-  const [messages, setMessages] = useState<SavedMessage[]>([]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [isCameraOn, setIsCameraOn] = useState(true);
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
+  const addMessage = (type: 'user' | 'assistant' | 'system', content: string) => {
+    setMessages((prev) => [
+      ...prev,
+      {
+        time: new Date().toLocaleTimeString(),
+        type,
+        content,
+      },
+    ]);
+  };
 
   useEffect(() => {
     console.log('🎬 Setting up Vapi event listeners...');
@@ -43,28 +58,21 @@ const InterviewNavigator: React.FC = () => {
       setCallStatus(CallStatus.FINISHED);
     };
 
-    const onMessage = async (message: Message) => {
-      console.log('📨 Received message from Vapi:', message);
-
-      if (message.type === 'transcript' && message.transcriptType === 'final') {
-        console.log('✅ Final transcript:', message.transcript);
-
-        const userInput = message.transcript;
-        const newMessage = { role: message.role, content: userInput };
-        setMessages((prev) => [...prev, newMessage]);
-
-        try {
-          console.log('↩️ Sending user message to assistant...');
-          await vapi.send({
-            type: 'add-message',
-            message: {
-              role: 'user',
-              content: userInput,
-            },
-          });
-        } catch (err) {
-          console.error('❌ Failed to send user message:', err);
+    const onMessage = async (message: any) => {
+      console.log('Received message:', message);
+      // Handle different message types
+      if (message.type === 'transcript') {
+        if (message.transcriptType === 'final') {
+          if (message.role === 'user') {
+            addMessage('user', message.transcript);
+          } else if (message.role === 'assistant') {
+            addMessage('assistant', message.transcript);
+          }
         }
+      } else if (message.type === 'function-call') {
+        addMessage('system', `Function called: ${message.functionCall.name}`);
+      } else if (message.type === 'hang') {
+        addMessage('system', 'Call ended by assistant');
       }
     };
 
@@ -126,6 +134,7 @@ const InterviewNavigator: React.FC = () => {
   const handleCancelEnd = () => {
     setConfirmDialogOpen(false);
   };
+  const lastMsg = messages[messages.length - 1];
 
   return (
     <div className="min-h-screen flex items-center justify-center  ">
@@ -138,35 +147,122 @@ const InterviewNavigator: React.FC = () => {
               <div className="md:col-span-3   h-[350px] ">
                 <UserCamera isCameraOn={isCameraOn} hideRecLabel={false} invitationId={invitationId} />
               </div>
-              <div className="md:col-span-3  bg-gray-900  p-4    flex items-center justify-center">
+              <div className="md:col-span-3  bg-gray-900       flex items-center justify-center">
                 <SpeakingIndicatorSoft isSpeaking={isSpeaking} />
               </div>
             </div>
-            <div className="p-4 flex items-center justify-center  rounded-b-xl  flex flex-col sm:flex-row gap-3">
-              <div className="flex items-center gap-2">
-                <>
-                  <div className="w-full flex justify-center">
-                    {phase === 'in-progress' && (
-                      <div className="gap-2 flex items-center justify-center">
-                        <Button onPress={handleEndClick} isDisabled={isLoading} isLoading={isLoading} isIconOnly color="danger" size="md" variant="bordered" radius="full">
-                          <FaTimes />
-                        </Button>
-                        <Button onPress={handleMute} isDisabled={isLoading} isLoading={isLoading} isIconOnly color="default" size="md" variant="bordered" radius="full">
-                          {vapi.isMuted() ? <FaMicrophoneSlash /> : <FaMicrophone />}
-                        </Button>
-                        <Button onPress={() => setIsCameraOn((prev) => !prev)} isDisabled={isLoading} isLoading={isLoading} isIconOnly color="default" size="md" variant="bordered" radius="full">
-                          {isCameraOn ? <FaVideo /> : <FaVideoSlash />}
-                        </Button>
-                      </div>
-                    )}
-                  </div>
-                </>
+
+            <div
+              className="p-4 rounded-b-xl bg-white
+                flex flex-col sm:flex-row gap-3
+                items-stretch sm:items-center justify-between"
+            >
+              <div className="flex-1 flex items-start gap-2 min-w-0">
+                <div className={clsx('w-10 h-10 shrink-0 flex items-center justify-center rounded-full border-2', lastMsg?.type === 'assistant' ? 'bg-violet-100 border-violet-200' : 'bg-purple-100 border-purple-200')}>{lastMsg?.type === 'assistant' ? <Bot className="w-5 h-5 text-violet-600" /> : <User className="w-5 h-5 text-purple-600" />}</div>
+
+                <p className="text-sm leading-5 break-words whitespace-pre-wrap text-black dark:text-gray-900">{lastMsg?.content ? lastMsg.content : <span className="text-gray-500 dark:text-gray-400">Starting conversation...</span>}</p>
               </div>
+
+              {phase === 'in-progress' && (
+                <div className="flex flex-wrap gap-2 justify-center sm:justify-end">
+                  <Tooltip content="Conversation History">
+                    <Button onPress={onOpen} variant="bordered" radius="full" isIconOnly>
+                      <FaHistory color="#1e232fff" />
+                    </Button>
+                  </Tooltip>
+
+                  <Tooltip content="End Call">
+                    <Button onPress={handleEndClick} isDisabled={isLoading} isLoading={isLoading} color="danger" variant="bordered" radius="full" isIconOnly>
+                      <FaTimes color="#1e232fff" />
+                    </Button>
+                  </Tooltip>
+
+                  <Tooltip content={vapi.isMuted() ? 'Unmute' : 'Mute'}>
+                    <Button onPress={handleMute} isDisabled={isLoading} isLoading={isLoading} variant="bordered" radius="full" isIconOnly>
+                      {vapi.isMuted() ? <FaMicrophoneSlash color="#1e232fff" /> : <FaMicrophone color="#1e232fff" />}
+                    </Button>
+                  </Tooltip>
+
+                  <Tooltip content={isCameraOn ? 'Turn Off Camera' : 'Turn On Camera'}>
+                    <Button onPress={() => setIsCameraOn((prev) => !prev)} isDisabled={isLoading} isLoading={isLoading} variant="bordered" radius="full" isIconOnly>
+                      {isCameraOn ? <FaVideo color="#1e232fff" /> : <FaVideoSlash color="#1e232fff" />}
+                    </Button>
+                  </Tooltip>
+                </div>
+              )}
+
               <ConfirmDialog isOpen={isConfirmDialogOpen} onClose={handleCancelEnd} title="End Interview" description="Are you sure you want to end the interview?" onConfirm={handleConfirmEnd} confirmButtonText="End" cancelButtonText="Cancel" />
             </div>
           </CardBody>
         </Card>
         <PoweredBy />
+        <Drawer isOpen={isOpen} onOpenChange={onOpenChange} size="2xl">
+          <DrawerContent>
+            {(onClose) => (
+              <>
+                <DrawerHeader className="flex flex-col gap-1">Conversation History</DrawerHeader>
+                <DrawerBody>
+                  <div>
+                    {messages.length === 0 ? (
+                      <div style={{ color: '#6b7280', textAlign: 'center', padding: '20px' }}>No messages yet. Start a call to begin the conversation.</div>
+                    ) : (
+                      messages.map((message, index) => (
+                        <div key={index} className={`flex gap-4 mb-2 ${message.type === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
+                          <div className={`w-10 h-10 flex items-center justify-center rounded-full border-2 ${message.type === 'assistant' ? 'bg-violet-100 border-violet-200' : 'bg-purple-100 border-purple-200'}`}>{message.type === 'assistant' ? <Bot className="w-5 h-5 text-violet-600" /> : <User className="w-5 h-5 text-purple-600" />}</div>
+
+                          <div className={`flex-1 max-w-[80%] ${message.type === 'user' ? 'text-right' : 'text-left'}`}>
+                            <div className={`inline-block px-4 py-3 rounded-2xl shadow-sm ${message.type === 'assistant' ? 'bg-violet-50 border border-violet-100 text-violet-900' : 'bg-purple-50 border border-purple-100 text-purple-900'}`}>
+                              <p className="text-sm leading-relaxed">{message.content}</p>
+                            </div>
+                            <div className={`mt-1 text-xs text-slate-500 ${message.type === 'user' ? 'text-right' : 'text-left'}`}>
+                              <span className="capitalize font-medium">{message.type === 'assistant' ? 'AI Assistant' : 'You'}</span>
+                              <span>{message.time}</span>
+                            </div>
+                          </div>
+                        </div>
+
+                        // <div
+                        //   key={index}
+                        //   style={{
+                        //     marginBottom: '12px',
+                        //     padding: '8px 12px',
+                        //     borderRadius: '6px',
+                        //     backgroundColor: message.type === 'user' ? '#dbeafe' : message.type === 'assistant' ? '#dcfce7' : '#f3f4f6',
+                        //   }}
+                        // >
+                        //   <div
+                        //     style={{
+                        //       display: 'flex',
+                        //       justifyContent: 'space-between',
+                        //       alignItems: 'center',
+                        //       marginBottom: '4px',
+                        //     }}
+                        //   >
+                        //     <span
+                        //       style={{
+                        //         fontWeight: 'bold',
+                        //         color: message.type === 'user' ? '#1d4ed8' : message.type === 'assistant' ? '#16a34a' : '#6b7280',
+                        //       }}
+                        //     >
+                        //       {message.type === 'user' ? 'You' : message.type === 'assistant' ? 'Assistant' : 'System'}
+                        //     </span>
+                        //     <span style={{ fontSize: '12px', color: '#6b7280' }}>{message.time}</span>
+                        //   </div>
+                        //   <div style={{ color: '#374151' }}>{message.content}</div>
+                        // </div>
+                      ))
+                    )}
+                  </div>
+                </DrawerBody>
+                <DrawerFooter>
+                  <Button color="danger" variant="light" onPress={onClose}>
+                    Close
+                  </Button>
+                </DrawerFooter>
+              </>
+            )}
+          </DrawerContent>
+        </Drawer>
       </div>
     </div>
   );

@@ -116,7 +116,7 @@ function App() {
         },
         server: {
           url: 'https://api.evalsy.com/webhook/vapi',
-          secret: 'bac5fdb0-6065-434c-809f-5e82220e7952', // 👈 Must match what your server checks
+          secret: 'bac5fdb0-6065-434c-809f-5e82220e7952',
 
           timeoutSeconds: 20,
         },
@@ -145,8 +145,9 @@ function App() {
         maxDurationSeconds: 600,
 
         // Required for CreateAssistantDTO
-        clientMessages: [],
-        serverMessages: [],
+        clientMessages: ['transcript', 'status-update', 'speech-update', 'model-output'] as unknown as object[][],
+
+        serverMessages: ['transcript', 'status-update', 'end-of-call-report'] as unknown as object[][],
       });
     } catch (error) {
       console.error('Error starting call:', error);
