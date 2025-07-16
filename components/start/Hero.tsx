@@ -1,9 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import Link from 'next/link';
 
-import { Play, ArrowRight, Sparkles, TrendingUp, Users, Zap, Bot, Video, MessageSquare, DollarSign } from 'lucide-react';
+import { Play, TrendingUp, Users, DollarSign, Clock, CheckCircle, Star } from 'lucide-react';
 import { Button, Chip } from '@heroui/react';
 import RequestDemoHero from './RequestDemoHero';
 
@@ -39,9 +38,9 @@ export function Hero() {
   }, [currentText, currentIndex, isDeleting, phrases]);
 
   const stats = [
-    { icon: <Users className="h-5 w-5 text-[#3534ff]" />, value: '10K+', label: 'Interviews completed' },
-    { icon: <TrendingUp className="h-5 w-5 text-[#3534ff]" />, value: '254858', label: 'HR manhours saved' },
-    { icon: <DollarSign className="h-5 w-5 text-[#3534ff]" />, value: '1M', label: 'Cost Saved' },
+    { icon: <CheckCircle className="h-5 w-5 text-[#3534ff]" />, value: 'Shortlist Instantly', label: 'AI screens candidates for you' },
+    { icon: <Clock className="h-5 w-5 text-[#3534ff]" />, value: '24/7 Interviews', label: 'Candidates interview anytime' },
+    { icon: <Star className="h-5 w-5 text-[#3534ff]" />, value: 'Smart Scoring', label: 'Review only top-ranked profiles' },
   ];
 
   return (
@@ -56,7 +55,7 @@ export function Hero() {
 
             {/* Main Heading */}
             <div className="space-y-4">
-              <h1 className="text-6xl lg:text-7xl font-black leading-tight" style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
+              <h1 className="text-5xl lg:text-5xl font-black leading-tight" style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
                 <span
                   className="bg-gradient-to-r from-purple-600 via-purple-700 to-indigo-800 bg-clip-text text-transparent"
                   style={{
@@ -65,23 +64,24 @@ export function Hero() {
                     willChange: 'auto',
                   }}
                 >
-                  Let AI Handle Your
+                  Instantly Screen & Shortlist Candidates
                 </span>
-                <br />
+              </h1>
+
+              <h1 className="text-4xl lg:text-4xl font-black leading-tight" style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
                 <span
-                  className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent"
+                  className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent mt-5"
                   style={{
                     backgroundSize: '200% 200%',
                     backgroundPosition: '73.96% 50%',
                     willChange: 'auto',
                   }}
                 >
-                  Interviews
+                  90% Faster. 70% Cheaper.
                 </span>
               </h1>
-
               {/* Description */}
-              <p className="text-lg md:text-xl text-gray-700 max-w-2xl leading-relaxed">Let our AI-powered video screening platform take over. fully automated candidate interviews, available 24/7</p>
+              <p className="text-lg md:text-xl text-gray-700 max-w-2xl leading-relaxed">Evalsy automatically interviews candidates 24/7 and gives you AI-powered shortlists. Focus only on the best.</p>
 
               {/* Typewriter Effect */}
               <div className="flex items-center gap-2">
@@ -94,7 +94,7 @@ export function Hero() {
             <div className="flex flex-col sm:flex-row gap-4">
               <Button variant="bordered" size="lg" className="border-2 border-purple-500/50 text-purple-500 hover:bg-purple-500/20 px-8 py-4 text-lg font-semibold rounded-full backdrop-blur-sm bg-transparent">
                 <Play className="h-5 w-5 mr-2 group-hover:scale-110 transition-transform" />
-                Watch Live Demo
+                See It in Action
               </Button>
             </div>
 
@@ -104,7 +104,7 @@ export function Hero() {
                 <div key={index} className="flex items-center gap-3">
                   <div className="p-2 rounded-full border border-[#3534ff]">{stat.icon}</div>
                   <div>
-                    <div className="text-2xl font-bold text-[]">{stat.value}</div>
+                    <div className="text-1xl font-bold text-[]">{stat.value}</div>
                     <div className="text-sm text-gray-600">{stat.label}</div>
                   </div>
                 </div>

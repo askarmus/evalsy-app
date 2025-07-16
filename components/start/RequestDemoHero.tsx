@@ -57,7 +57,7 @@ export default function RequestDemoHero() {
         <form onSubmit={handleSubmit} className="space-y-6">
           <Input
             name="fullName"
-            label="Full Name"
+            label="Name"
             labelPlacement="inside"
             size="sm"
             isRequired
@@ -72,7 +72,7 @@ export default function RequestDemoHero() {
           />
           <Input
             name="company"
-            label="Company Name"
+            label="Role"
             variant="bordered"
             radius="lg"
             classNames={{
@@ -82,43 +82,26 @@ export default function RequestDemoHero() {
             value={formData.company}
             onChange={handleInputChange}
           />
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <Input
-              name="email"
-              size="sm"
-              type="email"
-              label="Email Address"
-              labelPlacement="inside"
-              isRequired
-              variant="bordered"
-              radius="lg"
-              classNames={{
-                inputWrapper: 'bg-white text-black border-purple-500/80',
-                input: 'text-black placeholder:text-slate-500',
-              }}
-              value={formData.email}
-              onChange={handleInputChange}
-            />
 
-            <Input
-              name="mobile"
-              label="Mobile Number"
-              size="sm"
-              isRequired
-              type="tel"
-              variant="bordered"
-              radius="lg"
-              classNames={{
-                inputWrapper: 'bg-white text-black border-purple-500/80',
-                input: 'text-black placeholder:text-slate-500',
-              }}
-              value={formData.mobile}
-              onChange={handleInputChange}
-            />
-          </div>
+          <Input
+            name="email"
+            size="sm"
+            type="email"
+            label="Email Address"
+            labelPlacement="inside"
+            isRequired
+            variant="bordered"
+            radius="lg"
+            classNames={{
+              inputWrapper: 'bg-white text-black border-purple-500/80',
+              input: 'text-black placeholder:text-slate-500',
+            }}
+            value={formData.email}
+            onChange={handleInputChange}
+          />
 
           <Button radius="md" isLoading={isSubmiting} type="submit" size="md" className="mt-8 text-white  btn-gradient py-4 px-8 font-medium hover: hover:bg-slate-600 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-700" endContent={<FaArrowRight className="w-4 h-4 text-white hover:translate-x-1 transition-transform" />}>
-            Submit
+            Book a Free Demo
           </Button>
         </form>
       </CardBody>
