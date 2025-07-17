@@ -68,7 +68,7 @@ export const SendInvitationDrawer: React.FC<SendInvitationDrawerProps> = ({ isOp
         },
       });
     } catch (error: any) {
-      const errorMsg = error?.response?.data?.error || error?.message || 'Failed to send invitation due to an unexpected error.';
+      const errorMsg = error?.response?.data?.error || error?.message || ' Failed to send invitation due to an unexpected error.';
       showToast.error(errorMsg);
     } finally {
       setLoading(false);
