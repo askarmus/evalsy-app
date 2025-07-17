@@ -34,7 +34,7 @@ const creditPackages: CreditPackage[] = [
 ];
 
 export const CreditPackageList = ({ onBuy }: CreditPackageListProps) => {
-  const [isLoading, setIsLoading] = useState(false);
+  const [loadingCredits, setLoadingCredits] = useState<number | null>(null);
 
   return (
     <>
@@ -55,12 +55,12 @@ export const CreditPackageList = ({ onBuy }: CreditPackageListProps) => {
             </div>
             <Button
               variant="bordered"
-              isLoading={isLoading}
+              isLoading={loadingCredits === credits}
               radius="full"
               color="success"
               onPress={() => {
+                setLoadingCredits(credits);
                 onBuy(credits);
-                setIsLoading(true);
               }}
             >
               Buy
