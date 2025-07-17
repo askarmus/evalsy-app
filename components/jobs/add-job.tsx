@@ -257,7 +257,7 @@ export const AddJob = () => {
 
           const handleSaveQuestion = (updatedQuestion: Question) => {
             if (drawerMode === 'add') {
-              setFieldValue('questions', [updatedQuestion, ...values.questions]);
+              setFieldValue('questions', [...values.questions, updatedQuestion]);
             } else if (drawerMode === 'edit' && editingQuestionIndex !== null) {
               const updatedQuestions = [...values.questions];
               updatedQuestions[editingQuestionIndex] = updatedQuestion;
@@ -475,7 +475,7 @@ export const AddJob = () => {
 
                     <GenerateQuestionsDrawer
                       onQuestionsGenerated={(generatedQuestions) => {
-                        setFieldValue('questions', [...generatedQuestions, ...values.questions]);
+                        setFieldValue('questions', [...values.questions, ...generatedQuestions]);
                         setGenerateDrawerOpen(false);
                       }}
                       onOpenChange={(open) => setGenerateDrawerOpen(open)}

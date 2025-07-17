@@ -43,11 +43,6 @@ export const SendInvitationDrawer: React.FC<SendInvitationDrawerProps> = ({ isOp
   }, [isOpen, fetchInvitations]);
 
   const handleSubmit = async (values: any, { resetForm }: any) => {
-    if (credits < 2) {
-      showToast.error(`You have ${credits} credits remaining. Please purchase more to send invitations.`);
-      return;
-    }
-
     setLoading(true);
     try {
       let currentDate = new Date();
@@ -72,8 +67,9 @@ export const SendInvitationDrawer: React.FC<SendInvitationDrawerProps> = ({ isOp
           message: '',
         },
       });
-    } catch (error) {
-      showToast.error('Failed to send invitation.');
+    } catch (error: any) {
+      const errorMsg = error?.response?.data?.error || error?.message || 'Failed to send invitation due to an unexpected error.';
+      showToast.error(errorMsg);
     } finally {
       setLoading(false);
     }

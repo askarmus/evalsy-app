@@ -119,7 +119,7 @@ const ResumeUploader = ({ jobid, onViewDetails, onDelete, existingResume }: Resu
       }
 
       if (credits < acceptedFiles.length) {
-        showToast.error(`You only have ${credits} credit(s), but tried uploading ${acceptedFiles.length}.`);
+        showToast.error(`You only have ${credits} credit(s), Please purchase more to analayse resume.`);
         return;
       }
 
