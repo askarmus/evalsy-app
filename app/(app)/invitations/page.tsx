@@ -117,40 +117,56 @@ export default function Invitations() {
 
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-4">
         {/* Pending */}
-        <div className="flex items-center justify-between px-4 py-4 rounded-xl bg-white dark:bg-gray-900 shadow-sm">
-          <div className="flex items-center gap-2">
-            <AiOutlineClockCircle className="text-yellow-500 text-lg" />
-            <span className="text-sm font-medium text-gray-600 dark:text-gray-300">Pending</span>
-          </div>
-          <span className="text-lg font-semibold text-gray-900 dark:text-white">{pendingCount}</span>
-        </div>
+
+        <Card>
+          <CardBody>
+            <div className="flex items-center justify-between  ">
+              <div className="flex items-center gap-2">
+                <AiOutlineClockCircle className="text-yellow-500 text-lg" />
+                <span className="text-sm font-medium text-gray-600 dark:text-gray-300">Pending</span>
+              </div>
+              <span className="text-lg font-semibold text-gray-900 dark:text-white">{pendingCount}</span>
+            </div>
+          </CardBody>
+        </Card>
 
         {/* Started */}
-        <div className="flex items-center justify-between px-4 py-4 rounded-xl bg-white dark:bg-gray-900 shadow-sm">
-          <div className="flex items-center gap-2">
-            <AiOutlinePlayCircle className="text-blue-500 text-lg" />
-            <span className="text-sm font-medium text-gray-600 dark:text-gray-300">Started</span>
-          </div>
-          <span className="text-lg font-semibold text-gray-900 dark:text-white">{startedCount}</span>
-        </div>
-
+        <Card>
+          <CardBody>
+            <div className="flex items-center justify-between  ">
+              <div className="flex items-center gap-2">
+                <AiOutlinePlayCircle className="text-blue-500 text-lg" />
+                <span className="text-sm font-medium text-gray-600 dark:text-gray-300">Started</span>
+              </div>
+              <span className="text-lg font-semibold text-gray-900 dark:text-white">{startedCount}</span>
+            </div>
+          </CardBody>
+        </Card>
         {/* Completed */}
-        <div className="flex items-center justify-between px-4 py-4 rounded-xl bg-white dark:bg-gray-900 shadow-sm">
-          <div className="flex items-center gap-2">
-            <AiOutlineCheckCircle className="text-green-500 text-lg" />
-            <span className="text-sm font-medium text-gray-600 dark:text-gray-300">Completed</span>
-          </div>
-          <span className="text-lg font-semibold text-gray-900 dark:text-white">{completedCount}</span>
-        </div>
+        <Card>
+          <CardBody>
+            <div className="flex items-center justify-between ">
+              <div className="flex items-center gap-2">
+                <AiOutlineCheckCircle className="text-green-500 text-lg" />
+                <span className="text-sm font-medium text-gray-600 dark:text-gray-300">Completed</span>
+              </div>
+              <span className="text-lg font-semibold text-gray-900 dark:text-white">{completedCount}</span>
+            </div>
+          </CardBody>
+        </Card>
 
         {/* Expired */}
-        <div className="flex items-center justify-between px-4 py-4 rounded-xl bg-white dark:bg-gray-900 shadow-sm">
-          <div className="flex items-center gap-2">
-            <AiOutlineStop className="text-red-500 text-lg" />
-            <span className="text-sm font-medium text-gray-600 dark:text-gray-300">Expired</span>
-          </div>
-          <span className="text-lg font-semibold text-gray-900 dark:text-white">{expiredCount}</span>
-        </div>
+        <Card>
+          <CardBody>
+            <div className="flex items-center justify-between ">
+              <div className="flex items-center gap-2">
+                <AiOutlineStop className="text-red-500 text-lg" />
+                <span className="text-sm font-medium text-gray-600 dark:text-gray-300">Expired</span>
+              </div>
+              <span className="text-lg font-semibold text-gray-900 dark:text-white">{expiredCount}</span>
+            </div>
+          </CardBody>
+        </Card>
       </div>
 
       <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">

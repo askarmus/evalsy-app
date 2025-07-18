@@ -220,36 +220,6 @@ const InterviewNavigator: React.FC = () => {
                             </div>
                           </div>
                         </div>
-
-                        // <div
-                        //   key={index}
-                        //   style={{
-                        //     marginBottom: '12px',
-                        //     padding: '8px 12px',
-                        //     borderRadius: '6px',
-                        //     backgroundColor: message.type === 'user' ? '#dbeafe' : message.type === 'assistant' ? '#dcfce7' : '#f3f4f6',
-                        //   }}
-                        // >
-                        //   <div
-                        //     style={{
-                        //       display: 'flex',
-                        //       justifyContent: 'space-between',
-                        //       alignItems: 'center',
-                        //       marginBottom: '4px',
-                        //     }}
-                        //   >
-                        //     <span
-                        //       style={{
-                        //         fontWeight: 'bold',
-                        //         color: message.type === 'user' ? '#1d4ed8' : message.type === 'assistant' ? '#16a34a' : '#6b7280',
-                        //       }}
-                        //     >
-                        //       {message.type === 'user' ? 'You' : message.type === 'assistant' ? 'Assistant' : 'System'}
-                        //     </span>
-                        //     <span style={{ fontSize: '12px', color: '#6b7280' }}>{message.time}</span>
-                        //   </div>
-                        //   <div style={{ color: '#374151' }}>{message.content}</div>
-                        // </div>
                       ))
                     )}
                   </div>

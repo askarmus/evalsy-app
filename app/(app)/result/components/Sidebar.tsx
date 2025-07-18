@@ -26,7 +26,7 @@ const tabKeys = ['Reject', 'Borderline', 'Hire', 'Strong Hire'];
 export const ListboxWrapper = ({ children }) => <div className="w-full max-w-[360px] max-h-[700px] overflow-y-auto">{children}</div>;
 
 export default function Sidebar({ selectedTab, setSelectedTab, filterValue, setFilterValue, onSearchChange, items, handleViewDetails }: SidebarProps) {
-  const filteredItems = selectedTab === 'all' ? items.filter((item) => HiringGradeUtil.getHiringRecommendation(item.totalScore).recommendation !== 'Reject') : items.filter((item) => HiringGradeUtil.getHiringRecommendation(item.totalScore).recommendation === selectedTab);
+  const filteredItems = items.filter((item) => HiringGradeUtil.getHiringRecommendation(item.totalScore).recommendation === selectedTab || 'all');
 
   console.log('Filtered Items:', filteredItems);
   return (
