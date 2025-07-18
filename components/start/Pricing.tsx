@@ -91,7 +91,6 @@ export const Pricing = () => {
           </Link>
           <p className=" text-sm mt-3">Start with 10 free credits – no credit card required.</p>
         </div>
-        ``
       </div>
     </section>
   );
