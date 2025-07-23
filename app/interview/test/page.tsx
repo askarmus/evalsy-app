@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import Vapi from '@vapi-ai/web';
+import { any } from 'zod';
 
 interface Message {
   time: string;
@@ -116,9 +117,8 @@ function App() {
         },
         server: {
           url: 'https://api.evalsy.com/webhook/vapi',
-          secret: 'bac5fdb0-6065-434c-809f-5e82220e7952',
 
-          timeoutSeconds: 20,
+          timeoutSeconds: 200,
         },
         // Voice configuration
         voice: {
@@ -145,9 +145,9 @@ function App() {
         maxDurationSeconds: 600,
 
         // Required for CreateAssistantDTO
-        clientMessages: ['transcript', 'status-update', 'speech-update', 'model-output'] as unknown as object[][],
+        clientMessages: ['transcript', 'status-update', 'speech-update', 'model-output', 'conversation-update', 'hang'] as any,
 
-        serverMessages: ['transcript', 'status-update', 'end-of-call-report'] as unknown as object[][],
+        serverMessages: ['transcript', 'status-update', 'end-of-call-report', 'speech-update', 'conversation-update'] as any,
       });
     } catch (error) {
       console.error('Error starting call:', error);

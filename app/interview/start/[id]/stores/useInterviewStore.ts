@@ -4,7 +4,6 @@ import { createInterviewAssistant } from '@/lib/data/vapi.sdk';
 import { upload } from '@/services/company.service';
 import { endInterview, startInterview, updateScreeshot, updateVapiCallId } from '@/services/interview.service';
 import { getInvitationDetails } from '@/services/invitation.service';
-import { max } from 'date-fns';
 import { create } from 'zustand';
 
 type Phase = 'init' | 'not-started' | 'in-progress' | 'completed' | 'time-up' | 'expired' | 'skeleton-loading';

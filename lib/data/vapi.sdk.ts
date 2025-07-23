@@ -18,9 +18,8 @@ export const createInterviewAssistant = async (interviewData: {
     name: 'Evalsy AI Interviewer',
     server: {
       url: 'https://api.evalsy.com/webhook/vapi',
-      secret: 'bac5fdb0-6065-434c-809f-5e82220e7952',
 
-      timeoutSeconds: 20,
+      timeoutSeconds: 200,
     },
     transcriber: {
       provider: 'deepgram',
@@ -70,8 +69,9 @@ export const createInterviewAssistant = async (interviewData: {
         },
       ],
     },
-    clientMessages: ['transcript', 'status-update', 'speech-update', 'model-output'] as unknown as object[][],
-    serverMessages: ['transcript', 'status-update', 'end-of-call-report'] as unknown as object[][],
+    clientMessages: ['transcript', 'status-update', 'speech-update', 'model-output', 'conversation-update', 'hang'] as any,
+
+    serverMessages: ['transcript', 'status-update', 'end-of-call-report', 'speech-update', 'conversation-update'] as any,
   });
 
   if (call?.id) {
