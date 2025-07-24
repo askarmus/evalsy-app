@@ -1,24 +1,21 @@
 import { Question } from '@/app/interview/start/[id]/stores/useInterviewStore';
 import Vapi from '@vapi-ai/web';
 
-export const vapi = new Vapi('bac5fdb0-6065-434c-809f-5e82220e7952');
+export const vapi = new Vapi(process.env.VAPI_API_KEY!);
 
-// Function to create and start the interview assistant with dynamic questions
-export const createInterviewAssistant = async (interviewData: {
-  questions: Question[];
-  role: string;
-  level: string;
-  userName: string; // Added userName parameter
-}) => {
+export const createInterviewAssistant = async (interviewData: { questions: Question[]; role: string; level: string; userName: string; resultId: string; userId: string }) => {
   // Format the questions for the prompt
   const formattedQuestions = '- ' + interviewData.questions.map((q) => q.text).join('\n- ');
-  //Add the required properties according to CreateAssistantDTO type
 
   const call = await vapi.start({
     name: 'Evalsy AI Interviewer',
     server: {
-      url: 'https://api.evalsy.com/webhook/vapi',
-
+      url: process.env.VAPI_WEBHOOK_URL,
+      headers: {
+        Authorization: `Bearer ${process.env.VAPI_API_KEY!}`,
+        interviewResultId: interviewData.resultId,
+        userId: interviewData.userId,
+      },
       timeoutSeconds: 200,
     },
     transcriber: {

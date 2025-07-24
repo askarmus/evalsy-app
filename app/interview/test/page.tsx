@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import Vapi from '@vapi-ai/web';
 import { any } from 'zod';
+import { env } from 'process';
 
 interface Message {
   time: string;
@@ -10,7 +11,7 @@ interface Message {
 }
 
 function App() {
-  const [vapi] = useState(() => new Vapi('bac5fdb0-6065-434c-809f-5e82220e7952'));
+  const [vapi] = useState(() => new Vapi(process.env.VAPI_API_KEY!));
   const [connected, setConnected] = useState(false);
   const [assistantIsSpeaking, setAssistantIsSpeaking] = useState(false);
   const [volumeLevel, setVolumeLevel] = useState(0);
@@ -116,8 +117,12 @@ function App() {
           ],
         },
         server: {
-          url: 'https://api.evalsy.com/webhook/vapi',
-
+          url: process.env.VAPI_WEBHOOK_URL,
+          headers: {
+            Authorization: 'Bearer bac5fdb0-6065-434c-809f-5e82220e7952',
+            interviewResultId: 'interviewResultId',
+            userId: 'interviewResultId',
+          },
           timeoutSeconds: 200,
         },
         // Voice configuration
@@ -142,12 +147,12 @@ function App() {
         silenceTimeoutSeconds: 30,
 
         // Max call duration (in seconds) - 10 minutes
-        maxDurationSeconds: 600,
+        maxDurationSeconds: 1200,
 
         // Required for CreateAssistantDTO
         clientMessages: ['transcript', 'status-update', 'speech-update', 'model-output', 'conversation-update', 'hang'] as any,
 
-        serverMessages: ['transcript', 'status-update', 'end-of-call-report', 'speech-update', 'conversation-update'] as any,
+        serverMessages: ['status-update'] as any,
       });
     } catch (error) {
       console.error('Error starting call:', error);
