@@ -46,20 +46,15 @@ const InterviewNavigator: React.FC = () => {
   };
 
   useEffect(() => {
-    console.log('🎬 Setting up Vapi event listeners...');
-
     const onCallStart = () => {
-      console.log('🔔 Call started');
       setCallStatus(CallStatus.ACTIVE);
     };
 
     const onCallEnd = () => {
-      console.log('🔕 Call ended');
       setCallStatus(CallStatus.FINISHED);
     };
 
     const onMessage = async (message: any) => {
-      console.log('Received message:', message);
       // Handle different message types
       if (message.type === 'transcript') {
         if (message.transcriptType === 'final') {
@@ -77,12 +72,10 @@ const InterviewNavigator: React.FC = () => {
     };
 
     const onSpeechStart = () => {
-      console.log('🎙️ Speech started');
       setIsSpeaking(true);
     };
 
     const onSpeechEnd = () => {
-      console.log('🔇 Speech ended');
       setIsSpeaking(false);
     };
 

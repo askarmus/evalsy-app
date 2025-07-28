@@ -91,6 +91,7 @@ export const useInterviewStore = create<InterviewState>()((set, get) => ({
         level: job?.experienceLevel,
       };
 
+      console.log(resposne);
       const call = await createInterviewAssistant({ ...baseInterviewData, questions: resposne.questions, resultId: resposne.interviewResultId, userId: resposne.userId });
       if (call?.id) {
         await updateVapiCallId({ invitationId, callId: call.id });

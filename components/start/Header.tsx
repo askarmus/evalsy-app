@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import NextLink from 'next/link';
-import { Navbar, NavbarBrand, NavbarContent, NavbarItem, Button, Link, Drawer, DrawerContent } from '@heroui/react';
+import { Navbar, NavbarBrand, NavbarContent, NavbarItem, Button, Link, Drawer, DrawerContent, Spinner } from '@heroui/react';
 import { Menu, X } from 'lucide-react';
 import { LogoDark } from '@/components/logo.dark';
 import { useAuth } from '@/hooks/useAuth';
@@ -44,8 +44,10 @@ export function Header() {
 
         {/* Desktop CTA / Auth Section */}
         <NavbarContent justify="end" className="hidden md:flex items-center gap-4">
-          {!loading && user ? (
-            <Button as={NextLink} href="/dashboard" variant="bordered" radius="md" className="border-2 border-black  btn-gradient text-white  ">
+          {loading ? (
+            <Spinner size="sm" color="primary" /> // or use a <div className="animate-spin ..."></div> if custom
+          ) : user ? (
+            <Button as={NextLink} href="/dashboard" variant="bordered" radius="md" className="border-2 border-black btn-gradient text-white">
               Go to Dashboard
             </Button>
           ) : (
@@ -53,7 +55,7 @@ export function Header() {
               <Link className="inline-block rounded-lg px-2 py-1 text-md text-white" href="/login">
                 Sign in
               </Link>
-              <Button as={NextLink} href="#shedule-demo" variant="bordered" className="border-2 border-black  bg-[#3534ff]  text-white  ">
+              <Button as={NextLink} href="#shedule-demo" variant="bordered" className="border-2 border-black bg-[#3534ff] text-white">
                 Schedule a Demo
               </Button>
             </>
