@@ -147,14 +147,11 @@ export function Footer() {
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <p className="text-sm text-white">© 2025 Evalsy. All rights reserved.</p>
             <div className="flex space-x-6">
-              <Link className="text-sm text-white hover:text-white transition-colors hover:underline" href="/privacy">
+              <Link className="text-sm text-white hover:text-white transition-colors hover:underline" href="/privacy-policy">
                 Privacy Policy
               </Link>
               <Link className="text-sm text-white hover:text-white transition-colors hover:underline" href="/terms">
                 Terms of Service
-              </Link>
-              <Link className="text-sm text-white hover:text-white transition-colors hover:underline" href="/cookies">
-                Cookie Policy
               </Link>
             </div>
           </div>

@@ -12,6 +12,7 @@ import Feature from '@/components/start/Feature';
 import FAQ from '@/components/start/FAQ';
 import Companies from '../components/start/Company';
 import HomeLayout from './home-layout';
+import CookieBanner from '@/components/start/CookieBanner';
 
 export default function Home() {
   return (
@@ -30,6 +31,7 @@ export default function Home() {
           <Testimonials />
           <FAQ />
           <RequestDemo />
+          <CookieBanner />
         </main>
         <Footer />
       </div>

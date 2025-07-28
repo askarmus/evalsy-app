@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import { useRouter, usePathname } from "next/navigation";
-import apiClient, { refreshAccessToken } from "@/helpers/apiClient";
+import { useEffect, useState } from 'react';
+import { useRouter, usePathname } from 'next/navigation';
+import apiClient, { refreshAccessToken } from '@/helpers/apiClient';
 
 export const useAuth = () => {
   const [loading, setLoading] = useState(true);
@@ -11,29 +11,32 @@ export const useAuth = () => {
   const router = useRouter();
   const pathname = usePathname();
 
+  // Define public routes that don't require login
+  const publicRoutes = ['/', '/privacy-policy', '/terms'];
+
   useEffect(() => {
     const initAuth = async () => {
       try {
-        const { data } = await apiClient.get("/auth/me");
+        const { data } = await apiClient.get('/auth/me');
         setUser(data);
         setAuthenticated(true);
       } catch {
         const didRefresh = await refreshAccessToken();
         if (didRefresh) {
           try {
-            const { data } = await apiClient.get("/auth/me");
+            const { data } = await apiClient.get('/auth/me');
             setUser(data);
             setAuthenticated(true);
           } catch {
             setAuthenticated(false);
-            if (pathname !== "/") {
-              router.replace("/login");
+            if (!publicRoutes.includes(pathname!)) {
+              router.replace('/login');
             }
           }
         } else {
           setAuthenticated(false);
-          if (pathname !== "/") {
-            router.replace("/login");
+          if (!publicRoutes.includes(pathname!)) {
+            router.replace('/login');
           }
         }
       } finally {
