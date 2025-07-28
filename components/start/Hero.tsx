@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 import { Play, TrendingUp, Users, DollarSign, Clock, CheckCircle, Star } from 'lucide-react';
 import { Button, Chip } from '@heroui/react';
 import RequestDemoHero from './RequestDemoHero';
+import VideoModal from '@/app/interview/start/[id]/components/how-it-work-video';
 
 export function Hero() {
   const [currentText, setCurrentText] = useState('');
@@ -92,10 +93,7 @@ export function Hero() {
 
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4">
-              <Button variant="bordered" size="lg" className="border-2 border-purple-500/50 text-purple-500 hover:bg-purple-500/20 px-8 py-4 text-lg font-semibold rounded-full backdrop-blur-sm bg-transparent">
-                <Play className="h-5 w-5 mr-2 group-hover:scale-110 transition-transform" />
-                See It in Action
-              </Button>
+              <VideoModal />
             </div>
 
             {/* Stats */}
