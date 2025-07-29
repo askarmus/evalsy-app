@@ -17,7 +17,7 @@ import { Calendar, CheckCircle, Clock, Edit, ExternalLink, MoreHorizontal, Play,
 export default function Jobs() {
   const [page, setPage] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
-  const [isCreatingLink, setCreatingLink] = useState(false);
+  const [loadingJobId, setLoadingJobId] = useState<string | null>(null);
 
   const [filterValue, setFilterValue] = useState('');
   const [jobs, setJobs] = useState([]);
@@ -30,7 +30,7 @@ export default function Jobs() {
   const router = useRouter();
 
   const tryYourself = async (jobId: string) => {
-    setCreatingLink(true);
+    setLoadingJobId(jobId);
     try {
       let currentDate = new Date();
       currentDate.setDate(currentDate.getDate() + 1);
@@ -56,10 +56,9 @@ export default function Jobs() {
       const errorMsg = error?.response?.data?.error || error?.message || 'Failed to send invitation due to an unexpected error.';
       showToast.error(errorMsg);
     } finally {
-      setCreatingLink(false);
+      setLoadingJobId(null);
     }
   };
-
   const fetchJobs = async () => {
     setIsLoading(true);
     try {
@@ -317,7 +316,8 @@ export default function Jobs() {
                             Invite Candidates
                           </Button>
 
-                          <Button size="sm" isLoading={isCreatingLink} radius="full" variant="faded" color="default" aria-label="manage" onPress={() => tryYourself(job.id)}>
+                          <Button size="sm" isLoading={loadingJobId === job.id} radius="full" variant="faded" color="default" aria-label="manage" onPress={() => tryYourself(job.id)}>
+                            <Play className="w-4 h-4" />
                             Try Yourself
                           </Button>
                           <Dropdown>
