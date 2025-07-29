@@ -27,7 +27,7 @@ const StartInterview: React.FC = () => {
       {phase === 'not-started' && <InterviewInstruction />}
       {phase === 'in-progress' && <InterviewNavigator />}
       {(phase === 'completed' || phase === 'time-up') && <ThankYou />}
-      {phase === 'expired' && <NotFound />}
+      {phase === 'expired' && <ThankYou />}
     </div>
   );
 };
