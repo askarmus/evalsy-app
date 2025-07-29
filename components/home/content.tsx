@@ -76,7 +76,7 @@ export const Content = () => {
         {/* Left Section */}
         <div className="mt-4 gap-2 flex flex-col xl:max-w-md w-full">
           <div className="flex flex-col justify-center gap-4 flex-wrap md:flex-nowrap md:flex-col mt-14">
-            <Card shadow="md" radius="md" className=" p-4  w-full">
+            {/* <Card shadow="md" radius="md" className=" p-4  w-full">
               <CardBody>
                 <CategoryAveragesChart
                   data={[
@@ -88,7 +88,7 @@ export const Content = () => {
                   ]}
                 />
               </CardBody>
-            </Card>
+            </Card> */}
             <RecentInterviews />
           </div>
         </div>
