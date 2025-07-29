@@ -16,7 +16,12 @@ export const getInvitationDetails = async (invitationId: string) => {
 };
 
 // Send a new invitation
-export const sendInvitation = async (payload: { jobId: string; name: string; email: string; message: string; expires: string; interviwerId: string; duration: number }) => {
+export const sendInvitation = async (payload: { jobId: string; name: string; email: string; message: string; expires: string; duration: number }) => {
   const response = await apiClient.post('/invitation/send', payload);
+  return response.data.data;
+};
+
+export const testInterview = async (payload: { jobId: string; name: string; email: string; message: string; expires: string; duration: number }) => {
+  const response = await apiClient.post('/interview/try', payload);
   return response.data.data;
 };

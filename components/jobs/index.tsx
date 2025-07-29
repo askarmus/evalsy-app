@@ -1,5 +1,5 @@
 'use client';
-import { Button, Input, Pagination, Chip, Card, CardFooter, CardHeader, Tooltip, Tabs, Tab } from '@heroui/react';
+import { Button, Input, Pagination, Chip, Card, CardFooter, CardHeader, Tooltip, Tabs, Tab, DropdownMenu, Badge, CardBody, Dropdown, DropdownTrigger, DropdownItem } from '@heroui/react';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { getAllJobs, deleteJob } from '@/services/job.service';
 import { SendInvitationDrawer } from './send-invitation';
@@ -10,10 +10,15 @@ import DateFormatter from '@/app/utils/DateFormatter';
 import { AiFillEdit, AiOutlineDelete, AiOutlineDiff, AiOutlinePlus, AiOutlineUserAdd, AiOutlineRollback } from 'react-icons/ai';
 import EmptyStateCards from '../shared/empty-state-cards';
 import { FaExternalLinkAlt, FaSearch } from 'react-icons/fa';
+import { showToast } from '@/app/utils/toastUtils';
+import { sendInvitation, testInterview } from '@/services/invitation.service';
+import { Calendar, CheckCircle, Clock, Edit, ExternalLink, MoreHorizontal, Play, Send, Trash2, UserCheck, Users } from 'lucide-react';
 
 export default function Jobs() {
   const [page, setPage] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
+  const [isCreatingLink, setCreatingLink] = useState(false);
+
   const [filterValue, setFilterValue] = useState('');
   const [jobs, setJobs] = useState([]);
   const [selectedTab, setSelectedTab] = useState('active');
@@ -23,6 +28,37 @@ export default function Jobs() {
   const [jobToDelete, setJobToDelete] = useState<string | null>(null);
   const [isConfirmDialogOpen, setConfirmDialogOpen] = useState(false);
   const router = useRouter();
+
+  const tryYourself = async (jobId: string) => {
+    setCreatingLink(true);
+    try {
+      let currentDate = new Date();
+      currentDate.setDate(currentDate.getDate() + 1);
+
+      const result = await testInterview({
+        jobId,
+        name: 'John Doe',
+        email: 'johndoe@example.com',
+        message: 'This is test interview',
+        expires: currentDate.toDateString(),
+        duration: 2,
+      });
+
+      // Create a hidden link and click it
+      const link = document.createElement('a');
+      link.href = `/interview/start/${result.id}`;
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (error: any) {
+      const errorMsg = error?.response?.data?.error || error?.message || 'Failed to send invitation due to an unexpected error.';
+      showToast.error(errorMsg);
+    } finally {
+      setCreatingLink(false);
+    }
+  };
 
   const fetchJobs = async () => {
     setIsLoading(true);
@@ -107,6 +143,24 @@ export default function Jobs() {
   const handleCancelDelete = () => {
     setConfirmDialogOpen(false);
     setJobToDelete(null);
+  };
+
+  const statusConfig: Record<string, { icon: JSX.Element; bg: string; text: string }> = {
+    pending: {
+      icon: <Clock className="w-4 h-4 text-orange-600" />,
+      bg: 'bg-orange-50',
+      text: 'text-orange-700',
+    },
+    completed: {
+      icon: <CheckCircle className="w-4 h-4 text-green-600" />,
+      bg: 'bg-green-50',
+      text: 'text-green-700',
+    },
+    started: {
+      icon: <Play className="w-4 h-4 text-blue-600" />,
+      bg: 'bg-blue-50',
+      text: 'text-blue-700',
+    },
   };
 
   const getExperienceLevelColor = (level: string) => {
@@ -205,85 +259,85 @@ export default function Jobs() {
             ) : (
               <>
                 {items.map((job: any) => (
-                  <Card key={job.id} shadow="md" radius="md" className="P-6">
-                    <CardHeader className="flex justify-between items-center">
-                      <div className="flex gap-5">
-                        <div className="flex flex-col gap-2 items-start justify-center">
-                          <a href={`${window.location.origin}/job/${job.id}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-xl font-bold text-gray-900 dark:text-gray-100 hover:underline">
-                            {job.jobTitle}
-                            <FaExternalLinkAlt className="w-3 h-3 opacity-40" />
-                          </a>
-                        </div>
-                      </div>
+                  <Card key={job.id} shadow="md" radius="md">
+                    <CardBody className="p-4">
+                      <div className="flex items-start justify-between">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-3 mb-3">
+                            <h3 className="text-xl font-semibold text-gray-900 hover:text-purple-600 cursor-pointer flex items-center gap-2">
+                              {job.jobTitle}
 
-                      <div className="flex flex-col gap-2 ml-auto items-end">
-                        <div className="flex gap-1">
-                          {selectedTab === 'inactive' ? (
-                            <Tooltip content="Restore job">
-                              <button aria-label="Restore" className="p-1 text-gray-600 hover:text-black rounded-full" onClick={() => handleRestore(job.id)}>
-                                <AiOutlineRollback className="h-5 w-5 text-black" />
-                              </button>
-                            </Tooltip>
-                          ) : (
-                            <>
-                              <Tooltip content="Manage Resume">
-                                <Button size="sm" radius="full" variant="bordered" startContent={<AiOutlineDiff className="h-5 w-5 text-black dark:text-white" />} aria-label="manage" onPress={() => handleManageResumeClick(job.id)}>
-                                  Candidate
-                                </Button>
-                              </Tooltip>
-
-                              <Tooltip content="Send invitation">
-                                <button onClick={() => handleInviteClick(job.id)} className="p-1 text-black hover:text-black rounded-full dark:text-gray-300 dark:hover:text-white" aria-label="Send invitation">
-                                  <AiOutlineUserAdd className="h-5 w-5" />
-                                </button>
-                              </Tooltip>
-
-                              <Tooltip content="Edit job">
-                                <button aria-label="Edit" className="p-1 text-black hover:text-black rounded-full dark:text-gray-300 dark:hover:text-white" onClick={() => router.push(`/interviews/edit/${job.id}`)}>
-                                  <AiFillEdit className="h-5 w-5" />
-                                </button>
-                              </Tooltip>
-
-                              <Tooltip content="Delete job">
-                                <button aria-label="Delete" className="p-1 text-black hover:text-black rounded-full dark:text-gray-300 dark:hover:text-white" onClick={() => handleDeleteClick(job.id)}>
-                                  <AiOutlineDelete className="h-5 w-5" />
-                                </button>
-                              </Tooltip>
-                            </>
-                          )}
-                        </div>
-                      </div>
-                    </CardHeader>
-
-                    <CardFooter className="gap-6 flex-wrap flex justify-between items-center pt-0">
-                      <div className="flex gap-6 flex-wrap items-center">
-                        <div className="flex gap-1">
-                          <Chip size="sm" color="default" variant="solid" className={`${getExperienceLevelColor(job.experienceLevel)} `}>
-                            {job.experienceLevel.toUpperCase()}
-                          </Chip>
-                        </div>
-
-                        <div className="flex gap-1">
-                          <p className="text-sm text-gray-600 dark:text-gray-400">{job.totalInvitations}</p>
-                          <p className="text-sm text-gray-600 dark:text-gray-400">Invitations</p>
-                        </div>
-
-                        <div className="flex gap-1">
-                          <p className="text-sm">Created</p>
-                          <p className="font-semibold text-sm">{DateFormatter.formatDate(job.createdAt)}</p>
-                        </div>
-                      </div>
-
-                      <div className="mt-2 ml-auto">
-                        <ul className="flex gap-4 flex-wrap">
-                          {job.invitationStatusCount?.map((item, index) => (
-                            <Chip key={index} className="  font-xs" variant="bordered" size="sm">
-                              {item.status.charAt(0).toUpperCase() + item.status.slice(1)}: <strong> {item.count} </strong>
+                              <a href={`${window.location.origin}/job/${job.id}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-xl font-bold text-gray-900 dark:text-gray-100 hover:underline">
+                                <FaExternalLinkAlt className="w-3 h-3 opacity-40" />
+                              </a>
+                            </h3>
+                            <Chip size="sm" color="default" variant="solid" className={`${getExperienceLevelColor(job.experienceLevel)} `}>
+                              {job.experienceLevel.toUpperCase()}
                             </Chip>
-                          ))}
-                        </ul>
+                          </div>
+                          <div className="flex items-center gap-6 text-sm text-gray-600 mb-4">
+                            <div className="flex items-center gap-1">
+                              <Users className="w-4 h-4" />
+                              <span>{job.totalInvitations} Invitations</span>
+                            </div>
+                            <div className="flex items-center gap-1">
+                              <Calendar className="w-4 h-4" />
+                              <span>Created {DateFormatter.formatDate(job.createdAt)}</span>
+                            </div>
+                          </div>
+
+                          <div className="flex items-center gap-4">
+                            {job.invitationStatusCount?.map((item: any, index: number) => {
+                              const config = statusConfig[item.status] || {
+                                icon: <Clock className="w-4 h-4 text-gray-600" />,
+                                bg: 'bg-gray-100',
+                                text: 'text-gray-700',
+                              };
+
+                              return (
+                                <div key={index} className={`flex items-center gap-2 px-3 py-1 rounded-full ${config.bg}`}>
+                                  {config.icon}
+                                  <span className={`text-sm font-medium ${config.text}`}>
+                                    {item.status.charAt(0).toUpperCase() + item.status.slice(1)}: {item.count}
+                                  </span>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </div>
+
+                        <div className="flex items-center gap-2 ml-6">
+                          <Button variant="bordered" color="default" radius="full" onPress={() => handleManageResumeClick(job.id)} size="sm" className="gap-2 bg-transparent">
+                            <UserCheck className="w-4 h-4" />
+                            View Candidates
+                          </Button>
+
+                          <Button variant="bordered" color="default" radius="full" onPress={() => handleInviteClick(job.id)} size="sm" className="gap-2 bg-transparent">
+                            <Send className="w-4 h-4" />
+                            Invite Candidates
+                          </Button>
+
+                          <Button size="sm" isLoading={isCreatingLink} radius="full" variant="faded" color="default" aria-label="manage" onPress={() => tryYourself(job.id)}>
+                            Try Yourself
+                          </Button>
+                          <Dropdown>
+                            <DropdownTrigger asChild>
+                              <Button radius="full" isIconOnly variant="ghost" size="sm" className="h-8 w-8 p-0">
+                                <MoreHorizontal className="w-4 h-4" />
+                              </Button>
+                            </DropdownTrigger>
+                            <DropdownMenu aria-label="Static Actions">
+                              <DropdownItem onPress={() => router.push(`/interviews/edit/${job.id}`)} className="gap-2" key={'edit'} startContent={<Edit className="w-4 h-4" />}>
+                                Edit Position
+                              </DropdownItem>
+                              <DropdownItem key={'delete'} onPress={() => handleDeleteClick(job.id)} startContent={<Trash2 className="w-4 h-4" />} className="gap-2 text-red-600">
+                                Delete Position
+                              </DropdownItem>
+                            </DropdownMenu>
+                          </Dropdown>
+                        </div>
                       </div>
-                    </CardFooter>
+                    </CardBody>
                   </Card>
                 ))}
 
