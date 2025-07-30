@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useInterviewStore } from '../stores/useInterviewStore';
 import UserCamera from './UserCamera';
-import { Avatar, Button, Card, CardBody, Divider, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerHeader, Tooltip, useDisclosure } from '@heroui/react';
+import { Avatar, Button, Card, CardBody, Divider, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerHeader, Spinner, Tooltip, useDisclosure } from '@heroui/react';
 import CandidateInfo from './CandidateInfo';
 import PoweredBy from './PoweredBy';
 import { AntiCheat } from './AntiCheat';
@@ -147,7 +147,7 @@ const InterviewNavigator: React.FC = () => {
                 <UserCamera isCameraOn={isCameraOn} hideRecLabel={false} invitationId={invitationId} />
               </div>
               <div className="md:col-span-3  bg-gray-900       flex items-center justify-center">
-                <SpeakingIndicatorSoft isSpeaking={isSpeaking} />
+                <SpeakingIndicatorSoft isSpeaking={isSpeaking} volume={volumeLevel} />
               </div>
             </div>
 
@@ -156,10 +156,23 @@ const InterviewNavigator: React.FC = () => {
                 flex flex-col sm:flex-row gap-3
                 items-stretch sm:items-center justify-between"
             >
-              <div className="flex-1 flex items-start gap-2 min-w-0">
+              <div className="flex-1 flex items-center gap-2 min-w-0">
                 <div className={clsx('w-10 h-10 shrink-0 flex items-center justify-center rounded-full border-2', lastMsg?.type === 'assistant' ? 'bg-violet-100 border-violet-200' : 'bg-purple-100 border-purple-200')}>{lastMsg?.type === 'assistant' ? <Bot className="w-5 h-5 text-violet-600" /> : <User className="w-5 h-5 text-purple-600" />}</div>
 
-                <p className="text-sm leading-5 break-words whitespace-pre-wrap text-black dark:text-gray-900">{lastMsg?.content ? lastMsg.content : <span className="text-gray-500 dark:text-gray-400">Starting conversation...</span>}</p>
+                <p className="text-sm leading-5 break-words whitespace-pre-wrap text-black dark:text-gray-900">
+                  {lastMsg?.content ? (
+                    lastMsg.content
+                  ) : (
+                    <span className="  font-bold flex items-center gap-1">
+                      Starting conversation
+                      <span className="flex">
+                        <span className="animate-bounce">.</span>
+                        <span className="animate-bounce delay-150">.</span>
+                        <span className="animate-bounce delay-300">.</span>
+                      </span>
+                    </span>
+                  )}
+                </p>
               </div>
 
               {phase === 'in-progress' && (

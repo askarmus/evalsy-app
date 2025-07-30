@@ -29,7 +29,7 @@ const InterviewInstruction: React.FC<any> = () => {
                   {!showFullDescription && <div className="absolute bottom-0 left-0 right-0 h-16 pointer-events-none rounded-b-md" />}
                 </div>
 
-                <Button variant="ghost" size="sm" onPress={() => setShowFullDescription((prev) => !prev)} className="w-fit">
+                <Button variant="ghost" radius="full" size="sm" onPress={() => setShowFullDescription((prev) => !prev)} className="w-fit">
                   {showFullDescription ? 'Read Less' : 'Read More'}
                   <ChevronRight className="w-4 h-4 ml-1" />
                 </Button>

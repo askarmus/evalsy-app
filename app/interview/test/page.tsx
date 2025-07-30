@@ -220,7 +220,6 @@ function App() {
       }}
     >
       <h1 style={{ textAlign: 'center', color: '#333' }}>Vapi Voice Assistant</h1>
-      <SpeakingIndicatorSoft isSpeaking={true} />
 
       {/* Status Panel */}
       <div
