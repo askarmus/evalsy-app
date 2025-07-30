@@ -33,6 +33,7 @@ const InterviewNavigator: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isCameraOn, setIsCameraOn] = useState(true);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const [volumeLevel, setVolumeLevel] = useState(0);
 
   const addMessage = (type: 'user' | 'assistant' | 'system', content: string) => {
     setMessages((prev) => [
@@ -90,7 +91,9 @@ const InterviewNavigator: React.FC = () => {
     vapi.on('speech-start', onSpeechStart);
     vapi.on('speech-end', onSpeechEnd);
     vapi.on('error', onError);
-
+    vapi.on('volume-level', (volume) => {
+      setVolumeLevel(volume);
+    });
     return () => {
       vapi.off('call-start', onCallStart);
       vapi.off('call-end', onCallEnd);
@@ -98,6 +101,9 @@ const InterviewNavigator: React.FC = () => {
       vapi.off('speech-start', onSpeechStart);
       vapi.off('speech-end', onSpeechEnd);
       vapi.off('error', onError);
+      vapi.on('volume-level', (volume) => {
+        setVolumeLevel(volume);
+      });
     };
   }, []);
 

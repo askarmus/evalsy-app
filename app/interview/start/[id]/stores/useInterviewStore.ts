@@ -81,30 +81,45 @@ export const useInterviewStore = create<InterviewState>()((set, get) => ({
 
   startInterview: async () => {
     try {
-      const { invitationId, candidate, job, questions } = get();
-
+      const { invitationId, candidate, job } = get();
       set({ isLoading: true });
-      var resposne = await startInterview({ invitationId });
+
+      // Step 1: Start the interview
+      const resposne = await startInterview({ invitationId });
+
+      if (!resposne || !resposne.questions) {
+        throw new Error('Failed to start interview');
+      }
+
+      // Step 2: Prepare data only if Step 1 succeeded
       const baseInterviewData = {
         userName: candidate?.name,
         role: job?.jobTitle,
         level: job?.experienceLevel,
       };
 
-      console.log(resposne);
-      const call = await createInterviewAssistant({ ...baseInterviewData, questions: resposne.questions, resultId: resposne.interviewResultId, userId: resposne.userId });
-      if (call?.id) {
-        await updateVapiCallId({ invitationId, callId: call.id });
-      } else {
-        console.error('Call ID is undefined');
+      // Step 3: Create interview assistant
+      const call = await createInterviewAssistant({
+        ...baseInterviewData,
+        questions: resposne.questions,
+        resultId: resposne.interviewResultId,
+        userId: resposne.userId,
+      });
+
+      if (!call?.id) {
+        throw new Error('Failed to create interview assistant');
       }
+
+      // Step 4: Update Vapi Call ID
+      await updateVapiCallId({ invitationId, callId: call.id });
+
+      // Step 5: Move to in-progress phase
       set({ phase: 'in-progress', questions: resposne.questions });
     } catch (error) {
+      console.error('Interview error:', error);
       showToast.error('Error starting the interview');
     } finally {
-      set({
-        isLoading: false,
-      });
+      set({ isLoading: false });
     }
   },
 

@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import Vapi from '@vapi-ai/web';
 import { any } from 'zod';
 import { env } from 'process';
+import SpeakingIndicatorSoft from '../start/[id]/components/SpeakingIndicator';
 
 interface Message {
   time: string;
@@ -11,7 +12,7 @@ interface Message {
 }
 
 function App() {
-  const [vapi] = useState(() => new Vapi(process.env.VAPI_API_KEY!));
+  const [vapi] = useState(() => new Vapi('bac5fdb0-6065-434c-809f-5e82220e7952'));
   const [connected, setConnected] = useState(false);
   const [assistantIsSpeaking, setAssistantIsSpeaking] = useState(false);
   const [volumeLevel, setVolumeLevel] = useState(0);
@@ -117,7 +118,7 @@ function App() {
           ],
         },
         server: {
-          url: process.env.VAPI_WEBHOOK_URL,
+          url: 'https://575657dcd0e8.ngrok-free.app',
           headers: {
             Authorization: 'Bearer bac5fdb0-6065-434c-809f-5e82220e7952',
             interviewResultId: 'interviewResultId',
@@ -219,6 +220,7 @@ function App() {
       }}
     >
       <h1 style={{ textAlign: 'center', color: '#333' }}>Vapi Voice Assistant</h1>
+      <SpeakingIndicatorSoft isSpeaking={true} />
 
       {/* Status Panel */}
       <div

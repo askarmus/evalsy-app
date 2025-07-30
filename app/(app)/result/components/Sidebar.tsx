@@ -91,7 +91,7 @@ export default function Sidebar({ selectedTab, setSelectedTab, filterValue, setF
                   <div className="flex items-center gap-2">
                     <div>
                       {!data?.isRead && (
-                        <Badge color="success" content="">
+                        <Badge size="sm" color="success" content="New">
                           <Avatar name={data.name} className="h-8 w-8" src={data.image} />
                         </Badge>
                       )}
