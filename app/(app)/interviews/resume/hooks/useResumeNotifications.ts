@@ -18,7 +18,6 @@ export const useResumeNotifications = (jobId: string) => {
 
     const unsub = onSnapshot(q, (snapshot) => {
       const newItems = snapshot.docs.map((doc) => doc.data());
-      console.log('newItems', newItems);
       setNotifications(newItems);
     });
 

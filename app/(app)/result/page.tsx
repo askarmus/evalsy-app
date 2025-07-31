@@ -15,6 +15,7 @@ import CandidateSkeleton from './components/CandidateSkeleton';
 import { HiringGradeUtil } from '@/app/utils/hiring-grade.util';
 import CustomVideoPlayer from './components/CustomVideoPlayer';
 import { FaPlayCircle, FaStopCircle } from 'react-icons/fa';
+import { formatExperience } from '@/app/utils/formatExperience';
 
 export default function InterviewResultList() {
   const [page, setPage] = useState(1);
@@ -68,22 +69,19 @@ export default function InterviewResultList() {
   const handleViewDetails = async (resultId: string) => {
     setSelectedId(resultId);
     setSsLoadingOnResultSelected(true);
+
     try {
       const data = await getInterviewResultById(resultId);
       await updateReadStatus({ id: resultId });
+
       setInterviewResults((prev) => prev.map((item) => (item.id === resultId ? { ...item, isRead: true } : item)));
       setSelectedInterviewerData(data);
+
+      router.replace(`/result?id=${resultId}`, { scroll: false });
     } catch (error) {
       console.error('Error fetching interviewer data:', error);
     } finally {
       setSsLoadingOnResultSelected(false);
-      router.replace(`/result?id=${resultId}`, { scroll: false });
-    }
-    try {
-      const data = await getInterviewResultById(resultId);
-      setSelectedInterviewerData(data);
-    } catch (error) {
-      console.error('Error fetching interviewer data:', error);
     }
   };
 
@@ -213,7 +211,7 @@ export default function InterviewResultList() {
                   <Card className="  p-0">
                     <CardBody>
                       <div className="text-sm text-gray-600 mb-1">Total Experience</div>
-                      <div className="font-semibold text-gray-900">2 yrs & 4 months</div>
+                      <div className="font-semibold text-gray-900">{selectedInterviewerData?.totalExperience ? formatExperience(selectedInterviewerData.totalExperience) : 'Unknown'}</div>{' '}
                     </CardBody>
                   </Card>
                   <Card className="  p-0">

@@ -192,7 +192,6 @@ export const AddJob = () => {
           const paginatedQuestions = filteredQuestions.slice((page - 1) * Number(pageSize), page * Number(pageSize));
           const startIndex = (page - 1) * Number(pageSize);
 
-          console.log('errors', errors);
           const validateStep = async () => {
             try {
               await AddJobSchema.validate(values, { abortEarly: false });

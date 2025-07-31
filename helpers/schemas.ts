@@ -17,7 +17,6 @@ export const RegisterSchema = Yup.object().shape({
     .test('is-work-email', 'Only work email addresses are allowed', (value: any) => {
       if (!value) return false;
       const domain = value.split('@')[1]?.toLowerCase().trim();
-      console.log('TEST domain:', domain);
       return domain && !freeEmailDomains.includes(domain);
       // Block only hotmail.com for now
     }),

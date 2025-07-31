@@ -23,7 +23,6 @@ export default function UploadFiles() {
   const loadResumes = async () => {
     try {
       const result = await fetchResumes(id);
-      console.log('Fetched resumes:', result);
       const resume = result.resumes;
 
       const mappedFiles: UploadFile[] = resume.map((resume: any) => ({

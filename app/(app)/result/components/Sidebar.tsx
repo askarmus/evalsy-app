@@ -28,7 +28,6 @@ export const ListboxWrapper = ({ children }) => <div className="w-full max-w-[36
 export default function Sidebar({ selectedTab, setSelectedTab, filterValue, setFilterValue, onSearchChange, items, handleViewDetails }: SidebarProps) {
   const filteredItems = items.filter((item) => HiringGradeUtil.getHiringRecommendation(item.totalScore).recommendation === selectedTab || 'all');
 
-  console.log('Filtered Items:', filteredItems);
   return (
     <Card className="m-4 mt-1">
       <CardHeader>

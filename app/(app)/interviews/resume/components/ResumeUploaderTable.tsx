@@ -62,7 +62,6 @@ const ResumeUploader = ({ jobid, onViewDetails, onDelete, existingResume }: Resu
   const { searchTerm, setSearchTerm, selectedRecommendations, setSelectedRecommendations, experienceRange, setExperienceRange, dateRange, setDateRange, filteredFiles, clearFilters } = useResumeFilters(files);
 
   useEffect(() => {
-    console.log('Loaded resumes:', existingResume);
     const normalized = existingResume.map((f) => ({
       ...f,
       hireRecommendation: f.hireRecommendation ?? f.analysisResults?.hireRecommendation ?? '',
@@ -182,7 +181,6 @@ const ResumeUploader = ({ jobid, onViewDetails, onDelete, existingResume }: Resu
     if (!notifications.length) return;
     notifications.forEach((n) => {
       dispatch({ type: 'MARK_PROCESSED', resumeId: n.resumeId, analysisResults: n.analysisResults });
-      console.log('Marking processed for:', n.resumeId, n.analysisResults);
     });
   }, [notifications]);
 

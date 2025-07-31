@@ -2,7 +2,6 @@ import { Question } from '@/app/interview/start/[id]/stores/useInterviewStore';
 import Vapi from '@vapi-ai/web';
 
 export const vapi = new Vapi(process.env.NEXT_PUBLIC_VAPI_API_KEY!);
-console.log('process.env.VAPI_API_KEY!', process.env.NEXT_PUBLIC_VAPI_API_KEY!);
 
 export const createInterviewAssistant = async (interviewData: { questions: Question[]; role: string; level: string; userName: string; resultId: string; userId: string }) => {
   // Format the questions for the prompt

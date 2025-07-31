@@ -32,7 +32,6 @@ export default function RequestDemoHero() {
         formData,
         '5QUKIiJdXWi3K2KIR' // Your EmailJS public key
       );
-      console.log('SUCCESS!', result.status, result.text);
       showToast.success('Demo request submitted successfully!');
       setFormData({ fullName: '', email: '', company: '', mobile: '' });
     } catch (error) {
