@@ -47,8 +47,8 @@ export const RecentInterviews = () => {
     <Card shadow="md" radius="md" className="  p-4">
       <CardHeader className="pb-4">
         <div className="flex items-center justify-between w-full">
-          <div className="text-2xl font-semibold   flex items-center gap-2">
-            <TrendingUp className="w-7 h-7 text-blue-600" />
+          <div className="text-xl font-semibold   flex items-center gap-2">
+            <TrendingUp className="w-5 h-5 text-blue-600" />
             Recent Interviews
           </div>
           {/* <Button

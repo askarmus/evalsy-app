@@ -55,8 +55,8 @@ export const Content = () => {
         <div className="mt-6 gap-6 flex flex-col w-full">
           {/* Card Section Top */}
           <div className="flex flex-col gap-2 mb-4">
-            <div className="text-2xl font-semibold mb-4  flex items-center gap-2">
-              <Users className="w-7 h-7 text-voilet-600" />
+            <div className="text-xl font-semibold mb-4  flex items-center gap-2">
+              <Users className="w-5 h-5 text-voilet-600" />
               Hiring Pipeline Overview
             </div>
 
@@ -65,8 +65,8 @@ export const Content = () => {
 
           {/* Chart */}
           <div className="h-full flex flex-col gap-2">
-            <div className="text-2xl font-semibold mb-4  flex items-center gap-2">
-              <BarChart className="w-7 h-7 text-voilet-600" />
+            <div className="text-xl font-semibold mb-4  flex items-center gap-2">
+              <BarChart className="w-5 h-5 text-voilet-600" />
               Trend analytics
             </div>
 

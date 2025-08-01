@@ -23,14 +23,7 @@ export function Header() {
   ];
 
   return (
-    <Navbar
-      maxWidth="xl"
-      shouldHideOnScroll={false}
-      className="bg-[#0B0A33] sticky top-0 z-50"
-      isBordered
-      isMenuOpen={menuOpen} // controlled
-      onMenuOpenChange={setMenuOpen} // updated state
-    >
+    <Navbar maxWidth="2xl" shouldHideOnScroll={false} className="bg-[#0B0A33] sticky top-0 z-50 " isBordered isMenuOpen={menuOpen} onMenuOpenChange={setMenuOpen}>
       <NavbarBrand>
         <NextLink href="/dashboard" className="flex items-center space-x-2">
           <LogoDark />
