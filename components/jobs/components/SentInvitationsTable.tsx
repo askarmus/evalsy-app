@@ -47,7 +47,6 @@ export const SentInvitationsTable: React.FC<SentInvitationsTableProps> = ({ invi
           <TableColumn>Name</TableColumn>
           <TableColumn>Email</TableColumn>
           <TableColumn>Sent On</TableColumn>
-          <TableColumn>{''}</TableColumn>
         </TableHeader>
         <TableBody emptyContent={'No invitations to display.'} loadingContent="Loading invitations... ">
           {paginatedInvitations.map((invitation, index) => (
@@ -56,11 +55,6 @@ export const SentInvitationsTable: React.FC<SentInvitationsTableProps> = ({ invi
               <TableCell>{invitation.name}</TableCell>
               <TableCell>{invitation.email}</TableCell>
               <TableCell>{DateFormatter.formatDate(invitation.sentOn, true)}</TableCell>
-              <TableCell>
-                <Link target="_blank" href={`/interview/start/${invitation.id}`}>
-                  Start
-                </Link>
-              </TableCell>
             </TableRow>
           ))}
         </TableBody>
