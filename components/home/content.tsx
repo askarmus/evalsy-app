@@ -6,10 +6,7 @@ import { DashboardWidjet } from './dashboard.widget';
 import { AiOutlineUserSwitch, AiOutlineCheckCircle } from 'react-icons/ai';
 import { hiringPipelineOverview } from '@/services/dashboard.service';
 import { Card, CardBody, Skeleton } from '@heroui/react';
-import CandidateRadarChart from '../charts/CandidateRadarChart';
-import ScoreOverTimeChart from '../charts/ScoreOverTimeChart';
-import AverageScoreByJob from '../charts/AverageScoreByJob';
-import CategoryAveragesChart from '../charts/CategoryAveragesChart';
+import { BarChart, CheckSquare, TrendingUp, Users, Workflow } from 'lucide-react';
 
 const Chart = dynamic(() => import('../charts/steam'), {
   ssr: false,
@@ -57,14 +54,22 @@ export const Content = () => {
       <div className="flex justify-center gap-4 xl:gap-6 pt-3 px-4 lg:px-0 flex-wrap xl:flex-nowrap sm:pt-10 max-w-[80rem] mx-auto w-full">
         <div className="mt-6 gap-6 flex flex-col w-full">
           {/* Card Section Top */}
-          <div className="flex flex-col gap-2">
-            <h3 className="text-2xl font-semibold mb-3">Hiring Pipeline Overview</h3>
+          <div className="flex flex-col gap-2 mb-4">
+            <div className="text-2xl font-semibold mb-4  flex items-center gap-2">
+              <Users className="w-7 h-7 text-voilet-600" />
+              Hiring Pipeline Overview
+            </div>
+
             <div className="grid md:grid-cols-2 grid-cols-1 2xl:grid-cols-3 gap-5 justify-center w-full">{loading ? Array.from({ length: 3 }).map((_, index) => <Skeleton key={index} className="h-24 w-full rounded-xl" />) : widgetData.map((data, index) => <DashboardWidjet key={index} data={data} />)}</div>
           </div>
 
           {/* Chart */}
           <div className="h-full flex flex-col gap-2">
-            <h3 className="text-2xl font-semibold mb-3">Trend analytics</h3>
+            <div className="text-2xl font-semibold mb-4  flex items-center gap-2">
+              <BarChart className="w-7 h-7 text-voilet-600" />
+              Trend analytics
+            </div>
+
             <Card shadow="md" radius="md" className=" p-4  w-full">
               <CardBody>
                 <Chart />

@@ -1,7 +1,9 @@
 import React, { useMemo, useState } from 'react';
-import { Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, Input, Pagination } from '@heroui/react';
+import { Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, Input, Pagination, Tooltip } from '@heroui/react';
 import Link from 'next/link';
 import DateFormatter from '@/app/utils/DateFormatter';
+import { Copy } from 'lucide-react';
+import { showToast } from '@/app/utils/toastUtils';
 
 export interface Invitation {
   id: string;
@@ -47,6 +49,7 @@ export const SentInvitationsTable: React.FC<SentInvitationsTableProps> = ({ invi
           <TableColumn>Name</TableColumn>
           <TableColumn>Email</TableColumn>
           <TableColumn>Sent On</TableColumn>
+          <TableColumn>{''}</TableColumn>
         </TableHeader>
         <TableBody emptyContent={'No invitations to display.'} loadingContent="Loading invitations... ">
           {paginatedInvitations.map((invitation, index) => (
@@ -55,6 +58,19 @@ export const SentInvitationsTable: React.FC<SentInvitationsTableProps> = ({ invi
               <TableCell>{invitation.name}</TableCell>
               <TableCell>{invitation.email}</TableCell>
               <TableCell>{DateFormatter.formatDate(invitation.sentOn, true)}</TableCell>
+              <TableCell>
+                <Tooltip content="Copy invitation link">
+                  <button
+                    onClick={() => {
+                      navigator.clipboard.writeText(`${window.location.origin}/interview/start/${invitation.id}`);
+                      showToast.default('Invitation link copied');
+                    }}
+                    className="p-1 hover:bg-gray-100 rounded-md"
+                  >
+                    <Copy className="w-4 h-4 text-gray-600" />
+                  </button>
+                </Tooltip>
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>

@@ -3,22 +3,31 @@ import { getColorByInitial } from '@/app/utils/getColorByInitial';
 import { getInitials } from '@/app/utils/getInitials';
 import { truncateText } from '@/app/utils/truncate.text';
 import { get10InterviewResult } from '@/services/dashboard.service';
-import { Button, Card, CardBody, Skeleton, User } from '@heroui/react';
+import { Avatar, Button, Card, CardBody, CardHeader, Chip, DropdownMenu, Skeleton, User } from '@heroui/react';
+import { Badge, Clock, MoreHorizontal, TrendingUp, UserPlus } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { AiFillEye } from 'react-icons/ai';
 import { FaInfoCircle } from 'react-icons/fa';
+import { SendInvitationDrawer } from '../jobs/send-invitation';
 
 export const RecentInterviews = () => {
   const [results, setResults] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isConfirmDialogOpen, setConfirmDialogOpen] = useState(false);
+  const [isDrawerOpen, setDrawerOpen] = useState(false);
 
   const router = useRouter();
 
   const handleViewDetails = async (resultId: string) => {
     router.push(`/result?id=${resultId}`);
   };
-
+  const handleInviteClick = () => {
+    setDrawerOpen(true);
+  };
+  const handleCloseDrawer = () => {
+    setDrawerOpen(false);
+  };
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -36,13 +45,26 @@ export const RecentInterviews = () => {
 
   return (
     <Card shadow="md" radius="md" className="  p-4">
-      <CardBody className="py-5 gap-4">
-        <div className="flex gap-2.5 justify-center">
-          <div className="flex flex-col border-dashed border-2   border-gray-900 py-2 px-6 rounded-xl">
-            <span className="text-default-900 text-xl font-semibold">Recent Interviews</span>
+      <CardHeader className="pb-4">
+        <div className="flex items-center justify-between w-full">
+          <div className="text-2xl font-semibold   flex items-center gap-2">
+            <TrendingUp className="w-7 h-7 text-blue-600" />
+            Recent Interviews
           </div>
+          {/* <Button
+            size="sm"
+            className="gap-2"
+            onPress={() => {
+              handleInviteClick();
+            }}
+          >
+            <UserPlus className="w-4 h-4" />
+            Invite Candidate
+          </Button> */}
         </div>
+      </CardHeader>
 
+      <CardBody className="py-5 gap-4">
         <div className="flex flex-col gap-1">
           {loading
             ? Array.from({ length: 4 }).map((_, index) => (
@@ -68,40 +90,36 @@ export const RecentInterviews = () => {
                   </div>
                 </div>
               ))
-            : results.map((item) => (
-                <div key={item.id} className="bg-green grid grid-cols-[3fr_1fr_1fr_auto] w-full py-2 items-center">
-                  {/* First Column: User Information */}
-                  <div className="w-full">
-                    <User
-                      avatarProps={{
-                        name: getInitials(item.invitation.name),
-                        className: getColorByInitial(item.invitation.name),
-                      }}
-                      description={truncateText(item.job.jobTitle, 30, { wordBoundary: true })}
-                      name={truncateText(item.invitation.name, 30, { wordBoundary: true })}
-                    />
-                  </div>
-
-                  {/* Second Column: Status */}
-                  <div className="flex items-center flex-col text-center">
-                    <span className="text-success text-xs mb-1">Score</span>
-                    <span className="text-xs">{item?.totalScore}% </span>
-                  </div>
-
-                  {/* Third Column: Date */}
-                  <div className="flex items-center">
-                    <span className="text-default-500 text-xs">{DateFormatter.timeAgo(item.invitation.statusUpdateAt)}</span>
-                  </div>
-
-                  {/* Fourth Column: Button - Align to Right */}
-                  <div className="flex items-center justify-self-end ml-auto">
-                    <Button color="primary" isIconOnly={true} onPress={() => handleViewDetails(item.id)} radius="full" size="sm" variant="flat">
-                      <AiFillEye />
+            : results.map((interview) => (
+                <div key={interview.id} className="space-y-6 mt-1">
+                  <div className="flex items-center gap-3 p-2 rounded-lg border bg-card hover:bg-accent/50 transition-colors">
+                    <Avatar className={`w-10 h-10 ${getColorByInitial(interview.invitation.name)}`} name={getInitials(interview.invitation.name)} />{' '}
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 mb-1">
+                        <h3 className="font-medium text-sm truncate">{interview.invitation.name}</h3>
+                        <Chip size="sm" className="text-xs px-2 py-0.5">
+                          {interview.totalScore}%
+                        </Chip>
+                      </div>
+                      <p className="text-xs text-muted-foreground truncate mb-1">{interview.job.jobTitle}</p>
+                      <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                        <Clock className="w-3 h-3" />
+                        {DateFormatter.timeAgo(interview.invitation.statusUpdateAt)}
+                      </div>
+                    </div>
+                    <Button color="primary" onPress={() => handleViewDetails(interview.id)} radius="full" size="sm" variant="flat">
+                      View
                     </Button>
                   </div>
                 </div>
               ))}
-
+          {results.length > 0 && !loading && (
+            <div className="pt-4">
+              <Button variant="bordered" className="w-full text-sm bg-transparent" onPress={() => router.push(`/interview/list`)}>
+                View All Interviews
+              </Button>
+            </div>
+          )}
           {results.length === 0 && !loading && (
             <div className="w-full   mx-auto">
               <div className="  p-8 mb-4">
@@ -117,6 +135,7 @@ export const RecentInterviews = () => {
           )}
         </div>
       </CardBody>
+      <SendInvitationDrawer isOpen={isDrawerOpen} onClose={handleCloseDrawer} jobId={''} />
     </Card>
   );
 };

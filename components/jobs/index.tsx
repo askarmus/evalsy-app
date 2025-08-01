@@ -1,5 +1,5 @@
 'use client';
-import { Button, Input, Pagination, Chip, Card, CardFooter, CardHeader, Tooltip, Tabs, Tab, DropdownMenu, Badge, CardBody, Dropdown, DropdownTrigger, DropdownItem } from '@heroui/react';
+import { Button, Input, Pagination, Chip, Card, Tabs, Tab, DropdownMenu, CardBody, Dropdown, DropdownTrigger, DropdownItem } from '@heroui/react';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { getAllJobs, deleteJob } from '@/services/job.service';
 import { SendInvitationDrawer } from './send-invitation';
@@ -7,12 +7,12 @@ import { useRouter } from 'next/navigation';
 import JobListItemSkeleton from './components/job.listItem.skeleton';
 import ConfirmDialog from '@/components/ConfirmDialog';
 import DateFormatter from '@/app/utils/DateFormatter';
-import { AiFillEdit, AiOutlineDelete, AiOutlineDiff, AiOutlinePlus, AiOutlineUserAdd, AiOutlineRollback } from 'react-icons/ai';
+import { AiOutlinePlus } from 'react-icons/ai';
 import EmptyStateCards from '../shared/empty-state-cards';
 import { FaExternalLinkAlt, FaSearch } from 'react-icons/fa';
 import { showToast } from '@/app/utils/toastUtils';
-import { sendInvitation, testInterview } from '@/services/invitation.service';
-import { Calendar, CheckCircle, Clock, Edit, ExternalLink, MoreHorizontal, Play, Send, Trash2, UserCheck, Users } from 'lucide-react';
+import { testInterview } from '@/services/invitation.service';
+import { Calendar, CheckCircle, Clock, Edit, MoreHorizontal, Play, Send, Trash2, UserCheck, Users } from 'lucide-react';
 
 export default function Jobs() {
   const [page, setPage] = useState(1);
