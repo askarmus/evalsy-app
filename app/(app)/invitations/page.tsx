@@ -8,6 +8,7 @@ import { getAllInvitation } from '@/services/invitation.service';
 import { DateValue, parseDate } from '@internationalized/date';
 import DateFormatter from '@/app/utils/DateFormatter';
 import { AiOutlineCheckCircle, AiOutlineClockCircle, AiOutlinePlayCircle, AiOutlineSend, AiOutlineStop } from 'react-icons/ai';
+import { Send } from 'lucide-react';
 
 interface Job {
   id: string;
@@ -110,7 +111,7 @@ export default function Invitations() {
     <div className="my-10 px-4 lg:px-6 max-w-[80rem] mx-auto w-full flex flex-col gap-6">
       <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
         <h3 className="text-xl font-semibold">All Invitations</h3>
-        <Button color="primary" className=" text-white  bg-[#100145] " size="sm" onPress={() => handleInviteClick(null)} endContent={<AiOutlineSend />}>
+        <Button color="secondary" radius="full" variant="flat" size="sm" onPress={() => handleInviteClick(null)} startContent={<Send />}>
           Send Invitation
         </Button>
       </div>
@@ -221,17 +222,7 @@ export default function Invitations() {
       </div>
 
       <div className="flex justify-end">
-        <Pagination
-          color="primary"
-          classNames={{
-            item: 'w-8 h-8 text-small bg-red  ',
-            cursor: 'bg-[#100145]    ',
-          }}
-          size="sm"
-          total={totalPages}
-          page={page}
-          onChange={(newPage) => setPage(newPage)}
-        />
+        <Pagination color="secondary" size="sm" total={totalPages} page={page} onChange={(newPage) => setPage(newPage)} />
       </div>
 
       <SendInvitationDrawer isOpen={isDrawerOpen} onClose={handleCloseDrawer} jobId={selectedJobId} />
