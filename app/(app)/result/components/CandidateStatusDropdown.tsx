@@ -19,7 +19,7 @@ export default function CandidateStatusDropdown({ selectedStatus, isLoading, onC
         return 'success';
       case 'pending':
       default:
-        return 'default';
+        return 'secondary';
     }
   }, [selectedStatus]);
 

@@ -2,6 +2,7 @@
 import { Input, Tabs, Tab, Chip } from '@heroui/react';
 import { FaSearch } from 'react-icons/fa';
 import React from 'react';
+import { Search } from 'lucide-react';
 
 interface QuestionSearchAndFilterProps {
   searchTerm: string;
@@ -16,13 +17,13 @@ export const QuestionSearchAndFilter = ({ searchTerm, setSearchTerm }: QuestionS
           size="md"
           isClearable
           className="max-w-md"
-          placeholder="Search questions"
+          placeholder="Search Questions"
           onClear={() => {
             setSearchTerm('');
           }}
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          startContent={<FaSearch />}
+          startContent={<Search className="text-secondary" />}
           variant="bordered"
         />
       </div>

@@ -7,6 +7,7 @@ import { format } from 'date-fns';
 import { saveAs } from 'file-saver';
 import { getCreditHistory } from '@/services/credits.service';
 import { DateRangePicker, Button, Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Pagination, Card, CardBody } from '@heroui/react';
+import { ArrowLeftRight, Download } from 'lucide-react';
 
 const PAGE_SIZE = 10;
 
@@ -64,19 +65,21 @@ export const CreditTransactionTable = () => {
   return (
     <Card radius="none" shadow="none">
       <CardBody>
-        <h1 className="text-xl font-semibold mb-4">Credit Transaction</h1>
-
+        <div className="mb-6 flex items-center gap-[5px] mb-3 md:mb-4 ">
+          <ArrowLeftRight className="w-5 h-5 text-xl text-secondary-400" />
+          <h1 className=" text-xl/[24px] font-semibold text-tertiary  md:text-[20px]/[24px]">Credit Transaction</h1>
+        </div>
         <div className="flex flex-col sm:flex-row justify-between items-end mb-5 gap-4">
           <div className="w-full sm:w-60">
-            <DateRangePicker label="Filter by Date" placeholder="Select range" value={dateRange} onChange={setDateRange} size="sm" />
+            <DateRangePicker labelPlacement="outside" label="Filter by Date" placeholder="Select range" value={dateRange} onChange={setDateRange} size="md" />
           </div>
 
-          <Button onPress={handleExport} color="primary" startContent={<FaFileDownload />} className="w-full sm:w-auto bg-black text-white">
+          <Button onPress={handleExport} color="secondary" radius="full" variant="flat" size="sm" startContent={<Download />}>
             Export CSV
           </Button>
         </div>
 
-        <Table aria-label="Credit Transactions" isStriped removeWrapper>
+        <Table aria-label="Credit Transactions" isStriped removeWrapper color="secondary">
           <TableHeader>
             <TableColumn>Date</TableColumn>
             <TableColumn>Type</TableColumn>
@@ -111,7 +114,7 @@ export const CreditTransactionTable = () => {
           </TableBody>
         </Table>
         <div className="flex justify-center mt-4">
-          <Pagination page={currentPage} total={totalPages} onChange={setCurrentPage} showControls size="sm" color="primary" />
+          <Pagination page={currentPage} total={totalPages} onChange={setCurrentPage} showControls size="sm" color="secondary" />
         </div>
       </CardBody>
     </Card>

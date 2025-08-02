@@ -14,17 +14,17 @@ const Chart = dynamic(() => import('../charts/steam'), {
 
 const widgetConfig = {
   'Open Interview': {
-    icon: <AiOutlineUserSwitch className="text-2xl text-white dark:text-white" />, // ✅ fixed typo
+    icon: <AiOutlineUserSwitch className="text-2xl text-secondary dark:text-white" />, // ✅ fixed typo
     bgColor: 'bg-primary',
     textColor: 'text-white',
   },
   'Pending Invitation': {
-    icon: <AiOutlineUserSwitch className="text-2xl dark:text-white" />, // ✅ added dark mode support for icon
+    icon: <AiOutlineUserSwitch className="text-2xl dark:text-white text-secondary" />, // ✅ added dark mode support for icon
     bgColor: 'bg-default',
     textColor: 'text-black dark:text-white', // ✅ correct Tailwind class
   },
   'Completed Interview': {
-    icon: <AiOutlineCheckCircle className="text-2xl text-white dark:text-white" />, // ✅ added for consistency
+    icon: <AiOutlineCheckCircle className="text-2xl text-secondary dark:text-white" />, // ✅ added for consistency
     bgColor: 'bg-success',
     textColor: 'text-white',
   },
@@ -56,7 +56,7 @@ export const Content = () => {
           {/* Card Section Top */}
           <div className="flex flex-col gap-2 mb-4">
             <div className="text-xl font-semibold mb-4  flex items-center gap-2">
-              <Users className="w-5 h-5 text-voilet-600" />
+              <Users className="w-5 h-5 text-secondary" />
               Hiring Pipeline Overview
             </div>
 
@@ -66,7 +66,7 @@ export const Content = () => {
           {/* Chart */}
           <div className="h-full flex flex-col gap-2">
             <div className="text-xl font-semibold mb-4  flex items-center gap-2">
-              <BarChart className="w-5 h-5 text-voilet-600" />
+              <BarChart className="w-5 h-5 text-secondary" />
               Trend analytics
             </div>
 

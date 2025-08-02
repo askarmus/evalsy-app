@@ -46,13 +46,10 @@ const FileUploadWithPreview: React.FC<FileUploadWithPreviewProps> = ({
 
   return (
     <div className="flex items-center gap-4">
-      <div {...getRootProps()} className="flex-1 border-2 border-dashed rounded-lg p-6 text-center cursor-pointer hover:bg-slate-100 transition-colors">
+      <div {...getRootProps()} className="flex-1 border-2 border-dashed rounded-lg p-2 text-center cursor-pointer hover:bg-slate-100 transition-colors">
         <input {...getInputProps()} />
         {isUploading ? (
-          <div className="flex items-center justify-center gap-2 text-center">
-            <CircularProgress aria-label="Loading..." size="sm" />
-            Uploading...
-          </div>
+          <div className="flex items-center justify-center gap-2 text-center text-sm">Uploading...</div>
         ) : (
           <div>
             <p className="text-sm text-slate-600 font-medium">{browseText}</p>

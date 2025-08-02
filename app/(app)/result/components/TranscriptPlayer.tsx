@@ -80,7 +80,7 @@ export default function AudioPlayerWithHighlight({ transcript, recordingUrl, pla
             id={`sentence-${index}`}
             className={`sentence text-xs ${index === activeIndex ? 'active' : ''}`}
             style={{
-              color: item.role === 'bot' ? '#333' : '#0066cc',
+              color: item.role === 'bot' ? '#333' : '#7828c8',
               margin: '5px 0',
               padding: '4px 6px',
             }}

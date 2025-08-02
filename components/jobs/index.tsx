@@ -12,7 +12,7 @@ import EmptyStateCards from '../shared/empty-state-cards';
 import { FaExternalLinkAlt, FaSearch } from 'react-icons/fa';
 import { showToast } from '@/app/utils/toastUtils';
 import { testInterview } from '@/services/invitation.service';
-import { Calendar, CheckCircle, Clock, Edit, MoreHorizontal, Play, Send, Trash2, UserCheck, Users } from 'lucide-react';
+import { Calendar, CheckCircle, Clock, Edit, MoreHorizontal, Play, Plus, Search, Send, Trash2, UserCheck, Users } from 'lucide-react';
 
 export default function Jobs() {
   const [page, setPage] = useState(1);
@@ -185,11 +185,11 @@ export default function Jobs() {
             onChange={(e) => onSearchChange(e.target.value)}
             isClearable
             className="max-w-md   border-black  "
-            placeholder="Search jobs"
+            placeholder="Search Interviews"
             defaultValue=""
-            startContent={<FaSearch />}
+            startContent={<Search className="text-secondary" />}
             variant="bordered"
-            color="default"
+            color="secondary"
             onClear={() => {
               setFilterValue('');
               setPage(1);
@@ -200,7 +200,9 @@ export default function Jobs() {
           <Tabs
             key="tabs"
             aria-label="Tabs sizes"
-            size="sm"
+            size="md"
+            variant="underlined"
+            color="secondary"
             selectedKey={selectedTab}
             onSelectionChange={(key) => {
               setSelectedTab(key as string);
@@ -211,10 +213,7 @@ export default function Jobs() {
               key="active"
               title={
                 <>
-                  <span>Active </span>
-                  <Chip size="sm" variant="faded">
-                    {jobs.filter((j: any) => j.status.toLowerCase() !== 'deleted').length}
-                  </Chip>
+                  <span>Active ({jobs.filter((j: any) => j.status.toLowerCase() !== 'deleted').length}) </span>
                 </>
               }
             />
@@ -222,16 +221,13 @@ export default function Jobs() {
               key="inactive"
               title={
                 <>
-                  <span>Inactive </span>
-                  <Chip size="sm" variant="faded">
-                    {jobs.filter((j: any) => j.status.toLowerCase() === 'deleted').length}
-                  </Chip>
+                  <span>Inactive ({jobs.filter((j: any) => j.status.toLowerCase() === 'deleted').length}) </span>
                 </>
               }
             />
           </Tabs>
 
-          <Button color="primary" className=" text-white  bg-[#100145] " size="sm" onPress={() => router.push('/interviews/add')} endContent={<AiOutlinePlus />}>
+          <Button color="secondary" variant="flat" radius="full" size="md" onPress={() => router.push('/interviews/add')} startContent={<Plus />}>
             Create New Interview
           </Button>
         </div>
@@ -270,9 +266,6 @@ export default function Jobs() {
                                 <FaExternalLinkAlt className="w-3 h-3 opacity-40" />
                               </a>
                             </h3>
-                            <Chip size="sm" color="default" variant="solid" className={`${getExperienceLevelColor(job.experienceLevel)} `}>
-                              {job.experienceLevel.toUpperCase()}
-                            </Chip>
                           </div>
                           <div className="flex items-center gap-6 text-sm text-gray-600 mb-4">
                             <div className="flex items-center gap-1">
@@ -306,17 +299,12 @@ export default function Jobs() {
                         </div>
 
                         <div className="flex items-center gap-2 ml-6">
-                          <Button variant="bordered" color="default" radius="full" onPress={() => handleManageResumeClick(job.id)} size="sm" className="gap-2 bg-transparent">
-                            <UserCheck className="w-4 h-4" />
-                            View Candidates
-                          </Button>
-
-                          <Button variant="bordered" color="default" radius="full" onPress={() => handleInviteClick(job.id)} size="sm" className="gap-2 bg-transparent">
+                          <Button variant="faded" color="secondary" radius="full" onPress={() => handleInviteClick(job.id)} size="sm" className="gap-2 bg-transparent">
                             <Send className="w-4 h-4" />
                             Invite Candidates
                           </Button>
 
-                          <Button size="sm" isLoading={loadingJobId === job.id} radius="full" variant="faded" color="default" aria-label="manage" onPress={() => tryYourself(job.id)}>
+                          <Button size="sm" isLoading={loadingJobId === job.id} radius="full" variant="faded" color="secondary" aria-label="manage" onPress={() => tryYourself(job.id)}>
                             <Play className="w-4 h-4" />
                             Try Yourself
                           </Button>
@@ -330,6 +318,10 @@ export default function Jobs() {
                               <DropdownItem onPress={() => router.push(`/interviews/edit/${job.id}`)} className="gap-2" key={'edit'} startContent={<Edit className="w-4 h-4" />}>
                                 Edit Position
                               </DropdownItem>
+                              <DropdownItem onPress={() => handleManageResumeClick(job.id)} className="gap-2" key={'invite'} startContent={<Edit className="w-4 h-4" />}>
+                                View Candidates
+                              </DropdownItem>
+
                               <DropdownItem key={'delete'} onPress={() => handleDeleteClick(job.id)} startContent={<Trash2 className="w-4 h-4" />} className="gap-2 text-red-600">
                                 Delete Position
                               </DropdownItem>
@@ -342,10 +334,9 @@ export default function Jobs() {
                 ))}
 
                 <Pagination
-                  color="primary"
+                  color="secondary"
                   classNames={{
                     item: 'w-8 h-8 text-small bg-red  ',
-                    cursor: 'bg-[#100145]    ',
                   }}
                   size="sm"
                   page={page}

@@ -4,7 +4,7 @@ import React from 'react';
 import { Card, CardBody } from '@heroui/react';
 
 interface Step {
-  icon: React.ReactNode;
+  icon: React.ReactElement; // ReactElement so we can clone it
   title: string;
   description: string;
 }
@@ -18,8 +18,8 @@ interface VerticalStepperProps {
 
 export const VerticalStepper: React.FC<VerticalStepperProps> = ({ steps, currentStep, formReady, onStepChange }) => {
   return (
-    <Card shadow="sm" radius="md" className="p-4">
-      <CardBody>
+    <Card shadow="sm" radius="md">
+      <CardBody className="p-4">
         <div>
           {steps.map((step, index) => {
             const isActive = index === currentStep;
@@ -33,11 +33,15 @@ export const VerticalStepper: React.FC<VerticalStepperProps> = ({ steps, current
                   if (valid) onStepChange(index);
                 }}
                 className={`
-              py-2 mb-4 px-4 flex items-center gap-2 cursor-pointer m-1 rounded-xl transition-colors
-              ${isActive ? 'bg-blue-600 text-white dark:bg-blue-500' : 'bg-gray-100 text-gray-800 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600'}
-            `}
+                  py-2 mb-4 px-4 flex items-center gap-2 cursor-pointer m-1 rounded-lg transition-colors
+                  ${isActive ? 'bg-secondary-400 text-white' : 'bg-secondary-100 hover:bg-secondary-200'}
+                `}
               >
-                <div className={`w-5 h-5 text-xl ${isActive ? 'text-white' : 'text-gray-900 dark:text-gray-200'}`}>{step.icon}</div>
+                <div className="w-5 h-5">
+                  {React.cloneElement(step.icon, {
+                    className: `w-5 h-5 ${isActive ? 'text-white' : 'text-gray-900'}`,
+                  })}
+                </div>
                 <div>
                   <div className="text-base font-semibold">{step.title}</div>
                   <div className="text-xs">{step.description}</div>

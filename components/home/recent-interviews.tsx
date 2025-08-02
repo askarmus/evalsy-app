@@ -48,7 +48,7 @@ export const RecentInterviews = () => {
       <CardHeader className="pb-4">
         <div className="flex items-center justify-between w-full">
           <div className="text-xl font-semibold   flex items-center gap-2">
-            <TrendingUp className="w-5 h-5 text-blue-600" />
+            <TrendingUp className="w-5 h-5 text-secondary" />
             Recent Interviews
           </div>
           {/* <Button
@@ -92,12 +92,12 @@ export const RecentInterviews = () => {
               ))
             : results.map((interview) => (
                 <div key={interview.id} className="space-y-6 mt-1">
-                  <div className="flex items-center gap-3 p-2 rounded-lg border bg-card hover:bg-accent/50 transition-colors">
+                  <div className="flex items-center gap-3 p-2 rounded-xl border bg-card hover:bg-accent/50 transition-colors">
                     <Avatar className={`w-10 h-10 ${getColorByInitial(interview.invitation.name)}`} name={getInitials(interview.invitation.name)} />{' '}
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-1">
                         <h3 className="font-medium text-sm truncate">{interview.invitation.name}</h3>
-                        <Chip size="sm" className="text-xs px-2 py-0.5">
+                        <Chip size="sm" color="secondary" variant="flat" className="text-xs px-2 py-0.5">
                           {interview.totalScore}%
                         </Chip>
                       </div>
@@ -107,7 +107,7 @@ export const RecentInterviews = () => {
                         {DateFormatter.timeAgo(interview.invitation.statusUpdateAt)}
                       </div>
                     </div>
-                    <Button color="primary" onPress={() => handleViewDetails(interview.id)} radius="full" size="sm" variant="flat">
+                    <Button color="secondary" onPress={() => handleViewDetails(interview.id)} radius="full" size="sm" variant="faded">
                       View
                     </Button>
                   </div>
@@ -115,7 +115,7 @@ export const RecentInterviews = () => {
               ))}
           {results.length > 0 && !loading && (
             <div className="pt-4">
-              <Button variant="bordered" className="w-full text-sm bg-transparent" onPress={() => router.push(`/interview/list`)}>
+              <Button color="secondary" variant="bordered" className="w-full  " onPress={() => router.push(`/interview/list`)}>
                 View All Interviews
               </Button>
             </div>

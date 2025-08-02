@@ -42,10 +42,10 @@ export const CreditPackageList = ({ onBuy }: CreditPackageListProps) => {
         <Card radius="sm" shadow="sm" key={credits} className="mb-2">
           <CardBody className="flex flex-row justify-between items-center">
             <div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-4">
                 <span className="text-lg font-bold">{credits} Credits</span>
                 {popular && (
-                  <Chip color="success" className="text-white">
+                  <Chip color="secondary" size="sm">
                     Popular
                   </Chip>
                 )}
@@ -54,10 +54,11 @@ export const CreditPackageList = ({ onBuy }: CreditPackageListProps) => {
               <p className="text-sm text-default-500">{description}</p>
             </div>
             <Button
-              variant="bordered"
+              variant="flat"
+              size="sm"
               isLoading={loadingCredits === credits}
               radius="full"
-              color="success"
+              color="secondary"
               onPress={() => {
                 setLoadingCredits(credits);
                 onBuy(credits);

@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Card, CardBody } from '@heroui/react';
-import { FaRegEdit } from 'react-icons/fa';
+import { Edit } from 'lucide-react';
 
 interface Step {
   title: string;
@@ -21,18 +21,20 @@ interface StepperHeaderProps {
 export const StepperHeader: React.FC<StepperHeaderProps> = ({ isEditMode, currentStep, stepsData, completedSteps, invalidSteps }) => {
   return (
     <>
-      <h2 className="text-xl font-semibold">{isEditMode ? 'Edit Interview' : 'Add Interview'}</h2>
-      <Card shadow="sm" radius="md" className=" p-4">
-        <CardBody>
+      <Card shadow="sm" radius="md">
+        <CardBody className=" p-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-black flex items-center justify-center">
-                <FaRegEdit className="w-5 h-5 text-white" />
+              <div className="w-10 h-10 rounded-full bg-secondary-400 flex items-center justify-center">
+                <Edit className="w-5 h-5 text-secondary-200" />
               </div>
               <div>
-                <p className="text-sm text-gray-500 font-bold">
-                  Step {currentStep + 1} of {stepsData.length}: {stepsData[currentStep].title}
-                </p>
+                <div className="text-xl  font-semibold">
+                  {stepsData[currentStep].title}
+                  <div className="text-sm text-gray-600  font-semibold">
+                    Step {currentStep + 1} of {stepsData.length}:
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -41,24 +43,24 @@ export const StepperHeader: React.FC<StepperHeaderProps> = ({ isEditMode, curren
               {stepsData.map((_, idx) => (
                 <div key={idx} className="flex items-center">
                   {completedSteps.includes(idx) ? (
-                    <div className="w-6 h-6 rounded-full bg-green-100 flex items-center justify-center">
+                    <div className="w-6 h-6 rounded-full bg-secondary-100 flex items-center justify-center">
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                       </svg>
                     </div>
                   ) : idx === currentStep ? (
-                    <div className="w-6 h-6 rounded-full border-2 border-green-500 flex items-center justify-center">
-                      <div className="w-2 h-2 rounded-full bg-green-500"></div>
+                    <div className="w-6 h-6 rounded-full border-2 border-secondary-500 flex items-center justify-center">
+                      <div className="w-2 h-2 rounded-full bg-secondary-500"></div>
                     </div>
                   ) : invalidSteps.includes(idx) ? (
                     <div className="w-6 h-6 rounded-full border-2 border-red-500 flex items-center justify-center">
                       <div className="w-2 h-2 rounded-full bg-red-500"></div>
                     </div>
                   ) : (
-                    <div className="w-6 h-6 rounded-full border-2 border-green-300"></div>
+                    <div className="w-6 h-6 rounded-full border-2 border-secondary-300"></div>
                   )}
 
-                  {idx < stepsData.length - 1 && <div className={`w-3 h-0.5 ${completedSteps.includes(idx) ? 'bg-green-100' : invalidSteps.includes(idx) ? 'bg-red-200' : 'bg-green-200'}`}></div>}
+                  {idx < stepsData.length - 1 && <div className={`w-3 h-0.5 ${completedSteps.includes(idx) ? 'bg-secondary-100' : invalidSteps.includes(idx) ? 'bg-red-200' : 'bg-secondary-200'}`}></div>}
                 </div>
               ))}
             </div>

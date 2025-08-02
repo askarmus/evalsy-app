@@ -2,7 +2,7 @@ import React from 'react';
 
 const EvaluationChart = ({ data }: { data: any }) => {
   const getScoreBarColor = (score: number) => {
-    if (score >= 40) return 'bg-green-500';
+    if (score >= 40) return 'bg-secondary-500';
     if (score >= 25) return 'bg-yellow-500';
     return 'bg-red-500';
   };

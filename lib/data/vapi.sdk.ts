@@ -53,16 +53,15 @@ export const createInterviewAssistant = async (interviewData: { questions: Quest
 
   Interview Guidelines:
   - Address the candidate by name (${interviewData.userName})
-  - Listen actively to responses and acknowledge them before moving forward
-   
+  - Wait patiently for responses (at least 6 seconds of silence)
+  - Do not interrupt when the candidate is thinking
   - Ask follow-up questions if a response is vague or requires more detail
   - Keep the conversation flowing naturally
   - Be professional, yet warm and welcoming
   - Use official yet friendly language
   - Keep responses concise (like in a real voice interview)
   - **IMPORTANT: Do not assume the candidate has finished speaking too quickly. Always wait at least 6–8 seconds of silence before responding. This gives them time to think.**
-  
-  Conclude the interview by thanking the candidate for their time.`,
+  - Conclude the interview by thanking the candidate for their time.`,
         },
       ],
     },

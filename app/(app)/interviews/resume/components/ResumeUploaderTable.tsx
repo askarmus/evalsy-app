@@ -215,8 +215,8 @@ const ResumeUploader = ({ jobid, onViewDetails, onDelete, existingResume }: Resu
         <Card radius="sm" shadow="sm" className="w-full mb-8 border-2 border-dashed  cursor-pointer transition-colors hover:bg-slate-50 hover:border-slate-400 dark:hover:bg-slate-800 dark:hover:border-slate-600">
           <CardBody className="flex flex-row items-center justify-between py-4 px-6">
             <div className="flex items-center">
-              <div className="rounded-full bg-slate-100 p-2 mr-4 dark:bg-slate-800">
-                <FaUpload className="h-5 w-5 text-slate-500 dark:text-slate-300" />
+              <div className="rounded-full bg-secondary p-2 mr-4  ">
+                <FaUpload className="h-5 w-5 text-secondary-100" />
               </div>
               <div>
                 <h3 className="text-sm font-medium text-slate-800 dark:text-slate-100">Drag & drop resume files here</h3>
@@ -226,7 +226,7 @@ const ResumeUploader = ({ jobid, onViewDetails, onDelete, existingResume }: Resu
               </div>
             </div>
             <div>
-              <Button isDisabled={isUploadingOrProcessing} variant="bordered" size="sm" className="text-slate-700 dark:text-slate-200 border-slate-300 dark:border-slate-600">
+              <Button isDisabled={isUploadingOrProcessing} variant="flat" size="sm" color="secondary" radius="full">
                 Browse Files
               </Button>
             </div>

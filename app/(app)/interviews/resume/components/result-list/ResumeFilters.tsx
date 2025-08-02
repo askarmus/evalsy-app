@@ -10,7 +10,7 @@ export const ResumeFilters = ({ searchTerm, onSearchChange, selectedRecommendati
     <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
       <div className="flex flex-wrap gap-6 items-center flex-grow">
         <div className="relative">
-          <Input size="sm" value={searchTerm} onChange={(e) => onSearchChange(e.target.value)} isClearable aria-label="Search resumes" placeholder="Search Result" startContent={<FaSearch />} variant="bordered" />
+          <Input size="md" value={searchTerm} onChange={(e) => onSearchChange(e.target.value)} isClearable aria-label="Search resumes" placeholder="Search Result" startContent={<FaSearch className="text-secondary" />} variant="bordered" />
         </div>
 
         <div className="flex gap-2 flex-wrap">
@@ -24,7 +24,7 @@ export const ResumeFilters = ({ searchTerm, onSearchChange, selectedRecommendati
         <div className="min-w-[200px]">
           <Slider
             size="sm"
-            color="foreground"
+            color="secondary"
             aria-label="Experience Range"
             label={`Experience `}
             minValue={0}
@@ -41,12 +41,12 @@ export const ResumeFilters = ({ searchTerm, onSearchChange, selectedRecommendati
           />
         </div>
         <div className="min-w-[200px]">
-          <DateRangePicker size="sm" variant="bordered" aria-label="Filter by Date" value={dateRange} onChange={onDateChange} visibleMonths={1} />
+          <DateRangePicker size="md" variant="bordered" aria-label="Filter by Date" value={dateRange} onChange={onDateChange} visibleMonths={1} />
         </div>
       </div>
 
       <div className="flex-shrink-0">
-        <Button size="sm" variant="bordered" onPress={onClearFilters}>
+        <Button size="sm" variant="bordered" radius="full" color="secondary" onPress={onClearFilters}>
           Clear Filters
         </Button>
       </div>

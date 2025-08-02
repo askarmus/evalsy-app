@@ -138,7 +138,7 @@ export default function TrendAnalyticsChart() {
       align: 'center',
       style: {
         fontSize: '18px',
-        fontWeight: '600',
+        fontWeight: '100',
         color: isDark ? '#F3F4F6' : '#111827',
       },
     },

@@ -40,8 +40,8 @@ export function Header() {
         {navItems.map((item) => (
           <NavbarItem key={item.href} isActive={pathname === item.href}>
             <Link as={NextLink} href={item.href} className={`flex items-center gap-2 text-sm font-medium ${pathname === item.href ? 'text-white underline' : 'text-white hover:text-gray-300'}`}>
-              {item.icon}
-              {item.label}
+              <span className="p-1 rounded-full  text-secondary-300">{item.icon}</span>
+              <span className=" text-white"> {item.label}</span>
             </Link>
           </NavbarItem>
         ))}
@@ -58,7 +58,7 @@ export function Header() {
         {navItems.map((item) => (
           <NavbarItem key={item.href}>
             <NextLink href={item.href} passHref legacyBehavior>
-              <Link className="flex items-center gap-3 py-2 px-4" onClick={() => setMenuOpen(false)}>
+              <Link className="flex items-center gap-3 py-2 px-4" onPress={() => setMenuOpen(false)}>
                 {item.icon}
                 {item.label}
               </Link>

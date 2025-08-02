@@ -6,6 +6,7 @@ import apiClient from '@/helpers/apiClient';
 import { truncateText } from '@/app/utils/truncate.text';
 import { DarkModeSwitch } from './darkmodeswitch';
 import { useAuthContext } from '@/context/AuthContext';
+import { ArrowDown } from 'lucide-react';
 
 export const UserDropdown = () => {
   const { user, loading } = useAuthContext();
@@ -36,9 +37,9 @@ export const UserDropdown = () => {
             className="cursor-pointer text-white"
             avatarProps={{
               name: getInitials(user?.name),
-              className: 'bg-gray-500 text-white dark:bg-gray-900',
+              className: 'bg-secondary-300 text-white  ',
             }}
-            description={<span className="text-gray-100">Signed in as</span>}
+            description={<span className="text-secondary-100">Signed in as</span>}
             name={!loading ? truncateText(user?.name || '', 15) || 'User' : 'Loading user......'}
           />
         </DropdownTrigger>

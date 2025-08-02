@@ -31,8 +31,8 @@ export default function CandidateHeader({ selectedInterviewerData }: CandidateHe
     <div>
       <div className="flex justify-between items-center">
         <div className="flex flex-col">
+          <h2 className="text-xl font-bold text-secondary">{selectedInterviewerData?.name}</h2>
           <span className="text-sm text-gray-500">{selectedInterviewerData?.jobTitle}</span>
-          <h2 className="text-xl font-bold">{selectedInterviewerData?.name}</h2>
         </div>
 
         <div className="flex items-center gap-6">

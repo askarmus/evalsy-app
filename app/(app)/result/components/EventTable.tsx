@@ -1,6 +1,7 @@
 'use client';
 
 import { Input, Pagination, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from '@heroui/react';
+import { List } from 'lucide-react';
 import React, { useState, useMemo } from 'react';
 import { FaFile } from 'react-icons/fa';
 
@@ -42,8 +43,8 @@ const EventTable: React.FC<EventTableProps> = ({ data }) => {
         <TableBody
           emptyContent={
             <div className="flex flex-col items-center justify-center py-10 text-center text-default-500">
-              <FaFile className="w-8 h-8 mb-2" />
-              <p>No events found matching your search.</p>
+              <List className="w-8 h-8 mb-2" />
+              <p>No events found.</p>
             </div>
           }
         >

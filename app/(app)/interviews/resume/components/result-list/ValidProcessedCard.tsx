@@ -28,7 +28,7 @@ export const ValidProcessedCard = ({ file, onDelete, onViewDetails, isLoading = 
           </div>
         </div>
       </div>
-      <Button color="default" isLoading={isLoading} onPress={() => onViewDetails(file.resumeId)} radius="full" variant="solid" size="sm" isDisabled={isLoading}>
+      <Button color="secondary" isLoading={isLoading} onPress={() => onViewDetails(file.resumeId)} radius="full" variant="solid" size="sm" isDisabled={isLoading}>
         View Analysis
       </Button>
     </CardHeader>

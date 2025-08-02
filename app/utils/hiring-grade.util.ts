@@ -35,8 +35,8 @@ export class HiringGradeUtil {
    */
   static getTechnicalHiringGrade(score: number): HiringBadgeStyle {
     if (score < 50) return { color: 'danger', text: 'Low Proficiency', recommendation: 'Reject' };
-    if (score < 70) return { color: 'warning', text: 'Partial Proficiency', recommendation: 'Borderline' };
-    if (score < 90) return { color: 'secondary', text: 'Proficient', recommendation: 'Hire' };
+    if (score < 70) return { color: 'secondary', text: 'Partial Proficiency', recommendation: 'Borderline' };
+    if (score < 90) return { color: 'warning', text: 'Proficient', recommendation: 'Hire' };
     return { color: 'success', text: 'Highly Proficient', recommendation: 'Strong Hire' };
   }
 }

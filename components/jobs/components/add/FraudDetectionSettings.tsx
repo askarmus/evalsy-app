@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { Switch } from '@heroui/react';
+import { Shield } from 'lucide-react';
 
 interface FraudDetectionSettingsProps {
   values: {
@@ -45,7 +46,10 @@ export const FraudDetectionSettings: React.FC<FraudDetectionSettingsProps> = ({ 
 
   return (
     <div className="mt-0">
-      <h4 className="text-lg font-semibold mb-2">Fraud Detection Settings</h4>
+      <div className="mb-5 flex items-center gap-[5px] mb-3 md:mb-4 ">
+        <Shield className="w-5 h-5 text-xl text-secondary-400" />
+        <h1 className=" text-xl/[24px] font-semibold text-tertiary  md:text-[20px]/[24px]">Fraud Detection Settings</h1>
+      </div>
       <div className="space-y-6">
         {settings.map((setting) => (
           <div key={setting.key} className="flex items-center justify-between space-y-1">
@@ -53,7 +57,7 @@ export const FraudDetectionSettings: React.FC<FraudDetectionSettingsProps> = ({ 
               <h3 className="font-medium">{setting.title}</h3>
               <p className="text-sm text-muted-foreground">{setting.description}</p>
             </div>
-            <Switch size="sm" isSelected={values[setting.key as keyof typeof values]} onValueChange={(checked) => setFieldValue(`fraudDetection.${setting.key}`, checked)} aria-label={setting.title} />
+            <Switch size="sm" color="secondary" isSelected={values[setting.key as keyof typeof values]} onValueChange={(checked) => setFieldValue(`fraudDetection.${setting.key}`, checked)} aria-label={setting.title} />
           </div>
         ))}
       </div>

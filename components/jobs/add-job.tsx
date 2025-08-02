@@ -23,6 +23,7 @@ import { VerticalStepper } from './components/add/VerticalStepper';
 import { StepperHeader } from './components/add/StepperHeader';
 import { defaultJobFormValues } from './helpers/formDefaults';
 import { countryOptions, currencyOptions } from '@/services/currency.service';
+import { Briefcase, ChevronLeft, ChevronRight, Delete, Edit, Forward, GripVertical, MessageCircleQuestion, Save, Settings, Settings2, SettingsIcon, Shield, Sparkle, Trash } from 'lucide-react';
 
 export const AddJob = () => {
   const router = useRouter();
@@ -48,24 +49,24 @@ export const AddJob = () => {
 
   const stepsData = [
     {
-      icon: <FaBriefcase className="w-5 h-5 text-xl text-gray-900" />,
-      title: 'Job Info',
-      description: 'Overview of job roles and responsibilities',
+      icon: <Briefcase className="w-5 h-5 text-xl" />,
+      title: 'Interview Info',
+      description: 'View complete job role details and responsibilities overview.',
     },
     {
-      icon: <FaQuestionCircle className="w-5 h-5 text-xl text-gray-900" />,
+      icon: <MessageCircleQuestion className="w-5 h-5 text-xl text-secondary-900" />,
       title: 'Questions',
-      description: 'Common questions related to job applications',
+      description: 'Browse commonly asked questions to prepare effectively.',
     },
     {
-      icon: <FaCogs className="w-5 h-5 text-xl text-gray-900" />,
+      icon: <Settings2 className="w-5 h-5 text-xl text-gray-900" />,
       title: 'Settings',
-      description: 'Miscellaneous configurations and settings',
+      description: 'Configure application preferences and system-wide options.',
     },
     {
-      icon: <FaShieldAlt className="w-5 h-5 text-xl text-gray-900" />,
+      icon: <Shield className="w-5 h-5 text-xl text-gray-900" />,
       title: 'Fraud Detection',
-      description: 'Monitor and prevent fraudulent activities',
+      description: 'Track suspicious activity and prevent fraudulent candidate behavior.',
     },
   ];
 
@@ -158,24 +159,24 @@ export const AddJob = () => {
     const style = { transform: CSS.Transform.toString(transform), transition };
 
     return (
-      <div ref={setNodeRef} {...attributes} style={style} className="flex items-center justify-between p-2 border-2 rounded-xl border-black ">
+      <div ref={setNodeRef} {...attributes} style={style} className="flex items-center justify-between p-2 border-2 rounded-full border-secondary-100 ">
         <div className="flex items-center text-base min-w-0">
           <span className={`flex items-center justify-center rounded-full w-5 h-5 mr-3 text-xs font-medium text-primary-foreground ${question.isRandom ? 'bg-blue-600' : 'bg-red-600'}`}>{index + 1}</span>
 
           <span {...listeners} className="mr-2 cursor-grab  hover:text-gray-800">
-            <FaGripVertical />
+            <GripVertical className="text-secondary-200 w-4 h-4" />
           </span>
           <span className="truncate font-semibold max-w-[700px]  ">{question.text.length > 80 ? `${question.text.substring(0, 130)}...` : question.text || 'New Question'}</span>
         </div>
         <div className="flex items-center gap-2 ml-4 shrink-0">
           <Tooltip content="Edit question">
             <button aria-label="Edit" onClick={() => handleEditQuestion(question.id)} className="p-1 text-gray-600 hover:text-black rounded-full dark:text-gray-300 dark:hover:text-white">
-              <AiOutlineEdit className="h-5 w-5" />
+              <Edit className="h-4 w-4" />
             </button>
           </Tooltip>
           <Tooltip content="Remove question">
             <button aria-label="Delete" onClick={() => handleDeleteQuestion(question.id)} className="p-1 text-gray-600 hover:text-black rounded-full dark:text-gray-300 dark:hover:text-white">
-              <AiOutlineDelete className="h-5 w-5 text-red-400" />
+              <Trash className="h-4 w-4 text-red-400" />
             </button>
           </Tooltip>
         </div>
@@ -280,14 +281,14 @@ export const AddJob = () => {
                   />
                 </div>
                 <div>
-                  <Card shadow="sm" radius="md" className="p-4">
-                    <CardBody>
+                  <Card shadow="sm" radius="md">
+                    <CardBody className="p-4">
                       {currentStep === 0 && (
                         <>
                           <div className="space-y-4">
                             <div className="mb-5 flex items-center gap-[5px] mb-3 md:mb-4 ">
-                              <FaBriefcase className="w-5 h-5 text-xl text-black" />
-                              <h1 className=" text-xl/[24px] font-semibold text-tertiary  md:text-[20px]/[24px]">Job Details</h1>
+                              <Briefcase className="w-5 h-5 text-xl text-secondary-400" />
+                              <h1 className=" text-xl/[24px] font-semibold text-tertiary  md:text-[20px]/[24px]">Interview Details</h1>
                             </div>
                             <h1 className="text-sm font-semibold   mb-0">Role Name</h1>
                             <Input variant="bordered" value={values.jobTitle} onChange={handleChange('jobTitle')} isInvalid={!!errors.jobTitle && !!touched.jobTitle} errorMessage={errors.jobTitle} />
@@ -371,19 +372,8 @@ export const AddJob = () => {
                             <div className="mb-5 flex items-center   ">
                               <Textarea variant="bordered" placeholder="e.g. Focus on leadership, architecture patterns, or microservices" value={values.prompt} onChange={handleChange('prompt')} className="pr-10" />
 
-                              <Button
-                                endContent={
-                                  <svg xmlns="http://www.w3.org/2000/svg" width="4em" height="4em" fill="none" viewBox="0 0 18 18" className="text-lg">
-                                    <path stroke="#53B43B" d="M2.623 15.373a1.59 1.59 0 0 0 2.25 0l9.75-9.75a1.59 1.59 0 0 0 0-2.25 1.59 1.59 0 0 0-2.25 0l-9.75 9.75a1.59 1.59 0 0 0 0 2.25M13.508 6.742l-2.25-2.25M6.375 1.83 7.5 1.5l-.33 1.125.33 1.125-1.125-.33-1.125.33.33-1.125L5.25 1.5zM3.375 6.33 4.5 6l-.33 1.125.33 1.125-1.125-.33-1.125.33.33-1.125L2.25 6zM14.625 10.08l1.125-.33-.33 1.125.33 1.125-1.125-.33L13.5 12l.33-1.125-.33-1.125z"></path>
-                                  </svg>
-                                }
-                                variant="bordered"
-                                radius="full"
-                                isDisabled={!values.jobTitle}
-                                isLoading={loading}
-                                onPress={() => handleGenerateJobDescription(values, setFieldValue, setLoading)}
-                              >
-                                Generate
+                              <Button startContent={<Sparkle />} variant="bordered" radius="full" color="secondary" isDisabled={!values.jobTitle} isLoading={loading} onPress={() => handleGenerateJobDescription(values, setFieldValue, setLoading)}>
+                                AI Generate
                               </Button>
                             </div>
 
@@ -404,9 +394,19 @@ export const AddJob = () => {
                       )}
                       {currentStep === 1 && (
                         <>
-                          <div className="mb-3">
-                            <QuestionSearchAndFilter searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+                          <div className="mb-5 flex items-center justify-between mb-3 md:mb-4">
+                            {/* Left section: Icon + Title */}
+                            <div className="flex items-center gap-2">
+                              <MessageCircleQuestion className="w-5 h-5 text-xl text-secondary-400" />
+                              <h1 className="text-xl/[24px] font-semibold text-tertiary md:text-[20px]/[24px]">Manage Questions</h1>
+                            </div>
+
+                            {/* Right section: Search and Filter */}
+                            <div className="flex-shrink-0">
+                              <QuestionSearchAndFilter searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+                            </div>
                           </div>
+
                           <QuestionHeaderActions onGenerateAI={() => setGenerateDrawerOpen(true)} onAddManual={handleAddQuestion} questionCount={values.questions.length} />
 
                           {touched.questions && typeof errors.questions === 'string' && <div className="text-sm text-red-500 mt-2">{errors.questions}</div>}
@@ -433,9 +433,11 @@ export const AddJob = () => {
                       )}
                       {currentStep === 2 && (
                         <>
-                          <div className="mb-5">
-                            <h1 className=" text-xl/[24px] font-semibold text-tertiary  md:text-[20px]/[24px]">Settings</h1>
+                          <div className="mb-5 flex items-center gap-[5px] mb-3 md:mb-4 ">
+                            <Settings2 className="w-5 h-5 text-xl text-secondary-400" />
+                            <h1 className=" text-xl/[24px] font-semibold text-tertiary  md:text-[20px]/[24px]">Interview Settings</h1>
                           </div>
+
                           <div className="grid grid-cols-1  gap-6">
                             <div>
                               <h1 className="text-sm font-semibold  mb-0">Total verbal questions ({values.questions.length})</h1>
@@ -444,6 +446,7 @@ export const AddJob = () => {
                             </div>
                             <Slider
                               className="max-w-full"
+                              color="secondary"
                               defaultValue={5}
                               value={values.durationInMinutes}
                               label="Duration (Minutes)"
@@ -459,7 +462,7 @@ export const AddJob = () => {
                               }
                             />
 
-                            <RadioGroup label="invitation Expire" size="sm" orientation="horizontal" value={values.invitationExpireInDays.toString()} onChange={handleChange('invitationExpireInDays')} isInvalid={!!errors.invitationExpireInDays && !!touched.invitationExpireInDays} errorMessage={errors.invitationExpireInDays}>
+                            <RadioGroup color="secondary" label="invitation Expire" size="sm" orientation="horizontal" value={values.invitationExpireInDays.toString()} onChange={handleChange('invitationExpireInDays')} isInvalid={!!errors.invitationExpireInDays && !!touched.invitationExpireInDays} errorMessage={errors.invitationExpireInDays}>
                               <Radio value="3">3 Days</Radio>
                               <Radio value="7">One Week</Radio>
                               <Radio value="14">Two Weeks</Radio>
@@ -499,10 +502,10 @@ export const AddJob = () => {
                 </div>
               </div>
 
-              <div className="fixed bottom-0 left-0 right-0 z-50 border-t border-gray-700 dark:border-gray-700 bg-white dark:bg-gray-900 p-2 flex justify-end">
+              <div className="fixed bottom-0 left-0 right-0 z-50 border-t border-secondary-300 dark:border-gray-700 bg-white dark:bg-gray-900 p-2 flex justify-end">
                 <div className="mx-auto flex w-full max-w-[90rem] items-center px-5 xl:px-8 xl2:px-[60px] xl2:!pr-[60px] justify-between">
                   {currentStep > 0 ? (
-                    <Button size="md" onPress={() => setCurrentStep(currentStep - 1)}>
+                    <Button startContent={<ChevronLeft />} size="md" color="secondary" radius="full" variant="faded" onPress={() => setCurrentStep(currentStep - 1)}>
                       Previous
                     </Button>
                   ) : (
@@ -511,22 +514,24 @@ export const AddJob = () => {
 
                   <div className="flex gap-2">
                     {isEditMode && (
-                      <Button className="bg-[#100145] text-white" size="md" onPress={() => formRef.current.handleSubmit()} isLoading={loading}>
-                        Save
+                      <Button color="secondary" startContent={<Save />} variant="flat" radius="full" size="md" onPress={() => formRef.current.handleSubmit()} isLoading={loading}>
+                        Save Changes
                       </Button>
                     )}
 
                     {currentStep < stepsData.length - 1 ? (
                       <Button
+                        startContent={<ChevronRight />}
+                        color="secondary"
+                        variant="flat"
+                        radius="full"
                         size="md"
-                        variant="solid"
-                        className="bg-[#100145] text-white"
                         onPress={async () => {
                           const valid = await validateStep();
                           if (valid) setCurrentStep(currentStep + 1);
                         }}
                       >
-                        Next
+                        Move Next
                       </Button>
                     ) : (
                       !isEditMode && (
