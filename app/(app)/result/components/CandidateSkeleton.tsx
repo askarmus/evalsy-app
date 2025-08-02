@@ -1,4 +1,3 @@
-// components/CandidateSkeleton.tsx
 'use client';
 
 import { Card, CardBody, Spinner } from '@heroui/react';
@@ -11,7 +10,7 @@ export default function CandidateSkeleton() {
           <div className="flex flex-col md:flex-row items-center justify-between p-6 gap-4">
             <div className="flex items-center gap-4">
               <div className="bg-muted/30 p-3 rounded-full">
-                <Spinner />
+                <Spinner color="secondary" />
               </div>
               <div className="text-left">
                 <h3 className="text-lg font-medium">Loading Interview Results</h3>

@@ -1,9 +1,8 @@
 'use client';
 import React from 'react';
-import { Tabs, Tab, Input, Button, Avatar, DropdownTrigger, Dropdown, DropdownItem, DropdownMenu, Listbox, ListboxItem, CardBody, Card, cn, CardHeader, Badge, Chip } from '@heroui/react';
-import { FaCalculator, FaFilter, FaSearch, FaSyncAlt } from 'react-icons/fa';
+import { Input, Button, Avatar, DropdownTrigger, Dropdown, DropdownItem, DropdownMenu, Listbox, ListboxItem, CardBody, Card, CardHeader, Badge, Chip } from '@heroui/react';
 import { HiringGradeUtil } from '@/app/utils/hiring-grade.util';
-import { ChevronRightIcon, Filter, Search, Timer } from 'lucide-react';
+import { ChevronRightIcon, Filter, Search } from 'lucide-react';
 import { formatRelativeDate } from '@/app/utils/formatRelativeDate';
 
 interface SidebarProps {
@@ -21,19 +20,27 @@ interface SidebarProps {
   handleViewDetails: (id: string) => void;
 }
 
-const tabKeys = ['Reject', 'Borderline', 'Hire', 'Strong Hire'];
-
 export const ListboxWrapper = ({ children }) => <div className="w-full max-w-[360px] max-h-[700px] overflow-y-auto">{children}</div>;
 
-export default function Sidebar({ selectedTab, setSelectedTab, filterValue, setFilterValue, onSearchChange, items, handleViewDetails }: SidebarProps) {
-  const filteredItems = items.filter((item) => HiringGradeUtil.getHiringRecommendation(item.totalScore).recommendation === selectedTab || 'all');
+export default function Sidebar({ selectedTab, setSelectedTab, filterValue, setFilterValue, onSearchChange, items, selectedId, handleViewDetails }: SidebarProps) {
+  // Fix filter logic (previously always true)
+  const filteredItems = items.filter((item) => selectedTab === 'all' || HiringGradeUtil.getHiringRecommendation(item.totalScore).recommendation === selectedTab);
+
+  // Track selected keys and sync with parent selectedId
+  const [selectedKeys, setSelectedKeys] = React.useState<Set<string>>(selectedId ? new Set([selectedId]) : new Set());
+
+  React.useEffect(() => {
+    if (selectedId) {
+      setSelectedKeys(new Set([selectedId]));
+    }
+  }, [selectedId]);
 
   return (
     <Card className="m-4 mt-1">
       <CardHeader>
         <div className="flex flex-col gap-3">
           {/* Title */}
-          <h2 className="text-lg font-semibold text-center">Recent Interviews </h2>
+          <h2 className="text-lg font-semibold text-center">Recent Interviews</h2>
 
           {/* Controls Row */}
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
@@ -72,40 +79,59 @@ export default function Sidebar({ selectedTab, setSelectedTab, filterValue, setF
 
       <CardBody>
         <ListboxWrapper>
-          <Listbox aria-label="Actions" onAction={(key) => handleViewDetails(key as string)} className="border-0">
-            {filteredItems.map((data: any, index) => (
-              <ListboxItem
-                key={data.id}
-                endContent={
-                  <div className="flex items-center gap-1 text-default-400">
-                    <span className="text-small">
+          <Listbox
+            aria-label="Actions"
+            selectedKeys={selectedKeys}
+            selectionMode="single"
+            disallowEmptySelection
+            onSelectionChange={(keys) => {
+              if (keys !== 'all') {
+                const keySet = keys as Set<string>;
+                const selected = Array.from(keySet)[0];
+                if (selected) {
+                  setSelectedKeys(new Set([selected]));
+                  handleViewDetails(selected);
+                }
+              }
+            }}
+            className="border-0"
+          >
+            {filteredItems.map((data: any) => {
+              const isSelected = selectedKeys.has(data.id); // check if this item is selected
+              return (
+                <ListboxItem
+                  key={data.id}
+                  textValue={data.name}
+                  className={`rounded-md transition-colors ${isSelected ? 'bg-secondary-100 dark:bg-secondary-800' : 'hover:bg-gray-100 dark:hover:bg-gray-700'}`}
+                  endContent={
+                    <div className="flex items-center gap-1 text-default-400">
                       <Chip size="sm" variant="faded" color={HiringGradeUtil.getTechnicalHiringGrade(data.totalScore).color} className="text-[10px]">
                         {data.totalScore}
                       </Chip>
-                    </span>
-                    <ChevronRightIcon className="text-sm text-secondary-200" />
-                  </div>
-                }
-                startContent={
-                  <div className="flex items-center gap-2">
-                    <div>
-                      {!data?.isRead && (
-                        <Badge size="sm" color="secondary" content="New">
+                      <ChevronRightIcon className="text-sm text-secondary-200" />
+                    </div>
+                  }
+                  startContent={
+                    <div className="flex items-center gap-2">
+                      <div>
+                        {!data?.isRead ? (
+                          <Badge size="sm" color="secondary" content="New">
+                            <Avatar name={data.name} className="h-8 w-8" src={data.image} />
+                          </Badge>
+                        ) : (
                           <Avatar name={data.name} className="h-8 w-8" src={data.image} />
-                        </Badge>
-                      )}
-                      {data?.isRead && <Avatar name={data.name} className="h-8 w-8" src={data.image} />}
+                        )}
+                      </div>
+                      <div>
+                        <h3 className="font-medium text-sm pl-2 text-gray-900 dark:text-gray-100">{data.name}</h3>
+                        <p className="text-xs text-gray-500 dark:text-gray-400 pl-2">{data.jobTitle}</p>
+                        <p className="text-[10px] text-secondary-500 pl-2">{formatRelativeDate(data.statusUpdateAt)}</p>
+                      </div>
                     </div>
-
-                    <div>
-                      <h3 className="font-medium text-sm pl-2 text-gray-900 dark:text-gray-100">{data.name}</h3>
-                      <p className="text-xs text-gray-500 dark:text-gray-400 pl-2">{data.jobTitle}</p>
-                      <p className="text-[10px] text-secondary-500  pl-2"> {formatRelativeDate(data.statusUpdateAt)}</p>
-                    </div>
-                  </div>
-                }
-              ></ListboxItem>
-            ))}
+                  }
+                />
+              );
+            })}
           </Listbox>
         </ListboxWrapper>
       </CardBody>
