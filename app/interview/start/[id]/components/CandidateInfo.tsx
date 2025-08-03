@@ -11,21 +11,21 @@ const CandidateInfo: React.FC<any> = ({ job, addTopPadding = true }) => {
       <div className={`flex flex-col p-4   w-full`}>
         <div className="flex items-center justify-between">
           <div className="space-y-2">
-            <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100"> {job.jobTitle}</h2>
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100"> {job.jobTitle}</h2>
 
             <div className="flex items-center space-x-4">
               <div className="flex items-center text-sm text-gray-600 ">
-                <Chip variant="flat" size="sm" startContent={<Clock className="w-4 h-4 mr-1 text-[#3534ff] " />}>
+                <Chip variant="flat" size="sm" color="secondary" startContent={<Clock className="w-4 h-4 mr-1  " />}>
                   {duration / 60} minutes
                 </Chip>
               </div>
               <div className="flex items-center text-sm text-gray-600">
-                <Chip variant="flat" size="sm" startContent={<Building className="w-4 h-4 mr-1 text-[#3534ff]" />}>
+                <Chip variant="flat" size="sm" color="secondary" startContent={<Building className="w-4 h-4 mr-1  " />}>
                   {company?.name}
                 </Chip>
               </div>
               <div className="flex items-center text-sm text-gray-600">
-                <Chip variant="flat" size="sm" startContent={<User className="w-4 h-4 mr-1 text-[#3534ff]" />}>
+                <Chip variant="flat" size="sm" color="secondary" startContent={<User className="w-4 h-4 mr-1  " />}>
                   {candidate?.name}
                 </Chip>
               </div>

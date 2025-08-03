@@ -190,13 +190,13 @@ const InterviewNavigator: React.FC = () => {
                   </Tooltip>
 
                   <Tooltip content={vapi.isMuted() ? 'Unmute' : 'Mute'}>
-                    <Button onPress={handleMute} isDisabled={isLoading} isLoading={isLoading} variant="bordered" radius="full" isIconOnly>
+                    <Button onPress={handleMute} isDisabled={isLoading} isLoading={isLoading} variant="bordered" radius="full" color="secondary" isIconOnly>
                       {vapi.isMuted() ? <FaMicrophoneSlash color="#1e232fff" /> : <FaMicrophone color="#1e232fff" />}
                     </Button>
                   </Tooltip>
 
                   <Tooltip content={isCameraOn ? 'Turn Off Camera' : 'Turn On Camera'}>
-                    <Button onPress={() => setIsCameraOn((prev) => !prev)} isDisabled={isLoading} isLoading={isLoading} variant="bordered" radius="full" isIconOnly>
+                    <Button onPress={() => setIsCameraOn((prev) => !prev)} isDisabled={isLoading} isLoading={isLoading} variant="bordered" radius="full" color="secondary" isIconOnly>
                       {isCameraOn ? <FaVideo color="#1e232fff" /> : <FaVideoSlash color="#1e232fff" />}
                     </Button>
                   </Tooltip>

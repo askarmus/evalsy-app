@@ -4,7 +4,7 @@ import { useInterviewStore } from '../stores/useInterviewStore';
 import CandidateInfo from './CandidateInfo';
 import PoweredBy from './PoweredBy';
 import MediaPermission from './MediaPermission';
-import { ChevronRight, Mic, Video } from 'lucide-react';
+import { ChevronRight, Mic, Play, Video } from 'lucide-react';
 
 const InterviewInstruction: React.FC<any> = () => {
   const [showFullDescription, setShowFullDescription] = useState(false);
@@ -49,18 +49,16 @@ const InterviewInstruction: React.FC<any> = () => {
           <CardFooter>
             <div className="flex items-center justify-end w-full">
               {showMicTest && (
-                <Button size="md" onPress={startInterview} color="secondary" isLoading={isLoading} isDisabled={status !== 'granted'} variant="solid" radius="full">
+                <Button size="md" startContent={<Play />} onPress={startInterview} color="secondary" variant="flat" isLoading={isLoading} isDisabled={status !== 'granted'} radius="full">
                   Start Interview
                 </Button>
               )}
 
               {!showMicTest && (
-                <Button isLoading={isLoading} onPress={() => setShowMicTest(true)} size="md" color="secondary" radius="full">
+                <Button isLoading={isLoading} onPress={() => setShowMicTest(true)} size="md" color="secondary" variant="flat" radius="full">
                   <div className="flex items-center space-x-2">
-                    <Video className="w-4 h-4" />
-                    <Mic className="w-4 h-4" />
-                    <span>Next: Test your mic and video</span>
-                    <ChevronRight className="w-4 h-4" />
+                    <span>Next: Test audio/video</span>
+                    <ChevronRight className="w-5 h-5" />
                   </div>
                 </Button>
               )}

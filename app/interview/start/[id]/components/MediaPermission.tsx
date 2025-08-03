@@ -157,55 +157,45 @@ export default function MediaPermission({ onPermissionChange }: { onPermissionCh
         {permissionStatus === 'granted' && (
           <Card shadow="none">
             <CardBody>
-              <Alert
-                color="success"
-                title={
-                  <>
-                    <div className="space-y-2 text-sm text-gray-800 dark:text-gray-100">
-                      <div className="flex items-center space-x-2 text-green-600 dark:text-green-400 font-medium">
-                        <span>Camera and microphone permissions granted.</span>
-                      </div>
-                    </div>
-                  </>
-                }
-                className="mb-5"
-              />
+              <Alert color="success" title="Camera and microphone permissions granted." hideIcon className="mb-5" />
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
-                <Card shadow="sm">
+                <Card shadow="none">
                   <CardBody>
-                    <div className="flex items-center gap-3 mb-3">
-                      <Video className="w-5 h-5 text-slate-400" />
-                      <span className="font-medium">Video Preview ({videoRef.current?.srcObject ? 'Active' : 'Unavailable'})</span>
+                    <div className="mb-6 flex items-center gap-[5px] mb-3 md:mb-4 ">
+                      <Video className="w-5 h-5 text-xl text-secondary-400" />
+                      <h1 className=" text-xl/[24px] font-semibold text-tertiary  md:text-[20px]/[24px]">Video Preview</h1>
                     </div>
+
                     <video ref={videoRef} className="w-full border rounded shadow" autoPlay playsInline muted style={{ height: 200, backgroundColor: 'black' }} />
                   </CardBody>
                 </Card>
 
                 <div className="flex flex-col">
-                  <Card shadow="sm" className="mb-4">
+                  <Card shadow="none" className="mb-4">
                     <CardBody>
-                      <div className="flex items-center gap-3 mb-3">
-                        <Mic className="w-5 h-5 text-slate-400" />
-                        <span className="font-medium">Microphone</span>
+                      <div className="mb-6 flex items-center gap-[5px] mb-3 md:mb-4 ">
+                        <Mic className="w-5 h-5 text-xl text-secondary-400" />
+                        <h1 className=" text-xl/[24px] font-semibold text-tertiary  md:text-[20px]/[24px]">Microphone</h1>
                       </div>
-                      <Button onPress={testMic} isDisabled={isTestingMic} color="warning">
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                          <path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3zm-7 9a7 7 0 0014 0M5 10v1a7 7 0 0014 0v-1M12 19v4m-4 0h8" />
-                        </svg>
-                        {isTestingMic ? `Testing Mic... (${countdown}s)` : 'Test Microphone (3 sec)'}
-                      </Button>
+
                       {micDeviceLabel && (
                         <Alert
                           hideIcon
                           className="mb-4 mt-4 text-xs"
-                          color="default"
+                          color="secondary"
                           title={
                             <>
-                              Microphone in use: <strong>{micDeviceLabel}</strong>
+                              Mic in use: <strong>{micDeviceLabel}</strong>
                             </>
                           }
                         />
                       )}
+                      <Button onPress={testMic} isDisabled={isTestingMic} color="default">
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                          <path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3zm-7 9a7 7 0 0014 0M5 10v1a7 7 0 0014 0v-1M12 19v4m-4 0h8" />
+                        </svg>
+                        {isTestingMic ? `Testing Mic... (${countdown}s)` : 'Test Mic (3 sec)'}
+                      </Button>
                       {micAudioUrl && (
                         <div>
                           <p className="text-sm mb-1 text-gray-700 mt-5">Playback your recorded audio:</p>
