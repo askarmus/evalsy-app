@@ -8,6 +8,7 @@ import { Invitation, SentInvitationsTable } from './components/SentInvitationsTa
 import { SendInvitationSchema } from '@/helpers/schemas';
 import { useCredits } from '@/context/CreditContext';
 import { getAllJobs } from '@/services/job.service';
+import { Send } from 'lucide-react';
 
 interface SendInvitationDrawerProps {
   isOpen: boolean;
@@ -86,11 +87,17 @@ export const SendInvitationDrawer: React.FC<SendInvitationDrawerProps> = ({ isOp
         <Formik enableReinitialize initialValues={initialValues} validationSchema={SendInvitationSchema} onSubmit={handleSubmit}>
           {({ values, errors, touched, handleChange, handleSubmit, resetForm, setFieldValue }) => (
             <>
-              <DrawerHeader>Send Invitation</DrawerHeader>
+              <DrawerHeader>
+                <div className="mb-5 flex items-center gap-[5px] mb-3 md:mb-4 ">
+                  <Send className="w-5 h-5 text-xl text-secondary-400" />
+                  <h1 className=" text-xl/[24px] font-semibold text-tertiary  md:text-[20px]/[24px]">Send Invitation</h1>
+                </div>
+              </DrawerHeader>
               <DrawerBody>
                 <div className="flex flex-col gap-4 mb-6">
                   <Autocomplete
                     label="Select a job"
+                    variant="bordered"
                     onSelectionChange={async (value) => {
                       if (value) {
                         setInvitations([]);
@@ -109,9 +116,10 @@ export const SendInvitationDrawer: React.FC<SendInvitationDrawerProps> = ({ isOp
                     ))}
                   </Autocomplete>
 
-                  <Input label="Name" value={values.name} onChange={handleChange('name')} isInvalid={!!errors.name && !!touched.name} errorMessage={errors.name} />
-                  <Input label="Email" value={values.email} onChange={handleChange('email')} isInvalid={!!errors.email && !!touched.email} errorMessage={errors.email} />
+                  <Input label="Name" variant="bordered" value={values.name} onChange={handleChange('name')} isInvalid={!!errors.name && !!touched.name} errorMessage={errors.name} />
+                  <Input label="Email" variant="bordered" value={values.email} onChange={handleChange('email')} isInvalid={!!errors.email && !!touched.email} errorMessage={errors.email} />
                   <Textarea
+                    variant="bordered"
                     minRows={1}
                     label="Message"
                     classNames={{
@@ -123,13 +131,15 @@ export const SendInvitationDrawer: React.FC<SendInvitationDrawerProps> = ({ isOp
                     errorMessage={errors.message}
                   />
 
-                  <div className="mt-6">
-                    <Button color="primary" className="mr-2 bg-[#100145] text-white" isLoading={loading} onPress={handleSubmit as any}>
+                  <div className="mt-6 flex items-center gap-3">
+                    <Button color="secondary" startContent={<Send />} radius="full" variant="flat" isLoading={loading} onPress={handleSubmit as any}>
                       Send
                     </Button>
+
                     <Button
-                      color="primary"
-                      variant="flat"
+                      color="secondary"
+                      radius="full"
+                      variant="faded"
                       onPress={() =>
                         resetForm({
                           values: {

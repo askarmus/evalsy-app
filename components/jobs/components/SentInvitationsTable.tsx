@@ -2,7 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, Input, Pagination, Tooltip } from '@heroui/react';
 import Link from 'next/link';
 import DateFormatter from '@/app/utils/DateFormatter';
-import { Copy } from 'lucide-react';
+import { Copy, Search } from 'lucide-react';
 import { showToast } from '@/app/utils/toastUtils';
 
 export interface Invitation {
@@ -40,7 +40,7 @@ export const SentInvitationsTable: React.FC<SentInvitationsTableProps> = ({ invi
   return (
     <div className="flex flex-col gap-4">
       {/* Search Input */}
-      <Input placeholder="Search invitations..." value={searchValue} onChange={(e) => setSearchValue(e.target.value)} />
+      <Input placeholder="Search invitations..." startContent={<Search className="text-secondary" />} value={searchValue} onChange={(e) => setSearchValue(e.target.value)} />
 
       {/* Table */}
       <Table shadow="sm" radius="sm" aria-label="Sent Invitations">
@@ -79,7 +79,7 @@ export const SentInvitationsTable: React.FC<SentInvitationsTableProps> = ({ invi
       {/* Pagination */}
       {paginatedInvitations.length > 0 && (
         <div className="flex justify-center">
-          <Pagination showControls color="default" size="sm" total={Math.ceil(filteredInvitations.length / rowsPerPage)} page={page} onChange={(page) => setPage(page)} />
+          <Pagination showControls color="secondary" size="sm" total={Math.ceil(filteredInvitations.length / rowsPerPage)} page={page} onChange={(page) => setPage(page)} />
         </div>
       )}
     </div>

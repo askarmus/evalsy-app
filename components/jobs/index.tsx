@@ -1,5 +1,5 @@
 'use client';
-import { Button, Input, Pagination, Chip, Card, Tabs, Tab, DropdownMenu, CardBody, Dropdown, DropdownTrigger, DropdownItem } from '@heroui/react';
+import { Button, Input, Pagination, Chip, Card, Tabs, Tab, DropdownMenu, CardBody, Dropdown, DropdownTrigger, DropdownItem, CardFooter } from '@heroui/react';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { getAllJobs, deleteJob } from '@/services/job.service';
 import { SendInvitationDrawer } from './send-invitation';
@@ -12,7 +12,8 @@ import EmptyStateCards from '../shared/empty-state-cards';
 import { FaExternalLinkAlt, FaSearch } from 'react-icons/fa';
 import { showToast } from '@/app/utils/toastUtils';
 import { testInterview } from '@/services/invitation.service';
-import { Calendar, CheckCircle, Clock, Edit, MoreHorizontal, Play, Plus, Search, Send, Trash2, UserCheck, Users } from 'lucide-react';
+import { Calendar, CheckCircle, Clock, Edit, Link as LinkIcon, MoreHorizontal, Play, Plus, Search, Send, Trash2, UserCheck, UserPlus, Users } from 'lucide-react';
+import Link from 'next/link';
 
 export default function Jobs() {
   const [page, setPage] = useState(1);
@@ -22,7 +23,7 @@ export default function Jobs() {
   const [filterValue, setFilterValue] = useState('');
   const [jobs, setJobs] = useState([]);
   const [selectedTab, setSelectedTab] = useState('active');
-  const rowsPerPage = 4;
+  const rowsPerPage = 7;
   const [selectedJobId, setSelectedJobId] = useState<string | null>(null);
   const [isDrawerOpen, setDrawerOpen] = useState(false);
   const [jobToDelete, setJobToDelete] = useState<string | null>(null);
@@ -156,23 +157,10 @@ export default function Jobs() {
       text: 'text-green-700',
     },
     started: {
-      icon: <Play className="w-4 h-4 text-blue-600" />,
-      bg: 'bg-blue-50',
-      text: 'text-blue-700',
+      icon: <Play className="w-4 h-4 text-secondary-600" />,
+      bg: 'bg-secondary-50',
+      text: 'text-secondary-700',
     },
-  };
-
-  const getExperienceLevelColor = (level: string) => {
-    switch (level.toUpperCase()) {
-      case 'BEGINNER':
-        return 'bg-emerald-200 text-emerald-800 text-xs';
-      case 'EXPERT':
-        return 'bg-purple-200 text-purple-800';
-      case 'SENIOR':
-        return 'bg-amber-200 text-amber-800';
-      default:
-        return 'bg-gray-200 text-gray-800';
-    }
   };
 
   return (
@@ -184,7 +172,7 @@ export default function Jobs() {
           <Input
             onChange={(e) => onSearchChange(e.target.value)}
             isClearable
-            className="max-w-md   border-black  "
+            className="max-w-md   "
             placeholder="Search Interviews"
             defaultValue=""
             startContent={<Search className="text-secondary" />}
@@ -228,7 +216,7 @@ export default function Jobs() {
           </Tabs>
 
           <Button color="secondary" variant="flat" radius="full" size="md" onPress={() => router.push('/interviews/add')} startContent={<Plus />}>
-            Create New Interview
+            Create Interview
           </Button>
         </div>
       </div>
@@ -253,86 +241,102 @@ export default function Jobs() {
               />
             ) : (
               <>
-                {items.map((job: any) => (
-                  <Card key={job.id} shadow="md" radius="md">
-                    <CardBody className="p-4">
-                      <div className="flex items-start justify-between">
-                        <div className="flex-1">
-                          <div className="flex items-center gap-3 mb-3">
-                            <h3 className="text-xl font-semibold text-gray-900 hover:text-purple-600 cursor-pointer flex items-center gap-2">
-                              {job.jobTitle}
-
-                              <a href={`${window.location.origin}/job/${job.id}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-xl font-bold text-gray-900 dark:text-gray-100 hover:underline">
-                                <FaExternalLinkAlt className="w-3 h-3 opacity-40" />
-                              </a>
-                            </h3>
-                          </div>
-                          <div className="flex items-center gap-6 text-sm text-gray-600 mb-4">
-                            <div className="flex items-center gap-1">
-                              <Users className="w-4 h-4" />
-                              <span>{job.totalInvitations} Invitations</span>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                  <Link href="/interviews/add">
+                    <Card className="border-2 border-dashed border-purple-300 hover:border-purple-400 transition-colors cursor-pointer group">
+                      <CardBody className="flex flex-col items-center justify-center h-64 text-center p-6">
+                        <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mb-4 group-hover:bg-purple-200 transition-colors">
+                          <Plus className="w-8 h-8 text-purple-600" />
+                        </div>
+                        <h3 className="text-lg font-semibold   mb-2">Add New Interview</h3>
+                        <p className="text-sm text-gray-500">Create a new interview to start recruiting</p>
+                      </CardBody>
+                    </Card>
+                  </Link>
+                  {items.map((job: any) => (
+                    <Card key={job.id} shadow="md" radius="md">
+                      <CardBody className="p-4">
+                        <div className="flex items-start justify-between">
+                          <div className="flex-1">
+                            <div className="flex items-center gap-3 mb-3">
+                              <h3 className="text-xl font-semibold   hover:text-purple-600 cursor-pointer flex items-center gap-2">{job.jobTitle}</h3>
                             </div>
-                            <div className="flex items-center gap-1">
-                              <Calendar className="w-4 h-4" />
-                              <span>Created {DateFormatter.formatDate(job.createdAt)}</span>
-                            </div>
-                          </div>
-
-                          <div className="flex items-center gap-4">
-                            {job.invitationStatusCount?.map((item: any, index: number) => {
-                              const config = statusConfig[item.status] || {
-                                icon: <Clock className="w-4 h-4 text-gray-600" />,
-                                bg: 'bg-gray-100',
-                                text: 'text-gray-700',
-                              };
-
-                              return (
-                                <div key={index} className={`flex items-center gap-2 px-3 py-1 rounded-full ${config.bg}`}>
-                                  {config.icon}
-                                  <span className={`text-sm font-medium ${config.text}`}>
-                                    {item.status.charAt(0).toUpperCase() + item.status.slice(1)}: {item.count}
-                                  </span>
+                            <div className="  text-xs text-gray-600 mb-4">
+                              <div className="flex justify-start items-center w-full gap-4">
+                                <div className="flex items-center gap-1">
+                                  <Users className="w-4 h-4" />
+                                  <span>{job.totalInvitations}</span>
                                 </div>
-                              );
-                            })}
+                                <div className="flex items-center gap-1">
+                                  <Calendar className="w-4 h-4" />
+                                  <span>{DateFormatter.formatDate(job.createdAt, true)}</span>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div className="flex flex-wrap gap-2">
+                              {job.invitationStatusCount?.map((item: any, index: number) => {
+                                const config = statusConfig[item.status] || {
+                                  icon: <Clock className="w-4 h-4 text-gray-600" />,
+                                  bg: 'bg-gray-100',
+                                  text: 'text-gray-700',
+                                };
+
+                                return (
+                                  <div key={index} className={`flex items-center gap-2 px-3 py-1 rounded-full ${config.bg}`}>
+                                    {config.icon}
+                                    <span className={`text-sm font-medium ${config.text}`}>
+                                      {item.status.charAt(0).toUpperCase() + item.status.slice(1)}: {item.count}
+                                    </span>
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          </div>
+
+                          <div className="flex items-center gap-2 ml-6">
+                            <Dropdown>
+                              <DropdownTrigger asChild>
+                                <Button radius="full" isIconOnly variant="ghost" size="sm" className="h-8 w-8 p-0">
+                                  <MoreHorizontal className="w-4 h-4" />
+                                </Button>
+                              </DropdownTrigger>
+                              <DropdownMenu aria-label="Static Actions">
+                                <DropdownItem onPress={() => router.push(`/interviews/edit/${job.id}`)} className="gap-2" key={'edit'} startContent={<Edit className="w-4 h-4" />}>
+                                  Edit Position
+                                </DropdownItem>
+                                <DropdownItem onPress={() => handleManageResumeClick(job.id)} className="gap-2" key={'invite'} startContent={<Edit className="w-4 h-4" />}>
+                                  View Candidates
+                                </DropdownItem>
+
+                                <DropdownItem onPress={() => window.open(`${window.location.origin}/job/${job.id}`, '_blank')} className="gap-2" key="link" startContent={<LinkIcon className="w-4 h-4" />}>
+                                  Application Page
+                                </DropdownItem>
+
+                                <DropdownItem key={'delete'} onPress={() => handleDeleteClick(job.id)} startContent={<Trash2 className="w-4 h-4" />} className="gap-2 text-red-600">
+                                  Delete Position
+                                </DropdownItem>
+                              </DropdownMenu>
+                            </Dropdown>
                           </div>
                         </div>
-
-                        <div className="flex items-center gap-2 ml-6">
-                          <Button variant="faded" color="secondary" radius="full" onPress={() => handleInviteClick(job.id)} size="sm" className="gap-2 bg-transparent">
-                            <Send className="w-4 h-4" />
-                            Invite Candidates
+                      </CardBody>
+                      <CardFooter>
+                        <div className="flex justify-between items-center w-full">
+                          <Button variant="faded" color="secondary" radius="full" onPress={() => handleInviteClick(job.id)} size="sm" className="gap-2">
+                            <UserPlus className="w-4 h-4" />
+                            Invite
                           </Button>
 
-                          <Button size="sm" isLoading={loadingJobId === job.id} radius="full" variant="faded" color="secondary" aria-label="manage" onPress={() => tryYourself(job.id)}>
-                            <Play className="w-4 h-4" />
+                          <Button size="sm" isLoading={loadingJobId === job.id} radius="full" variant="faded" color="secondary" aria-label="manage" onPress={() => tryYourself(job.id)} className="gap-2">
+                            <LinkIcon className="w-4 h-4" />
                             Try Yourself
                           </Button>
-                          <Dropdown>
-                            <DropdownTrigger asChild>
-                              <Button radius="full" isIconOnly variant="ghost" size="sm" className="h-8 w-8 p-0">
-                                <MoreHorizontal className="w-4 h-4" />
-                              </Button>
-                            </DropdownTrigger>
-                            <DropdownMenu aria-label="Static Actions">
-                              <DropdownItem onPress={() => router.push(`/interviews/edit/${job.id}`)} className="gap-2" key={'edit'} startContent={<Edit className="w-4 h-4" />}>
-                                Edit Position
-                              </DropdownItem>
-                              <DropdownItem onPress={() => handleManageResumeClick(job.id)} className="gap-2" key={'invite'} startContent={<Edit className="w-4 h-4" />}>
-                                View Candidates
-                              </DropdownItem>
-
-                              <DropdownItem key={'delete'} onPress={() => handleDeleteClick(job.id)} startContent={<Trash2 className="w-4 h-4" />} className="gap-2 text-red-600">
-                                Delete Position
-                              </DropdownItem>
-                            </DropdownMenu>
-                          </Dropdown>
                         </div>
-                      </div>
-                    </CardBody>
-                  </Card>
-                ))}
-
+                      </CardFooter>
+                    </Card>
+                  ))}
+                </div>
                 <Pagination
                   color="secondary"
                   classNames={{
