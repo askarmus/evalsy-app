@@ -20,6 +20,8 @@ export type CompanySettingsFormValues = {
   twitter?: string;
   logo?: string;
   phone?: string;
+  supportName?: string;
+  supportEmail?: string;
 };
 
 const CompanySettings = () => {
@@ -35,6 +37,8 @@ const CompanySettings = () => {
     twitter: '',
     logo: '',
     phone: '',
+    supportName: '',
+    supportEmail: '',
   });
 
   const handleRemoveImage = () => {
@@ -89,7 +93,9 @@ const CompanySettings = () => {
                       <Input variant="bordered" size="sm" label="Facebook" name="facebook" value={values.facebook || ''} onChange={handleChange} isInvalid={!!errors.facebook && !!touched.facebook} errorMessage={errors.facebook} />
                       <Input label="Twitter" name="twitter" value={values.twitter || ''} onChange={handleChange} isInvalid={!!errors.twitter && !!touched.twitter} errorMessage={errors.twitter} />
                     </div>
-                    <Input variant="bordered" size="sm" label="Phone" name="phone" value={values.phone || ''} onChange={handleChange} isInvalid={!!errors.phone && !!touched.phone} errorMessage={errors.phone} />
+                    <Input variant="bordered" size="sm" label="Support Phone" name="phone" value={values.phone || ''} onChange={handleChange} isInvalid={!!errors.phone && !!touched.phone} errorMessage={errors.phone} />
+                    <Input variant="bordered" size="sm" label="Supporter Name" name="supportName" value={values.supportName || ''} onChange={handleChange} isInvalid={!!errors.supportName && !!touched.supportName} errorMessage={errors.supportName} />
+                    <Input variant="bordered" size="sm" label="Support Email" name="supportEmail" value={values.supportEmail || ''} onChange={handleChange} isInvalid={!!errors.supportEmail && !!touched.supportEmail} errorMessage={errors.supportEmail} />
                   </div>
                 </div>
                 <div className="w-1/5">

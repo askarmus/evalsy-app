@@ -88,6 +88,8 @@ export const CompanySettingsSchema = object().shape({
   twitter: string().url('Invalid Twitter URL').nullable(),
   logo: string().url('Invalid logo URL').nullable(),
   phone: string().nullable(),
+  supportEmail: string().nullable(),
+  supportName: string().nullable(),
 });
 
 export const ChangePasswordSchema = object().shape({

@@ -51,7 +51,7 @@ const ChangePassword = () => {
                 <Lock className="w-5 h-5 text-xl text-secondary-400" />
                 <h1 className=" text-xl/[24px] font-semibold text-tertiary  md:text-[20px]/[24px]">Change Password</h1>
               </div>
-              <p className="text-sm text-secondary-500 mb-6">Please note, After updating, you will be logged out and need to log in again.</p>
+              <p className="text-sm text-secondary-500 mb-6">Please note: After the update, you will be logged out and will need to log in again.</p>
 
               <div className="grid grid-cols-1 gap-4">
                 <Input variant="bordered" size="sm" label="Current Password" name="oldPassword" type="password" value={values.oldPassword} onChange={handleChange} isInvalid={!!errors.oldPassword && !!touched.oldPassword} errorMessage={errors.oldPassword} />

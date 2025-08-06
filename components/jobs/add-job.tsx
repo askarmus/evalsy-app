@@ -316,10 +316,27 @@ export const AddJob = () => {
                             <h1 className="text-sm font-semibold">Salary Range(this will help you you narrow down selecton process)</h1>
 
                             <div className="grid grid-cols-3 gap-3">
-                              <Autocomplete label="Currency" placeholder="Select a currency" labelPlacement="outside" isInvalid={!!errors.currency && !!touched.currency} errorMessage={errors.currency} selectedKey={values.currency ?? null} onSelectionChange={(key) => setFieldValue('currency', key)} className="w-full">
-                                {currencyOptions.map((item) => (
-                                  <AutocompleteItem key={item.code} textValue={item.name}>
-                                    {item.name} ({item.symbol})
+                              <Autocomplete
+                                label="Currency"
+                                placeholder="Select a currency"
+                                labelPlacement="outside"
+                                isInvalid={!!errors.currency && !!touched.currency}
+                                errorMessage={errors.currency}
+                                selectedKey={values.currency ?? null}
+                                onSelectionChange={(key) => setFieldValue('currency', key)}
+                                className="w-full"
+                                defaultFilter={(textValue, inputValue) => {
+                                  const query = inputValue.toLowerCase();
+                                  return textValue.toLowerCase().includes(query);
+                                }}
+                              >
+                                {currencyOptions.map((item: any) => (
+                                  <AutocompleteItem
+                                    key={item.code}
+                                    // combine code + name so both are searchable
+                                    textValue={`${item.code} ${item.name}`}
+                                  >
+                                    {item.code} - {item.name}
                                   </AutocompleteItem>
                                 ))}
                               </Autocomplete>
