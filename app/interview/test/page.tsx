@@ -4,6 +4,7 @@ import Vapi from '@vapi-ai/web';
 import { any } from 'zod';
 import { env } from 'process';
 import SpeakingIndicatorSoft from '../start/[id]/components/SpeakingIndicator';
+import UserCamera from '../start/[id]/components/UserCamera';
 
 interface Message {
   time: string;
@@ -396,6 +397,7 @@ function App() {
 
         {/* Preset Messages */}
         <div>
+          <UserCamera hideRecLabel={false} invitationId="asdsad" isCameraOn={true} />
           <h4 style={{ margin: '0 0 10px 0', color: '#6b7280' }}>Quick Preset Messages:</h4>
           <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
             {['Hello, how are you doing today?', 'Let me think about that for a moment.', "That's a great question! Here's what I think:", 'I understand your concern. Let me explain.', 'Thank you for your patience.', 'Is there anything else I can help you with?', 'Our time is up. Thank you for the conversation, goodbye!'].map((preset, index) => (
