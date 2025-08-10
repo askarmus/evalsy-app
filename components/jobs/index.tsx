@@ -303,14 +303,14 @@ export default function Jobs() {
                               </DropdownTrigger>
                               <DropdownMenu aria-label="Static Actions">
                                 <DropdownItem onPress={() => router.push(`/interviews/edit/${job.id}`)} className="gap-2" key={'edit'} startContent={<Edit className="w-4 h-4" />}>
-                                  Edit Position
+                                  Edit Interview
                                 </DropdownItem>
                                 <DropdownItem onPress={() => handleManageResumeClick(job.id)} className="gap-2" key={'invite'} startContent={<Edit className="w-4 h-4" />}>
-                                  View Candidates
+                                  Manage Resumes
                                 </DropdownItem>
 
                                 <DropdownItem onPress={() => window.open(`${window.location.origin}/job/${job.id}`, '_blank')} className="gap-2" key="link" startContent={<LinkIcon className="w-4 h-4" />}>
-                                  Application Page
+                                  Public Apply Page
                                 </DropdownItem>
 
                                 <DropdownItem key={'delete'} onPress={() => handleDeleteClick(job.id)} startContent={<Trash2 className="w-4 h-4" />} className="gap-2 text-red-600">

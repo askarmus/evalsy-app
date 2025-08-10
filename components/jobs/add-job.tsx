@@ -23,7 +23,8 @@ import { VerticalStepper } from './components/add/VerticalStepper';
 import { StepperHeader } from './components/add/StepperHeader';
 import { defaultJobFormValues } from './helpers/formDefaults';
 import { countryOptions, currencyOptions } from '@/services/currency.service';
-import { Briefcase, ChevronLeft, ChevronRight, Delete, Edit, Forward, GripVertical, MessageCircleQuestion, Save, Settings, Settings2, SettingsIcon, Shield, Sparkle, Trash } from 'lucide-react';
+import { Briefcase, ChevronLeft, ChevronRight, ClipboardList, Delete, Edit, Forward, GripVertical, MessageCircleQuestion, Save, Settings, Settings2, SettingsIcon, Shield, Sparkle, Trash } from 'lucide-react';
+import ResumeCriteriaSettings from './components/add/ResumeCriteriaSettings';
 
 export const AddJob = () => {
   const router = useRouter();
@@ -63,6 +64,12 @@ export const AddJob = () => {
       title: 'Settings',
       description: 'Configure application preferences and system-wide options.',
     },
+    {
+      icon: <ClipboardList className="w-5 h-5 text-xl text-gray-900" />,
+      title: 'Resume Scoring Criteria',
+      description: 'Set rules and weights for matching resumes to jobs.',
+    },
+
     {
       icon: <Shield className="w-5 h-5 text-xl text-gray-900" />,
       title: 'Fraud Detection',
@@ -396,10 +403,9 @@ export const AddJob = () => {
 
                             <RichTextEditor
                               value={values.description}
+                              onTextChange={(text) => setFieldValue('descriptionPlain', text)}
                               onChange={(val) => {
                                 setFieldValue('description', val);
-
-                                // Optional: Mark as touched on first edit if not already
                                 if (!touched.description) {
                                   setTouched({ ...touched, description: true });
                                 }
@@ -489,7 +495,9 @@ export const AddJob = () => {
                           </div>
                         </>
                       )}
-                      {currentStep === 3 && <FraudDetectionSettings values={values.fraudDetection} setFieldValue={setFieldValue} />}
+
+                      {currentStep === 3 && <ResumeCriteriaSettings />}
+                      {currentStep === 4 && <FraudDetectionSettings values={values.fraudDetection} setFieldValue={setFieldValue} />}
                     </CardBody>
 
                     <GenerateQuestionsDrawer

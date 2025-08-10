@@ -1,16 +1,8 @@
+import { HiringGradeUtil } from '@/app/utils/hiring-grade.util';
 import React from 'react';
 
-const getRecommendationStyle = (recommendation: string) => {
-  const map = {
-    strong: { color: 'bg-green-500', label: 'Strong Match' },
-    weak: { color: 'bg-red-500', label: 'Weak Match' },
-    conditional: { color: 'bg-yellow-500', label: 'Conditional Match' },
-  };
-  return map[recommendation] || { color: 'bg-gray-500', label: 'Unknown' };
-};
-
 export const RecommendationSection: React.FC<{ job_match: any; decision_summary: any }> = ({ job_match, decision_summary }) => {
-  const { color, label } = getRecommendationStyle(decision_summary.hire_recommendation);
+  const { color, label } = HiringGradeUtil.getResumeRecommendationStyle(decision_summary.hire_recommendation);
   return (
     <section className="   ">
       <div className="flex flex-col md:flex-row gap-4 items-center">

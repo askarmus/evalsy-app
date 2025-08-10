@@ -8,6 +8,7 @@ import { KeyMatchesSection } from './KeyMatchesSection';
 import { RecommendationSection } from './RecommendationSection';
 import { KeyMissingSection } from './KeyMissingSection';
 import { TopSkillsSection } from './TopSkillsSection';
+import { MailPlusIcon, Send } from 'lucide-react';
 
 export const ResumeAnalyseDrawer: React.FC<{ isOpen: boolean; onClose: () => void; resumeData: any }> = ({ isOpen, onClose, resumeData }) => {
   const [isDrawerOpen, setDrawerOpen] = useState(false);
@@ -34,10 +35,10 @@ export const ResumeAnalyseDrawer: React.FC<{ isOpen: boolean; onClose: () => voi
             <TopSkillsSection skill_experience={skill_experience} />
           </DrawerBody>
           <DrawerFooter>
-            <Button color="primary" onPress={() => handleInviteClick()} variant="solid">
+            <Button color="secondary" radius="full" variant="flat" size="md" onPress={() => handleInviteClick()} startContent={<Send />}>
               Send Interview Invitation
             </Button>
-            <Button color="default" variant="bordered" onPress={onClose}>
+            <Button color="default" radius="full" variant="bordered" size="md" onPress={onClose}>
               Close
             </Button>
           </DrawerFooter>

@@ -7,6 +7,15 @@ type HiringBadgeStyle = {
 export class HiringGradeUtil {
   static RECOMMENDATION_LABELS: Array<'Reject' | 'Borderline' | 'Hire' | 'Strong Hire'> = ['Reject', 'Borderline', 'Hire', 'Strong Hire'];
 
+  static getResumeRecommendationStyle(recommendation: string) {
+    const map = {
+      strong: { color: 'bg-green-500', label: 'Strong Match' },
+      weak: { color: 'bg-red-500', label: 'Weak Match' },
+      conditional: { color: 'bg-yellow-500', label: 'Conditional Match' },
+    };
+    return map[recommendation] || { color: 'bg-gray-500', label: 'Unknown' };
+  }
+
   /**
    * Evaluates a candidate's score (0-100) and returns a hiring recommendation badge.
    * - 0-40: Reject

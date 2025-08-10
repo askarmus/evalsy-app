@@ -39,3 +39,8 @@ export const generateJobDescriptionFromAI = async (payload: { jobTitle: string; 
   const response = await apiClient.post('/job/generate-job-description', payload);
   return response.data.jobDescription;
 };
+
+export const generateRubricFromAI = async (payload: { roleTitle?: string; jdText?: string }) => {
+  const response = await apiClient.post('/job/generate-reume-rubrics', payload);
+  return response.data.rubricDraft;
+};

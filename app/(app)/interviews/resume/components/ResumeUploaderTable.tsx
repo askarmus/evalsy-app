@@ -175,14 +175,14 @@ const ResumeUploader = ({ jobid, onViewDetails, onDelete, existingResume }: Resu
       setLoadingResumeId(null);
     }
   };
-  const { getRootProps, getInputProps } = useDropzone({ onDrop, multiple: true, disabled: isUploadingOrProcessing });
+  const { getRootProps, getInputProps, open } = useDropzone({ onDrop, multiple: true, disabled: isUploadingOrProcessing });
 
-  useEffect(() => {
-    if (!notifications.length) return;
-    notifications.forEach((n) => {
-      dispatch({ type: 'MARK_PROCESSED', resumeId: n.resumeId, analysisResults: n.analysisResults });
-    });
-  }, [notifications]);
+  // useEffect(() => {
+  //   if (!notifications.length) return;
+  //   notifications.forEach((n) => {
+  //     dispatch({ type: 'MARK_PROCESSED', resumeId: n.resumeId, analysisResults: n.analysisResults });
+  //   });
+  // }, [notifications]);
 
   const paginatedFiles = useMemo(() => {
     const start = (currentPage - 1) * PAGE_SIZE;
@@ -212,7 +212,7 @@ const ResumeUploader = ({ jobid, onViewDetails, onDelete, existingResume }: Resu
     <div className="">
       <div {...getRootProps()}>
         <input {...getInputProps()} className="hidden" aria-label="Upload resume file" />
-        <Card radius="sm" shadow="sm" className="w-full mb-8 border-2 border-dashed  cursor-pointer transition-colors hover:bg-slate-50 hover:border-slate-400 dark:hover:bg-slate-800 dark:hover:border-slate-600">
+        <Card radius="sm" shadow="sm" className="w-full mb-8 p-6 border-2 border-dashed  cursor-pointer transition-colors hover:bg-slate-50 hover:border-slate-400 dark:hover:bg-slate-800 dark:hover:border-slate-600">
           <CardBody className="flex flex-row items-center justify-between py-4 px-6">
             <div className="flex items-center">
               <div className="rounded-full bg-secondary p-2 mr-4  ">
@@ -226,7 +226,7 @@ const ResumeUploader = ({ jobid, onViewDetails, onDelete, existingResume }: Resu
               </div>
             </div>
             <div>
-              <Button isDisabled={isUploadingOrProcessing} variant="flat" size="sm" color="secondary" radius="full">
+              <Button isDisabled={isUploadingOrProcessing} onPress={open} variant="flat" size="sm" color="secondary" radius="full">
                 Browse Files
               </Button>
             </div>

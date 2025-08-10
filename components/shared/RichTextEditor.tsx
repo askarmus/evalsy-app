@@ -13,9 +13,10 @@ import { useEffect } from 'react';
 interface RichTextEditorProps {
   value: string;
   onChange: (val: string) => void;
+  onTextChange?: (txt: string) => void; // ← plain text callback
 }
 
-export default function RichTextEditor({ value, onChange }: RichTextEditorProps) {
+export default function RichTextEditor({ value, onChange, onTextChange }: RichTextEditorProps) {
   const lowlight = createLowlight();
 
   const editor = useEditor({
@@ -30,6 +31,8 @@ export default function RichTextEditor({ value, onChange }: RichTextEditorProps)
 
     onUpdate: ({ editor }) => {
       onChange(editor.getHTML());
+      onTextChange?.(editor.getText({ blockSeparator: '\n' })); // ← plain text
+
       editor.commands.scrollIntoView();
     },
   });
