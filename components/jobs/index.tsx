@@ -225,7 +225,7 @@ export default function Jobs() {
         {isLoading && <JobListItemSkeleton />}
 
         {!isLoading && (
-          <div className="w-full flex flex-col gap-4">
+          <div className="w-full flex flex-col gap-3">
             {filteredItems.length === 0 ? (
               <EmptyStateCards
                 title={jobs.length === 0 ? 'No Interviews available' : 'No matching results'}
@@ -241,7 +241,7 @@ export default function Jobs() {
               />
             ) : (
               <>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4">
                   <Link href="/interviews/add">
                     <Card className="border-2 border-dashed border-purple-300 hover:border-purple-400 transition-colors cursor-pointer group">
                       <CardBody className="flex flex-col items-center justify-center h-64 text-center p-6">

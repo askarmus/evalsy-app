@@ -177,12 +177,12 @@ const ResumeUploader = ({ jobid, onViewDetails, onDelete, existingResume }: Resu
   };
   const { getRootProps, getInputProps, open } = useDropzone({ onDrop, multiple: true, disabled: isUploadingOrProcessing });
 
-  // useEffect(() => {
-  //   if (!notifications.length) return;
-  //   notifications.forEach((n) => {
-  //     dispatch({ type: 'MARK_PROCESSED', resumeId: n.resumeId, analysisResults: n.analysisResults });
-  //   });
-  // }, [notifications]);
+  useEffect(() => {
+    if (!notifications.length) return;
+    notifications.forEach((n) => {
+      dispatch({ type: 'MARK_PROCESSED', resumeId: n.resumeId, analysisResults: n.analysisResults });
+    });
+  }, [notifications]);
 
   const paginatedFiles = useMemo(() => {
     const start = (currentPage - 1) * PAGE_SIZE;

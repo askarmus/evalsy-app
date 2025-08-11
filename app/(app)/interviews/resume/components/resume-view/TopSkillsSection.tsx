@@ -10,7 +10,7 @@ export const TopSkillsSection: React.FC<{ skill_experience: any[] }> = ({ skill_
           <span className="text-sm">{skill.experience}</span>
         </div>
         <div className="w-full bg-gray-200 rounded-full h-1 mt-1">
-          <div className="bg-green-700 h-1 rounded-full w-full"></div>
+          <div className="bg-secondary-700 h-1 rounded-full w-full"></div>
         </div>
         <p className="text-xs mt-1">Last used: {skill.last_used}</p>
       </div>
