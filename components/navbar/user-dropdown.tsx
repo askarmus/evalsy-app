@@ -39,7 +39,7 @@ export const UserDropdown = () => {
               name: getInitials(user?.name),
               className: 'bg-secondary-300 text-white  ',
             }}
-            description={<span className="text-secondary-100">Signed in as</span>}
+            description={<span>Signed in as</span>}
             name={!loading ? truncateText(user?.name || '', 15) || 'User' : 'Loading user......'}
           />
         </DropdownTrigger>

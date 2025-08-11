@@ -21,9 +21,7 @@ import { generateRubricFromAI } from '@/services/job.service';
 // ---------------------- Types ----------------------
 export type Rubric = {
   id?: string;
-  name: string;
-  scope: 'org' | 'role_template' | 'job_override';
-  roleKey?: string;
+
   weights: { skills: number; experience: number; seniority: number; domain: number };
   caps: { missing_core: number; missing_field_ops: number };
   mustHaves: {
@@ -68,10 +66,7 @@ function computeMatch(e: Evidence, caps: Rubric['caps'], w: Rubric['weights']) {
   return Math.round(score);
 }
 
-const DEFAULT_RUBRIC: Rubric = {
-  name: 'Health & Safety Officer – Default',
-  scope: 'org',
-  roleKey: 'HSE_OFFICER',
+export const DEFAULT_RUBRIC: Rubric = {
   weights: { skills: 0.4, experience: 0.3, seniority: 0.2, domain: 0.1 },
   caps: { missing_core: 10, missing_field_ops: 20 },
   mustHaves: {
@@ -190,7 +185,7 @@ export default function ResumeCriteriaSettings() {
     try {
       setGenerating(true);
 
-      const roleTitle = values.jobTitle || rubric.name || 'Untitled Role';
+      const roleTitle = values.jobTitle || 'Untitled Role';
       const jdText = (values as any).descriptionPlain?.trim() || '';
 
       if (!roleTitle && !jdText) {
