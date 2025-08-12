@@ -1,6 +1,5 @@
 import { nanoid } from 'nanoid';
 import { AddJobFormValues } from '../types';
-import { DEFAULT_RUBRIC } from '../components/add/ResumeCriteriaSettings';
 
 export const defaultJobFormValues: AddJobFormValues = {
   jobTitle: '',
@@ -8,7 +7,7 @@ export const defaultJobFormValues: AddJobFormValues = {
   totalRandomCodingQuestion: 0,
   invitationExpireInDays: 7,
   durationInMinutes: 10,
-  resumeCriteria: DEFAULT_RUBRIC,
+  resumeCriteria: null,
   questions: [
     {
       id: nanoid(),

@@ -1,5 +1,3 @@
-import { Rubric } from './components/add/ResumeCriteriaSettings';
-
 export type Question = { id: string; text: string; expectedScore: number; isRandom: boolean };
 
 export interface AddJobFormValues {
@@ -19,7 +17,7 @@ export interface AddJobFormValues {
   minSalary: number;
   maxSalary: number;
   showSalaryInDescription: boolean;
-  resumeCriteria: Rubric;
+  resumeCriteria: any;
   fraudDetection: {
     tabSwitch: boolean;
     rightClick: boolean;
