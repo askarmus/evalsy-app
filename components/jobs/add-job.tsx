@@ -105,24 +105,34 @@ export const AddJob = () => {
     { id: 'expert', name: 'Expert' },
   ];
 
-  useEffect(() => {
-    if (isEditMode) {
-      const fetchJob = async () => {
-        const jobData = await getJobById(id);
-        setInitialValues(jobData);
-        setFormReady(true);
+  function htmlToPlainText(html?: string) {
+    if (!html) return '';
+    const withBreaks = html.replace(/<(\/p|\/div|\/h[1-6]|br\s*\/?)>/gi, '$&\n').replace(/<li>/gi, '\n• ');
+    const div = document.createElement('div');
+    div.innerHTML = withBreaks;
+    const text = div.textContent || div.innerText || '';
+    return text
+      .replace(/\u00A0/g, ' ')
+      .replace(/\n{3,}/g, '\n\n')
+      .trim();
+  }
 
-        // ✅ Validate all steps once form is ready
-        try {
-          await AddJobSchema.validate(jobData, { abortEarly: false });
-          setCompletedSteps(stepsData.map((_, index) => index)); // all steps passed
-        } catch {
-          // do nothing — user will need to fix form
-        }
-      };
-      fetchJob();
-    }
-  }, [id]);
+  useEffect(() => {
+    if (!isEditMode) return;
+
+    (async () => {
+      const jobData = await getJobById(id);
+      setInitialValues(jobData);
+      setFormReady(true);
+
+      // Wait one frame so Formik (and formRef) are mounted
+      requestAnimationFrame(() => {
+        if (!formRef.current) return;
+        formRef.current.setFieldValue('description', jobData.description || '');
+        formRef.current.setFieldValue('descriptionPlain', jobData.descriptionPlain?.trim?.() || htmlToPlainText(jobData.description));
+      });
+    })();
+  }, [id, isEditMode]);
 
   const handleGenerateJobDescription = async (values: AddJobFormValues, setFieldValue: FormikHelpers<AddJobFormValues>['setFieldValue'], setLoading: (loading: boolean) => void) => {
     try {

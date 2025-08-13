@@ -43,6 +43,7 @@ export default function ResumeCriteriaSettings() {
       setGenerating(true);
       const roleTitle = (values as any).jobTitle || 'Untitled Role';
       const jdText = (values as any).descriptionPlain?.trim() || '';
+      alert(jdText);
 
       if (!roleTitle && !jdText) {
         showToast.error('Please enter a role title or a job description first.');
@@ -59,7 +60,7 @@ export default function ResumeCriteriaSettings() {
       showToast.success('Resume criteria generated!');
     } catch (e: any) {
       console.error(e);
-      showToast.error(e?.response?.data?.error ?? 'Failed to generate resume criteria.');
+      showToast.error(e?.response?.data?.error ?? 'Failed to generate resume criteria. try again');
     } finally {
       setGenerating(false);
     }
