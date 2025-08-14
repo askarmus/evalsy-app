@@ -11,20 +11,17 @@ import { QuestionEditDrawer } from './components/add/QuestionEditDrawer';
 import { AddJobFormValues, Question } from './types';
 import { QuestionSearchAndFilter } from './components/add/QuestionSearchAndFilter';
 import { GenerateQuestionsDrawer } from './components/add/GenerateQuestionsDrawer';
-import { AiOutlineDelete, AiOutlineEdit } from 'react-icons/ai';
 import { QuestionHeaderActions } from './components/add/QuestionHeaderActions';
 import RichTextEditor from '../shared/RichTextEditor';
 import { DndContext, closestCenter, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy, useSortable, arrayMove } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { FaAsterisk, FaBriefcase, FaCogs, FaGripVertical, FaQuestionCircle, FaShieldAlt } from 'react-icons/fa';
 import { FraudDetectionSettings } from './components/add/FraudDetectionSettings';
 import { VerticalStepper } from './components/add/VerticalStepper';
 import { StepperHeader } from './components/add/StepperHeader';
 import { defaultJobFormValues } from './helpers/formDefaults';
 import { countryOptions, currencyOptions } from '@/services/currency.service';
 import { Briefcase, ChevronLeft, ChevronRight, ClipboardList, Delete, Edit, Forward, GripVertical, MessageCircleQuestion, Save, Settings, Settings2, SettingsIcon, Shield, Sparkle, Trash } from 'lucide-react';
-import ResumeCriteriaSettings from './components/add/ResumeCriteriaSettings';
 
 export const AddJob = () => {
   const router = useRouter();
@@ -45,7 +42,6 @@ export const AddJob = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [completedSteps, setCompletedSteps] = useState<number[]>([]);
   const [invalidSteps, setInvalidSteps] = useState<number[]>([]);
-  const [availableCities, setAvailableCities] = useState<string[]>([]);
   const [selectedCountry, setSelectedCountry] = useState<string>('');
 
   const stepsData = [
@@ -64,12 +60,6 @@ export const AddJob = () => {
       title: 'Settings',
       description: 'Configure application preferences and system-wide options.',
     },
-    {
-      icon: <ClipboardList className="w-5 h-5 text-xl text-gray-900" />,
-      title: 'Resume Scoring Criteria',
-      description: 'Set rules and weights for matching resumes to jobs.',
-    },
-
     {
       icon: <Shield className="w-5 h-5 text-xl text-gray-900" />,
       title: 'Fraud Detection',
@@ -506,8 +496,7 @@ export const AddJob = () => {
                         </>
                       )}
 
-                      {currentStep === 3 && <ResumeCriteriaSettings />}
-                      {currentStep === 4 && <FraudDetectionSettings values={values.fraudDetection} setFieldValue={setFieldValue} />}
+                      {currentStep === 3 && <FraudDetectionSettings values={values.fraudDetection} setFieldValue={setFieldValue} />}
                     </CardBody>
 
                     <GenerateQuestionsDrawer
