@@ -7,7 +7,6 @@ import { RedFlagsSection } from './RedFlagsSection';
 import { KeyMatchesSection } from './KeyMatchesSection';
 import { RecommendationSection } from './RecommendationSection';
 import { KeyMissingSection } from './KeyMissingSection';
-import { TopSkillsSection } from './TopSkillsSection';
 import { MailPlusIcon, Send } from 'lucide-react';
 
 export const ResumeAnalyseDrawer: React.FC<{ isOpen: boolean; onClose: () => void; resumeData: any }> = ({ isOpen, onClose, resumeData }) => {
@@ -18,7 +17,7 @@ export const ResumeAnalyseDrawer: React.FC<{ isOpen: boolean; onClose: () => voi
     setDrawerOpen(true);
   };
   if (!resumeData) return null;
-  const { contact, current_role, experience, education, soft_skills, red_flags, job_match, decision_summary, skill_experience } = resumeData.analysisResults;
+  const { candidate_info, current_role, experience, education, soft_skills, red_flags, job_match, decision_summary, skill_experience } = resumeData.analysisResults;
   const { jobId } = resumeData;
 
   return (
@@ -26,13 +25,7 @@ export const ResumeAnalyseDrawer: React.FC<{ isOpen: boolean; onClose: () => voi
       <Drawer isOpen={isOpen} onOpenChange={onClose} size="2xl">
         <DrawerContent>
           <DrawerBody className="space-y-6">
-            <ResumeHeader contact={contact} current_role={current_role} experience={experience} />
-            <RecommendationSection job_match={job_match} decision_summary={decision_summary} />
-            <KeyMatchesSection key_matches={job_match.key_matches} />
-            <KeyMissingSection key_missing={job_match.key_missing} />
-            <RedFlagsSection red_flags={red_flags} />
-            <EducationAndSoftSkills education={education} soft_skills={soft_skills} />
-            <TopSkillsSection skill_experience={skill_experience} />
+            <ResumeHeader contact={candidate_info} current_role={candidate_info} experience={candidate_info} />
           </DrawerBody>
           <DrawerFooter>
             <Button color="secondary" radius="full" variant="flat" size="md" onPress={() => handleInviteClick()} startContent={<Send />}>
@@ -45,7 +38,7 @@ export const ResumeAnalyseDrawer: React.FC<{ isOpen: boolean; onClose: () => voi
         </DrawerContent>
       </Drawer>
 
-      <SendInvitationDrawer isOpen={isDrawerOpen} name={contact.name} email={contact.email} onClose={handleCloseDrawer} jobId={jobId} />
+      {/* <SendInvitationDrawer isOpen={isDrawerOpen} name={contact.name} email={contact.email} onClose={handleCloseDrawer} jobId={jobId} /> */}
     </>
   );
 };

@@ -9,7 +9,6 @@ import { FaUpload } from 'react-icons/fa';
 import { useResumeNotifications } from '../hooks/useResumeNotifications';
 import { createResume } from '@/services/resume.service';
 import { ResumeUploaderProps, UploadFile } from '../types/UploadFileType';
-import { InvalidProcessedCard } from './result-list/InvalidProcessedCard';
 import { UploadingCard } from './result-list/UploadingCard';
 import { ValidProcessedCard } from './result-list/ValidProcessedCard';
 import { UploadedCard } from './result-list/UploadedCard';
@@ -294,7 +293,7 @@ const ResumeUploader = ({ jobid, onViewDetails, onDelete, existingResume }: Resu
               if (file.status === 'uploading') return <UploadingCard key={file.resumeId} file={file} />;
               if (file.status === 'uploaded') return <UploadedCard key={file.resumeId} file={file} />;
               if (file.status === 'processed') {
-                return file.analysisResults.validityStatus ? <ValidProcessedCard onViewDetails={handleViewDetails} isLoading={loadingResumeId === file.resumeId} key={file.resumeId} file={file} onDelete={onDelete} /> : <InvalidProcessedCard key={file.resumeId} file={file} />;
+                return <ValidProcessedCard onViewDetails={handleViewDetails} isLoading={loadingResumeId === file.resumeId} key={file.resumeId} file={file} onDelete={onDelete} />;
               }
               return null;
             })}

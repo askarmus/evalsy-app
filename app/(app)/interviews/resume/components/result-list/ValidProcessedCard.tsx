@@ -6,14 +6,15 @@ import { HiringGradeUtil } from '@/app/utils/hiring-grade.util';
 import { Calendar, ThumbsUp } from 'lucide-react';
 
 export const ValidProcessedCard = ({ file, onDelete, onViewDetails, isLoading = false }: { file: UploadFile; onDelete: (id: string) => void; onViewDetails: (id: string) => void; isLoading?: boolean }) => {
-  const { color, label } = HiringGradeUtil.getResumeRecommendationStyle(file.analysisResults?.hireRecommendation);
+  console.log(file);
+  const { color, text } = HiringGradeUtil.getHiringRecommendation(file.analysisResults?.matchScore);
 
   return (
     <Card shadow="sm" radius="sm" className="p-2">
       <CardHeader className="flex items-center justify-between gap-4">
         {/* Left: score + identity */}
         <div className="flex items-center gap-3 min-w-0">
-          <div className={`w-12 h-12 rounded-full flex items-center justify-center shrink-0 ${color}`} aria-label="Match score">
+          <div className={`w-12 h-12 rounded-full flex items-center justify-center shrink-0 bg-${color}`} aria-label="Match score">
             <span className="text-white text-xs font-bold">{Math.round(file.analysisResults?.matchScore ?? 0)}%</span>
           </div>
 
@@ -39,7 +40,7 @@ export const ValidProcessedCard = ({ file, onDelete, onViewDetails, isLoading = 
             <p className="text-default-400 text-small">
               <ThumbsUp width={15} height={15} />
             </p>
-            <p className="font-semibold   text-small">{label}</p>
+            <p className="font-semibold   text-small">{text}</p>
           </div>
           <div className="flex items-center gap-x-2">
             <Tooltip content="Delete Resume">
