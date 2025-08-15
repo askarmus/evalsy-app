@@ -5,20 +5,12 @@ import { ResumeFiltersProps } from '../../types/ResumeFiltersType';
 
 const statusOptions = ['strong', 'weak', 'conditional'];
 
-export const ResumeFilters = ({ searchTerm, onSearchChange, selectedRecommendations, onRecommendationChange, experienceRange, onExperienceChange, dateRange, onDateChange, onClearFilters }: ResumeFiltersProps) => {
+export const ResumeFilters = ({ searchTerm, onSearchChange, experienceRange, onExperienceChange, dateRange, onDateChange, onClearFilters }: ResumeFiltersProps) => {
   return (
     <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
       <div className="flex flex-wrap gap-6 items-center flex-grow">
         <div className="relative">
           <Input size="md" value={searchTerm} onChange={(e) => onSearchChange(e.target.value)} isClearable aria-label="Search resumes" placeholder="Search Result" startContent={<FaSearch className="text-secondary" />} variant="bordered" />
-        </div>
-
-        <div className="flex gap-2 flex-wrap">
-          {statusOptions.map((option) => (
-            <Checkbox size="sm" key={option} isSelected={selectedRecommendations.includes(option)} onValueChange={(isSelected) => onRecommendationChange(option, isSelected)}>
-              {option}
-            </Checkbox>
-          ))}
         </div>
 
         <div className="min-w-[200px]">

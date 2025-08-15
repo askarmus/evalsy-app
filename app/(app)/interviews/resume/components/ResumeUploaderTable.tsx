@@ -58,12 +58,12 @@ const ResumeUploader = ({ jobid, onViewDetails, onDelete, existingResume }: Resu
   const [currentPage, setCurrentPage] = useState(1);
   const { notifications } = useResumeNotifications(jobid);
   const [loadingResumeId, setLoadingResumeId] = useState<string | null>(null);
-  const { searchTerm, setSearchTerm, selectedRecommendations, setSelectedRecommendations, experienceRange, setExperienceRange, dateRange, setDateRange, filteredFiles, clearFilters } = useResumeFilters(files);
+  const { searchTerm, setSearchTerm, experienceRange, setExperienceRange, dateRange, setDateRange, filteredFiles, clearFilters } = useResumeFilters(files);
 
   useEffect(() => {
+    console.log(existingResume);
     const normalized = existingResume.map((f) => ({
       ...f,
-      hireRecommendation: f.hireRecommendation ?? f.analysisResults?.hireRecommendation ?? '',
     }));
     dispatch({ type: 'INIT', payload: normalized });
   }, [existingResume]);
@@ -240,10 +240,6 @@ const ResumeUploader = ({ jobid, onViewDetails, onDelete, existingResume }: Resu
             onSearchChange={(val) => {
               setSearchTerm(val);
               setCurrentPage(1);
-            }}
-            selectedRecommendations={selectedRecommendations}
-            onRecommendationChange={(option, isSelected) => {
-              setSelectedRecommendations((prev) => (isSelected ? [...prev, option] : prev.filter((r) => r !== option)));
             }}
             experienceRange={experienceRange}
             onExperienceChange={setExperienceRange}
