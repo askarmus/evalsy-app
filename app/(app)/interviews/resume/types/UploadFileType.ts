@@ -11,7 +11,6 @@ export type UploadFile = {
   error?: string;
   status?: string;
   isNew?: boolean;
-  hireRecommendation?: string;
 };
 export type ResumeUploaderProps = {
   jobid: string;

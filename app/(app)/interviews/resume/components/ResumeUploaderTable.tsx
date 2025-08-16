@@ -16,6 +16,7 @@ import { showToast } from '@/app/utils/toastUtils';
 import { useResumeFilters } from '../hooks/useResumeFilters';
 import { ResumeFilters } from './result-list/ResumeFilters';
 import { useCredits } from '@/context/CreditContext';
+import { InvalidProcessedCard } from './result-list/InvalidProcessedCard';
 
 const ALLOWED_EXTENSIONS = ['pdf', 'doc', 'docx'];
 const PAGE_SIZE = 50;
@@ -40,7 +41,6 @@ function filesReducer(state: UploadFile[], action: Action): UploadFile[] {
           ? {
               ...f,
               analysisResults: action.analysisResults,
-              hireRecommendation: action.analysisResults?.hireRecommendation,
               status: 'processed',
               isLoadingResult: false,
             }
@@ -58,7 +58,7 @@ const ResumeUploader = ({ jobid, onViewDetails, onDelete, existingResume }: Resu
   const [currentPage, setCurrentPage] = useState(1);
   const { notifications } = useResumeNotifications(jobid);
   const [loadingResumeId, setLoadingResumeId] = useState<string | null>(null);
-  const { searchTerm, setSearchTerm, experienceRange, setExperienceRange, dateRange, setDateRange, filteredFiles, clearFilters } = useResumeFilters(files);
+  const { searchTerm, setSearchTerm, dateRange, setDateRange, filteredFiles, clearFilters } = useResumeFilters(files);
 
   useEffect(() => {
     console.log(existingResume);
@@ -214,7 +214,7 @@ const ResumeUploader = ({ jobid, onViewDetails, onDelete, existingResume }: Resu
         <Card radius="sm" shadow="sm" className="w-full mb-8 p-6 border-2 border-dashed  cursor-pointer transition-colors hover:bg-slate-50 hover:border-slate-400 dark:hover:bg-slate-800 dark:hover:border-slate-600">
           <CardBody className="flex flex-row items-center justify-between py-4 px-6">
             <div className="flex items-center">
-              <div className="rounded-full bg-secondary p-2 mr-4  ">
+              <div className="rounded-full   p-2 mr-4  ">
                 <FaUpload className="h-5 w-5 text-secondary-100" />
               </div>
               <div>
@@ -241,8 +241,6 @@ const ResumeUploader = ({ jobid, onViewDetails, onDelete, existingResume }: Resu
               setSearchTerm(val);
               setCurrentPage(1);
             }}
-            experienceRange={experienceRange}
-            onExperienceChange={setExperienceRange}
             dateRange={dateRange}
             onDateChange={(range) => {
               setDateRange(range);
@@ -286,8 +284,13 @@ const ResumeUploader = ({ jobid, onViewDetails, onDelete, existingResume }: Resu
           )}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {paginatedFiles.map((file) => {
+              console.log(file);
               if (file.status === 'uploading') return <UploadingCard key={file.resumeId} file={file} />;
-              if (file.status === 'uploaded') return <UploadedCard key={file.resumeId} file={file} />;
+              if (file.status === 'processed' && !file.analysisResults.validityStatus) return <InvalidProcessedCard key={file.resumeId} file={file} />;
+
+              if (file.status === 'processed') {
+                return <ValidProcessedCard onViewDetails={handleViewDetails} isLoading={loadingResumeId === file.resumeId} key={file.resumeId} file={file} onDelete={onDelete} />;
+              }
               if (file.status === 'processed') {
                 return <ValidProcessedCard onViewDetails={handleViewDetails} isLoading={loadingResumeId === file.resumeId} key={file.resumeId} file={file} onDelete={onDelete} />;
               }

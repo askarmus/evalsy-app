@@ -3,6 +3,7 @@ import { Drawer, DrawerContent, DrawerBody, DrawerFooter, Button } from '@heroui
 
 import { Send } from 'lucide-react';
 import ResumeHeader, { bgTint } from './ResumeHeader';
+import { SendInvitationDrawer } from '@/components/jobs/send-invitation';
 
 export const ResumeAnalyseDrawer: React.FC<{ isOpen: boolean; onClose: () => void; resumeData: any }> = ({ isOpen, onClose, resumeData }) => {
   const [isDrawerOpen, setDrawerOpen] = useState(false);
@@ -14,6 +15,7 @@ export const ResumeAnalyseDrawer: React.FC<{ isOpen: boolean; onClose: () => voi
   if (!resumeData) return null;
   const { jobId } = resumeData;
 
+  console.log(resumeData);
   return (
     <>
       <Drawer isOpen={isOpen} onOpenChange={onClose} size="4xl">
@@ -23,7 +25,7 @@ export const ResumeAnalyseDrawer: React.FC<{ isOpen: boolean; onClose: () => voi
           </DrawerBody>
           <DrawerFooter>
             <Button color="secondary" radius="full" variant="flat" size="md" onPress={() => handleInviteClick()} startContent={<Send />}>
-              Send Interview Invitation
+              Invite Interview
             </Button>
             <Button color="default" radius="full" variant="bordered" size="md" onPress={onClose}>
               Close
@@ -32,7 +34,7 @@ export const ResumeAnalyseDrawer: React.FC<{ isOpen: boolean; onClose: () => voi
         </DrawerContent>
       </Drawer>
 
-      {/* <SendInvitationDrawer isOpen={isDrawerOpen} name={contact.name} email={contact.email} onClose={handleCloseDrawer} jobId={jobId} /> */}
+      <SendInvitationDrawer isOpen={isDrawerOpen} name={resumeData?.analysisResults?.candidate_info.candidatename} email={resumeData?.analysisResults?.candidate_info.email} onClose={handleCloseDrawer} jobId={jobId} />
     </>
   );
 };

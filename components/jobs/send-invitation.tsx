@@ -132,10 +132,6 @@ export const SendInvitationDrawer: React.FC<SendInvitationDrawerProps> = ({ isOp
                   />
 
                   <div className="mt-6 flex items-center gap-3">
-                    <Button color="secondary" startContent={<Send />} radius="full" variant="flat" isLoading={loading} onPress={handleSubmit as any}>
-                      Send
-                    </Button>
-
                     <Button
                       color="secondary"
                       radius="full"
@@ -151,6 +147,9 @@ export const SendInvitationDrawer: React.FC<SendInvitationDrawerProps> = ({ isOp
                       }
                     >
                       Reset
+                    </Button>
+                    <Button color="secondary" startContent={<Send />} radius="full" variant="flat" isLoading={loading} onPress={handleSubmit as any}>
+                      Send
                     </Button>
                   </div>
                 </div>
