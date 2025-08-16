@@ -2,14 +2,16 @@
 
 import React, { useEffect, useState } from 'react';
 import { getJobById } from '@/services/job.service';
-import { useParams } from 'next/navigation';
-import { Card, CardBody, CardHeader, Chip, Divider, Navbar, NavbarBrand, ScrollShadow, Switch, Tabs, Tab } from '@heroui/react';
+import { useParams, useRouter } from 'next/navigation';
+import { Card, CardBody, CardHeader, Chip, Divider, Navbar, NavbarBrand, ScrollShadow, Tabs, Tab, Button, NavbarContent, NavbarItem, Table, TableHeader, TableRow, TableColumn, TableBody, TableCell } from '@heroui/react';
 import UploadFiles from '@/app/(app)/interviews/resume/[id]/page';
+import { Briefcase, Calendar, Clock, Edit, MapPin, MessageSquare } from 'lucide-react';
 
 export default function JobView() {
   const { id } = useParams() as { id?: string };
 
   const [data, setData] = useState<any>();
+  const router = useRouter();
 
   useEffect(() => {
     (async () => {
@@ -27,12 +29,19 @@ export default function JobView() {
       {/* Top bar */}
       <Navbar maxWidth="xl" className="backdrop-blur supports-[backdrop-filter]:bg-background/70" isBordered>
         <NavbarBrand>
-          <div className="h-8 w-8 rounded-xl bg-gradient-to-br from-violet-600 to-fuchsia-600" />
           <div className="ml-3">
             <div className="text-tiny text-default-500">Interview</div>
-            <div className="-mt-0.5 text-small font-semibold">Read-only Overview</div>
+            <div className="-mt-0.5 text-xl font-semibold">{data?.jobTitle}</div>
           </div>
         </NavbarBrand>
+
+        <NavbarContent justify="end">
+          <NavbarItem>
+            <Button radius="full" color="secondary" onPress={() => router.push(`/interviews/edit/${data.id}`)} variant="flat" size="sm" startContent={<Edit />}>
+              Edit Interview
+            </Button>
+          </NavbarItem>
+        </NavbarContent>
       </Navbar>
 
       {/* Tabs layout */}
@@ -41,43 +50,67 @@ export default function JobView() {
           <Tab key="overview" title="Overview">
             <Card shadow="sm" className="mt-3">
               <CardHeader className="flex-col items-start gap-1">
-                <div className="text-base font-semibold">Interview Details</div>
-                <div className="text-small text-default-500">Role and compensation overview.</div>
+                <div className="text-base font-semibold text-default-500">{data?.jobTitle}</div>
+
+                <div className="flex items-center gap-3 p-3   ">
+                  <Chip color="primary" variant="flat">
+                    {data?.experienceLevel}
+                  </Chip>
+                  <Chip color="secondary">{`${data?.minSalary} – ${data?.minSalary} ${data?.currency}`}</Chip>
+                </div>
               </CardHeader>
               <Divider />
-              <CardBody className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                <Field label="Role Name">{data?.roleName}</Field>
-                <Field label="Experience Level">{data?.experienceLevel}</Field>
-                <Field label="Workplace Type">{data?.workplaceType}</Field>
-                <Field label="Salary Range">
-                  <div className="flex flex-wrap items-center gap-2">
-                    <span>sds</span>
-                    <Chip size="sm" variant="flat">
-                      {data?.salary?.currencyLabel}
-                    </Chip>
+              <CardBody className=" ">
+                <div className="grid grid-flow-col auto-cols-[minmax(140px,1fr)] gap-4 w-full overflow-x-auto snap-x snap-mandatory">
+                  <div className="flex items-center gap-3 p-3 bg-card rounded-lg border snap-start">
+                    <MapPin className="w-5 h-5 text-secondary" />
+                    <div>
+                      <p className="text-sm text-muted-foreground">Location</p>
+                      <p className="font-medium">
+                        {data?.country}, {data?.city}
+                      </p>
+                    </div>
                   </div>
-                </Field>
-                <Field label="Location">
-                  <div className="flex flex-wrap gap-2">
-                    <span>{data?.location?.country}</span>
-                    <span className="text-default-400">•</span>
-                    <span>{data?.location?.city}</span>
-                  </div>
-                </Field>
-                <Field label="Show salary in JD">
-                  <Switch size="sm" isSelected={!!data?.showInJD} isDisabled aria-label="Show salary in JD" />
-                </Field>
 
-                <div className="md:col-span-2">
+                  <div className="flex items-center gap-3 p-3 bg-card rounded-lg border snap-start">
+                    <MessageSquare className="w-5 h-5 text-secondary" />
+                    <div>
+                      <p className="text-sm text-secondary">Verbal Questions</p>
+                      <p className="font-medium">{data?.totalRandomVerbalQuestion}</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-3 p-3 bg-card rounded-lg border snap-start">
+                    <Clock className="w-5 h-5 text-secondary" />
+                    <div>
+                      <p className="text-sm text-secondary">Duration </p>
+                      <p className="font-medium">{data?.durationInMinutes} Minutes</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-3 p-3 bg-card rounded-lg border snap-start">
+                    <Calendar className="w-5 h-5 text-secondary" />
+                    <div>
+                      <p className="text-sm text-secondary">Invitation Expires</p>
+                      <p className="font-medium">{data?.invitationExpireInDays} days</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-3 p-3 bg-card rounded-lg border snap-start">
+                    <Briefcase className="w-5 h-5 text-secondary" />
+                    <div>
+                      <p className="text-sm text-secondary">Work Type</p>
+                      <p className="font-medium">{data?.workplaceType}</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-4">
                   <div className="mb-2 text-sm font-medium">Job Description</div>
                   <Card className="border border-dashed border-default-200 bg-content1" radius="lg" shadow="none">
                     <CardBody>
                       <article className="prose prose-sm max-w-none dark:prose-invert">
-                        {/* {jdParagraphs.map((p) => (
-                          <p key={p.id} className="whitespace-pre-wrap">
-                            {p.text}
-                          </p>
-                        ))} */}
+                        <div className={`text-primary4 container space-y-4 text-sm pr-2 max-h-full `} dangerouslySetInnerHTML={{ __html: data?.description || '' }} />
                       </article>
                     </CardBody>
                   </Card>
@@ -86,47 +119,49 @@ export default function JobView() {
             </Card>
           </Tab>
 
-          <Tab key="questions" title={`Questions (${data?.settings?.selectedVerbalQuestions}/${data?.settings?.totalVerbalQuestions})`}>
+          <Tab key="questions" title={`Questions (${data?.questions?.length ?? 0})`}>
             <Card shadow="sm" className="mt-3">
               <CardHeader className="flex-col items-start gap-1">
                 <div className="text-base font-semibold">Questions</div>
                 <div className="text-small text-default-500">Verbal questions included in the session.</div>
               </CardHeader>
               <Divider />
-              <CardBody className="p-0">
+              <CardBody>
                 <ScrollShadow className="max-h-[420px]">
-                  {/* <Listbox aria-label="Interview questions" variant="flat" className="p-0">
-                    {questionItems.map((q) => (
-                      <ListboxItem
-                        key={q.id}
-                        textValue={q.text}
-                        startContent={
-                          <Chip size="sm" color="secondary" variant="flat" className="min-w-7 justify-center">
-                            {q.n}
-                          </Chip>
-                        }
-                      >
-                        <span className="text-sm leading-relaxed">{q.text}</span>
-                      </ListboxItem>
-                    ))}
-                  </Listbox> */}
-                </ScrollShadow>
-              </CardBody>
-            </Card>
-          </Tab>
+                  <Table aria-label="Interview questions" className="p-0">
+                    <TableHeader>
+                      <TableColumn className="w-14">#</TableColumn>
+                      <TableColumn>Question</TableColumn>
+                      <TableColumn>.</TableColumn>
+                    </TableHeader>
 
-          <Tab key="settings" title="Settings">
-            <Card shadow="sm" className="mt-3">
-              <CardHeader className="flex-col items-start gap-1">
-                <div className="text-base font-semibold">Interview Settings</div>
-                <div className="text-small text-default-500">Session configuration.</div>
-              </CardHeader>
-              <Divider />
-              <CardBody className="grid grid-cols-1 gap-6 md:grid-cols-3">
-                <Field label="Total verbal questions">{data?.settings?.totalVerbalQuestions}</Field>
-                <Field label="Selected verbal questions">{data?.settings?.selectedVerbalQuestions}</Field>
-                <Field label="Duration (minutes)">{data?.settings?.durationMinutes}</Field>
-                <Field label="Invitation expires">{data?.settings?.invitationExpire}</Field>
+                    <TableBody emptyContent="No questions">
+                      {data?.questions?.map((q: any, index: number) => (
+                        <TableRow key={index}>
+                          <TableCell>
+                            <Chip size="sm" color="secondary" variant="flat" className=" justify-center">
+                              {index + 1}
+                            </Chip>
+                          </TableCell>
+                          <TableCell>
+                            <span className="text-sm leading-relaxed">{typeof q === 'string' ? q : q?.text}</span>
+                          </TableCell>
+                          <TableCell>
+                            {q?.isRandom ? (
+                              <Chip color="secondary" size="sm" variant="flat">
+                                Randon
+                              </Chip>
+                            ) : (
+                              <Chip size="sm" color="primary" variant="flat">
+                                Fixed
+                              </Chip>
+                            )}
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </ScrollShadow>
               </CardBody>
             </Card>
           </Tab>
