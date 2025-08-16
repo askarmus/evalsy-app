@@ -74,8 +74,7 @@ export default function UploadFiles() {
   };
 
   return (
-    <div className="my-10 px-4 lg:px-6 max-w-[80rem] mx-auto w-full flex flex-col gap-4">
-      <h3 className="text-2xl font-semibold mb-5">Analyzer - {jobTitle}</h3>
+    <div className="   max-w-[80rem] mx-auto w-full flex flex-col gap-4">
       <ResumeStatsGrid resumeStats={resumeStats} />
       <ResumeUploaderTable jobid={id} onViewDetails={handleViewDetails} onDelete={handleDeleteClick} existingResume={files} />
       <ResumeAnalyseDrawer isOpen={isDrawerOpen} onClose={closeDrawer} resumeData={selectedResumeData} />

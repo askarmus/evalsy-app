@@ -1,5 +1,5 @@
 'use client';
-import { Button, Input, Pagination, Chip, Card, Tabs, Tab, DropdownMenu, CardBody, Dropdown, DropdownTrigger, DropdownItem, CardFooter } from '@heroui/react';
+import { Button, Input, Pagination, Card, Tabs, Tab, DropdownMenu, CardBody, Dropdown, DropdownTrigger, DropdownItem, CardFooter } from '@heroui/react';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { getAllJobs, deleteJob } from '@/services/job.service';
 import { SendInvitationDrawer } from './send-invitation';
@@ -7,12 +7,10 @@ import { useRouter } from 'next/navigation';
 import JobListItemSkeleton from './components/job.listItem.skeleton';
 import ConfirmDialog from '@/components/ConfirmDialog';
 import DateFormatter from '@/app/utils/DateFormatter';
-import { AiOutlinePlus } from 'react-icons/ai';
 import EmptyStateCards from '../shared/empty-state-cards';
-import { FaExternalLinkAlt, FaSearch } from 'react-icons/fa';
 import { showToast } from '@/app/utils/toastUtils';
 import { testInterview } from '@/services/invitation.service';
-import { Calendar, CheckCircle, Clock, Edit, Link as LinkIcon, MoreHorizontal, Play, Plus, Search, Send, Trash2, UserCheck, UserPlus, Users } from 'lucide-react';
+import { Calendar, CheckCircle, Clock, Edit, Link as LinkIcon, MoreHorizontal, Play, Plus, Search, Trash2, UserPlus, Users } from 'lucide-react';
 import Link from 'next/link';
 
 export default function Jobs() {
@@ -104,11 +102,6 @@ export default function Jobs() {
   const handleCloseDrawer = () => {
     setSelectedJobId(null);
     setDrawerOpen(false);
-  };
-
-  const handleManageResumeClick = (jobId: string) => {
-    setSelectedJobId(jobId);
-    router.push(`/interviews/resume/${jobId}`);
   };
 
   const handleDeleteClick = (jobId: string) => {
@@ -258,7 +251,12 @@ export default function Jobs() {
                       <CardBody className="p-4">
                         <div className="flex items-start justify-between">
                           <div className="flex-1">
-                            <div className="flex items-center gap-3 mb-3">
+                            <div
+                              className="flex items-center gap-3 mb-3"
+                              onClick={() => {
+                                router.push(`/interviews/view/${job.id}`);
+                              }}
+                            >
                               <h3 className="text-xl font-semibold   hover:text-purple-600 cursor-pointer flex items-center gap-2">{job.jobTitle}</h3>
                             </div>
                             <div className="  text-xs text-gray-600 mb-4">
@@ -304,9 +302,6 @@ export default function Jobs() {
                               <DropdownMenu aria-label="Static Actions">
                                 <DropdownItem onPress={() => router.push(`/interviews/edit/${job.id}`)} className="gap-2" key={'edit'} startContent={<Edit className="w-4 h-4" />}>
                                   Edit Interview
-                                </DropdownItem>
-                                <DropdownItem onPress={() => handleManageResumeClick(job.id)} className="gap-2" key={'invite'} startContent={<Edit className="w-4 h-4" />}>
-                                  Manage Resumes
                                 </DropdownItem>
 
                                 <DropdownItem onPress={() => window.open(`${window.location.origin}/job/${job.id}`, '_blank')} className="gap-2" key="link" startContent={<LinkIcon className="w-4 h-4" />}>
