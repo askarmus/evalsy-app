@@ -6,6 +6,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { Card, CardBody, CardHeader, Chip, Divider, Navbar, NavbarBrand, ScrollShadow, Tabs, Tab, Button, NavbarContent, NavbarItem, Table, TableHeader, TableRow, TableColumn, TableBody, TableCell } from '@heroui/react';
 import UploadFiles from '@/app/(app)/interviews/resume/[id]/page';
 import { Briefcase, Calendar, Clock, Edit, MapPin, MessageSquare } from 'lucide-react';
+import JobOverviewSkeleton from '../JobOverviewSkeleton';
 
 export default function JobView() {
   const { id } = useParams() as { id?: string };
@@ -48,75 +49,79 @@ export default function JobView() {
       <div className="mx-auto max-w-6xl px-4 py-6">
         <Tabs aria-label="Interview tabs" color="secondary" variant="underlined" className="w-full" defaultSelectedKey="overview">
           <Tab key="overview" title="Overview">
-            <Card shadow="sm" className="mt-3">
-              <CardHeader className="flex-col items-start gap-1">
-                <div className="text-base font-semibold text-default-500">{data?.jobTitle}</div>
+            {!data ? (
+              <JobOverviewSkeleton />
+            ) : (
+              <Card shadow="sm" className="mt-3">
+                <CardHeader className="flex-col items-start gap-1">
+                  <div className="text-base font-semibold text-default-500">{data?.jobTitle}</div>
 
-                <div className="flex items-center gap-3 p-3   ">
-                  <Chip color="primary" variant="flat">
-                    {data?.experienceLevel}
-                  </Chip>
-                  <Chip color="secondary">{`${data?.minSalary} – ${data?.minSalary} ${data?.currency}`}</Chip>
-                </div>
-              </CardHeader>
-              <Divider />
-              <CardBody className=" ">
-                <div className="grid grid-flow-col auto-cols-[minmax(140px,1fr)] gap-4 w-full overflow-x-auto snap-x snap-mandatory">
-                  <div className="flex items-center gap-3 p-3 bg-card rounded-lg border snap-start">
-                    <MapPin className="w-5 h-5 text-secondary" />
-                    <div>
-                      <p className="text-sm text-muted-foreground">Location</p>
-                      <p className="font-medium">
-                        {data?.country}, {data?.city}
-                      </p>
+                  <div className="flex items-center gap-3 p-3   ">
+                    <Chip color="primary" variant="flat">
+                      {data?.experienceLevel}
+                    </Chip>
+                    <Chip color="secondary">{`${data?.minSalary} – ${data?.minSalary} ${data?.currency}`}</Chip>
+                  </div>
+                </CardHeader>
+                <Divider />
+                <CardBody className=" ">
+                  <div className="grid grid-flow-col auto-cols-[minmax(140px,1fr)] gap-4 w-full overflow-x-auto snap-x snap-mandatory">
+                    <div className="flex items-center gap-3 p-3 bg-card rounded-lg border snap-start">
+                      <MapPin className="w-5 h-5 text-secondary" />
+                      <div>
+                        <p className="text-sm text-muted-foreground">Location</p>
+                        <p className="font-medium">
+                          {data?.country}, {data?.city}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-3 p-3 bg-card rounded-lg border snap-start">
+                      <MessageSquare className="w-5 h-5 text-secondary" />
+                      <div>
+                        <p className="text-sm text-secondary">Verbal Questions</p>
+                        <p className="font-medium">{data?.totalRandomVerbalQuestion}</p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-3 p-3 bg-card rounded-lg border snap-start">
+                      <Clock className="w-5 h-5 text-secondary" />
+                      <div>
+                        <p className="text-sm text-secondary">Duration </p>
+                        <p className="font-medium">{data?.durationInMinutes} Minutes</p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-3 p-3 bg-card rounded-lg border snap-start">
+                      <Calendar className="w-5 h-5 text-secondary" />
+                      <div>
+                        <p className="text-sm text-secondary">Invitation Expires</p>
+                        <p className="font-medium">{data?.invitationExpireInDays} days</p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-3 p-3 bg-card rounded-lg border snap-start">
+                      <Briefcase className="w-5 h-5 text-secondary" />
+                      <div>
+                        <p className="text-sm text-secondary">Work Type</p>
+                        <p className="font-medium">{data?.workplaceType}</p>
+                      </div>
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-3 p-3 bg-card rounded-lg border snap-start">
-                    <MessageSquare className="w-5 h-5 text-secondary" />
-                    <div>
-                      <p className="text-sm text-secondary">Verbal Questions</p>
-                      <p className="font-medium">{data?.totalRandomVerbalQuestion}</p>
-                    </div>
+                  <div className="mt-4">
+                    <div className="mb-2 text-sm font-medium">Job Description</div>
+                    <Card className="border border-dashed border-default-200 bg-content1" radius="lg" shadow="none">
+                      <CardBody>
+                        <article className="prose prose-sm max-w-none dark:prose-invert">
+                          <div className={`text-primary4 container space-y-4 text-sm pr-2 max-h-full `} dangerouslySetInnerHTML={{ __html: data?.description || '' }} />
+                        </article>
+                      </CardBody>
+                    </Card>
                   </div>
-
-                  <div className="flex items-center gap-3 p-3 bg-card rounded-lg border snap-start">
-                    <Clock className="w-5 h-5 text-secondary" />
-                    <div>
-                      <p className="text-sm text-secondary">Duration </p>
-                      <p className="font-medium">{data?.durationInMinutes} Minutes</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-3 p-3 bg-card rounded-lg border snap-start">
-                    <Calendar className="w-5 h-5 text-secondary" />
-                    <div>
-                      <p className="text-sm text-secondary">Invitation Expires</p>
-                      <p className="font-medium">{data?.invitationExpireInDays} days</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-3 p-3 bg-card rounded-lg border snap-start">
-                    <Briefcase className="w-5 h-5 text-secondary" />
-                    <div>
-                      <p className="text-sm text-secondary">Work Type</p>
-                      <p className="font-medium">{data?.workplaceType}</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="mt-4">
-                  <div className="mb-2 text-sm font-medium">Job Description</div>
-                  <Card className="border border-dashed border-default-200 bg-content1" radius="lg" shadow="none">
-                    <CardBody>
-                      <article className="prose prose-sm max-w-none dark:prose-invert">
-                        <div className={`text-primary4 container space-y-4 text-sm pr-2 max-h-full `} dangerouslySetInnerHTML={{ __html: data?.description || '' }} />
-                      </article>
-                    </CardBody>
-                  </Card>
-                </div>
-              </CardBody>
-            </Card>
+                </CardBody>
+              </Card>
+            )}
           </Tab>
 
           <Tab key="questions" title={`Questions (${data?.questions?.length ?? 0})`}>
