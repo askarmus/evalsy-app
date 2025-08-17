@@ -45,7 +45,9 @@ export function Header() {
         {/* Desktop CTA / Auth Section */}
         <NavbarContent justify="end" className="hidden md:flex items-center gap-4">
           {loading ? (
-            <Spinner size="sm" color="primary" /> // or use a <div className="animate-spin ..."></div> if custom
+            <Link className="inline-block rounded-lg px-2 py-1 text-md text-white" href="/login">
+              Sign in
+            </Link>
           ) : user ? (
             <Button as={NextLink} href="/dashboard" variant="bordered" radius="md" className="border-2 border-black btn-gradient text-white">
               Go to Dashboard
