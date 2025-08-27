@@ -17,7 +17,6 @@ export interface AddJobFormValues {
   minSalary: number;
   maxSalary: number;
   showSalaryInDescription: boolean;
-  resumeCriteria: any;
   fraudDetection: {
     tabSwitch: boolean;
     rightClick: boolean;

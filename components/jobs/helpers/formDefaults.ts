@@ -7,7 +7,6 @@ export const defaultJobFormValues: AddJobFormValues = {
   totalRandomCodingQuestion: 0,
   invitationExpireInDays: 7,
   durationInMinutes: 10,
-  resumeCriteria: null,
   questions: [
     {
       id: nanoid(),
