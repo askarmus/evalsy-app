@@ -220,7 +220,7 @@ const ResumeUploader = ({ jobid, onViewDetails, onDelete, existingResume }: Resu
               <div>
                 <h3 className="text-sm font-medium text-slate-800 dark:text-slate-100">Drag & drop resume files here</h3>
                 <p className="text-xs  ">
-                  Supported formats: <strong>.pdf, .doc, .docx</strong>. Upload <strong>1–20 files</strong> at a time. Duplicate files will be skipped. Please wait for current uploads and processing to finish before uploading more.
+                  Supported formats: <strong>.pdf, .doc, .docx</strong>. Upload <strong>1–20 files</strong> at a time. Duplicate files will be skipped.
                 </p>
               </div>
             </div>
@@ -233,7 +233,7 @@ const ResumeUploader = ({ jobid, onViewDetails, onDelete, existingResume }: Resu
         </Card>
       </div>
 
-      <Card shadow="sm" className="p-4 ">
+      <Card shadow="sm" className="p-1">
         <CardBody>
           <ResumeFilters
             searchTerm={searchTerm}
@@ -284,15 +284,15 @@ const ResumeUploader = ({ jobid, onViewDetails, onDelete, existingResume }: Resu
           )}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {paginatedFiles.map((file) => {
-              console.log(file);
+              console.log(file.status);
               if (file.status === 'uploading') return <UploadingCard key={file.resumeId} file={file} />;
               if (file.status === 'processed' && !file.analysisResults.validityStatus) return <InvalidProcessedCard key={file.resumeId} file={file} />;
 
               if (file.status === 'processed') {
                 return <ValidProcessedCard onViewDetails={handleViewDetails} isLoading={loadingResumeId === file.resumeId} key={file.resumeId} file={file} onDelete={onDelete} />;
               }
-              if (file.status === 'processed') {
-                return <ValidProcessedCard onViewDetails={handleViewDetails} isLoading={loadingResumeId === file.resumeId} key={file.resumeId} file={file} onDelete={onDelete} />;
+              if (file.status === 'uploaded') {
+                return <UploadedCard key={file.resumeId} file={file} />;
               }
               return null;
             })}

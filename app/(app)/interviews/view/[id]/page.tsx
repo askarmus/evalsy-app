@@ -7,6 +7,7 @@ import { Card, CardBody, CardHeader, Chip, Divider, Navbar, NavbarBrand, ScrollS
 import UploadFiles from '@/app/(app)/interviews/resume/[id]/page';
 import { Briefcase, Calendar, Clock, Edit, MapPin, MessageSquare } from 'lucide-react';
 import JobOverviewSkeleton from '../JobOverviewSkeleton';
+import SocialShareDropdown from '../components/SocialShareDropdown';
 
 export default function JobView() {
   const { id } = useParams() as { id?: string };
@@ -53,16 +54,23 @@ export default function JobView() {
               <JobOverviewSkeleton />
             ) : (
               <Card shadow="sm" className="mt-3">
-                <CardHeader className="flex-col items-start gap-1">
-                  <div className="text-base font-semibold text-default-500">{data?.jobTitle}</div>
+                <CardHeader className="flex items-start justify-between gap-3">
+                  {/* Left side: title + chips */}
+                  <div className="flex flex-col gap-2">
+                    <div className="text-base font-semibold text-default-500">{data?.jobTitle}</div>
 
-                  <div className="flex items-center gap-3 p-3   ">
-                    <Chip color="primary" variant="flat">
-                      {data?.experienceLevel}
-                    </Chip>
-                    <Chip color="secondary">{`${data?.minSalary} – ${data?.minSalary} ${data?.currency}`}</Chip>
+                    <div className="flex items-center gap-3">
+                      <Chip color="primary" variant="flat">
+                        {data?.experienceLevel}
+                      </Chip>
+                      <Chip color="secondary">{`${data?.minSalary} – ${data?.maxSalary} ${data?.currency}`}</Chip>
+                    </div>
                   </div>
+
+                  {/* Right side: share button */}
+                  <SocialShareDropdown url="https://www.evalsy.com" title="Evalsy – AI video interviews" />
                 </CardHeader>
+
                 <Divider />
                 <CardBody className=" ">
                   <div className="grid grid-flow-col auto-cols-[minmax(140px,1fr)] gap-4 w-full overflow-x-auto snap-x snap-mandatory">

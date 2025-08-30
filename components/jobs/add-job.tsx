@@ -379,7 +379,7 @@ export const AddJob = () => {
                                 ))}
                               </Autocomplete>
 
-                              <Input variant="bordered" labelPlacement="outside" isInvalid={!!errors.city && !!touched.city} errorMessage={errors.city} label="City" placeholder="city" value={values.city?.toString() || ''} onChange={handleChange('city')} />
+                              <Input variant="bordered" labelPlacement="outside" isInvalid={!!errors.city && !!touched.city} errorMessage={errors.city} label="City" placeholder="Enter city name" value={values.city?.toString() || ''} onChange={handleChange('city')} />
                             </div>
 
                             <Checkbox isSelected={values.showSalaryInDescription} onValueChange={(val) => setFieldValue('showSalaryInDescription', val)}>
@@ -485,7 +485,7 @@ export const AddJob = () => {
                               }
                             />
 
-                            <RadioGroup color="secondary" label="invitation Expire" size="sm" orientation="horizontal" value={values.invitationExpireInDays.toString()} onChange={handleChange('invitationExpireInDays')} isInvalid={!!errors.invitationExpireInDays && !!touched.invitationExpireInDays} errorMessage={errors.invitationExpireInDays}>
+                            <RadioGroup color="secondary" label="Invitation Expire" size="sm" orientation="horizontal" value={values.invitationExpireInDays.toString()} onChange={handleChange('invitationExpireInDays')} isInvalid={!!errors.invitationExpireInDays && !!touched.invitationExpireInDays} errorMessage={errors.invitationExpireInDays}>
                               <Radio value="3">3 Days</Radio>
                               <Radio value="7">One Week</Radio>
                               <Radio value="14">Two Weeks</Radio>

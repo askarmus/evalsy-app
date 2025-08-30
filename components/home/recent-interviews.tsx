@@ -115,7 +115,7 @@ export const RecentInterviews = () => {
               ))}
           {results.length > 0 && !loading && (
             <div className="pt-4">
-              <Button color="secondary" variant="bordered" className="w-full  " onPress={() => router.push(`/interview/list`)}>
+              <Button color="secondary" variant="bordered" className="w-full  " onPress={() => router.push(`/result`)}>
                 View All Interviews
               </Button>
             </div>

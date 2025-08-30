@@ -1,47 +1,42 @@
 import { Card } from '@heroui/react';
-import { FaUsers, FaStar, FaUserSlash, FaChartBar } from 'react-icons/fa';
-
-type Props = {
-  resumeStats: {
-    totalCandidates: number;
-    avgMatchScore: number;
-    topCandidatesPercent: number;
-    rejectedCandidates: number;
-  };
-};
+import { BarChart3, Star, Users, UserX } from 'lucide-react';
 
 const iconMap = {
-  totalCandidates: <FaUsers className="h-7 w-7 text-secondary mr-4 flex-shrink-0" />,
-  avgMatchScore: <FaChartBar className="h-7 w-7 text-secondary mr-4 flex-shrink-0" />,
-  topCandidatesPercent: <FaStar className="h-7 w-7 text-secondary mr-4 flex-shrink-0" />,
-  rejectedCandidates: <FaUserSlash className="h-7 w-7 text-secondary mr-4 flex-shrink-0" />,
+  totalCandidates: <Users className="h-6 w-6 text-purple-600" />,
+  avgMatchScore: <BarChart3 className="h-6 w-6 text-purple-600" />,
+  topCandidatesPercent: <Star className="h-6 w-6 text-purple-600" />,
+  rejectedCandidates: <UserX className="h-6 w-6 text-purple-600" />,
 };
 
-export default function ResumeStatsGrid({ resumeStats }: Props) {
+export default function ResumeStatsGrid({ resumeStats }: any) {
   const cards = [
     {
       key: 'totalCandidates',
-      title: 'Total Candidates',
+      title: 'Candidates',
       value: resumeStats.totalCandidates,
-      subtitle: 'Profiles evaluated',
+      percentage: null,
+      subtitle: 'Profiles checked',
     },
     {
       key: 'avgMatchScore',
-      title: 'Average Match Score',
+      title: 'Avg Score',
       value: `${resumeStats.avgMatchScore || 0}%`,
-      subtitle: 'Average score across all candidates',
+      percentage: null,
+      subtitle: 'Overall average',
     },
     {
       key: 'topCandidatesPercent',
-      title: 'Top Candidates',
+      title: `Top`,
       value: `${resumeStats.topCandidatesPercent}%`,
-      subtitle: 'Candidates scoring above 85%',
+      percentage: resumeStats.topCandidatesPercent,
+      subtitle: 'Above 75% score',
     },
     {
       key: 'rejectedCandidates',
-      title: 'Rejected Candidates',
+      title: `Rejected ${resumeStats.rejectedCandidatesPercent}%`,
       value: resumeStats.rejectedCandidates,
-      subtitle: 'Rejected due to low match score below 35%',
+      percentage: resumeStats.rejectedCandidatesPercent,
+      subtitle: 'Below 50% score',
     },
   ];
 
@@ -50,9 +45,9 @@ export default function ResumeStatsGrid({ resumeStats }: Props) {
       {cards.map((card, idx) => (
         <Card key={idx} className=" " radius="sm" shadow="sm">
           <div className="flex items-center p-3">
-            {iconMap[card.key as keyof typeof iconMap]}
+            <div className="p-2 bg-purple-100 rounded-lg mr-5">{iconMap[card.key as keyof typeof iconMap]}</div>
             <div className="min-w-0">
-              <div className="text-[20px] font-medium  mb-1  truncate">{card.title}</div>
+              <div className="text-[20px] font-medium   truncate">{card.title}</div>
               <div className="flex items-baseline">
                 <span className="text-xl font-bold mr-2">{card.value}</span>
                 <span className="text-xs   truncate">{card.subtitle}</span>

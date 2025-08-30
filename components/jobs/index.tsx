@@ -10,7 +10,7 @@ import DateFormatter from '@/app/utils/DateFormatter';
 import EmptyStateCards from '../shared/empty-state-cards';
 import { showToast } from '@/app/utils/toastUtils';
 import { testInterview } from '@/services/invitation.service';
-import { Calendar, CheckCircle, Clock, Edit, Link as LinkIcon, MoreHorizontal, Play, Plus, Search, Trash2, UserPlus, Users } from 'lucide-react';
+import { Calendar, CheckCircle, Clock, Edit, Link as LinkIcon, MoreHorizontal, Play, Plus, Search, Trash2, UserPlus, Users, View } from 'lucide-react';
 import Link from 'next/link';
 
 export default function Jobs() {
@@ -257,7 +257,7 @@ export default function Jobs() {
                                 router.push(`/interviews/view/${job.id}`);
                               }}
                             >
-                              <h3 className="text-xl font-semibold   hover:text-purple-600 cursor-pointer flex items-center gap-2">{job.jobTitle}</h3>
+                              <h3 className="text-xl font-semibold   hover:text-purple-600   hover:underline cursor-pointer flex items-center gap-2">{job.jobTitle}</h3>
                             </div>
                             <div className="  text-xs text-gray-600 mb-4">
                               <div className="flex justify-start items-center w-full gap-4">
@@ -304,12 +304,22 @@ export default function Jobs() {
                                   Edit Interview
                                 </DropdownItem>
 
+                                <DropdownItem
+                                  key={'view'}
+                                  onPress={() => {
+                                    router.push(`/interviews/view/${job.id}`);
+                                  }}
+                                  startContent={<View className="w-4 h-4" />}
+                                  className="gap-2  "
+                                >
+                                  View Interview
+                                </DropdownItem>
                                 <DropdownItem onPress={() => window.open(`${window.location.origin}/job/${job.id}`, '_blank')} className="gap-2" key="link" startContent={<LinkIcon className="w-4 h-4" />}>
-                                  Public Apply Page
+                                  View Job Advert
                                 </DropdownItem>
 
                                 <DropdownItem key={'delete'} onPress={() => handleDeleteClick(job.id)} startContent={<Trash2 className="w-4 h-4" />} className="gap-2 text-red-600">
-                                  Delete Position
+                                  Delete Interview
                                 </DropdownItem>
                               </DropdownMenu>
                             </Dropdown>

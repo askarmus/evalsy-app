@@ -14,8 +14,8 @@ export const ValidProcessedCard = ({ file, onDelete, onViewDetails, isLoading = 
       <CardHeader className="flex items-center justify-between gap-4">
         {/* Left: score + identity */}
         <div className="flex items-center gap-3 min-w-0">
-          <div className={`w-12 h-12 rounded-full flex items-center justify-center shrink-0 bg-${color}`} aria-label="Match score">
-            <span className="text-white text-xs font-bold">{Math.round(file.analysisResults?.matchScore ?? 0)}%</span>
+          <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 bg-${color}`} aria-label="Match score">
+            <span className="text-white text-xs font-semibold">{Math.round(file.analysisResults?.matchScore ?? 0)}%</span>
           </div>
 
           <div className="min-w-0">
@@ -34,13 +34,13 @@ export const ValidProcessedCard = ({ file, onDelete, onViewDetails, isLoading = 
         <div className="flex items-center justify-between w-full">
           <div className="flex items-center gap-x-2">
             <p className="text-default-400 text-small">
-              <Calendar width={15} height={15} />
+              <Calendar width={10} height={10} />
             </p>
-            <p className="font-semibold   text-small">{DateFormatter.formatDate(file.createdAt || '', true)}</p>
+            <p className=" text-default-400  text-xs">{DateFormatter.formatDate(file.createdAt || '', true)}</p>
             <p className="text-default-400 text-small">
-              <ThumbsUp width={15} height={15} />
+              <ThumbsUp width={10} height={10} />
             </p>
-            <p className="font-semibold   text-small">{text}</p>
+            <p className=" text-default-400  text-xs">{text}</p>
           </div>
           <div className="flex items-center gap-x-2">
             <Tooltip content="Delete Resume">
