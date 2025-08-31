@@ -108,7 +108,7 @@ export default function Invitations() {
   const expiredCount = filteredData.filter((i) => isExpired(i.expire, i.statusUpdateAt)).length;
 
   return (
-    <div className="my-10 px-4 lg:px-6 max-w-[80rem] mx-auto w-full flex flex-col gap-6">
+    <div className="my-10 px-4 lg:px-6 mx-auto w-full flex flex-col gap-6">
       <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
         <h3 className="text-xl font-semibold">All Invitations</h3>
         <Button color="secondary" radius="full" variant="flat" size="sm" onPress={() => handleInviteClick(null)} startContent={<Send />}>

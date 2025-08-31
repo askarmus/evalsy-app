@@ -1,12 +1,11 @@
 'use client';
 
-import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, NavbarItem, User } from '@heroui/react';
-import { useCallback, useContext } from 'react';
+import { Button, User } from '@heroui/react';
+import { useCallback } from 'react';
 import apiClient from '@/helpers/apiClient';
 import { truncateText } from '@/app/utils/truncate.text';
-import { DarkModeSwitch } from './darkmodeswitch';
+
 import { useAuthContext } from '@/context/AuthContext';
-import { ArrowDown } from 'lucide-react';
 
 export const UserDropdown = () => {
   const { user, loading } = useAuthContext();
@@ -30,28 +29,20 @@ export const UserDropdown = () => {
   };
 
   return (
-    <Dropdown>
-      <NavbarItem>
-        <DropdownTrigger>
-          <User
-            className="cursor-pointer text-white"
-            avatarProps={{
-              name: getInitials(user?.name),
-              className: 'bg-secondary-300 text-white  ',
-            }}
-            description={<span>Signed in as</span>}
-            name={!loading ? truncateText(user?.name || '', 15) || 'User' : 'Loading user......'}
-          />
-        </DropdownTrigger>
-      </NavbarItem>
-      <DropdownMenu aria-label="User menu actions">
-        <DropdownItem key="logout" color="primary" onPress={handleLogout}>
-          Log Out
-        </DropdownItem>
-        <DropdownItem key="dark-mode" color="default">
-          <DarkModeSwitch />
-        </DropdownItem>
-      </DropdownMenu>
-    </Dropdown>
+    <>
+      <User
+        className="cursor-pointer  "
+        avatarProps={{
+          name: getInitials(user?.name),
+          className: 'bg-secondary-300  ',
+        }}
+        description={<span>Signed in as</span>}
+        name={!loading ? truncateText(user?.name || '', 15) || 'User' : 'Loading user......'}
+      />
+
+      <Button key="logout" color="secondary" size="sm" onPress={handleLogout} radius="full" variant="bordered">
+        Log Out
+      </Button>
+    </>
   );
 };

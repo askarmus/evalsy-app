@@ -112,7 +112,7 @@ export default function InterviewResultList() {
   }, [page, filteredResults]);
 
   return (
-    <div className="my-6 px-4 lg:px-6 max-w-[86rem] mx-auto w-full min-h-screen">
+    <div className="my-6 px-4 lg:px-6   mx-auto w-full min-h-screen">
       {isLoadingOnResultSelected && (
         <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/10 backdrop-blur-sm">
           <Spinner label="Loading, please wait..." color="secondary" />

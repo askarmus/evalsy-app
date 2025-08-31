@@ -1,71 +1,69 @@
 'use client';
 
 import { useState } from 'react';
-import NextLink from 'next/link';
-import { usePathname } from 'next/navigation';
-import { Navbar, NavbarBrand, NavbarContent, NavbarItem, Link, NavbarMenu, NavbarMenuToggle } from '@heroui/react';
+import { usePathname, useRouter } from 'next/navigation';
+import { Button, cn } from '@heroui/react';
 import { Menu, X } from 'lucide-react';
 import { AiOutlineHome, AiOutlineShopping, AiOutlineNotification, AiOutlineSetting, AiOutlineMail } from 'react-icons/ai';
-import { LogoDark } from '@/components/logo.dark';
-import { UserDropdown } from './user-dropdown';
+
 import { CreditManager } from '../settings/components/credits/credits/CreditManager';
+import { Logo } from '../shared/logo';
+import { LogoDark } from '../logo.dark';
+
+export const navItems = [
+  { href: '/dashboard', label: 'Dashboard', icon: <AiOutlineHome className="w-4 h-4 mr-3" /> },
+  { href: '/interviews/list', label: 'Interview', icon: <AiOutlineShopping className="w-4 h-4 mr-3" /> },
+  { href: '/result', label: 'Result', icon: <AiOutlineNotification className="w-4 h-4 mr-3" /> },
+  { href: '/invitations', label: 'Invitations', icon: <AiOutlineMail className="w-4 h-4 mr-3" /> },
+  { href: '/company/settings', label: 'Settings', icon: <AiOutlineSetting className="w-4 h-4 mr-3" /> },
+];
 
 export function Header() {
-  const [menuOpen, setMenuOpen] = useState(false);
   const pathname = usePathname();
-
-  const navItems = [
-    { href: '/dashboard', label: 'Dashboard', icon: <AiOutlineHome /> },
-    { href: '/interviews/list', label: 'Interview', icon: <AiOutlineShopping /> },
-    { href: '/result', label: 'Result', icon: <AiOutlineNotification /> },
-    { href: '/invitations', label: 'Invitations', icon: <AiOutlineMail /> },
-    { href: '/company/settings', label: 'Settings', icon: <AiOutlineSetting /> },
-  ];
+  const [isOpen, setIsOpen] = useState(false);
+  const router = useRouter();
 
   return (
-    <Navbar maxWidth="2xl" shouldHideOnScroll={false} className="bg-[#0B0A33] sticky top-0 z-50 " isBordered isMenuOpen={menuOpen} onMenuOpenChange={setMenuOpen}>
-      <NavbarBrand>
-        <NextLink href="/dashboard" className="flex items-center space-x-2">
-          <LogoDark />
-        </NextLink>
-      </NavbarBrand>
+    <>
+      {/* Mobile menu button */}
+      <Button isIconOnly variant="ghost" className="fixed top-4 left-4 z-50 md:hidden" onClick={() => setIsOpen(!isOpen)}>
+        {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+      </Button>
 
-      {/* Mobile toggle */}
-      <NavbarContent className="md:hidden" justify="end">
-        <NavbarMenuToggle className="text-white" aria-label={menuOpen ? 'Close menu' : 'Open menu'} icon={menuOpen ? <X /> : <Menu />} />
-      </NavbarContent>
+      {/* Overlay for mobile */}
+      {isOpen && <div className="fixed inset-0 bg-black/50 z-40 md:hidden" onClick={() => setIsOpen(false)} />}
 
-      {/* Desktop nav */}
-      <NavbarContent className="hidden md:flex" justify="center">
-        {navItems.map((item) => (
-          <NavbarItem key={item.href} isActive={pathname === item.href}>
-            <Link as={NextLink} href={item.href} className={`flex items-center gap-2 text-sm font-medium ${pathname === item.href ? 'text-white underline' : 'text-white hover:text-gray-300'}`}>
-              <span className="p-1 rounded-full  text-secondary-300">{item.icon}</span>
-              <span className=" text-white"> {item.label}</span>
-            </Link>
-          </NavbarItem>
-        ))}
-      </NavbarContent>
+      {/* Sidebar */}
+      <div className={cn('fixed left-0 top-0 z-40 h-full w-64 bg-white dark:bg-black border-r border-gray-200 dark:border-[#3f3f46] transform transition-transform duration-200 ease-in-out md:relative md:translate-x-0', isOpen ? 'translate-x-0' : '-translate-x-full')}>
+        <div className="flex flex-col h-full">
+          {/* Logo */}
+          <div className="p-4 border-b border-gray-200 dark:border-[#3f3f46]">
+            <div className="flex items-center gap-2">
+              <Logo />
+            </div>
+          </div>
 
-      {/* Desktop actions */}
-      <NavbarContent justify="end" className="hidden md:flex gap-4">
-        <CreditManager />
-        <UserDropdown />
-      </NavbarContent>
+          {/* Navigation */}
+          <nav className="flex-1 p-4">
+            <ul className="space-y-2">
+              {navItems.map((item) => {
+                const isActive = pathname?.startsWith(item.href); // highlight based on current route
+                return (
+                  <li key={item.label}>
+                    <Button color="secondary" variant="bordered" onPress={() => router.push(item.href)} className={cn('w-full justify-start', isActive && 'bg-purple-100 text-purple-700 hover:bg-purple-100 dark:bg-purple-900/40 dark:text-purple-300')}>
+                      {item.icon}
+                      {item.label}
+                    </Button>
+                  </li>
+                );
+              })}
+            </ul>
+          </nav>
 
-      {/* Mobile Menu content */}
-      <NavbarMenu>
-        {navItems.map((item) => (
-          <NavbarItem key={item.href}>
-            <NextLink href={item.href} passHref legacyBehavior>
-              <Link className="flex items-center gap-3 py-2 px-4" onPress={() => setMenuOpen(false)}>
-                {item.icon}
-                {item.label}
-              </Link>
-            </NextLink>
-          </NavbarItem>
-        ))}
-      </NavbarMenu>
-    </Navbar>
+          {/* Credits section */}
+          <CreditManager />
+        </div>
+      </div>
+    </>
   );
 }

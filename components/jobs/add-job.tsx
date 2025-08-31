@@ -192,7 +192,7 @@ export const AddJob = () => {
   };
 
   return (
-    <div className="my-10 px-4 lg:px-6 max-w-[82rem] mx-auto w-full flex flex-col gap-4">
+    <div className="my-10 px-4 lg:px-6  mx-auto w-full flex flex-col gap-4">
       <StepperHeader isEditMode={isEditMode} currentStep={currentStep} stepsData={stepsData} completedSteps={completedSteps} invalidSteps={invalidSteps} />
       <Formik innerRef={formRef} enableReinitialize validationSchema={AddJobSchema} initialValues={initialValues} onSubmit={handleSubmit} validateOnChange={true} validateOnBlur={true}>
         {({ values, errors, touched, handleChange, setFieldValue, setErrors, setTouched }) => {

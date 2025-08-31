@@ -1,14 +1,20 @@
-import Link from 'next/link';
-import React from 'react';
+'use client';
 
-export const Logo = () => (
-  <>
-    {/* Light Mode Logo */}
+import Image from 'next/image';
 
-    <img src="/final-light.png" className="max-h-[35px] w-auto dark:hidden" alt="evalsy Logo" />
-
-    {/* Dark Mode Logo */}
-
-    <img src="/final-light.png" className="max-h-[35px] w-auto hidden dark:block" alt="evalsy logo" />
-  </>
-);
+export const Logo = () => {
+  return (
+    <div className="relative h-10 w-[160px]">
+      {/* Light logo */}
+      <Image
+        src="/final-light.png" // ← or /final-light.png if you prefer that variant
+        alt="Evalsy"
+        fill
+        className="object-contain dark:hidden"
+        priority
+      />
+      {/* Dark logo */}
+      <Image src="/final-dark-white.png" alt="Evalsy" fill className="object-contain hidden dark:block" priority />
+    </div>
+  );
+};

@@ -157,9 +157,7 @@ export default function Jobs() {
   };
 
   return (
-    <div className="  my-10 px-4 lg:px-6 max-w-[80rem] mx-auto w-full flex flex-col gap-4">
-      <h3 className="text-xl font-semibold">All Interviews</h3>
-
+    <div className="  my-10 px-4 lg:px-6  mx-auto w-full flex flex-col gap-4">
       <div className="flex justify-between flex-wrap gap-4 items-center">
         <div className="flex items-center gap-3 flex-wrap md:flex-nowrap">
           <Input
@@ -214,7 +212,7 @@ export default function Jobs() {
         </div>
       </div>
 
-      <div className="max-w-[80rem] mx-auto w-full">
+      <div className="  mx-auto w-full">
         {isLoading && <JobListItemSkeleton />}
 
         {!isLoading && (
