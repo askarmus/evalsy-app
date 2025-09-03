@@ -201,7 +201,7 @@ div::-webkit-scrollbar-track {
 }
 
 .job-description li {
-  line-height: 1.5;
+  line-height: 1;
   white-space: normal;
   word-wrap: break-word;
   margin-bottom: 8px;

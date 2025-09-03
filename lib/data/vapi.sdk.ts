@@ -106,13 +106,13 @@ Conclude with: “Thanks for your time, {{userName}}. We’ll review your respon
     serverMessages: ['transcript', 'status-update', 'end-of-call-report', 'speech-update', 'conversation-update'] as any,
   });
 
-  if (call?.id) {
-    // ✅ Trigger camera and speech start
-    vapi.send({
-      type: 'control',
-      control: 'say-first-message',
-      videoRecordingStartDelaySeconds: 1,
-    });
-  }
+  // if (call?.id) {
+  //   // ✅ Trigger camera and speech start
+  //   vapi.send({
+  //     type: 'control',
+  //     control: 'say-first-message',
+  //     videoRecordingStartDelaySeconds: 1,
+  //   });
+  // }
   return call;
 };

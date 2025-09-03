@@ -5,6 +5,7 @@ import CandidateInfo from './CandidateInfo';
 import PoweredBy from './PoweredBy';
 import MediaPermission from './MediaPermission';
 import { ChevronRight, Mic, Play, Video } from 'lucide-react';
+import { cleanDescription } from '@/app/utils/formatRelativeDate';
 
 const InterviewInstruction: React.FC<any> = () => {
   const [showFullDescription, setShowFullDescription] = useState(false);
@@ -24,8 +25,8 @@ const InterviewInstruction: React.FC<any> = () => {
               <div className="mt-1 flex flex-col gap-[6px] font-xs">
                 <h1 className="text-md font-medium text-tertiary mb-2">Job Description</h1>
 
-                <div className="relative">
-                  <div className={`text-primary4 container space-y-4 text-sm pr-2 ${showFullDescription ? 'max-h-full' : 'max-h-[160px] overflow-hidden'}`} dangerouslySetInnerHTML={{ __html: job?.description || '' }} />
+                <div className="relative  job-description">
+                  <div className={`text-primary4 container space-y-4 text-sm pr-2 ${showFullDescription ? 'max-h-full' : 'max-h-[160px] overflow-hidden'}`} dangerouslySetInnerHTML={{ __html: cleanDescription(job?.description) || '' }} />
                   {!showFullDescription && <div className="absolute bottom-0 left-0 right-0 h-16 pointer-events-none rounded-b-md" />}
                 </div>
 

@@ -24,3 +24,9 @@ export function formatRelativeDate(input: string | Date): string {
 
   return formatFriendlyDate(date);
 }
+
+export function cleanDescription(html: string) {
+  return html
+    .replace(/<p>(\s|&nbsp;|<br\s*\/?>)*<\/p>/gi, '') // strip empty <p>…</p>
+    .replace(/<br\s*\/?>/gi, ''); // optional: remove standalone <br>
+}
