@@ -16,9 +16,10 @@ interface StepperHeaderProps {
   stepsData: Step[];
   completedSteps: number[];
   invalidSteps: number[];
+  jobTitle: string;
 }
 
-export const StepperHeader: React.FC<StepperHeaderProps> = ({ isEditMode, currentStep, stepsData, completedSteps, invalidSteps }) => {
+export const StepperHeader: React.FC<StepperHeaderProps> = ({ isEditMode, jobTitle, currentStep, stepsData, completedSteps, invalidSteps }) => {
   return (
     <>
       <Card shadow="sm" radius="md">
@@ -30,7 +31,7 @@ export const StepperHeader: React.FC<StepperHeaderProps> = ({ isEditMode, curren
               </div>
               <div>
                 <div className="text-xl  font-semibold">
-                  {stepsData[currentStep].title}
+                  <span className="text-gray-600"> {stepsData[currentStep].title}</span> - {jobTitle}
                   <div className="text-sm text-gray-600  font-semibold">
                     Step {currentStep + 1} of {stepsData.length}:
                   </div>

@@ -28,6 +28,7 @@ export const AddJob = () => {
   const { id } = useParams() as { id: string };
   const formRef = useRef<any>(null);
   const sensors = useSensors(useSensor(PointerSensor));
+  const [jobTitle, setJobTitle] = useState('');
 
   const [loading, setLoading] = useState(false);
   const [isQuestionDrawerOpen, setQuestionDrawerOpen] = useState(false);
@@ -74,6 +75,7 @@ export const AddJob = () => {
     if (isEditMode) {
       const fetchJob = async () => {
         const jobData = await getJobById(id);
+        setJobTitle(jobData.jobTitle);
         setInitialValues(jobData);
         setFormReady(true);
       };
@@ -193,7 +195,7 @@ export const AddJob = () => {
 
   return (
     <div className="my-10 px-4 lg:px-6  mx-auto w-full flex flex-col gap-4">
-      <StepperHeader isEditMode={isEditMode} currentStep={currentStep} stepsData={stepsData} completedSteps={completedSteps} invalidSteps={invalidSteps} />
+      <StepperHeader isEditMode={isEditMode} jobTitle={jobTitle || 'Untitled Role'} currentStep={currentStep} stepsData={stepsData} completedSteps={completedSteps} invalidSteps={invalidSteps} />
       <Formik innerRef={formRef} enableReinitialize validationSchema={AddJobSchema} initialValues={initialValues} onSubmit={handleSubmit} validateOnChange={true} validateOnBlur={true}>
         {({ values, errors, touched, handleChange, setFieldValue, setErrors, setTouched }) => {
           const filteredQuestions = values.questions.filter((q) => q.text.toLowerCase().includes(searchTerm.toLowerCase())).filter((q) => selectedTab === 'all');
@@ -298,7 +300,16 @@ export const AddJob = () => {
                               <h1 className=" text-xl/[24px] font-semibold text-tertiary  md:text-[20px]/[24px]">Interview Details</h1>
                             </div>
                             <h1 className="text-sm font-semibold   mb-0">Role Name</h1>
-                            <Input variant="bordered" value={values.jobTitle} onChange={handleChange('jobTitle')} isInvalid={!!errors.jobTitle && !!touched.jobTitle} errorMessage={errors.jobTitle} />
+                            <Input
+                              variant="bordered"
+                              value={values.jobTitle}
+                              onChange={(e) => {
+                                handleChange('jobTitle')(e);
+                                setJobTitle(e.target.value);
+                              }}
+                              isInvalid={!!errors.jobTitle && !!touched.jobTitle}
+                              errorMessage={errors.jobTitle}
+                            />
 
                             {/* Workplace Type */}
 
