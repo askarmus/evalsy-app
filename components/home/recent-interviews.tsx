@@ -51,16 +51,6 @@ export const RecentInterviews = () => {
             <TrendingUp className="w-5 h-5 text-secondary" />
             Recent Interviews
           </div>
-          {/* <Button
-            size="sm"
-            className="gap-2"
-            onPress={() => {
-              handleInviteClick();
-            }}
-          >
-            <UserPlus className="w-4 h-4" />
-            Invite Candidate
-          </Button> */}
         </div>
       </CardHeader>
 
