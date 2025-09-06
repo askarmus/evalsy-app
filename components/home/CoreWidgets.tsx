@@ -3,8 +3,9 @@
 
 import React, { useEffect, useMemo, useState } from 'react';
 import dynamic from 'next/dynamic';
-import { Card, CardBody, Chip, Skeleton } from '@heroui/react';
+import { Card, CardBody, Chip, Divider, Skeleton } from '@heroui/react';
 import { fetchCoreWidgets } from '@/services/dashboard.service';
+import { BatteryCharging, Briefcase, CheckCircle, PieChart } from 'lucide-react';
 
 const Chart: any = dynamic(() => import('react-apexcharts'), { ssr: false });
 
@@ -193,7 +194,15 @@ export default function CoreWidgets() {
       {/* 1) Active jobs — Open vs Closed */}
       <Card className="p-3">
         <CardBody className="p-3">
-          <div className="text-sm font-medium mb-2">Active jobs — Open vs Closed</div>
+          <div className="flex gap-2">
+            <CheckCircle />
+            <div className="flex flex-col">
+              <span className={`text-lg font-semibold  `}>Active jobs </span>
+              <span className={`text-xs  `}> Open vs Closed</span>
+            </div>
+          </div>
+          <Divider className="mt-3 mb-3" />
+
           <Chart
             type="donut"
             height={220}
@@ -223,7 +232,15 @@ export default function CoreWidgets() {
       {/* 2) Interviews — today / this week */}
       <Card className="p-3">
         <CardBody className="p-3">
-          <div className="text-sm font-medium mb-2">Interviews — today / this week</div>
+          <div className="flex gap-2">
+            <Briefcase />
+            <div className="flex flex-col">
+              <span className={`text-lg font-semibold  `}>Interviews </span>
+              <span className={`text-xs  `}> today / this week</span>
+            </div>
+          </div>
+          <Divider className="mt-3 mb-3" />
+
           <Chart
             type="bar"
             height={220}
@@ -250,11 +267,16 @@ export default function CoreWidgets() {
       {/* 4) Avg total score & selection mix */}
       <Card className="p-3">
         <CardBody className="p-3">
-          <div className="text-sm font-medium">Avg total score & decision mix</div>
-          <div className="text-3xl font-semibold">
-            {scores.averageTotalScore !== null ? Number(scores.averageTotalScore).toFixed(1) : '—'} <span className="text-sm"> last 180 days</span>{' '}
+          <div className="flex gap-2">
+            <PieChart />
+            <div className="flex flex-col">
+              <span className={`text-lg font-semibold  `}>Score & Decisions</span>
+              <span className={`text-xs  `}>
+                {scores.averageTotalScore !== null ? Number(scores.averageTotalScore).toFixed(1) : '—'} <span className="text-sm"> last 180 days</span>{' '}
+              </span>
+            </div>
           </div>
-
+          <Divider className="mt-3 mb-3" />
           <Chart
             type="donut"
             height={220}

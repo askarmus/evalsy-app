@@ -3,7 +3,7 @@ import React from 'react';
 
 import { RecentInterviews } from './recent-interviews';
 
-import { Card, CardBody, Skeleton } from '@heroui/react';
+import { Card, CardBody } from '@heroui/react';
 import { BarChart, Users } from 'lucide-react';
 import CoreWidgets from './CoreWidgets';
 import TopJobsPerformance from './TopJobsPerformance';
@@ -15,7 +15,7 @@ export const Content = () => {
         <div className="mt-6 gap-6 flex flex-col w-full">
           {/* Card Section Top */}
           <div className="flex flex-col gap-2 mb-4">
-            <div className="text-xl font-semibold mb-4  flex items-center gap-2">
+            <div className="text-2xl font-semibold mb-4  flex items-center gap-2">
               <Users className="w-5 h-5 text-secondary" />
               Hiring Pipeline Overview
             </div>
@@ -25,7 +25,7 @@ export const Content = () => {
 
           {/* Chart */}
           <div className="h-full flex flex-col gap-2">
-            <div className="text-xl font-semibold mb-4  flex items-center gap-2">
+            <div className="text-2xl font-semibold mb-4  flex items-center gap-2">
               <BarChart className="w-5 h-5 text-secondary" />
               Top Performence Interviews
             </div>
