@@ -177,10 +177,6 @@ export default function CoreWidgets() {
             <CardBody>
               <Skeleton className="h-4 w-40 mb-4" />
               <Skeleton className="h-[220px] w-full rounded-lg" />
-              <div className="mt-3 grid grid-cols-2 gap-2">
-                <Skeleton className="h-4 w-full" />
-                <Skeleton className="h-4 w-full" />
-              </div>
             </CardBody>
           </Card>
         ))}
