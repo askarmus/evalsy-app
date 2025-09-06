@@ -43,7 +43,7 @@ export default function RequestDemoHero() {
   };
 
   return (
-    <Card shadow="none" className="  rounded-3xl p-8 border border-white/10 shadow-lg bg-white p-4">
+    <Card shadow="none" className="  rounded-3xl p-8 border border-white   bg-[#f3ebfd] p-4">
       <CardHeader className="pb-0 pt-4   flex flex-col items-start ">
         <div className="flex gap-2  items-start mb-4">
           <div className="rounded-full   p-1 mb-4 border-2 border-purple-500/80">
@@ -63,7 +63,7 @@ export default function RequestDemoHero() {
             variant="bordered"
             radius="lg"
             classNames={{
-              inputWrapper: 'bg-white text-black border-purple-500/80',
+              inputWrapper: 'bg-white text-black border-purple-200/80',
               input: 'text-black placeholder:text-slate-500',
             }}
             value={formData.fullName}
@@ -75,7 +75,7 @@ export default function RequestDemoHero() {
             variant="bordered"
             radius="lg"
             classNames={{
-              inputWrapper: 'bg-white text-black border-purple-500/80',
+              inputWrapper: 'bg-white text-black border-purple-200/80',
               input: 'text-black placeholder:text-slate-500',
             }}
             value={formData.company}
@@ -92,7 +92,7 @@ export default function RequestDemoHero() {
             variant="bordered"
             radius="lg"
             classNames={{
-              inputWrapper: 'bg-white text-black border-purple-500/80',
+              inputWrapper: 'bg-white text-black border-purple-200/80',
               input: 'text-black placeholder:text-slate-500',
             }}
             value={formData.email}
