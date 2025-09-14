@@ -5,15 +5,16 @@ import JobPostingClient from './components/JobPostingClient';
 
 const SITE_URL = 'https://www.evalsy.com';
 
-export async function generateMetadata({ params }: { params: { id: string } }, _parent: ResolvingMetadata): Promise<Metadata> {
-  const { id } = params;
+type RouteParams = { id: string };
+const normalizeParams = async (p: RouteParams | Promise<RouteParams>): Promise<RouteParams> => (typeof (p as any)?.then === 'function' ? (p as Promise<RouteParams>) : Promise.resolve(p as RouteParams));
+
+export async function generateMetadata({ params }: { params: RouteParams | Promise<RouteParams> }, _parent: ResolvingMetadata): Promise<Metadata> {
+  const { id } = await normalizeParams(params);
   const job = await getJobById(id);
   if (!job) return { title: 'Job Not Found' };
 
   const title = `${job.jobTitle} at ${job.user.company.name}`;
-  // 👉 make this 120–160 chars
-  const desc = `${job.jobTitle} opening at ${job.user.company.name}. Join our fast-growing team to lead growth initiatives across channels, optimize funnels, and scale user acquisition. ${job.location || 'Remote'} • Apply now.`;
-
+  const desc = `${job.jobTitle} opening at ${job.user.company.name}. Join our fast-growing team to lead growth initiatives and scale acquisition. ${job.location || 'Remote'} • Apply now.`;
   const ogImage = job.ogImageUrl || `${SITE_URL}/meta/now_hiring.png`;
 
   return {
@@ -22,33 +23,20 @@ export async function generateMetadata({ params }: { params: { id: string } }, _
     description: desc,
     alternates: { canonical: `/job/${id}` },
     openGraph: {
-      type: 'website', // 'article' also OK; 'website' is safe
+      type: 'website',
       siteName: 'Evalsy',
       url: `${SITE_URL}/job/${id}`,
       title,
       description: desc,
-      images: [
-        {
-          url: ogImage,
-          secureUrl: ogImage,
-          width: 1200,
-          height: 627, // ✅ matches your actual image
-          alt: title,
-        },
-      ],
+      images: [{ url: ogImage, width: 1200, height: 627, alt: title }],
     },
-    twitter: {
-      card: 'summary_large_image',
-      title,
-      description: desc,
-      images: [ogImage],
-    },
+    twitter: { card: 'summary_large_image', title, description: desc, images: [ogImage] },
   };
 }
 
-export default async function JobPostingPage({ params }: { params: { id: string } }) {
-  const { id } = params;
+export default async function JobPostingPage({ params }: { params: RouteParams | Promise<RouteParams> }) {
+  const { id } = await normalizeParams(params);
   const jobData = await getJobById(id);
-  if (!jobData) return <div className="text-center py-16">Job not found.</div>;
+  if (!jobData) return <div className="text-center py-16 text-gray-600 dark:text-gray-300">Job not found.</div>;
   return <JobPostingClient jobData={jobData} />;
 }
