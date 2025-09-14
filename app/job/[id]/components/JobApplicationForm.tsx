@@ -1,16 +1,18 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Button, Card, CardBody, CardFooter, CardHeader, Input, Textarea } from '@heroui/react';
+import { Button, Card, CardBody, Input, Textarea } from '@heroui/react';
 import { Formik, Form } from 'formik';
 import { AiOutlineCloseCircle } from 'react-icons/ai';
 import * as Yup from 'yup';
-import FileUploadWithPreview from '@/components/FileUploadWithPreview';
 import { showToast } from '@/app/utils/toastUtils';
 import { createJobApplication } from '@/services/jobApplication.service';
-import { FaBriefcase, FaCheckCircle } from 'react-icons/fa';
+import { FaCheckCircle } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 import FirebaseFileUploader from './FirebaseFileUploader';
+
+import { CheckCircle } from 'lucide-react';
+import ClientPortal from './ClientPortal';
 
 const JobApplicationSchema = Yup.object().shape({
   jobId: Yup.string().required('Job ID is required'),
@@ -20,7 +22,7 @@ const JobApplicationSchema = Yup.object().shape({
   coverLetter: Yup.string(),
 });
 
-const JobApplicationForm = ({ jobId, userId }: { jobId: string; userId: string }) => {
+const JobApplicationForm = ({ jobId, userId, onCancel }: { jobId: string; userId: string; onCancel }) => {
   const [uploadResumeUrl, setUploadResumeUrl] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -50,7 +52,7 @@ const JobApplicationForm = ({ jobId, userId }: { jobId: string; userId: string }
   if (isSubmitted) {
     return (
       <div className="self-start">
-        <Card className="p-2" shadow="sm" radius="sm">
+        <Card className="p-2" radius="lg">
           <CardBody>
             <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ delay: 0.3, duration: 0.5 }} className="mb-6 inline-flex justify-center">
               <div className="rounded-full bg-emerald-100 p-2">
@@ -68,67 +70,71 @@ const JobApplicationForm = ({ jobId, userId }: { jobId: string; userId: string }
   return (
     <Formik initialValues={initialValues} validationSchema={JobApplicationSchema} onSubmit={handleSubmit}>
       {({ values, handleChange, setFieldValue, errors, touched }) => (
-        <Form>
-          <Card className="p-2" shadow="sm" radius="sm">
-            <CardHeader className="flex flex-col gap-1">
-              <h2 className="text-lg font-semibold">Apply for Job</h2>
-              <span className="text-sm text-slate-500">Fill out the form below to apply</span>
-            </CardHeader>
-            <CardBody>
-              <div className="grid grid-cols-1 gap-4">
-                <Input name="name" label="Name" value={values.name} onChange={handleChange} isInvalid={!!errors.name && touched.name} errorMessage={errors.name} />
-                <Input name="email" label="Email" value={values.email} onChange={handleChange} isInvalid={!!errors.email && touched.email} errorMessage={errors.email} />
-                <Textarea name="coverLetter" label="Tell us why you're a good fit..." value={values.coverLetter} onChange={handleChange} />
-                <div className=" ">
-                  <div className="text-sm font-medium mb-2">
-                    <label htmlFor="resume" className="text-sm font-medium mb-2">
-                      Resume
-                    </label>
-                  </div>
-
-                  <FirebaseFileUploader
-                    onUpload={(url) => {
-                      setUploadResumeUrl(url);
-                      setFieldValue('resumeUrl', url);
-                    }}
-                    acceptedFileTypes={{
-                      'application/pdf': [],
-                      'application/msword': [], // .doc
-                      'application/vnd.openxmlformats-officedocument.wordprocessingml.document': [], // .docx
-                    }}
-                    browseText="Upload your resume (PDF, DOC, DOCX)"
-                  />
-
-                  {uploadResumeUrl && (
-                    <div className="relative w-full border border-gray-300 rounded-lg p-4 bg-gray-50 mt-2">
-                      <div className="flex justify-between items-center">
-                        <a href={uploadResumeUrl} target="_blank" rel="noopener noreferrer" className="text-blue-600 font-medium hover:underline truncate">
-                          View Resume
-                        </a>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setUploadResumeUrl('');
-                            setFieldValue('resumeUrl', '');
-                          }}
-                          className="text-red-500 hover:text-red-700 text-xl"
-                          title="Remove"
-                        >
-                          <AiOutlineCloseCircle />
-                        </button>
-                      </div>
-                    </div>
-                  )}
-                </div>
-                {errors.resumeUrl && touched.resumeUrl && <p className="text-sm text-red-500">{errors.resumeUrl}</p>}
+        <Form id="jobAppForm">
+          <div className="grid grid-cols-1 gap-4">
+            <Input name="name" label="Name" variant="bordered" value={values.name} onChange={handleChange} isInvalid={!!errors.name && touched.name} errorMessage={errors.name} />
+            <Input name="email" label="Email" variant="bordered" value={values.email} onChange={handleChange} isInvalid={!!errors.email && touched.email} errorMessage={errors.email} />
+            <Textarea name="coverLetter" variant="bordered" label="Tell us why you're a good fit..." value={values.coverLetter} onChange={handleChange} />
+            <div className=" ">
+              <div className="text-sm font-medium mb-2">
+                <label htmlFor="resume" className="text-sm font-medium mb-2">
+                  Resume
+                </label>
               </div>
-            </CardBody>
-            <CardFooter>
-              <Button color="primary" type="submit" className="w-full" isLoading={isSubmitting}>
-                <FaBriefcase className="mr-2 h-4 w-4" /> Submit Application
-              </Button>
-            </CardFooter>
-          </Card>
+
+              <FirebaseFileUploader
+                onUpload={(url) => {
+                  setUploadResumeUrl(url);
+                  setFieldValue('resumeUrl', url);
+                }}
+                acceptedFileTypes={{
+                  'application/pdf': [],
+                  'application/msword': [], // .doc
+                  'application/vnd.openxmlformats-officedocument.wordprocessingml.document': [], // .docx
+                }}
+                browseText="Upload your resume (PDF, DOC, DOCX)"
+              />
+
+              {uploadResumeUrl && (
+                <div className="relative w-full border border-gray-300 rounded-lg p-4 bg-gray-50 mt-2">
+                  <div className="flex justify-between items-center">
+                    <a href={uploadResumeUrl} target="_blank" rel="noopener noreferrer" className="text-blue-600 font-medium hover:underline truncate">
+                      View Resume
+                    </a>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setUploadResumeUrl('');
+                        setFieldValue('resumeUrl', '');
+                      }}
+                      className="text-red-500 hover:text-red-700 text-xl"
+                      title="Remove"
+                    >
+                      <AiOutlineCloseCircle />
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+            {errors.resumeUrl && touched.resumeUrl && <p className="text-sm text-red-500">{errors.resumeUrl}</p>}
+          </div>
+          <ClientPortal>
+            <div className="fixed bottom-0 left-0 right-0 z-50   bg-gray-700 dark:bg-gray-900 p-2 flex justify-end">
+              <div className="mx-auto flex w-full max-w-[90rem] items-center px-5 xl:px-8 xl2:px-[60px] xl2:!pr-[60px] justify-between">
+                <div>
+                  <Button className="text-white font-semibold mr-5" form="jobAppForm" color="default" type="submit" radius="full" variant="bordered" size="lg" isLoading={isSubmitting}>
+                    <CheckCircle className="mr-2 h-5 w-5" /> Submit Application
+                  </Button>
+
+                  <Button onPress={() => onCancel()} color="default" className="text-white underline" radius="full" type="reset" variant="light">
+                    Cancel
+                  </Button>
+                </div>
+
+                <img src="/final-dark.png" alt={'Logo'} className="h-8 w-auto object-contain" />
+              </div>
+            </div>
+          </ClientPortal>
         </Form>
       )}
     </Formik>

@@ -1,18 +1,13 @@
+// app/job/[id]/page.tsx
 import { getJobById } from '@/services/jobApplication.service';
-import { FaBuilding } from 'react-icons/fa';
-import { Chip, Card, CardBody, CardHeader, CardFooter } from '@heroui/react';
-import JobApplicationForm from './components/JobApplicationForm';
-import PoweredBy from '@/app/interview/start/[id]/components/PoweredBy';
+import JobPostingClient from './components/JobPostingClient';
 
-export async function generateMetadata({ params }: { params: any }) {
+export async function generateMetadata({ params }: { params: { id: string } }) {
   const { id } = params;
-
   const job = await getJobById(id);
 
   if (!job) {
-    return {
-      title: 'Job Not Found',
-    };
+    return { title: 'Job Not Found' };
   }
 
   return {
@@ -33,50 +28,16 @@ export async function generateMetadata({ params }: { params: any }) {
   };
 }
 
-export default async function JobPostingPage({ params }: { params: any }) {
-  const { id } = await params;
+export default async function JobPostingPage({ params }: { params: { id: string } }) {
+  const { id } = params;
 
+  // ✅ Server-side data fetching (SSR)
   const jobData = await getJobById(id);
 
-  if (!jobData) return <div className="text-center">Job not found.</div>;
+  if (!jobData) {
+    return <div className="text-center py-16 text-gray-600 dark:text-gray-300">Job not found.</div>;
+  }
 
-  return (
-    <div className="min-h-screen">
-      <div className="container mx-auto py-8 px-4 max-w-5xl">
-        <div className="grid gap-8">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-            <div className="flex items-start gap-4">
-              <img src={jobData.user.company.logo} alt={jobData.user.company.name} className="h-6" />
-              <div>
-                <h1 className="text-2xl font-bold">{jobData.jobTitle}</h1>
-                <div className="flex items-center gap-2 mt-2">
-                  <FaBuilding />
-                  <span className="font-medium">{jobData.user.company.name}</span>
-                </div>
-              </div>
-            </div>
-            <Chip size="sm" color="primary" variant="bordered">
-              {jobData.experienceLevel.toUpperCase()}
-            </Chip>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="md:col-span-2 space-y-8">
-              <Card className="p-4" shadow="sm" radius="sm">
-                <CardHeader>
-                  <h2 className="text-lg font-semibold">Job Description</h2>
-                </CardHeader>
-                <CardBody className="space-y-4">
-                  <div className="container space-y-4 text-sm job-description" dangerouslySetInnerHTML={{ __html: jobData.description || '' }} />
-                </CardBody>
-                <CardFooter />
-              </Card>
-              <PoweredBy />
-            </div>
-            <JobApplicationForm jobId={id} userId={jobData.userId} />
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+  // Pass the hydrated data down to the client component
+  return <JobPostingClient jobData={jobData} />;
 }
