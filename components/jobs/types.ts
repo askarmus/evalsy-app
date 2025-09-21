@@ -24,6 +24,7 @@ export interface AddJobFormValues {
     faceNotDetected: boolean;
     clipboard: boolean;
   };
+  voiceId?: string;
 }
 
 export type FraudDetectionSettings = {
