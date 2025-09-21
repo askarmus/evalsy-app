@@ -25,6 +25,7 @@ export interface AddJobFormValues {
     clipboard: boolean;
   };
   voiceId?: string;
+  voiceName?: string;
 }
 
 export type FraudDetectionSettings = {

@@ -5,7 +5,7 @@ import { interview_promtp } from './interview.prompt';
 
 export const vapi = new Vapi(process.env.NEXT_PUBLIC_VAPI_API_KEY!);
 
-export const createInterviewAssistant = async (interviewData: { questions: Question[]; role: string; level: string; userName: string; resultId: string; userId: string }) => {
+export const createInterviewAssistant = async (interviewData: { questions: Question[]; role: string; level: string; userName: string; resultId: string; userId: string; voiceName: string }) => {
   // Format the questions for the prompt
   const formattedQuestions = '- ' + interviewData.questions.map((q) => q.text).join('\n- ');
 
@@ -17,6 +17,15 @@ export const createInterviewAssistant = async (interviewData: { questions: Quest
       model: 'llama-3.1-8b-instant',
       temperature: 0.2,
       messages: [{ role: 'system', content: interviewPromtp }],
+    },
+    voice: {
+      provider: '11labs',
+      voiceId: interviewData.voiceName.toLowerCase(),
+      stability: 0.4,
+      similarityBoost: 0.8,
+      speed: 0.9,
+      style: 0.5,
+      useSpeakerBoost: true,
     },
     server: {
       url: process.env.NEXT_PUBLIC_VAPI_WEBHOOK_URL,

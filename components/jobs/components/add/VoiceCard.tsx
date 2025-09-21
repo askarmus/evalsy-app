@@ -7,15 +7,16 @@ import { toTitleCase } from '@/app/utils/text.utls';
 export type VoiceCardProps = {
   voice: { label: string; voiceId?: string; labels: any };
   isSelected: boolean;
+  voiceName: String;
   isPreviewing: boolean;
-  onSelect: (voiceId: string) => void;
+  onSelect: (voiceId: string, voiceName: string) => void;
   onPreview: (voice: { voiceId?: string }) => void;
   onStop: () => void;
 };
 
-export function VoiceCard({ voice, isSelected, isPreviewing, onSelect, onPreview, onStop }: VoiceCardProps) {
+export function VoiceCard({ voice, isSelected, isPreviewing, onSelect, onPreview, onStop, voiceName }: VoiceCardProps) {
   return (
-    <Card isBlurred radius="lg" shadow="sm" className={`border-2 ${isSelected ? 'border-secondary-500' : 'border-default-200'}`}>
+    <Card isBlurred radius="lg" shadow="sm" className={`border-2 ${isSelected || voiceName === voice.label ? 'border-secondary-500' : 'border-default-200'}`}>
       <CardHeader className="flex items-start justify-between p-4">
         <div>
           <div className="font-semibold text-lg">{voice.label}</div>
@@ -56,7 +57,7 @@ export function VoiceCard({ voice, isSelected, isPreviewing, onSelect, onPreview
           </div>
         </div>
 
-        <Button fullWidth radius="full" color="primary" variant="solid" size="sm" className="mt-4" onPress={() => onSelect(voice.voiceId!)}>
+        <Button fullWidth radius="full" color="primary" variant="solid" size="sm" className="mt-4" onPress={() => onSelect(voice.voiceId!, voice.label!)}>
           Select Voice
         </Button>
       </CardBody>

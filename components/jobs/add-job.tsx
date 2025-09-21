@@ -51,6 +51,8 @@ export const AddJob = () => {
   const [voicesError, setVoicesError] = useState<string | null>(null);
   const [previewingVoiceId, setPreviewingVoiceId] = useState<string | null>(null);
   const [selectedVoiceId, setSelectedVoiceId] = useState<string | null>(null);
+  const [selectedVoiceName, setSelectedVoiceName] = useState<string | null>(null);
+
   const [filter, setFilter] = useState<{ age?: string; gender?: string; accent?: string }>({});
 
   type VoiceOption = { label: string; voiceId?: string; labels: any };
@@ -216,6 +218,8 @@ export const AddJob = () => {
       requestAnimationFrame(() => {
         if (!formRef.current) return;
         formRef.current.setFieldValue('description', jobData.description || '');
+        formRef.current.setFieldValue('voiceName', jobData.voiceName || '');
+        setSelectedVoiceName(jobData.voiceName || 'Sarah');
         formRef.current.setFieldValue('descriptionPlain', jobData.descriptionPlain?.trim?.() || htmlToPlainText(jobData.description));
       });
     })();
@@ -676,10 +680,12 @@ export const AddJob = () => {
                                 <VoiceCard
                                   key={v.voiceId}
                                   voice={v}
+                                  voiceName={selectedVoiceName!}
                                   isSelected={selectedVoiceId === v.voiceId}
                                   isPreviewing={previewingVoiceId === v.voiceId}
-                                  onSelect={(id) => {
+                                  onSelect={(id, voiceName) => {
                                     setFieldValue('voiceId', id);
+                                    setFieldValue('voiceName', voiceName);
                                     setSelectedVoiceId(id);
                                   }}
                                   onPreview={previewVoice}
