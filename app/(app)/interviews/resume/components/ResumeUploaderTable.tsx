@@ -2,7 +2,8 @@
 import { useReducer, useCallback, useMemo, useEffect, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
-import { nanoid } from 'nanoid';
+import { v4 as uuidv4 } from 'uuid';
+
 import { storage } from '@/config/firebase.config';
 import { Badge, Button, Card, CardBody, Divider, Pagination, Progress } from '@heroui/react';
 import { FaUpload } from 'react-icons/fa';
@@ -147,7 +148,7 @@ const ResumeUploader = ({ jobid, onViewDetails, onDelete, existingResume }: Resu
       if (accepted.length === 0) return;
 
       const uploadList: UploadFile[] = accepted.map((file) => ({
-        resumeId: nanoid(),
+        resumeId: uuidv4(),
         file,
         name: file.name,
         analysisResults: {},
