@@ -38,7 +38,7 @@ export const createInterviewAssistant = async (interviewData: { questions: Quest
     },
     firstMessage: `Hello ${interviewData.userName}! I'll be conducting your interview for the ${interviewData.role} position today. Let's get started.`,
     firstMessageMode: 'assistant-speaks-first',
-  } satisfies AssistantOverrides;
+  } as any;
 
   var call = await vapi.start('365bc13a-dfb9-4144-8862-bd8ae3472475', assistantOverridesOpenAI);
 

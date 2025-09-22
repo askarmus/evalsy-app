@@ -149,32 +149,9 @@ Conclude with: “Thanks for your time, Askar. We’ll review your responses and
         firstMessageMode: 'assistant-speaks-first',
 
         // pass variables to fill {{ }} in your Assistant config
-      } satisfies AssistantOverrides;
+      } as any;
 
       await vapi.start('365bc13a-dfb9-4144-8862-bd8ae3472475', assistantOverridesOpenAI);
-
-      // 1) Start the call with your Assistant ID
-      await vapi.start('365bc13a-dfb9-4144-8862-bd8ae3472475');
-
-      // 2) Optional: greet the user
-      const greeting = `Hello Askar, I'll be conducting your interview for the Software Engineer position today. Let's get started.`;
-      vapi.send({
-        type: 'add-message',
-        message: {
-          role: 'system',
-          content: greeting,
-        },
-      });
-
-      // 3) Send your structured interview system prompt
-
-      vapi.send({
-        type: 'add-message',
-        message: {
-          role: 'system',
-          content: systemPrompt,
-        },
-      });
     } catch (error) {
       console.error('Error starting call:', error);
       addMessage('system', `Failed to start call: ${String(error)}`);
