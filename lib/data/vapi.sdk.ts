@@ -5,7 +5,7 @@ import { interview_promtp } from './interview.prompt';
 
 export const vapi = new Vapi(process.env.NEXT_PUBLIC_VAPI_API_KEY!);
 
-export const createInterviewAssistant = async (interviewData: { questions: Question[]; role: string; level: string; userName: string; resultId: string; userId: string; voiceName: string }) => {
+export const createInterviewAssistant = async (interviewData: { questions: Question[]; role: string; level: string; userName: string; resultId: string; userId: string; voiceid: string }) => {
   // Format the questions for the prompt
   const formattedQuestions = '- ' + interviewData.questions.map((q) => q.text).join('\n- ');
 
@@ -20,7 +20,7 @@ export const createInterviewAssistant = async (interviewData: { questions: Quest
     },
     voice: {
       provider: '11labs',
-      voiceId: interviewData.voiceName.toLowerCase(),
+      voiceId: interviewData.voiceid,
       stability: 0.4,
       similarityBoost: 0.8,
       speed: 0.9,

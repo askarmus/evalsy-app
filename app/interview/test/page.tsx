@@ -141,8 +141,15 @@ Conclude with: “Thanks for your time, Askar. We’ll review your responses and
           temperature: 0.2,
           messages: [{ role: 'system', content: systemPrompt }],
         },
-        // optional voice override (example)
-        // voice: { provider: "11labs", voiceId: "YOUR_11LABS_VOICE_ID" },
+        voice: {
+          provider: '11labs',
+          voiceId: 'pFZP5JQG7iQjIQuC4Bku',
+          stability: 0.4,
+          similarityBoost: 0.8,
+          speed: 0.9,
+          style: 0.5,
+          useSpeakerBoost: true,
+        },
 
         // make assistant speak first with your custom greeting
         firstMessage: `Hello askar , I'll be conducting your software enginner interview now. Let's begin.`,
