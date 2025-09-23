@@ -104,7 +104,7 @@ export const useInterviewStore = create<InterviewState>()((set, get) => ({
         questions: resposne.questions,
         resultId: resposne.interviewResultId,
         userId: resposne.userId,
-        voiceid: resposne.voiceid,
+        voiceid: resposne.voiceid || 'sarah',
       });
 
       if (!call?.id) {
