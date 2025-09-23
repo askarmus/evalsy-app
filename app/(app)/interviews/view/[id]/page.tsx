@@ -47,7 +47,7 @@ export default function JobView() {
       </Navbar>
 
       {/* Tabs layout */}
-      <div className="mx-auto max-w-6xl px-4 py-6">
+      <div className="mx-auto  max-w-[94rem] px-4 py-6">
         <Tabs aria-label="Interview tabs" color="secondary" variant="underlined" className="w-full" defaultSelectedKey="overview">
           <Tab key="overview" title="Overview">
             {!data ? (
