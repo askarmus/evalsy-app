@@ -29,7 +29,7 @@ export default function JobView() {
   return (
     <main className="min-h-screen bg-background text-foreground transition-colors">
       {/* Top bar */}
-      <Navbar maxWidth="xl" className="backdrop-blur supports-[backdrop-filter]:bg-background/70" isBordered>
+      <Navbar className="backdrop-blur supports-[backdrop-filter]:bg-background/70 max-w-[94rem]" isBordered>
         <NavbarBrand>
           <div className="ml-3">
             <div className="text-tiny text-default-500">Interview</div>
@@ -39,7 +39,7 @@ export default function JobView() {
 
         <NavbarContent justify="end">
           <NavbarItem>
-            <Button radius="full" color="secondary" onPress={() => router.push(`/interviews/edit/${data.id}`)} variant="flat" size="sm" startContent={<Edit />}>
+            <Button radius="full" color="default" onPress={() => router.push(`/interviews/edit/${data.id}`)} variant="bordered" size="sm" startContent={<Edit />}>
               Edit Interview
             </Button>
           </NavbarItem>
