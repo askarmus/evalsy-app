@@ -29,7 +29,7 @@ export default function JobView() {
   return (
     <main className="min-h-screen bg-background text-foreground transition-colors">
       {/* Top bar */}
-      <Navbar className="backdrop-blur supports-[backdrop-filter]:bg-background/70 max-w-[94rem]" isBordered>
+      <Navbar maxWidth="2xl" className="backdrop-blur supports-[backdrop-filter]:bg-background/70  " isBordered>
         <NavbarBrand>
           <div className="ml-3">
             <div className="text-tiny text-default-500">Interview</div>
