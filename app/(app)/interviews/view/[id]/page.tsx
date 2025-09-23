@@ -122,7 +122,7 @@ export default function JobView() {
                     <Card className="border border-dashed border-default-200 bg-content1" radius="lg" shadow="none">
                       <CardBody>
                         <article className="prose prose-sm max-w-none dark:prose-invert">
-                          <div className={`text-primary4 container space-y-4 text-sm pr-2 max-h-full job-description`} dangerouslySetInnerHTML={{ __html: data?.description || '' }} />
+                          <div className={`text-primary4   text-sm pr-2 max-h-full job-description`} dangerouslySetInnerHTML={{ __html: data?.description || '' }} />
                         </article>
                       </CardBody>
                     </Card>
