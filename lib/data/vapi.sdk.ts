@@ -36,6 +36,9 @@ export const createInterviewAssistant = async (interviewData: { questions: Quest
       },
       timeoutSeconds: 200,
     },
+     clientMessages: ['transcript', 'status-update', 'speech-update', 'model-output', 'conversation-update', 'hang'] as any,
+
+      serverMessages: ['transcript', 'status-update', 'end-of-call-report', 'speech-update', 'conversation-update'] as any,
     firstMessage: `Hello ${interviewData.userName}! I'll be conducting your interview for the ${interviewData.role} position today. Let's get started.`,
     firstMessageMode: 'assistant-speaks-first',
   } as any;
