@@ -3,7 +3,7 @@ import Vapi from '@vapi-ai/web';
 
 export const vapi = new Vapi(process.env.NEXT_PUBLIC_VAPI_API_KEY!);
 
-export const createInterviewAssistant = async (interviewData: { questions: Question[]; role: string; level: string; userName: string; resultId: string; userId: string ; voiceId : string }) => {
+export const createInterviewAssistant = async (interviewData: { questions: Question[]; role: string; level: string; userName: string; resultId: string; userId: string ; voiceid : string }) => {
   // Format the questions for the prompt
   const formattedQuestions = '- ' + interviewData.questions.map((q) => q.text).join('\n- ');
 
