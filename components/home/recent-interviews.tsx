@@ -47,20 +47,10 @@ export const RecentInterviews = () => {
     <Card shadow="md" radius="md" className="  p-4">
       <CardHeader className="pb-4">
         <div className="flex items-center justify-between w-full">
-          <div className="text-xl font-semibold   flex items-center gap-2">
+          <div className="text-2xl font-semibold   flex items-center gap-2">
             <TrendingUp className="w-5 h-5 text-secondary" />
             Recent Interviews
           </div>
-          {/* <Button
-            size="sm"
-            className="gap-2"
-            onPress={() => {
-              handleInviteClick();
-            }}
-          >
-            <UserPlus className="w-4 h-4" />
-            Invite Candidate
-          </Button> */}
         </div>
       </CardHeader>
 

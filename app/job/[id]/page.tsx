@@ -1,82 +1,56 @@
+// app/job/[id]/page.tsx
+import type { Metadata, ResolvingMetadata } from 'next';
 import { getJobById } from '@/services/jobApplication.service';
-import { FaBuilding } from 'react-icons/fa';
-import { Chip, Card, CardBody, CardHeader, CardFooter } from '@heroui/react';
-import JobApplicationForm from './components/JobApplicationForm';
-import PoweredBy from '@/app/interview/start/[id]/components/PoweredBy';
+import JobPostingClient from './components/JobPostingClient';
 
-export async function generateMetadata({ params }: { params: any }) {
-  const { id } = params;
+const SITE_URL = 'https://www.evalsy.com';
 
+type RouteParams = { id: string };
+
+export async function generateMetadata({ params }: { params: Promise<RouteParams> }, _parent: ResolvingMetadata): Promise<Metadata> {
+  const { id } = await params;
   const job = await getJobById(id);
+  if (!job) return { title: 'Job Not Found' };
 
-  if (!job) {
-    return {
-      title: 'Job Not Found',
-    };
-  }
+  const title = `${job.jobTitle} at ${job.user.company.name}`;
+  const desc = `${job.jobTitle} opening at ${job.user.company.name}. Join our team to lead multi-channel growth, optimize funnels, and scale acquisition for Evalsy. ` + `${job.location || 'Remote'} • Apply now.`;
+
+  const ogImage = job.ogImageUrl || `${SITE_URL}/meta/now_hiring.png`;
 
   return {
-    title: job.jobTitle,
-    description: `Job opening at ${job.user.company.name}`,
+    metadataBase: new URL(SITE_URL),
+    title,
+    description: desc, // >= 100 chars to avoid compact card
+    alternates: { canonical: `/job/${id}` },
     openGraph: {
-      title: job.jobTitle,
-      description: `Job opening at ${job.user.company.name}`,
+      type: 'website',
+      siteName: 'Evalsy',
+      url: `${SITE_URL}/job/${id}`,
+      title,
+      description: desc,
       images: [
         {
-          url: job.ogImageUrl || 'https://www.evalsy.com/meta/now_hiring.png',
+          url: ogImage,
           width: 1200,
-          height: 630,
-          alt: job.jobTitle,
+          height: 627, // match actual image
+          alt: title,
         },
       ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description: desc,
+      images: [ogImage],
     },
   };
 }
 
-export default async function JobPostingPage({ params }: { params: any }) {
+export default async function JobPostingPage({ params }: { params: Promise<RouteParams> }) {
   const { id } = await params;
-
   const jobData = await getJobById(id);
-
-  if (!jobData) return <div className="text-center">Job not found.</div>;
-
-  return (
-    <div className="min-h-screen">
-      <div className="container mx-auto py-8 px-4 max-w-5xl">
-        <div className="grid gap-8">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-            <div className="flex items-start gap-4">
-              <img src={jobData.user.company.logo} alt={jobData.user.company.name} className="h-6" />
-              <div>
-                <h1 className="text-2xl font-bold">{jobData.jobTitle}</h1>
-                <div className="flex items-center gap-2 mt-2">
-                  <FaBuilding />
-                  <span className="font-medium">{jobData.user.company.name}</span>
-                </div>
-              </div>
-            </div>
-            <Chip size="sm" color="primary" variant="bordered">
-              {jobData.experienceLevel.toUpperCase()}
-            </Chip>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="md:col-span-2 space-y-8">
-              <Card className="p-4" shadow="sm" radius="sm">
-                <CardHeader>
-                  <h2 className="text-lg font-semibold">Job Description</h2>
-                </CardHeader>
-                <CardBody className="space-y-4">
-                  <div className="container space-y-4 text-sm job-description" dangerouslySetInnerHTML={{ __html: jobData.description || '' }} />
-                </CardBody>
-                <CardFooter />
-              </Card>
-              <PoweredBy />
-            </div>
-            <JobApplicationForm jobId={id} userId={jobData.userId} />
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+  if (!jobData) {
+    return <div className="text-center py-16 text-gray-600 dark:text-gray-300">Job not found.</div>;
+  }
+  return <JobPostingClient jobData={jobData} />;
 }

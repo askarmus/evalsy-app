@@ -40,7 +40,6 @@ export default function Sidebar({ selectedTab, setSelectedTab, filterValue, setF
       <CardHeader>
         <div className="flex flex-col gap-3">
           {/* Title */}
-          <h2 className="text-lg font-semibold text-center">Recent Interviews</h2>
 
           {/* Controls Row */}
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">

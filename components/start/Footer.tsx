@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Instagram, Facebook, Twitter, MapPin, Phone, Mail } from 'lucide-react';
+import { Instagram, Facebook, Twitter, MapPin, Phone, Mail, Youtube, Linkedin } from 'lucide-react';
 import { LogoDarkWhite } from '@/components/logo.dark.white';
 
 export function Footer() {
@@ -129,14 +129,11 @@ export function Footer() {
             <h4 className="text-lg font-semibold text-white">Follow us on social media</h4>
             <p className="text-white text-sm leading-relaxed">Stay connected and updated on our latest features and community insights.</p>
             <div className="flex space-x-4">
-              <Link href="https://instagram.com/evalsy" className="p-2   border-2 border-white rounded-full hover: transition-colors">
-                <Instagram className="h-5 w-5 text-white" />
+              <Link href="https://www.youtube.com/@EvalsyAI" target="_blank" className="p-2   border-2 border-white rounded-full hover: transition-colors">
+                <Youtube className="h-5 w-5 text-white" />
               </Link>
-              <Link href="https://facebook.com/evalsy" className="p-2   border-2 border-white rounded-full hover: transition-colors">
-                <Facebook className="h-5 w-5 text-white" />
-              </Link>
-              <Link href="https://twitter.com/evalsy" className="p-2   border-2 border-white rounded-full hover: transition-colors">
-                <Twitter className="h-5 w-5 text-white" />
+              <Link href="https://www.linkedin.com/company/evalsy" className="p-2 target='_blank'   border-2 border-white rounded-full hover: transition-colors">
+                <Linkedin className="h-5 w-5 text-white" />
               </Link>
             </div>
           </div>

@@ -21,13 +21,15 @@ import { VerticalStepper } from './components/add/VerticalStepper';
 import { StepperHeader } from './components/add/StepperHeader';
 import { defaultJobFormValues } from './helpers/formDefaults';
 import { countryOptions, currencyOptions } from '@/services/currency.service';
-import { Briefcase, ChevronLeft, ChevronRight, ClipboardList, Delete, Edit, Forward, GripVertical, MessageCircleQuestion, Save, Settings, Settings2, SettingsIcon, Shield, Sparkle, Trash } from 'lucide-react';
+import { AudioWaveform, Briefcase, ChevronLeft, ChevronRight, Edit, GripVertical, MessageCircleQuestion, Save, Settings2, Shield, Sparkle, Trash } from 'lucide-react';
+import { VoiceCard } from './components/add/VoiceCard';
 
 export const AddJob = () => {
   const router = useRouter();
   const { id } = useParams() as { id: string };
   const formRef = useRef<any>(null);
   const sensors = useSensors(useSensor(PointerSensor));
+  const [jobTitle, setJobTitle] = useState('');
 
   const [loading, setLoading] = useState(false);
   const [isQuestionDrawerOpen, setQuestionDrawerOpen] = useState(false);
@@ -43,6 +45,90 @@ export const AddJob = () => {
   const [completedSteps, setCompletedSteps] = useState<number[]>([]);
   const [invalidSteps, setInvalidSteps] = useState<number[]>([]);
   const [selectedCountry, setSelectedCountry] = useState<string>('');
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [voices, setVoices] = useState<VoiceOption[]>([]);
+  const [voicesLoading, setVoicesLoading] = useState(true);
+  const [voicesError, setVoicesError] = useState<string | null>(null);
+  const [previewingVoiceId, setPreviewingVoiceId] = useState<string | null>(null);
+  const [selectedVoiceId, setSelectedVoiceId] = useState<string | null>(null);
+  const [selectedVoiceName, setSelectedVoiceName] = useState<string | null>(null);
+
+  const [filter, setFilter] = useState<{ age?: string; gender?: string; accent?: string }>({});
+
+  type VoiceOption = { label: string; voiceId?: string; labels: any };
+  const [previewText, setPreviewText] = useState("Hi! I'm your interview assistant. Let's begin when you're ready.");
+
+  const audioUrlRef = useRef<string | null>(null);
+
+  async function previewVoice(voice: { voiceId?: string }) {
+    try {
+      // indicate which card is previewing
+      setPreviewingVoiceId(voice.voiceId!);
+
+      // stop any existing playback first
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
+      }
+
+      const res = await fetch('/api/tts/preview', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          previewText,
+          voiceId: voice.voiceId ?? '',
+        }),
+      });
+      if (!res.ok) throw new Error('Preview failed');
+
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      audioUrlRef.current = url;
+
+      if (!audioRef.current) audioRef.current = new Audio();
+      const a = audioRef.current;
+
+      // cleanup any previous handler
+      a.onended = null;
+      a.onerror = null;
+
+      a.src = url;
+
+      // when audio ends (or errors), show Preview again
+      a.onended = () => {
+        setPreviewingVoiceId(null);
+        if (audioUrlRef.current) {
+          URL.revokeObjectURL(audioUrlRef.current);
+          audioUrlRef.current = null;
+        }
+      };
+      a.onerror = () => {
+        setPreviewingVoiceId(null);
+        if (audioUrlRef.current) {
+          URL.revokeObjectURL(audioUrlRef.current);
+          audioUrlRef.current = null;
+        }
+        showToast.error('Audio playback error.');
+      };
+
+      await a.play();
+    } catch (e) {
+      showToast.error('Could not play the preview. Check your TTS config.');
+      setPreviewingVoiceId(null); // only clear on failure
+    }
+  }
+
+  function stopPreview() {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+    }
+    setPreviewingVoiceId(null);
+    if (audioUrlRef.current) {
+      URL.revokeObjectURL(audioUrlRef.current);
+      audioUrlRef.current = null;
+    }
+  }
 
   const stepsData = [
     {
@@ -65,6 +151,11 @@ export const AddJob = () => {
       title: 'Fraud Detection',
       description: 'Track suspicious activity and prevent fraudulent candidate behavior.',
     },
+    {
+      icon: <AudioWaveform className="w-5 h-5 text-xl text-gray-900" />,
+      title: 'Voice Library',
+      description: 'Track suspicious activity and prevent fraudulent candidate behavior.',
+    },
   ];
 
   const [initialValues, setInitialValues] = useState<AddJobFormValues>(defaultJobFormValues);
@@ -74,6 +165,7 @@ export const AddJob = () => {
     if (isEditMode) {
       const fetchJob = async () => {
         const jobData = await getJobById(id);
+        setJobTitle(jobData.jobTitle);
         setInitialValues(jobData);
         setFormReady(true);
       };
@@ -94,6 +186,13 @@ export const AddJob = () => {
     { id: 'intermediate', name: 'Intermediate' },
     { id: 'expert', name: 'Expert' },
   ];
+
+  const filteredVoices = voices.filter((v) => {
+    if (filter.gender && v.labels.gender !== filter.gender) return false;
+    if (filter.age && v.labels.age !== filter.age) return false;
+    if (filter.accent && v.labels.accent !== filter.accent) return false;
+    return true;
+  });
 
   function htmlToPlainText(html?: string) {
     if (!html) return '';
@@ -119,6 +218,8 @@ export const AddJob = () => {
       requestAnimationFrame(() => {
         if (!formRef.current) return;
         formRef.current.setFieldValue('description', jobData.description || '');
+        formRef.current.setFieldValue('voiceName', jobData.voiceName || '');
+        setSelectedVoiceName(jobData.voiceName || 'Sarah');
         formRef.current.setFieldValue('descriptionPlain', jobData.descriptionPlain?.trim?.() || htmlToPlainText(jobData.description));
       });
     })();
@@ -139,6 +240,37 @@ export const AddJob = () => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    (async () => {
+      try {
+        setVoicesLoading(true);
+        const res = await fetch('/api/tts/voices');
+        const data = await res.json();
+        if (!res.ok) throw new Error(data?.error || 'Failed to load voices');
+
+        const opts: VoiceOption[] = (data?.voices ?? []).map((v: any) => ({
+          label: v.name as string,
+          voiceId: v.voice_id as string,
+          labels: v.labels,
+        }));
+
+        setVoices(opts);
+
+        // If no voice selected yet, pick the first one
+        if (!formRef.current?.values?.voice && opts.length) {
+          formRef.current?.setFieldValue('voice', {
+            voiceId: opts[0].voiceId,
+            displayName: opts[0].label,
+          });
+        }
+      } catch (e: any) {
+        setVoicesError(e?.message || 'Could not load voices');
+      } finally {
+        setVoicesLoading(false);
+      }
+    })();
+  }, []);
 
   const handleSubmit = async (values: AddJobFormValues, { resetForm }: FormikHelpers<AddJobFormValues>) => {
     setLoading(true);
@@ -192,8 +324,8 @@ export const AddJob = () => {
   };
 
   return (
-    <div className="my-10 px-4 lg:px-6  mx-auto w-full flex flex-col gap-4">
-      <StepperHeader isEditMode={isEditMode} currentStep={currentStep} stepsData={stepsData} completedSteps={completedSteps} invalidSteps={invalidSteps} />
+    <div className="my-10 px-4 lg:px-6   max-w-[94rem]   mx-auto w-full   flex flex-col gap-4">
+      <StepperHeader isEditMode={isEditMode} jobTitle={jobTitle || 'Untitled Role'} currentStep={currentStep} stepsData={stepsData} completedSteps={completedSteps} invalidSteps={invalidSteps} />
       <Formik innerRef={formRef} enableReinitialize validationSchema={AddJobSchema} initialValues={initialValues} onSubmit={handleSubmit} validateOnChange={true} validateOnBlur={true}>
         {({ values, errors, touched, handleChange, setFieldValue, setErrors, setTouched }) => {
           const filteredQuestions = values.questions.filter((q) => q.text.toLowerCase().includes(searchTerm.toLowerCase())).filter((q) => selectedTab === 'all');
@@ -298,7 +430,16 @@ export const AddJob = () => {
                               <h1 className=" text-xl/[24px] font-semibold text-tertiary  md:text-[20px]/[24px]">Interview Details</h1>
                             </div>
                             <h1 className="text-sm font-semibold   mb-0">Role Name</h1>
-                            <Input variant="bordered" value={values.jobTitle} onChange={handleChange('jobTitle')} isInvalid={!!errors.jobTitle && !!touched.jobTitle} errorMessage={errors.jobTitle} />
+                            <Input
+                              variant="bordered"
+                              value={values.jobTitle}
+                              onChange={(e) => {
+                                handleChange('jobTitle')(e);
+                                setJobTitle(e.target.value);
+                              }}
+                              isInvalid={!!errors.jobTitle && !!touched.jobTitle}
+                              errorMessage={errors.jobTitle}
+                            />
 
                             {/* Workplace Type */}
 
@@ -497,6 +638,64 @@ export const AddJob = () => {
                       )}
 
                       {currentStep === 3 && <FraudDetectionSettings values={values.fraudDetection} setFieldValue={setFieldValue} />}
+
+                      {currentStep === 4 && (
+                        <>
+                          <div className="mb-5 flex items-center gap-[5px] mb-3 md:mb-4 ">
+                            <AudioWaveform className="w-5 h-5 text-xl text-secondary-400" />
+                            <h1 className=" text-xl/[24px] font-semibold text-tertiary  md:text-[20px]/[24px]">Voice Library</h1>
+                          </div>
+
+                          <div className="grid grid-cols-1  gap-6">
+                            <Input variant="bordered" fullWidth label="Preview Text" placeholder="Enter text to preview voices" value={previewText} onChange={(e) => setPreviewText(e.target.value)} className="mb-4" />
+
+                            <div className="flex flex-wrap items-center gap-3 mb-4">
+                              {/* Gender Filter */}
+                              <Select label="Filter by Gender" size="sm" variant="bordered" radius="full" selectedKeys={filter.gender ? [filter.gender] : []} onSelectionChange={(keys) => setFilter((f) => ({ ...f, gender: Array.from(keys)[0] as string }))} className="w-40">
+                                <SelectItem key="male">Male</SelectItem>
+                                <SelectItem key="female">Female</SelectItem>
+                              </Select>
+
+                              {/* Age Filter */}
+                              <Select label="Filter by Age" size="sm" variant="bordered" radius="full" selectedKeys={filter.age ? [filter.age] : []} onSelectionChange={(keys) => setFilter((f) => ({ ...f, age: Array.from(keys)[0] as string }))} className="w-40">
+                                <SelectItem key="young">Young</SelectItem>
+                                <SelectItem key="middle_aged">Middle Aged</SelectItem>
+                              </Select>
+
+                              {/* Accent Filter */}
+                              <Select label="Filter by Accent" size="sm" variant="bordered" radius="full" selectedKeys={filter.accent ? [filter.accent] : []} onSelectionChange={(keys) => setFilter((f) => ({ ...f, accent: Array.from(keys)[0] as string }))} className="w-40">
+                                <SelectItem key="american">American</SelectItem>
+                                <SelectItem key="british">British</SelectItem>
+                                <SelectItem key="australian">Australian</SelectItem>
+                              </Select>
+
+                              {/* Clear Filters */}
+                              <Button variant="flat" color="secondary" radius="full" onPress={() => setFilter({})} isDisabled={!filter.age && !filter.gender && !filter.accent}>
+                                Clear Filters
+                              </Button>
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-4 items-end gap-3">
+                              {filteredVoices.map((v) => (
+                                <VoiceCard
+                                  key={v.voiceId}
+                                  voice={v}
+                                  voiceName={selectedVoiceName!}
+                                  isSelected={selectedVoiceId === v.voiceId}
+                                  isPreviewing={previewingVoiceId === v.voiceId}
+                                  onSelect={(id, voiceName) => {
+                                    setFieldValue('voiceId', id);
+                                    setFieldValue('voiceName', voiceName);
+                                    setSelectedVoiceId(id);
+                                  }}
+                                  onPreview={previewVoice}
+                                  onStop={stopPreview}
+                                />
+                              ))}
+                            </div>
+                          </div>
+                        </>
+                      )}
                     </CardBody>
 
                     <GenerateQuestionsDrawer

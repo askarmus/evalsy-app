@@ -56,7 +56,7 @@ export function Hero() {
 
             {/* Main Heading */}
             <div className="space-y-4">
-              <h1 className="text-5xl lg:text-5xl font-black leading-tight" style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
+              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black leading-tight font-semibold">
                 <span
                   className="bg-gradient-to-r from-purple-600 via-purple-700 to-indigo-800 bg-clip-text text-transparent"
                   style={{
@@ -65,11 +65,11 @@ export function Hero() {
                     willChange: 'auto',
                   }}
                 >
-                  Instantly Screen & Shortlist Candidates
+                  AI-Powered Hiring.
                 </span>
               </h1>
 
-              <h1 className="text-4xl lg:text-4xl font-black leading-tight" style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
+              <h1 className="text-4xl lg:text-4xl font-black leading-tight font-semibold" style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
                 <span
                   className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent mt-5"
                   style={{
@@ -82,7 +82,7 @@ export function Hero() {
                 </span>
               </h1>
               {/* Description */}
-              <p className="text-lg md:text-xl text-gray-700 max-w-2xl leading-relaxed">Evalsy automatically interviews candidates 24/7 and gives you AI-powered shortlists. Focus only on the best.</p>
+              <p className="text-lg md:text-xl text-gray-900 max-w-2xl leading-relaxed">Evalsy automatically interviews candidates 24/7 and gives you AI-powered shortlists. Focus only on the best.</p>
 
               {/* Typewriter Effect */}
               <div className="flex items-center gap-2">

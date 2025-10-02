@@ -1,42 +1,78 @@
+type Recommendation = 'Reject' | 'Borderline' | 'Hire' | 'Strong Hire';
+
 type HiringBadgeStyle = {
   color: 'danger' | 'warning' | 'secondary' | 'success';
   text: string;
-  recommendation?: 'Reject' | 'Borderline' | 'Hire' | 'Strong Hire'; // Optional actionable label
+  recommendation?: Recommendation;
 };
 
+type Band = {
+  min: number; // inclusive
+  max: number; // inclusive
+  text: string;
+  recommendation: Recommendation;
+};
+
+const COLOR_BY_RECO: Record<Recommendation, HiringBadgeStyle['color']> = {
+  Reject: 'danger',
+  Borderline: 'warning',
+  Hire: 'secondary',
+  'Strong Hire': 'success',
+};
+
+function clampScore(score: number): number {
+  if (!Number.isFinite(score)) return 0;
+  if (score < 0) return 0;
+  if (score > 100) return 100;
+  return Math.round(score); // optional: round to nearest int
+}
+
+function pickBand(score: number, bands: Band[]): Band {
+  const s = clampScore(score);
+  // Assumes non-overlapping, inclusive bands covering 0–100
+  return bands.find((b) => s >= b.min && s <= b.max)!;
+}
+
 export class HiringGradeUtil {
-  static RECOMMENDATION_LABELS: Array<'Reject' | 'Borderline' | 'Hire' | 'Strong Hire'> = ['Reject', 'Borderline', 'Hire', 'Strong Hire'];
+  static RECOMMENDATION_LABELS: Recommendation[] = ['Reject', 'Borderline', 'Hire', 'Strong Hire'];
+
+  // General assessments
+  private static GENERAL_BANDS: Band[] = [
+    { min: 0, max: 40, text: 'Weak Fit', recommendation: 'Reject' },
+    { min: 41, max: 60, text: 'Needs Review', recommendation: 'Borderline' },
+    { min: 61, max: 85, text: 'Good Fit', recommendation: 'Hire' },
+    { min: 86, max: 100, text: 'Excellent Fit', recommendation: 'Strong Hire' },
+  ];
+
+  // Technical assessments (stricter)
+  private static TECHNICAL_BANDS: Band[] = [
+    { min: 0, max: 49, text: 'Low Proficiency', recommendation: 'Reject' },
+    { min: 50, max: 69, text: 'Partial Proficiency', recommendation: 'Borderline' },
+    { min: 70, max: 89, text: 'Proficient', recommendation: 'Hire' },
+    { min: 90, max: 100, text: 'Highly Proficient', recommendation: 'Strong Hire' },
+  ];
 
   /**
-   * Evaluates a candidate's score (0-100) and returns a hiring recommendation badge.
-   * - 0-40: Reject
-   * - 41-60: Borderline
-   * - 61-85: Hire
-   * - 86-100: Strong Hire
+   * General hiring recommendation (0–100)
+   * - 0–40: Reject
+   * - 41–60: Borderline
+   * - 61–85: Hire
+   * - 86–100: Strong Hire
    */
   static getHiringRecommendation(score: number): HiringBadgeStyle {
-    if (score <= 40) {
-      return { color: 'danger', text: 'Weak Fit', recommendation: 'Reject' };
-    } else if (score <= 60) {
-      return { color: 'warning', text: 'Needs Review', recommendation: 'Borderline' };
-    } else if (score <= 85) {
-      return { color: 'secondary', text: 'Good Fit', recommendation: 'Hire' };
-    } else {
-      return { color: 'success', text: 'Excellent Fit', recommendation: 'Strong Hire' };
-    }
+    const band = pickBand(score, this.GENERAL_BANDS);
+    return { color: COLOR_BY_RECO[band.recommendation], text: band.text, recommendation: band.recommendation };
   }
 
   /**
-   * For technical assessments (stricter grading).
-   * - 0-49: Reject (below minimum bar)
-   * - 50-69: Borderline (weak but passable)
-   * - 70-89: Hire (meets expectations)
-   * - 90+: Strong Hire (exceptional)
+   * Technical hiring recommendation (stricter, 0–100)
+   * - 0–49: Reject
+   * - 50–69: Borderline
+   * - 70–89: Hire
+   * - 90–100: Strong Hire
    */
   static getTechnicalHiringGrade(score: number): HiringBadgeStyle {
-    if (score < 50) return { color: 'danger', text: 'Low Proficiency', recommendation: 'Reject' };
-    if (score < 70) return { color: 'secondary', text: 'Partial Proficiency', recommendation: 'Borderline' };
-    if (score < 90) return { color: 'warning', text: 'Proficient', recommendation: 'Hire' };
-    return { color: 'success', text: 'Highly Proficient', recommendation: 'Strong Hire' };
+    const band = pickBand(score, this.TECHNICAL_BANDS);
+    return { color: COLOR_BY_RECO[band.recommendation], text: band.text, recommendation: band.recommendation };
   }
 }
