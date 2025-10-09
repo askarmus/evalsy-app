@@ -12,7 +12,7 @@ export const useAuth = () => {
   const pathname = usePathname();
 
   // Define public routes that don't require login
-  const publicRoutes = ['/', '/privacy-policy', '/terms'];
+  const publicRoutes = ['/', '/privacy-policy', '/terms', '/Supabase'];
 
   useEffect(() => {
     const initAuth = async () => {
