@@ -91,20 +91,21 @@ export const useInterviewStore = create<InterviewState>()((set, get) => ({
         throw new Error('Failed to start interview');
       }
 
+      console.log('voiceid', resposne.voiceid);
+
       // Step 2: Prepare data only if Step 1 succeeded
       const baseInterviewData = {
         userName: candidate?.name,
         role: job?.jobTitle,
         level: job?.experienceLevel,
       };
-
       // Step 3: Create interview assistant
       const call = await createInterviewAssistant({
         ...baseInterviewData,
         questions: resposne.questions,
         resultId: resposne.interviewResultId,
         userId: resposne.userId,
-        voiceid: resposne.voiceid || 'sarah',
+        voiceId: resposne.voiceId,
       });
 
       if (!call?.id) {
