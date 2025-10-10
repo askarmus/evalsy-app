@@ -72,7 +72,7 @@ export const Login = () => {
                   <Input variant="bordered" label="Email" type="email" value={values.email} isInvalid={!!errors.email && !!touched.email} errorMessage={errors.email} onChange={handleChange('email')} />
                   <Input variant="bordered" label="Password" type="password" value={values.password} isInvalid={!!errors.password && !!touched.password} errorMessage={errors.password} onChange={handleChange('password')} />
 
-                  <Button onPress={() => handleSubmit()} isLoading={isSubmitting} className="text-white  bg-black py-4 px-8 font-medium">
+                  <Button onPress={() => handleSubmit()} isLoading={isSubmitting} color="secondary" radius="full">
                     Login
                   </Button>
                   <p className="mt-2 text-sm text-gray-700">
