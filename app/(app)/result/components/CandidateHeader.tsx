@@ -38,7 +38,7 @@ export default function CandidateHeader({ selectedInterviewerData }: CandidateHe
         <div className="flex items-center gap-6">
           <div className="flex items-center gap-2">
             <div className="flex flex-col">
-              <CandidateStatusDropdown selectedStatus={selectedStatus} isLoading={isLoading} onChange={handleStatusChange} />
+              <CandidateStatusDropdown selectedStatus={selectedInterviewerData.selectionStatus} isLoading={isLoading} onChange={handleStatusChange} />
             </div>
           </div>
         </div>
