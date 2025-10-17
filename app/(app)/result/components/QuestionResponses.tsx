@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Card, CardBody, CardHeader, CardFooter, Divider, Progress, Tooltip, Chip } from '@heroui/react';
-import { CheckCircle, AlertTriangle, XCircle } from 'lucide-react';
+import { CheckCircle, AlertTriangle, XCircle, MessageSquare } from 'lucide-react';
 
 // -----------------------------
 // 🧩 Type Definitions
@@ -54,8 +54,13 @@ function getScoreBadge(score: number) {
 export function QuestionResponses({ assessmentData }: QuestionResponsesProps) {
   return (
     <div className="space-y-6">
-      <h2 className="text-xl font-semibold text-foreground mb-4">Question Responses</h2>
-
+      <h2 className="text-xl font-semibold text-foreground mb-4"></h2>
+      <div className="flex items-center gap-2 mb-6">
+        <div className="w-8 h-8 bg-secondary-100 rounded-full p-2 flex items-center justify-center">
+          <MessageSquare className="w-4 h-4 text-secondary-600" />
+        </div>
+        <h3 className="text-lg font-semibold text-gray-900">Question Responses</h3>
+      </div>
       {assessmentData.map((item, index) => {
         const badge = getScoreBadge(item.score);
 
