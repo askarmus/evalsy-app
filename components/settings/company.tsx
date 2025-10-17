@@ -155,7 +155,7 @@ const CompanySettings = () => {
                       <p className="mt-2 text-sm text-gray-500">
                         <strong>Instruction:</strong> Please keep the placeholders <code>&lt;position&gt;</code> and <code>&lt;company&gt;</code> exactly as shown. They will be automatically replaced with the real job title and company name when sending the invitation.
                         <br />
-                        <span className="block mt-1 text-gray-400">Example: You're invited to the Initial interviews for the &lt;position&gt; role at &lt;company&gt;.</span>
+                        <span className="block mt-1 text-gray-400">Example: You&apos;re invited to the Initial interviews for the &lt;position&gt; role at &lt;company&gt;.</span>
                       </p>
                     </div>
                     <div className="w-1/5">

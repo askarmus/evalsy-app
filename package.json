@@ -24,7 +24,7 @@
     "@monaco-editor/react": "^4.7.0",
     "@stripe/react-stripe-js": "^3.4.0",
     "@stripe/stripe-js": "^6.0.0",
-    "@supabase/supabase-js": "^2.58.0",
+    "@supabase/supabase-js": "^2.75.0",
     "@tiptap/extension-code-block-lowlight": "^2.11.7",
     "@tiptap/extension-underline": "^2.11.7",
     "@tiptap/react": "^2.11.7",
