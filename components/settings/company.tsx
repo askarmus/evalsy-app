@@ -41,7 +41,7 @@ const CompanySettings = () => {
     supportName: '',
     supportEmail: '',
     invitationTemplate: `
-    You're invited to the Initial interviews for the <postion> role at <company>.
+    You're invited to the Initial interviews for the <position> role at <company>.
     `,
   });
 
@@ -145,13 +145,18 @@ const CompanySettings = () => {
                 <CardBody className="p-4">
                   <div className="mb-6 flex items-center gap-[5px] mb-3 md:mb-4 ">
                     <LayoutTemplate className="w-5 h-5 text-xl text-secondary-400" />
-                    <h1 className=" text-xl/[24px] font-semibold text-tertiary  md:text-[20px]/[24px]">Template</h1>
+                    <h1 className=" text-xl/[24px] font-semibold text-tertiary  md:text-[20px]/[24px]">Invitation Template</h1>
                   </div>
                   <div className="flex gap-4">
                     <div className="w-4/5">
                       <div className="grid grid-cols-1 gap-4">
                         <Textarea variant="bordered" size="sm" rows={100} label="Invitation Template" name="invitationTemplate" value={values.invitationTemplate || ''} onChange={handleChange} isInvalid={!!errors.invitationTemplate && !!touched.invitationTemplate} errorMessage={errors.invitationTemplate} />
                       </div>
+                      <p className="mt-2 text-sm text-gray-500">
+                        <strong>Instruction:</strong> Please keep the placeholders <code>&lt;position&gt;</code> and <code>&lt;company&gt;</code> exactly as shown. They will be automatically replaced with the real job title and company name when sending the invitation.
+                        <br />
+                        <span className="block mt-1 text-gray-400">Example: You're invited to the Initial interviews for the &lt;position&gt; role at &lt;company&gt;.</span>
+                      </p>
                     </div>
                     <div className="w-1/5">
                       <div className="lg:col-span-1">

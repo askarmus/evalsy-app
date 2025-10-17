@@ -15,6 +15,7 @@ import CustomVideoPlayer from './components/CustomVideoPlayer';
 import { FaStopCircle } from 'react-icons/fa';
 import { formatExperience } from '@/app/utils/formatExperience';
 import { Brain, Play, Shield, Trophy, Video } from 'lucide-react';
+import { QuestionResponses } from './components/QuestionResponses';
 
 export default function InterviewResultList() {
   const [page, setPage] = useState(1);
@@ -292,6 +293,10 @@ export default function InterviewResultList() {
                     </div>
                   </div>
                 </CardBody>
+              </Card>
+
+              <Card shadow="md" radius="md" className="mt-4 p-2">
+                <CardBody>{selectedInterviewerData?.questionRatings && <QuestionResponses assessmentData={selectedInterviewerData?.questionRatings} />}</CardBody>
               </Card>
             </div>
           </main>
