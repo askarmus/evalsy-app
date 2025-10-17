@@ -51,7 +51,7 @@ export function Hero() {
       <div className="container relative z-10">
         <div className="flex flex-col lg:flex-row gap-12 items-center">
           {/* Left Content - 60% width on large screens */}
-          <div className="w-full lg:w-[68%] flex flex-col space-y-8">
+          <div className="w-full   flex flex-col space-y-8">
             {/* Badge */}
 
             {/* Main Heading */}
@@ -108,11 +108,6 @@ export function Hero() {
                 </div>
               ))}
             </div>
-          </div>
-
-          {/* Right Visual - 40% width on large screens */}
-          <div className="w-full lg:w-[32%] relative lg:pl-18">
-            <RequestDemoHero />
           </div>
         </div>
       </div>

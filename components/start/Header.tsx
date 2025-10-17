@@ -7,7 +7,7 @@ import { Menu, X } from 'lucide-react';
 import { LogoDark } from '@/components/logo.dark';
 import { useAuth } from '@/hooks/useAuth';
 
-export function Header() {
+export function Headerx() {
   const [isOpen, setIsOpen] = useState(false);
   const { user, loading } = useAuth();
 
@@ -22,53 +22,81 @@ export function Header() {
   const closeMenu = () => setIsOpen(false);
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b-2 border-black bg-[#0B0A33]  ">
-      <Navbar maxWidth="xl" className="bg-transparent px-4 md:px-6" height="4rem">
-        {/* Brand / Logo */}
-        <NavbarBrand>
-          <NextLink href="/" className="flex items-center space-x-2">
+    <header className="fixed top-2 z-30 w-full md:top-6 ">
+      <div className="mx-auto max-w-[1600px] px-4 sm:px-6">
+        <div className="relative flex h-16 items-center justify-between gap-3 rounded-full bg-[#0B0A33] px-3 shadow-lg shadow-black/[0.03] backdrop-blur-xs before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:border before:border-transparent before:[background:linear-gradient(var(--color-gray-100),var(--color-gray-200))_border-box] before:[mask-composite:exclude_!important] before:[mask:linear-gradient(white_0_0)_padding-box,_linear-gradient(white_0_0)]">
+          {/* Logo */}
+          <div className="flex flex-1 items-center">
             <LogoDark />
-          </NextLink>
-        </NavbarBrand>
+          </div>
 
-        {/* Desktop Links */}
-        <NavbarContent className="hidden md:flex  " justify="center">
-          {navigationItems.map((item) => (
-            <NavbarItem key={item.href}>
-              <Link as={NextLink} href={item.href} className="text-sm font-medium text-white hover:text-gray-200 transition-colors hover:underline underline-offset-4">
-                {item.label}
-              </Link>
-            </NavbarItem>
-          ))}
-        </NavbarContent>
+          {/* Desktop Navigation */}
+          <ul className="hidden md:flex flex-1 items-center justify-end gap-3">
+            {navigationItems.map((item) => (
+              <li key={item.href}>
+                <Link as={NextLink} href={item.href} onClick={closeMenu} className="text-white font-medium">
+                  {item.label}
+                </Link>
+              </li>
+            ))}
 
-        {/* Desktop CTA / Auth Section */}
-        <NavbarContent justify="end" className="hidden md:flex items-center gap-4">
-          {loading ? (
-            <Link className="inline-block rounded-lg px-2 py-1 text-md text-white" href="/login">
-              Sign in
-            </Link>
-          ) : user ? (
-            <Button as={NextLink} href="/dashboard" variant="bordered" radius="md" className="border-2 border-black btn-gradient text-white">
-              Go to Dashboard
-            </Button>
-          ) : (
-            <>
+            {loading ? (
               <Link className="inline-block rounded-lg px-2 py-1 text-md text-white" href="/login">
                 Sign in
               </Link>
-              <Button as={NextLink} href="#shedule-demo" variant="bordered" className="border-2 border-black bg-[#3534ff] text-white">
-                Schedule a Demo
+            ) : user ? (
+              <Button as={NextLink} href="/dashboard" variant="bordered" radius="full" className="border-2 font-bold border-black btn-gradient text-white">
+                Go to Dashboard
               </Button>
-            </>
-          )}
-        </NavbarContent>
+            ) : (
+              <>
+                <Link className="inline-block rounded-lg px-2 py-1 text-md text-white" href="/login">
+                  Sign in
+                </Link>
+                <Button as={NextLink} href="#shedule-demo" radius="full" variant="bordered" className="border-2 font-bold border-black bg-[#3534ff] text-white">
+                  Schedule a Demo
+                </Button>
+              </>
+            )}
+          </ul>
 
-        {/* Mobile Menu Button */}
-        <Button className="md:hidden text-white hover:bg-[#7FE67F]" onPress={() => setIsOpen(true)} aria-label="Toggle menu" size="sm" variant="light">
-          <Menu className="h-6 w-6" />
-        </Button>
-      </Navbar>
+          {/* Mobile Toggle */}
+          <div className="md:hidden flex items-center">
+            <Button className="text-white hover:bg-[#7FE67F]" onPress={() => setIsOpen(true)} aria-label="Toggle menu" size="sm" variant="light">
+              <Menu className="h-6 w-6" />
+            </Button>
+          </div>
+        </div>
+
+        {/* Mobile Menu Drawer (optional) */}
+        {isOpen && (
+          <div className="md:hidden mt-2 rounded-lg bg-[#0B0A33] p-4 shadow-lg">
+            <ul className="flex flex-col gap-3">
+              {navigationItems.map((item) => (
+                <li key={item.href}>
+                  <Link as={NextLink} href={item.href} onClick={() => setIsOpen(false)} className="block text-white font-medium">
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+              {!user ? (
+                <>
+                  <Link className="text-white font-medium" href="/login">
+                    Sign in
+                  </Link>
+                  <Button as={NextLink} href="#shedule-demo" radius="full" variant="bordered" className="border-2 font-bold border-black bg-[#3534ff] text-white">
+                    Schedule a Demo
+                  </Button>
+                </>
+              ) : (
+                <Button as={NextLink} href="/dashboard" variant="bordered" radius="full" className="border-2 font-bold border-black btn-gradient text-white">
+                  Go to Dashboard
+                </Button>
+              )}
+            </ul>
+          </div>
+        )}
+      </div>
 
       {/* Mobile Drawer */}
       <Drawer isOpen={isOpen} onClose={closeMenu} placement="right">
@@ -84,13 +112,12 @@ export function Header() {
             {/* Nav Items */}
             <nav className="flex flex-col gap-4 py-6 flex-1">
               {navigationItems.map((item) => (
-                <Link key={item.href} as={NextLink} href={item.href} onClick={closeMenu} className="text-lg font-medium text-black hover:text-gray-700 transition-colors py-2 px-4 rounded hover:bg-[#98FB98] border-2 border-transparent hover:border-black">
+                <Link key={item.href} as={NextLink} href={item.href} onPress={closeMenu} className="text-lg font-medium text-black hover:text-gray-700 transition-colors py-2 px-4 rounded  ">
                   {item.label}
                 </Link>
               ))}
             </nav>
 
-            {/* CTA / Auth Section */}
             <div className="pt-6 border-t-2 border-black flex flex-col gap-4">
               {!loading && user ? (
                 <Link href="/dashboard" onClick={closeMenu} className="inline-flex items-center justify-center rounded-full py-3 px-5 text-sm font-semibold focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 bg-white text-black hover:text-white hover:bg-green-500 active:bg-green-800 active:text-green-100 focus-visible:outline-green-600">
