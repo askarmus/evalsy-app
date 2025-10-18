@@ -30,7 +30,7 @@ export function Headerx() {
             <LogoDark />
             <span className="flex items-center gap-1">
               <span className="opacity-70">by</span>
-              <span className="font-semibold text-white tracking-wide">TOPJOBS.LK</span>
+              <span className="font-semibold text-white tracking-wide">BIGJOBS.lk</span>
             </span>
           </div>
 
