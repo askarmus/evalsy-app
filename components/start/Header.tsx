@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import NextLink from 'next/link';
-import { Navbar, NavbarBrand, NavbarContent, NavbarItem, Button, Link, Drawer, DrawerContent, Spinner } from '@heroui/react';
+import { Navbar, NavbarBrand, NavbarContent, NavbarItem, Button, Link, Drawer, DrawerContent } from '@heroui/react';
 import { Menu, X } from 'lucide-react';
 import { LogoDark } from '@/components/logo.dark';
 import { useAuth } from '@/hooks/useAuth';
@@ -22,45 +22,48 @@ export function Headerx() {
   const closeMenu = () => setIsOpen(false);
 
   return (
-    <header className="fixed top-2 z-30 w-full md:top-6 ">
+    <header className="fixed top-2 z-30 w-full md:top-6">
       <div className="mx-auto max-w-[1600px] px-4 sm:px-6">
-        <div className="relative flex h-16 items-center justify-between gap-3 rounded-full bg-[#0B0A33] px-3 shadow-lg shadow-black/[0.03] backdrop-blur-xs before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:border before:border-transparent before:[background:linear-gradient(var(--color-gray-100),var(--color-gray-200))_border-box] before:[mask-composite:exclude_!important] before:[mask:linear-gradient(white_0_0)_padding-box,_linear-gradient(white_0_0)]">
-          {/* Logo */}
+        <div className="relative flex h-16 items-center justify-between gap-4 rounded-full bg-[#0B0A33] px-4 shadow-lg shadow-black/[0.03] backdrop-blur-xs before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:border before:border-transparent before:[background:linear-gradient(var(--color-gray-100),var(--color-gray-200))_border-box] before:[mask-composite:exclude_!important] before:[mask:linear-gradient(white_0_0)_padding-box,_linear-gradient(white_0_0)]">
+          {/* Logo + Tagline */}
           <div className="flex flex-1 items-center gap-2 text-white text-sm md:text-base">
             <LogoDark />
             <span className="flex items-center gap-1">
-              <span className="opacity-70">by</span>
+              <span className="opacity-70 text-xs md:text-sm">by</span>
               <span className="font-semibold text-white tracking-wide">BIGJOBS.lk</span>
             </span>
           </div>
 
           {/* Desktop Navigation */}
-          <ul className="hidden md:flex flex-1 items-center justify-end gap-3">
+          <ul className="hidden md:flex flex-1 items-center justify-end gap-5 whitespace-nowrap">
             {navigationItems.map((item) => (
               <li key={item.href}>
-                <Link as={NextLink} href={item.href} onClick={closeMenu} className="text-white font-medium">
+                <Link as={NextLink} href={item.href} onClick={closeMenu} className="text-white font-medium hover:text-[#7FE67F] transition-colors">
                   {item.label}
                 </Link>
               </li>
             ))}
 
-            {loading ? (
-              <Link className="inline-block rounded-lg px-2 py-1 text-md text-white" href="/login">
-                Sign in
-              </Link>
-            ) : user ? (
-              <Button as={NextLink} href="/dashboard" variant="bordered" radius="full" className="border-2 font-bold border-black btn-gradient text-white">
-                Go to Dashboard
-              </Button>
-            ) : (
+            {/* ✅ Show demo buttons while loading OR unauthenticated */}
+            {loading || !user ? (
               <>
                 <Link className="inline-block rounded-lg px-2 py-1 text-md text-white" href="/login">
                   Sign in
                 </Link>
-                <Button as={NextLink} href="#shedule-demo" radius="full" variant="bordered" className="border-2 font-bold border-black bg-[#3534ff] text-white">
-                  Schedule a Demo
+
+                <Button as={NextLink} href="#shedule-demo" radius="full" variant="bordered" className="border-2 font-semibold border-black bg-[#3534ff] text-white px-4 py-2 h-[40px]">
+                  Book a Demo
+                </Button>
+
+                <Button as={NextLink} href="/signup" radius="full" variant="bordered" className="border-2 font-semibold border-black bg-white text-black px-4 py-2 h-[40px]">
+                  Sign Up
                 </Button>
               </>
+            ) : (
+              // ✅ Authenticated → show dashboard button
+              <Button as={NextLink} href="/dashboard" radius="full" variant="bordered" className="border-2 border-black btn-gradient text-white px-4 py-2 h-[40px] font-semibold">
+                Go to Dashboard
+              </Button>
             )}
           </ul>
 
@@ -72,7 +75,7 @@ export function Headerx() {
           </div>
         </div>
 
-        {/* Mobile Menu Drawer (optional) */}
+        {/* Mobile Dropdown (Quick Drawer) */}
         {isOpen && (
           <div className="md:hidden mt-2 rounded-lg bg-[#0B0A33] p-4 shadow-lg">
             <ul className="flex flex-col gap-3">
@@ -83,17 +86,18 @@ export function Headerx() {
                   </Link>
                 </li>
               ))}
+
               {!user ? (
                 <>
                   <Link className="text-white font-medium" href="/login">
                     Sign in
                   </Link>
-                  <Button as={NextLink} href="#shedule-demo" radius="full" variant="bordered" className="border-2 font-bold border-black bg-[#3534ff] text-white">
+                  <Button as={NextLink} href="#shedule-demo" radius="full" variant="bordered" className="border-2 font-semibold border-black bg-[#3534ff] text-white px-4 py-2 h-[40px]">
                     Schedule a Demo
                   </Button>
                 </>
               ) : (
-                <Button as={NextLink} href="/dashboard" variant="bordered" radius="full" className="border-2 font-bold border-black btn-gradient text-white">
+                <Button as={NextLink} href="/dashboard" variant="bordered" radius="full" className="border-2 font-semibold border-black btn-gradient text-white px-4 py-2 h-[40px]">
                   Go to Dashboard
                 </Button>
               )}
@@ -102,29 +106,33 @@ export function Headerx() {
         )}
       </div>
 
-      {/* Mobile Drawer */}
+      {/* Slide-in Drawer for Mobile */}
       <Drawer isOpen={isOpen} onClose={closeMenu} placement="right">
         <DrawerContent className="w-[300px] bg-[#F0FFF4] border-l-2 border-black">
           <div className="flex flex-col h-full p-4">
-            {/* Header */}
+            {/* Drawer Header */}
             <div className="flex items-center justify-between pb-6 border-b-2 border-black">
               <NextLink href="/" onClick={closeMenu} className="flex items-center space-x-2">
-                <img src="/final-light.png" className="max-h-[40px] w-auto   dark:block" alt="evalsy logo" />
+                <img src="/final-light.png" className="max-h-[40px] w-auto" alt="evalsy logo" />
               </NextLink>
+              <Button onPress={closeMenu} isIconOnly variant="light">
+                <X className="h-5 w-5 text-black" />
+              </Button>
             </div>
 
-            {/* Nav Items */}
-            <nav className="flex flex-col gap-4 py-6 flex-1">
+            {/* Drawer Nav Links */}
+            <nav className="flex flex-col gap-4 py-6 px-2 flex-1 text-black">
               {navigationItems.map((item) => (
-                <Link key={item.href} as={NextLink} href={item.href} onPress={closeMenu} className="text-lg font-medium text-black hover:text-gray-700 transition-colors py-2 px-4 rounded  ">
+                <Link key={item.href} as={NextLink} href={item.href} onPress={closeMenu} className="text-lg font-medium text-black hover:text-gray-700 transition-colors py-2 px-4 rounded">
                   {item.label}
                 </Link>
               ))}
             </nav>
 
+            {/* Drawer Footer */}
             <div className="pt-6 border-t-2 border-black flex flex-col gap-4">
               {!loading && user ? (
-                <Link href="/dashboard" onClick={closeMenu} className="inline-flex items-center justify-center rounded-full py-3 px-5 text-sm font-semibold focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 bg-white text-black hover:text-white hover:bg-green-500 active:bg-green-800 active:text-green-100 focus-visible:outline-green-600">
+                <Link href="/dashboard" onClick={closeMenu} className="inline-flex items-center justify-center rounded-full py-3 px-5 text-sm font-semibold bg-white text-black hover:text-white hover:bg-green-500 active:bg-green-800 focus-visible:outline-green-600">
                   Go to Dashboard
                 </Link>
               ) : (
@@ -132,7 +140,7 @@ export function Headerx() {
                   <Link href="/login" onClick={closeMenu} className="text-md text-black underline text-center">
                     Sign in
                   </Link>
-                  <a className="group inline-flex items-center justify-center rounded-full py-3 px-5 text-sm font-semibold focus:outline-hidden focus-visible:outline-2 focus-visible:outline-offset-2 bg-blue-600 text-white hover:text-slate-100 hover:bg-blue-500 active:bg-blue-800 active:text-blue-100 focus-visible:outline-blue-600" href="#shedule-demo" onClick={closeMenu}>
+                  <a href="#shedule-demo" onClick={closeMenu} className="inline-flex items-center justify-center rounded-full py-3 px-5 text-sm font-semibold bg-blue-600 text-white hover:bg-blue-500 active:bg-blue-800">
                     Let&apos;s talk
                   </a>
                 </>

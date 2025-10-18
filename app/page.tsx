@@ -14,6 +14,7 @@ import HomeLayout from './home-layout';
 import CookieBanner from '@/components/start/CookieBanner';
 import HeroHome from '@/components/start/hero-home';
 import { Headerx } from '@/components/start/Header';
+import HeroAiRecruitment from '@/components/start/HeroAiRecruitment';
 
 export default function Home() {
   return (
@@ -24,7 +25,7 @@ export default function Home() {
 
           <div className="bg-[url('/02.svg')] bg-cover bg-center">
             <HeroHome />
-
+            <HeroAiRecruitment />
             <OptimizationComparison />
           </div>
           <Feature />
