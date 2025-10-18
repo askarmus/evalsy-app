@@ -12,7 +12,7 @@ export function Hero() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
 
-  const phrases = ['conversational & dynamic interview', 'AI cheat detection', 'AI cheat detection'];
+  const phrases = ['Conversational & dynamic interview', 'AI cheat detection', 'Unbiased candidate scoring'];
 
   useEffect(() => {
     const timeout = setTimeout(
@@ -45,7 +45,7 @@ export function Hero() {
   ];
 
   return (
-    <section className="relative w-full py-12 md:py-24 lg:py-32 xl:py-32   p-4 overflow-hidden ">
+    <section className="relative w-full mt-16 sm:mt-24 md:mt-32 lg:mt-48 p-4 overflow-hidden">
       {/* Background Elements */}
 
       <div className="container relative z-10">
@@ -95,18 +95,10 @@ export function Hero() {
             <div className="flex flex-col sm:flex-row gap-4">
               <VideoModal />
             </div>
-
-            {/* Stats */}
-            <div className="flex flex-wrap gap-8 pt-8 border-t border-gray-200">
-              {stats.map((stat, index) => (
-                <div key={index} className="flex items-center gap-3">
-                  <div className="p-2 rounded-full border border-[#3534ff]">{stat.icon}</div>
-                  <div>
-                    <div className="text-1xl font-bold text-[]">{stat.value}</div>
-                    <div className="text-sm text-gray-600">{stat.label}</div>
-                  </div>
-                </div>
-              ))}
+          </div>
+          <div>
+            <div className="flex-center w-full">
+              <img alt="image" decoding="async" data-nimg="1" src="/images/software-interview.png"></img>
             </div>
           </div>
         </div>

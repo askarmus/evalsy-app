@@ -24,8 +24,8 @@ export default function Home() {
           <Headerx />
 
           <div className="bg-[url('/02.svg')] bg-cover bg-center">
-            <HeroHome />
-            <HeroAiRecruitment />
+            <Hero />
+
             <OptimizationComparison />
           </div>
           <Feature />
