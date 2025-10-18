@@ -210,7 +210,7 @@ export default function CoreWidgets() {
             options={{
               ...baseChartOptions,
               labels: ['Open', 'Closed'],
-              colors: [theme.secondary, theme.muted],
+              colors: [theme.success, theme.warning],
               legend: { position: 'bottom', labels: { colors: theme.foreground } },
               dataLabels: { enabled: true },
               plotOptions: {

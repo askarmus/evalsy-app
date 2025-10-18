@@ -445,3 +445,8 @@
 [1018/013822.545:WARNING:dns_config_service_win.cc(668)] Failed to read DnsConfig.
 [1018/013827.564:WARNING:dns_config_service_win.cc(668)] Failed to read DnsConfig.
 [1018/013832.572:WARNING:dns_config_service_win.cc(668)] Failed to read DnsConfig.
+[1018/173050.056:WARNING:dns_config_service_win.cc(668)] Failed to read DnsConfig.
+[1018/173055.080:WARNING:dns_config_service_win.cc(668)] Failed to read DnsConfig.
+[1018/173100.099:WARNING:dns_config_service_win.cc(668)] Failed to read DnsConfig.
+[1018/173105.117:WARNING:dns_config_service_win.cc(668)] Failed to read DnsConfig.
+[1018/173110.131:WARNING:dns_config_service_win.cc(668)] Failed to read DnsConfig.
