@@ -51,11 +51,11 @@ export function Headerx() {
                   Sign in
                 </Link>
 
-                <Button as={NextLink} href="#shedule-demo" radius="full" variant="bordered" className="border-2 font-semibold border-black bg-[#3534ff] text-white px-4 py-2 h-[40px]">
-                  Book a Demo
+                <Button as={NextLink} href="#shedule-demo" radius="full" variant="solid" className=" font-semibold  bg-[#3534ff] text-white px-4 py-2 h-[40px]">
+                  Schedule a Demo
                 </Button>
 
-                <Button as={NextLink} href="/signup" radius="full" variant="bordered" className="border-2 font-semibold border-black bg-white text-black px-4 py-2 h-[40px]">
+                <Button as={NextLink} href="/signup" radius="full" variant="solid" className="font-semibold  bg-white text-black px-4 py-2 h-[40px]">
                   Sign Up
                 </Button>
               </>
@@ -92,7 +92,7 @@ export function Headerx() {
                   <Link className="text-white font-medium" href="/login">
                     Sign in
                   </Link>
-                  <Button as={NextLink} href="#shedule-demo" radius="full" variant="bordered" className="border-2 font-semibold border-black bg-[#3534ff] text-white px-4 py-2 h-[40px]">
+                  <Button as={NextLink} href="#shedule-demo" radius="full" variant="bordered" className="  font-semibold bg-[#3534ff] text-white px-4 py-2 h-[40px]">
                     Schedule a Demo
                   </Button>
                 </>
