@@ -127,25 +127,23 @@ export function Headerx() {
                   {item.label}
                 </Link>
               ))}
-            </nav>
 
-            {/* Drawer Footer */}
-            <div className="pt-6 border-t-2 border-black flex flex-col gap-4">
+              {/* Auth Links inside nav */}
               {!loading && user ? (
-                <Link href="/dashboard" onClick={closeMenu} className="inline-flex items-center justify-center rounded-full py-3 px-5 text-sm font-semibold bg-white text-black hover:text-white hover:bg-green-500 active:bg-green-800 focus-visible:outline-green-600">
+                <Link href="/dashboard" onPress={closeMenu} className="mt-4 inline-flex items-center justify-center rounded-full py-3 px-5 text-sm font-semibold bg-white text-black hover:text-white hover:bg-green-500 active:bg-green-800 focus-visible:outline-green-600">
                   Go to Dashboard
                 </Link>
               ) : (
                 <>
-                  <Link href="/login" onClick={closeMenu} className="text-md text-black underline text-center">
-                    Sign in
+                  <Link href="/login" onPress={closeMenu} className="text-lg font-medium text-black hover:text-gray-700 transition-colors py-2 px-4 rounded">
+                    Sign In
                   </Link>
-                  <a href="#shedule-demo" onClick={closeMenu} className="inline-flex items-center justify-center rounded-full py-3 px-5 text-sm font-semibold bg-blue-600 text-white hover:bg-blue-500 active:bg-blue-800">
-                    Let&apos;s talk
-                  </a>
+                  <Link href="/signup" onPress={closeMenu} className="text-lg font-medium text-black hover:text-gray-700 transition-colors py-2 px-4 rounded">
+                    Sign Up
+                  </Link>
                 </>
               )}
-            </div>
+            </nav>
           </div>
         </DrawerContent>
       </Drawer>
