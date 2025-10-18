@@ -86,7 +86,7 @@ export const Pricing = () => {
           </div>
         </div>
         <div className="mt-10 text-center">
-          <Link className="mt-8 text-white   btn-gradient round-md rounded-lg py-3 px-8 font-medium   hover:   hover:bg-slate-600 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-700" href="/signup">
+          <Link className="mt-8 text-white   btn-gradient round-full rounded-lg py-3 px-8 font-medium   hover:   hover:bg-slate-600 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-700" href="/signup">
             Try for free
           </Link>
           <p className=" text-sm mt-3">Start with 10 free credits – no credit card required.</p>
