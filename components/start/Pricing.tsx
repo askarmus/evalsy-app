@@ -62,7 +62,7 @@ export const Pricing = () => {
           </div>
 
           {/* Credit Usage */}
-          <div className="shadow-2xl rounded-2xl  bg-white p-8">
+          <div className="shadow-2xl rounded-3xl  bg-white p-8">
             <h3 className="text-2xl font-semibold">Pay-as-You-Go</h3>
             <p className="mt-2 text-sm">Pay only for the time and services you use.</p>
             <ul className="mt-6 space-y-4 text-sm">
@@ -86,9 +86,18 @@ export const Pricing = () => {
           </div>
         </div>
         <div className="mt-10 text-center">
-          <Link className="mt-8 text-white   btn-gradient round-full rounded-lg py-3 px-8 font-medium   hover:   hover:bg-slate-600 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-700" href="/signup">
-            Try for free
+          <Link
+            href="/signup"
+            className="mt-8 inline-block rounded-full bg-[#5B21B6] 
+             text-white font-semibold py-3 px-10 text-lg 
+             shadow-lg shadow-purple-500/30 
+             hover:bg-[#4C1D95] 
+             transition-all duration-300 ease-in-out 
+             focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 focus-visible:ring-offset-2"
+          >
+            Try for Free
           </Link>
+
           <p className=" text-sm mt-3">Start with 10 free credits – no credit card required.</p>
         </div>
       </div>

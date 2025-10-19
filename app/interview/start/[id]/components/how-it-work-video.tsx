@@ -8,18 +8,9 @@ export default function VideoModal() {
   const [isOpen, setIsOpen] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
-  const handleClose = () => {
-    setIsOpen(false);
-    // Pause and reset video when modal closes
-    if (videoRef.current) {
-      videoRef.current.pause();
-      videoRef.current.currentTime = 0;
-    }
-  };
-
   return (
     <>
-      <Button onPress={() => setIsOpen(true)} variant="bordered" size="lg" className="border-2 border-purple-700  text-purple-500 hover:bg-purple-500/20 px-8 py-4 text-lg font-semibold rounded-full backdrop-blur-sm bg-transparent">
+      <Button onPress={() => setIsOpen(true)} variant="bordered" size="lg" className="border-2 border-purple-700  text-purple-700 hover:bg-purple-500/20 px-8 py-4 text-lg font-semibold rounded-full backdrop-blur-sm bg-transparent">
         <Play className="h-5 w-5  group-hover:scale-110 transition-transform" />
         See It in Action
       </Button>
