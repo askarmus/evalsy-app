@@ -53,13 +53,13 @@ export const Login = () => {
           <Logo />
         </div>
 
-        {/* <p className='mt-2 text-sm  '>
-          Don’t have an account?{" "}
-          <Link href='/signup' className='font-medium text-blue-600 hover:underline'>
+        <p className="mt-2 text-sm  ">
+          Don’t have an account?{' '}
+          <Link href="/signup" className="font-medium text-blue-600 hover:underline">
             Signup here
-          </Link>{" "}
+          </Link>{' '}
           for a free trial.
-        </p> */}
+        </p>
 
         <Formik initialValues={initialValues} validationSchema={LoginSchema} onSubmit={handleLogin}>
           {({ values, errors, touched, handleChange, handleSubmit }) => (
