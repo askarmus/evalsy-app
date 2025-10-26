@@ -1,3 +1,4 @@
+import { NextResponse } from 'next/server';
 import { bucket } from '@/lib/googleStorage';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -28,5 +29,6 @@ export async function POST(request: Request) {
   // 🌐 Public URL matches actual storage path
   const publicUrl = `https://storage.googleapis.com/${bucket.name}/${filePath}`;
 
-  return Response.json({ uploadUrl, publicUrl });
+  // ✅ Use NextResponse.json()
+  return NextResponse.json({ uploadUrl, publicUrl });
 }
