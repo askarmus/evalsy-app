@@ -20,7 +20,7 @@ export function VoiceCard({ voice, isSelected, isPreviewing, onSelect, onPreview
       <CardHeader className="flex items-start justify-between p-4">
         <div>
           <div className="font-semibold text-lg">{voice.label}</div>
-          <div className="font-semibold text-lg">{voice.voiceId}</div>
+
           <div className="text-sm opacity-70">Voice Profile</div>
         </div>
 
