@@ -28,10 +28,6 @@ export function Headerx() {
           {/* Logo + Tagline */}
           <div className="flex flex-1 items-center gap-2 text-white text-sm md:text-base">
             <LogoDark />
-            <span className="flex items-center gap-1">
-              <span className="opacity-70 text-xs md:text-sm">by</span>
-              <span className="font-semibold text-white tracking-wide">BIGJOBS.lk</span>
-            </span>
           </div>
 
           {/* Desktop Navigation */}
