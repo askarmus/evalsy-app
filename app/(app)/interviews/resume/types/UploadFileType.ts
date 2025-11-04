@@ -17,4 +17,5 @@ export type ResumeUploaderProps = {
   onViewDetails: (resumeId: string) => void;
   onDelete: (resumeId: string) => void;
   existingResume: UploadFile[];
+  onRefresh?: () => Promise<void>; // ✅ added optional refresh callback
 };

@@ -1,105 +1,137 @@
+'use client';
+
+import { Select, SelectItem } from '@heroui/react';
 import Link from 'next/link';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { AiOutlineCheckCircle } from 'react-icons/ai';
 
 export const Pricing = () => {
+  const [plans, setPlans] = useState<any[]>([]);
+  const [currency, setCurrency] = useState('USD');
+  const [rates, setRates] = useState<{ [key: string]: number }>({});
+  const [loadingRates, setLoadingRates] = useState(true);
+  const [loadingPlans, setLoadingPlans] = useState(true);
+
+  // ✅ Fetch pricing plans from backend
+  useEffect(() => {
+    const fetchPricing = async () => {
+      try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/pricing`);
+        const data = await res.json();
+        setPlans(data.plans || []);
+      } catch (err) {
+        console.error('❌ Failed to fetch pricing:', err);
+      } finally {
+        setLoadingPlans(false);
+      }
+    };
+    fetchPricing();
+  }, []);
+
+  // ✅ Fetch exchange rates from open.er-api.com (no API key required)
+  useEffect(() => {
+    const fetchRates = async () => {
+      try {
+        const res = await fetch('https://open.er-api.com/v6/latest/USD');
+        const data = await res.json();
+        if (data?.rates) setRates(data.rates);
+      } catch (err) {
+        console.error('❌ Currency fetch failed:', err);
+      } finally {
+        setLoadingRates(false);
+      }
+    };
+    fetchRates();
+  }, []);
+
+  // ✅ Convert USD → selected currency
+  const convert = (usd: number) => {
+    if (!rates || !rates[currency]) return `$${usd.toFixed(2)} USD`;
+    const converted = usd * rates[currency];
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency,
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(converted);
+  };
+
+  if (loadingPlans) return <div className="text-center py-20 text-lg font-medium">Loading pricing…</div>;
+
   return (
     <section id="pricing" className="bg-gradient-6 py-20 sm:py-32">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        {/* ===== Header ===== */}
         <div className="text-center">
-          <h2 className="font-display text-4xl font-semibold sm:text-4xl text-[#262626]">
-            Simple <span className="gradients-primary-2-text-hard">Usage-Based Pricing</span>
+          <h2 className="font-display text-4xl font-semibold text-[#262626]">
+            Simple <span className="gradients-primary-2-text-hard">Pay-as-You-Go Pricing</span>
           </h2>
+          <p className="mt-4 text-lg text-gray-600">Buy credits once and use them anytime — no subscriptions, no expiry.</p>
 
-          <p className="mt-4 text-lg  ">Start for free no credit card required and pay only for what you use. Our flexible credit system ensures you never waste features.</p>
+          {/* Currency Selector */}
+          <div className="mt-6">
+            <Select
+              selectedKeys={[currency]}
+              onSelectionChange={(keys) => {
+                const selected = Array.from(keys)[0] as string;
+                setCurrency(selected);
+              }}
+              className="max-w-xs mx-auto"
+              variant="bordered"
+              color="secondary"
+              radius="md"
+            >
+              <SelectItem key="USD">🇺🇸 USD — Dollar</SelectItem>
+              <SelectItem key="GBP">🇬🇧 GBP — Pound</SelectItem>
+              <SelectItem key="EUR">🇪🇺 EUR — Euro</SelectItem>
+              <SelectItem key="LKR">🇱🇰 LKR — Rupee</SelectItem>
+              <SelectItem key="INR">🇮🇳 INR — Rupee</SelectItem>
+              <SelectItem key="AUD">🇦🇺 AUD — Dollar</SelectItem>
+            </Select>
+          </div>
         </div>
+
+        {/* ===== Pricing Grid ===== */}
         <div className="mt-16 grid grid-cols-1 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 gap-x-6">
-          {/* Free Trial */}
-          <div className=" p-8 shadow-2xl rounded-2xl  bg-white">
-            <h3 className="text-2xl font-semibold">Free Trial</h3>
-            <p className="mt-2 text-sm ">Get started with no risk — no credit card required.</p>
-            <ul className="mt-6 space-y-4 text-sm">
-              <li className="flex items-center">
-                <AiOutlineCheckCircle className="text-[#3534ff] mr-3 h-5 w-5" />
-                10 free credits
-              </li>
-              <li className="flex items-center">
-                <AiOutlineCheckCircle className="text-[#3534ff] mr-3 h-5 w-5" />
-                Unlimited job postings
-              </li>
-              <li className="flex items-center">
-                <AiOutlineCheckCircle className="text-[#3534ff] mr-3 h-5 w-5" />
-                Full access to AI interviews
-              </li>
-              <li className="flex items-center">
-                <AiOutlineCheckCircle className="text-[#3534ff] mr-3 h-5 w-5" />
-                Cancel anytime, no commitment
-              </li>
-            </ul>
-          </div>
+          {/* === Free Trial === */}
 
-          {/* Credit Packages */}
-          <div className="p-8 shadow-2xl rounded-2xl  bg-white">
-            <h3 className="text-2xl font-semibold">Credit Packages</h3>
-            <p className="mt-2 text-sm  ">Buy once, use anytime — credits never expire.</p>
-            <ul className="mt-6 space-y-4 text-sm">
-              <li className="flex items-center">
-                <AiOutlineCheckCircle className="text-[#3534ff] mr-3 h-5 w-5" />
-                50 Credits – <strong>$10</strong>
-              </li>
-              <li className="flex items-center">
-                <AiOutlineCheckCircle className="text-[#3534ff] mr-3 h-5 w-5" />
-                200 Credits – <strong>$35</strong>
-              </li>
-              <li className="flex items-center">
-                <AiOutlineCheckCircle className="text-[#3534ff] mr-3 h-5 w-5" />
-                500 Credits – <strong>$75</strong>
-              </li>
-              <li className="flex items-center">
-                <AiOutlineCheckCircle className="text-[#3534ff] mr-3 h-5 w-5" />
-                Credits never expire
-              </li>
-            </ul>
-          </div>
+          {/* === Dynamic Plans === */}
+          {plans.map((plan) => (
+            <div key={plan.id} className={`p-8 shadow-2xl rounded-2xl ${plan.id === 'business' ? 'bg-gradient-to-b from-purple-600 to-indigo-600 text-white' : 'bg-white text-gray-800'}`}>
+              <h3 className="text-2xl font-semibold">{plan.name}</h3>
+              <p className="mt-1 text-sm opacity-80">{plan.idealFor}</p>
 
-          {/* Credit Usage */}
-          <div className="shadow-2xl rounded-3xl  bg-white p-8">
-            <h3 className="text-2xl font-semibold">Pay-as-You-Go</h3>
-            <p className="mt-2 text-sm">Pay only for the time and services you use.</p>
-            <ul className="mt-6 space-y-4 text-sm">
-              <li className="flex items-center">
-                <AiOutlineCheckCircle className="text-[#3534ff] mr-3 h-5 w-5" />
-                Resume screening – 1 credit per resume
-              </li>
-              <li className="flex items-center">
-                <AiOutlineCheckCircle className="text-[#3534ff] mr-3 h-5 w-5" />
-                Manual interview invite – 3 credits
-              </li>
-              <li className="flex items-center">
-                <AiOutlineCheckCircle className="text-[#3534ff] mr-3 h-5 w-5" />
-                AI voice interview – 1 credit per minute
-              </li>
-              <li className="flex items-center">
-                <AiOutlineCheckCircle className="text-[#3534ff] mr-3 h-5 w-5" />
-                Real-time usage tracking in your dashboard
-              </li>
-            </ul>
-          </div>
+              <ul className="mt-6 space-y-4 text-sm">
+                <li className="flex items-center">
+                  <AiOutlineCheckCircle className={`${plan.id === 'business' ? 'text-white' : 'text-[#5B21B6]'} mr-3 h-5 w-5`} />
+                  {plan.credits} credits — never expire
+                </li>
+
+                <li className="flex items-center">
+                  <AiOutlineCheckCircle className={`${plan.id === 'business' ? 'text-white' : 'text-[#5B21B6]'} mr-3 h-5 w-5`} />
+                  Resume — <strong>{convert(plan.estimatedCost.resumeUSD)} / resume</strong>
+                </li>
+
+                <li className="flex items-center">
+                  <AiOutlineCheckCircle className={`${plan.id === 'business' ? 'text-white' : 'text-[#5B21B6]'} mr-3 h-5 w-5`} />
+                  AI Interview — <strong>{convert(plan.estimatedCost.interview10MinUSD)} / 10 min</strong>
+                </li>
+
+                <li className="flex items-center">
+                  <AiOutlineCheckCircle className={`${plan.id === 'business' ? 'text-white' : 'text-[#5B21B6]'} mr-3 h-5 w-5`} />
+                  Price — <strong>{convert(plan.priceUSD)}</strong>
+                </li>
+              </ul>
+            </div>
+          ))}
         </div>
-        <div className="mt-10 text-center">
-          <Link
-            href="/signup"
-            className="mt-8 inline-block rounded-full bg-[#5B21B6] 
-             text-white font-semibold py-3 px-10 text-lg 
-             shadow-lg shadow-purple-500/30 
-             hover:bg-[#4C1D95] 
-             transition-all duration-300 ease-in-out 
-             focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 focus-visible:ring-offset-2"
-          >
+
+        {/* ===== CTA ===== */}
+        <div className="mt-12 text-center">
+          <Link href="/signup" className="mt-8 inline-block rounded-full bg-[#5B21B6] text-white font-semibold py-3 px-10 text-lg shadow-lg shadow-purple-500/30 hover:bg-[#4C1D95] transition-all duration-300">
             Try for Free
           </Link>
-
-          <p className=" text-sm mt-3">Start with 10 free credits – no credit card required.</p>
+          <p className="text-sm mt-3 text-gray-600">Start with 10 free credits — no credit card required.</p>
         </div>
       </div>
     </section>

@@ -11,7 +11,7 @@ import { InvalidProcessedCard } from './result-list/InvalidProcessedCard';
 import { showToast } from '@/app/utils/toastUtils';
 import { useCredits } from '@/context/CreditContext';
 import { supabase } from '@/lib/supabaseClient';
-import { Eye, Trash2 } from 'lucide-react';
+import { Eye, RefreshCw, Trash2 } from 'lucide-react';
 import DateFormatter from '@/app/utils/DateFormatter';
 import { HiringGradeUtil } from '@/app/utils/hiring-grade.util';
 import { AiOutlineDownload } from 'react-icons/ai';
@@ -26,12 +26,29 @@ type LocalUpload = {
   publicUrl?: string;
 };
 
-const ResumeUploader = ({ jobid, onViewDetails, onDelete, existingResume }: ResumeUploaderProps) => {
+const ResumeUploader = ({ jobid, onViewDetails, onDelete, existingResume, onRefresh }: ResumeUploaderProps) => {
   const { refreshCredits } = useCredits();
   const [uploadingFiles, setUploadingFiles] = useState<LocalUpload[]>([]);
   const [loadingResumeId, setLoadingResumeId] = useState<string | null>(null);
   const [resumeList, setResumeList] = useState(existingResume);
   const [viewMode, setViewMode] = useState<'card' | 'table'>('card');
+
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
+  const handleRefresh = async () => {
+    if (!onRefresh) return;
+
+    try {
+      setIsRefreshing(true);
+      await onRefresh(); // ✅ just await it, don't assign result
+      showToast.success('Resumes refreshed!');
+    } catch (err) {
+      console.error(err);
+      showToast.error('Failed to refresh resumes');
+    } finally {
+      setIsRefreshing(false);
+    }
+  };
 
   useEffect(() => {
     if (existingResume?.length) {
@@ -234,6 +251,12 @@ const ResumeUploader = ({ jobid, onViewDetails, onDelete, existingResume }: Resu
                 Table View
               </Button>
             </ButtonGroup>
+
+            <Tooltip content="Refresh Resume List">
+              <Button isIconOnly variant="flat" color="secondary" size="sm" isLoading={isRefreshing} onPress={handleRefresh}>
+                <RefreshCw className="h-4 w-4" />
+              </Button>
+            </Tooltip>
           </div>
           {viewMode === 'card' ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
