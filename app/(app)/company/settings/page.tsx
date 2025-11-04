@@ -29,7 +29,7 @@ const CompanySettingsPage = () => {
   ];
   return (
     <div className="my-10 px-4 lg:px-6   max-w-[94rem]   mx-auto w-full  flex flex-col gap-4">
-      <Card className="P-3  ">
+      <Card className="P-6  " shadow="none">
         <CardBody>
           <div className="grid lg:grid-cols-4 gap-3">
             <div className="col-span-1 p-4">

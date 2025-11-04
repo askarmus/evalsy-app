@@ -8,7 +8,8 @@ import FileUploadWithPreview from '@/components/FileUploadWithPreview';
 import { CompanySettingsSchema } from '@/helpers/schemas';
 
 import { AiOutlineCloseCircle } from 'react-icons/ai';
-import { Building, Building2, LayoutTemplate, Save, Upload } from 'lucide-react';
+import { Building, Building2, Inbox, LayoutTemplate, Save, Upload } from 'lucide-react';
+import EmailInputList from './components/EmailInputList';
 
 export type CompanySettingsFormValues = {
   name: string;
@@ -23,6 +24,7 @@ export type CompanySettingsFormValues = {
   phone?: string;
   supportName?: string;
   supportEmail?: string;
+  applicationReceiveEmail: string[];
 };
 
 const CompanySettings = () => {
@@ -43,6 +45,7 @@ const CompanySettings = () => {
     invitationTemplate: `
     You're invited to the Initial interviews for the <position> role at <company>.
     `,
+    applicationReceiveEmail: [],
   });
 
   const handleRemoveImage = () => {
@@ -78,7 +81,7 @@ const CompanySettings = () => {
         <Form>
           <Tabs aria-label="Settings">
             <Tab key="company" title="Company">
-              <Card className="p-0" shadow="none">
+              <Card className="p-0">
                 <CardBody className="p-4">
                   <div className="mb-6 flex items-center gap-[5px] mb-3 md:mb-4 ">
                     <Building className="w-5 h-5 text-xl text-secondary-400" />
@@ -141,7 +144,7 @@ const CompanySettings = () => {
               </Card>
             </Tab>
             <Tab key="template" title="Template">
-              <Card className="p-0" shadow="none">
+              <Card>
                 <CardBody className="p-4">
                   <div className="mb-6 flex items-center gap-[5px] mb-3 md:mb-4 ">
                     <LayoutTemplate className="w-5 h-5 text-xl text-secondary-400" />
@@ -158,39 +161,18 @@ const CompanySettings = () => {
                         <span className="block mt-1 text-gray-400">Example: You&apos;re invited to the Initial interviews for the &lt;position&gt; role at &lt;company&gt;.</span>
                       </p>
                     </div>
-                    <div className="w-1/5">
-                      <div className="lg:col-span-1">
-                        <Card>
-                          <CardHeader>Company Logo</CardHeader>
-                          <CardBody>
-                            <div className="space-y-4">
-                              <div className="flex items-center justify-center w-full h-32 border-2 border-dashed border-secondary-200 rounded-lg bg-secondary-50">
-                                <div className="text-center">
-                                  {uploadLogoUrl && (
-                                    <div className="relative inline-block">
-                                      <img src={uploadLogoUrl} alt="Company Logo Preview" className="max-w-full h-auto rounded max-w-[80px]" />
-                                      <button type="button" onClick={handleRemoveImage} className="absolute -top-3 -right-3">
-                                        <AiOutlineCloseCircle />
-                                      </button>
-                                    </div>
-                                  )}
-                                  <p className="text-sm text-gray-500">Current Logo</p>
-                                </div>
-                              </div>
-
-                              <FileUploadWithPreview
-                                onUpload={(data) => {
-                                  setFieldValue('logo', data.url);
-                                  setUploadLogoUrl(data.url);
-                                }}
-                              />
-                              <p className="text-xs text-gray-500 text-center">Supports: JPG, PNG, SVG (Max 2MB)</p>
-                            </div>
-                          </CardBody>
-                        </Card>
-                      </div>
-                    </div>
                   </div>
+                </CardBody>
+              </Card>
+            </Tab>
+            <Tab key="app_emails" title="Application Email">
+              <Card>
+                <CardBody className="p-4">
+                  <div className="mb-6 flex items-center gap-[5px] mb-3 md:mb-4 ">
+                    <Inbox className="w-5 h-5 text-xl text-secondary-400" />
+                    <h1 className=" text-xl/[24px] font-semibold text-tertiary  md:text-[20px]/[24px]">HR Application Inbox</h1>
+                  </div>
+                  <EmailInputList value={values.applicationReceiveEmail} onChange={(list) => setFieldValue('applicationReceiveEmail', list)} />
                 </CardBody>
               </Card>
             </Tab>
