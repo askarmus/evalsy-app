@@ -1,7 +1,5 @@
 'use client';
 
-import { motion } from 'framer-motion';
-
 interface SpeakingIndicatorProps {
   isSpeaking: boolean;
   volume: number;
@@ -20,9 +18,7 @@ export default function SpeakingIndicatorSoft({ isSpeaking, volume }: SpeakingIn
             <img src="/favicon-large.png" className="w-full h-full rounded-full object-cover" />
           </div>
         </div>
-        <div className="w-full h-2 bg-gray-700 rounded-full overflow-hidden mt-3">
-          <motion.div className="h-full bg-gradient-to-r from-blue-500 to-purple-500" animate={{ width: `${volume * 100}%` }} transition={{ duration: 0.1 }} />
-        </div>
+
         <p className="mt-5 text-center text-lg text-gray-300 font-bold">AI INTERVIEWER</p>
       </div>
     </div>

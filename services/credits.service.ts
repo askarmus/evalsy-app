@@ -14,7 +14,3 @@ export const createCheckoutSession = async (credits: number) => {
   const response = await apiClient.post('/credits/checkout-session', { credits });
   return response.data.url;
 };
-export const deductCredits = async (payload: { amount: number; type: 'resume' | 'interview'; relatedId?: string }) => {
-  const response = await apiClient.post('/credits/deduct', payload);
-  return response.data;
-};
