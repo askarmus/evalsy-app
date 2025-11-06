@@ -16,7 +16,6 @@ import { FaStopCircle } from 'react-icons/fa';
 import { formatExperience } from '@/app/utils/formatExperience';
 import { Brain, Play, Shield, Trophy, Video } from 'lucide-react';
 import { QuestionResponses } from './components/QuestionResponses';
-import GaugeChart from 'react-gauge-chart';
 
 export default function InterviewResultList() {
   const [page, setPage] = useState(1);
@@ -32,8 +31,7 @@ export default function InterviewResultList() {
   const rowsPerPage = 1000;
   const searchParams = useSearchParams();
   const [isPlaying, setIsPlaying] = useState(false);
-  const arcsLength = [0.4, 0.25, 0.2, 0.15]; // Adjust arc proportions
-  const colors = ['#EA4228', '#F5CD19', '#5BC0DE', '#5BE12C']; // match reject→strong hire order
+
   const handlePlay = () => setIsPlaying(true);
   const handleStop = () => setIsPlaying(false);
 
@@ -201,16 +199,16 @@ export default function InterviewResultList() {
               <div className="grid grid-cols-3 gap-4 mb-5">
                 <Card>
                   <CardBody className="justify-center items-center pb-0">
-                    <GaugeChart
-                      id="gauge-chart-hiring"
-                      nrOfLevels={420}
-                      arcsLength={arcsLength}
-                      colors={colors}
-                      percent={selectedInterviewerData?.totalScore / 100}
-                      arcPadding={0.02}
-                      textColor="#000" // label color changed to black
-                      formatTextValue={() => `${selectedInterviewerData?.totalScore}%`}
-                      needleColor="#000"
+                    <CircularProgress
+                      color={HiringGradeUtil.getHiringRecommendation(selectedInterviewerData?.totalScore || 0).color}
+                      classNames={{
+                        svg: 'w-32 h-32 drop-shadow-none',
+                        track: 'stroke-gray-200',
+                        value: 'text-2xl font-semibold ',
+                      }}
+                      showValueLabel={true}
+                      strokeWidth={4}
+                      value={selectedInterviewerData?.totalScore}
                     />
                   </CardBody>
                   <CardFooter className="justify-center items-center pt-0">
