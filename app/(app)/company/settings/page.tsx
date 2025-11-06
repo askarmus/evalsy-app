@@ -8,6 +8,7 @@ import { CreditProvider } from '@/context/CreditContext';
 import { CreditBalanceCard } from '@/components/settings/components/credits/CreditBalanceCard';
 import { CreditTransactionTable } from '@/components/settings/components/credits/credits/CreditTransactionTable';
 import { ArrowLeftRight, Building, Building2, CreditCard, KeyRound, Lock } from 'lucide-react';
+import AddCompanyUser from '@/components/settings/add.user';
 
 const CompanySettingsPage = () => {
   const [activeTab, setActiveTab] = useState('settings');
@@ -23,6 +24,7 @@ const CompanySettingsPage = () => {
   const TABS = [
     { key: 'settings', label: 'Settings', icon: Building },
     { key: 'password', label: 'Password', icon: Lock },
+    { key: 'addUser', label: 'Add User', icon: Building2 },
 
     { key: 'subscriptions', label: 'Subscriptions', icon: CreditCard },
     { key: 'creditTransaction', label: 'Credit Transaction', icon: ArrowLeftRight },
@@ -53,6 +55,7 @@ const CompanySettingsPage = () => {
                   <CreditBalanceCard />
                 </CreditProvider>
               )}
+              {activeTab === 'addUser' && <AddCompanyUser />}
 
               {activeTab === 'creditTransaction' && <CreditTransactionTable />}
             </div>
