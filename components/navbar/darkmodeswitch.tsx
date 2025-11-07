@@ -9,9 +9,5 @@ export const DarkModeSwitch = () => {
 
   const isDark = resolvedTheme === 'dark';
 
-  return (
-    <div className="flex items-center gap-2">
-      <Switch isSelected={isDark} color="secondary" size="sm" onValueChange={(val) => setTheme(val ? 'dark' : 'light')} thumbIcon={({ isSelected, className }) => (isSelected ? <FaSun className={className} /> : <FaMoon className={className} />)} />
-    </div>
-  );
+  return <div className="flex items-center gap-2">{/* <Switch isSelected={isDark} color="secondary" size="sm" onValueChange={(val) => setTheme(val ? 'dark' : 'light')} thumbIcon={({ isSelected, className }) => (isSelected ? <FaSun className={className} /> : <FaMoon className={className} />)} /> */}</div>;
 };

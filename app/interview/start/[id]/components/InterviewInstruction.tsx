@@ -8,7 +8,7 @@ import { ChevronRight, Mic, Play, Video } from 'lucide-react';
 import { cleanDescription } from '@/app/utils/formatRelativeDate';
 
 const InterviewInstruction: React.FC<any> = () => {
-  const [showFullDescription, setShowFullDescription] = useState(false);
+  const [showFullDescription, setShowFullDescription] = useState(true);
   const [showMicTest, setShowMicTest] = useState(false);
   const [status, setStatus] = useState<'pending' | 'granted' | 'denied' | 'blocked'>('pending');
 
@@ -30,10 +30,10 @@ const InterviewInstruction: React.FC<any> = () => {
                   {!showFullDescription && <div className="absolute bottom-0 left-0 right-0 h-16 pointer-events-none rounded-b-md" />}
                 </div>
 
-                <Button variant="ghost" radius="full" size="sm" onPress={() => setShowFullDescription((prev) => !prev)} className="w-fit">
+                {/* <Button variant="ghost" radius="full" size="sm" onPress={() => setShowFullDescription((prev) => !prev)} className="w-fit">
                   {showFullDescription ? 'Read Less' : 'Read More'}
                   <ChevronRight className="w-4 h-4 ml-1" />
-                </Button>
+                </Button> */}
               </div>
               <Divider className="mt-6" />
             </CardBody>
@@ -50,13 +50,13 @@ const InterviewInstruction: React.FC<any> = () => {
           <CardFooter>
             <div className="flex items-center justify-end w-full">
               {showMicTest && (
-                <Button size="md" startContent={<Play />} onPress={startInterview} color="secondary" variant="flat" isLoading={isLoading} isDisabled={status !== 'granted'} radius="full">
+                <Button size="md" startContent={!isLoading && <Play />} onPress={startInterview} color="secondary" variant="bordered" isLoading={isLoading} isDisabled={status !== 'granted'} radius="full">
                   Start Interview
                 </Button>
               )}
 
               {!showMicTest && (
-                <Button isLoading={isLoading} onPress={() => setShowMicTest(true)} size="md" color="secondary" variant="flat" radius="full">
+                <Button isLoading={isLoading} onPress={() => setShowMicTest(true)} size="md" color="secondary" variant="bordered" radius="full">
                   <div className="flex items-center space-x-2">
                     <span>Next: Test audio/video</span>
                     <ChevronRight className="w-5 h-5" />

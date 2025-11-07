@@ -282,6 +282,20 @@ div::-webkit-scrollbar-track {
   border: 1px solid #ffffff1a;
 }
 
+.home_v2 {
+  z-index: -1;
+
+  background-color: #150c24;
+  background-image: url(/images/4_eae2dd7eb3a55636dc2d74f4fa4c386e.svg);
+
+  background-repeat: no-repeat, no-repeat;
+  background-size: auto, auto;
+  justify-content: center;
+  align-items: stretch;
+
+  inset: 0% 0% 96px;
+}
+
 .home_v2-hero-bg {
   z-index: -1;
 
