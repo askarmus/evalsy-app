@@ -8,7 +8,6 @@ import { AiOutlineHome, AiOutlineShopping, AiOutlineNotification, AiOutlineSetti
 
 import { CreditManager } from '../settings/components/credits/credits/CreditManager';
 import { Logo } from '../shared/logo';
-import { LogoDark } from '../logo.dark';
 
 export const navItems = [
   { href: '/dashboard', label: 'Dashboard', icon: <AiOutlineHome className="w-4 h-4 mr-3" /> },
@@ -50,7 +49,7 @@ export function Header() {
                 const isActive = pathname?.startsWith(item.href); // highlight based on current route
                 return (
                   <li key={item.label}>
-                    <Button color="secondary" variant="bordered" onPress={() => router.push(item.href)} className={cn('w-full justify-start', isActive && 'bg-purple-100 text-purple-700 hover:bg-purple-100 dark:bg-purple-900/40 dark:text-purple-300')}>
+                    <Button variant="bordered" onPress={() => router.push(item.href)} className={cn('w-full justify-start', isActive && 'bg-purple-100 text-purple-700 hover:bg-purple-100 dark:bg-purple-900/40 dark:text-purple-300')}>
                       {item.icon}
                       {item.label}
                     </Button>

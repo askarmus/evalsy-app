@@ -4,7 +4,7 @@ import { getInitials } from '@/app/utils/getInitials';
 import { truncateText } from '@/app/utils/truncate.text';
 import { get10InterviewResult } from '@/services/dashboard.service';
 import { Avatar, Button, Card, CardBody, CardHeader, Chip, DropdownMenu, Skeleton, User } from '@heroui/react';
-import { Badge, Clock, MoreHorizontal, TrendingUp, UserPlus } from 'lucide-react';
+import { Badge, Clock, ListOrdered, MoreHorizontal, TrendingUp, UserPlus } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { AiFillEye } from 'react-icons/ai';
@@ -104,8 +104,8 @@ export const RecentInterviews = () => {
                 </div>
               ))}
           {results.length > 0 && !loading && (
-            <div className="pt-4">
-              <Button color="secondary" variant="bordered" className="w-full  " onPress={() => router.push(`/result`)}>
+            <div className="pt-4 flex justify-end">
+              <Button variant="bordered" radius="full" onPress={() => router.push(`/result`)} startContent={<ListOrdered className="w-4 h-4" />}>
                 View All Interviews
               </Button>
             </div>

@@ -1,7 +1,6 @@
 import apiClient from '@/helpers/apiClient';
 
 import { ResetPasswordFormType, ChangePasswordFormType, ForgetPasswordFormType, LoginFormType, RegisterFormType } from '@/helpers/types';
-import axios from 'axios';
 
 export const registerUser = async (values: RegisterFormType) => {
   const response = await apiClient.post('/auth/register', values);
@@ -38,5 +37,16 @@ export const loginUser = async (values: LoginFormType) => {
 
 export const getCurrentUser = async () => {
   const res = await apiClient.get('/auth/me');
+  return res.data;
+};
+
+export async function getCompanyUsers() {
+  const res = await apiClient.get('/auth/company/users');
+  return res.data;
+}
+
+// 🔹 Toggle user enable/disable (admin/owner only)
+export const toggleUserStatus = async (userId: string, isActive: boolean) => {
+  const res = await apiClient.put('/auth/company/user/status', { userId, isActive });
   return res.data;
 };

@@ -32,7 +32,6 @@ export const Layout = ({ children }: Props) => {
             <div className="flex items-center gap-4 ml-auto">
               <div className="flex items-center gap-3">
                 <UserDropdown />
-                <DarkModeSwitch />
               </div>
             </div>
           </div>

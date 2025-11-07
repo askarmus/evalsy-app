@@ -38,7 +38,12 @@ export const Login = () => {
         }
       } catch (error: any) {
         console.error('Login error:', error);
-        showToast.error([401, 404].includes(error?.response?.status) ? 'Invalid email or password' : error?.response?.data?.error || 'Login failed. Please try again.');
+
+        if (error.status === 401 || error.status === 404) {
+          showToast.error('Invalid email or password');
+        } else {
+          showToast.error(error.message || 'Login failed. Please try again.');
+        }
       } finally {
         setSubmitting(false);
       }
@@ -56,14 +61,14 @@ export const Login = () => {
         <p className="mt-2 text-sm  ">
           Don’t have an account?{' '}
           <Link href="/signup" className="font-medium text-blue-600 hover:underline">
-            Signup here
+            Signup
           </Link>{' '}
           for a free trial.
         </p>
 
         <Formik initialValues={initialValues} validationSchema={LoginSchema} onSubmit={handleLogin}>
           {({ values, errors, touched, handleChange, handleSubmit }) => (
-            <Card shadow="sm" radius="md" className="p-4 mt-6   rounded-xl">
+            <Card radius="lg" className="p-4 mt-6   rounded-xl">
               <CardHeader>
                 <h2 className=" text-2xl font-semibold ">Sign in to your account</h2>
               </CardHeader>
@@ -76,7 +81,7 @@ export const Login = () => {
                     Login
                   </Button>
                   <p className="mt-2 text-sm text-gray-700">
-                    <Link href="/forgetpassword" className="font-medium text-black-600 hover:underline">
+                    <Link href="/forgetpassword" className="font-medium text-blue-600 hover:underline">
                       Forget Password?
                     </Link>
                   </p>
