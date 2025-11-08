@@ -207,7 +207,7 @@ const ResumeUploader = ({ jobid, onViewDetails, onDelete, existingResume, onRefr
   return (
     <div>
       {/* Upload Area */}
-      <div {...getRootProps()}>
+      <div {...getRootProps()} onClick={open}>
         <input {...getInputProps()} className="hidden" aria-label="Upload resume file" />
         <Card radius="sm" shadow="sm" className="w-full mb-8 p-2 border-2 border-dashed cursor-pointer transition-colors hover:bg-slate-50 hover:border-slate-400 dark:hover:bg-slate-800 dark:hover:border-slate-600">
           <CardBody className="flex flex-row items-center justify-between py-4 px-6">
