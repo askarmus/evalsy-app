@@ -11,10 +11,10 @@ import { Logo } from '../shared/logo';
 
 export const navItems = [
   { href: '/dashboard', label: 'Dashboard', icon: <AiOutlineHome className="w-4 h-4 mr-3" /> },
-  { href: '/interviews/list', label: 'Interview', icon: <AiOutlineShopping className="w-4 h-4 mr-3" /> },
-  { href: '/result', label: 'Result', icon: <AiOutlineNotification className="w-4 h-4 mr-3" /> },
-  { href: '/invitations', label: 'Invitations', icon: <AiOutlineMail className="w-4 h-4 mr-3" /> },
-  { href: '/company/settings', label: 'Settings', icon: <AiOutlineSetting className="w-4 h-4 mr-3" /> },
+  { href: '/interviews/list', label: 'AI Interview Manager', icon: <AiOutlineShopping className="w-4 h-4 mr-3" /> },
+  { href: '/result', label: 'Candidate Reports', icon: <AiOutlineNotification className="w-4 h-4 mr-3" /> },
+  { href: '/invitations', label: 'Interview Invites', icon: <AiOutlineMail className="w-4 h-4 mr-3" /> },
+  { href: '/company/settings', label: 'Company Settings', icon: <AiOutlineSetting className="w-4 h-4 mr-3" /> },
 ];
 
 export function Header() {

@@ -235,7 +235,7 @@ export default function Jobs() {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4">
                   <Link href="/interviews/add">
                     <Card className="border-2 border-dashed border-purple-300 hover:border-purple-400 transition-colors cursor-pointer group">
-                      <CardBody className="flex flex-col items-center justify-center h-64 text-center p-6">
+                      <CardBody className="flex flex-col items-center justify-center   text-center p-6">
                         <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mb-4 group-hover:bg-purple-200 transition-colors">
                           <Plus className="w-8 h-8 text-purple-600" />
                         </div>

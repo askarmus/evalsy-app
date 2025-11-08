@@ -47,7 +47,7 @@ export default function JobView() {
       </Navbar>
 
       {/* Tabs layout */}
-      <div className="mx-auto  max-w-[96rem] px-4 py-6">
+      <div className="mx-auto    px-4 py-6">
         <Tabs aria-label="Interview tabs" color="secondary" variant="underlined" className="w-full" defaultSelectedKey="overview">
           <Tab key="overview" title="Overview">
             {!data ? (
@@ -132,7 +132,7 @@ export default function JobView() {
             )}
           </Tab>
 
-          {/* <Tab key="questions" title={`Questions (${data?.questions?.length ?? 0})`}>
+          <Tab key="questions" title={`Questions (${data?.questions?.length ?? 0})`}>
             <Card shadow="sm" className="mt-3">
               <CardHeader className="flex-col items-start gap-1">
                 <div className="text-base font-semibold">Questions</div>
@@ -177,7 +177,7 @@ export default function JobView() {
                 </ScrollShadow>
               </CardBody>
             </Card>
-          </Tab> */}
+          </Tab>
 
           <Tab key="fraud" title="Fraud Detection">
             <Card shadow="sm" className="mt-3">
