@@ -121,29 +121,41 @@ export default function AddCompanyUser() {
           ) : users.length === 0 ? (
             <p className="text-sm text-gray-500">No users found.</p>
           ) : (
-            <Table aria-label="Company users">
+            <Table aria-label="Company Users" isStriped shadow="none" className="mt-4">
               <TableHeader>
                 <TableColumn>Name</TableColumn>
                 <TableColumn>Email</TableColumn>
                 <TableColumn>Role</TableColumn>
-                <TableColumn align="end">&nbsp;</TableColumn>
+                <TableColumn className="text-right">Status</TableColumn>
               </TableHeader>
-              <TableBody>
+
+              <TableBody emptyContent="No users found">
                 {users.map((u) => (
                   <TableRow key={u.id}>
-                    <TableCell className="flex items-center gap-2">
-                      {getRoleIcon(u.role)}
-                      {u.name}
+                    <TableCell>
+                      <div className="flex items-center gap-2">
+                        {getRoleIcon(u.role)}
+                        <span>{u.name}</span>
+                      </div>
                     </TableCell>
-                    <TableCell className="flex items-center gap-2">
-                      <Mail className="w-4 h-4 text-secondary-400" />
-                      {u.email}
+
+                    <TableCell>
+                      <div className="flex items-center gap-2">
+                        <Mail className="w-4 h-4 text-secondary-400" />
+                        <span>{u.email}</span>
+                      </div>
                     </TableCell>
-                    <TableCell>{u.role}</TableCell>
-                    <TableCell align="right">
-                      <Button size="sm" radius="full" color={u.is_active ? 'success' : 'danger'} variant="flat" startContent={<Power className="w-4 h-4" />} onPress={() => handleToggle(u.id, u.is_active)}>
-                        {u.is_active ? 'Active' : 'Disabled'}
-                      </Button>
+
+                    <TableCell>
+                      <span className="capitalize">{u.role}</span>
+                    </TableCell>
+
+                    <TableCell>
+                      <div className="flex justify-end">
+                        <Button size="sm" radius="full" color={u.is_active ? 'success' : 'danger'} variant="flat" startContent={<Power className="w-4 h-4" />} onPress={() => handleToggle(u.id, u.is_active)}>
+                          {u.is_active ? 'Active' : 'Disabled'}
+                        </Button>
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))}
