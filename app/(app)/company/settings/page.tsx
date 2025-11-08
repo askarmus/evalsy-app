@@ -22,12 +22,12 @@ const CompanySettingsPage = () => {
   }, []);
 
   const TABS = [
-    { key: 'settings', label: 'Settings', icon: Building },
-    { key: 'password', label: 'Password', icon: Lock },
-    { key: 'addUser', label: 'Add User', icon: Building2 },
+    { key: 'settings', label: 'Company Profile', icon: Building },
+    { key: 'password', label: 'Security & Password', icon: Lock },
+    { key: 'addUser', label: 'Team Members', icon: Building2 },
 
-    { key: 'subscriptions', label: 'Subscriptions', icon: CreditCard },
-    { key: 'creditTransaction', label: 'Credit Transaction', icon: ArrowLeftRight },
+    { key: 'subscriptions', label: 'Billing & Subscription', icon: CreditCard },
+    { key: 'creditTransaction', label: 'Credit Usage History', icon: ArrowLeftRight },
   ];
   return (
     <div className=" my-10 px-4 lg:px-6  mx-auto w-full flex flex-col gap-4">
