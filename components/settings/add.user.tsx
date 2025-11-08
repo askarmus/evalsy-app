@@ -10,7 +10,6 @@ import { addUser, getCompanyUsers, toggleUserStatus } from '@/services/authServi
 const AddUserSchema = Yup.object().shape({
   name: Yup.string().required('Name is required'),
   email: Yup.string().email('Invalid email').required('Email is required'),
-  password: Yup.string().min(6, 'Password must be at least 6 characters').required('Password is required'),
   role: Yup.string().oneOf(['member', 'admin'], 'Invalid role').required('Role is required'),
 });
 
@@ -19,15 +18,15 @@ export default function AddCompanyUser() {
   const [users, setUsers] = useState<any[]>([]);
   const [isLoadingUsers, setIsLoadingUsers] = useState(true);
 
-  const initialValues = { name: '', email: '', password: '', role: 'member' };
+  const initialValues = { name: '', email: '', role: 'member' };
 
-  // 🔹 Fetch users
+  // 🔹 Load all users
   const loadUsers = async () => {
     try {
       setIsLoadingUsers(true);
       const data = await getCompanyUsers();
       setUsers(data.data);
-    } catch (err) {
+    } catch {
       showToast.error('Failed to load users');
     } finally {
       setIsLoadingUsers(false);
@@ -38,12 +37,12 @@ export default function AddCompanyUser() {
     loadUsers();
   }, []);
 
-  // 🔹 Handle submit
+  // 🔹 Handle Add User
   const handleSubmit = async (values: typeof initialValues, { resetForm }: any) => {
     try {
       setIsLoading(true);
       await addUser(values);
-      showToast.success('✅ User added successfully!');
+      showToast.success('✅ User added successfully! A password setup email has been sent.');
       resetForm();
       await loadUsers();
     } catch (error: any) {
@@ -53,6 +52,7 @@ export default function AddCompanyUser() {
     }
   };
 
+  // 🔹 Enable/disable user
   const handleToggle = async (userId: string, currentState: boolean) => {
     try {
       await toggleUserStatus(userId, !currentState);
@@ -63,6 +63,7 @@ export default function AddCompanyUser() {
     }
   };
 
+  // 🔹 Icon by role
   const getRoleIcon = (role: string) => {
     switch (role) {
       case 'owner':
@@ -73,6 +74,7 @@ export default function AddCompanyUser() {
         return <User className="w-4 h-4 text-gray-500" />;
     }
   };
+
   return (
     <div className="space-y-6">
       <Formik initialValues={initialValues} validationSchema={AddUserSchema} onSubmit={handleSubmit}>
@@ -85,10 +87,9 @@ export default function AddCompanyUser() {
                   <h1 className="text-xl font-semibold text-tertiary">Add New User</h1>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <Input label="Name" name="name" variant="bordered" size="sm" value={values.name} onChange={handleChange} isInvalid={!!errors.name && !!touched.name} errorMessage={errors.name} />
                   <Input label="Email" name="email" type="email" variant="bordered" size="sm" value={values.email} onChange={handleChange} isInvalid={!!errors.email && !!touched.email} errorMessage={errors.email} />
-                  <Input label="Password" name="password" type="password" variant="bordered" size="sm" value={values.password} onChange={handleChange} isInvalid={!!errors.password && !!touched.password} errorMessage={errors.password} />
                   <Select label="Role" selectedKeys={[values.role]} onChange={(e) => setFieldValue('role', e.target.value)} size="sm">
                     <SelectItem key="member">Member</SelectItem>
                     <SelectItem key="admin">Admin</SelectItem>
@@ -130,7 +131,10 @@ export default function AddCompanyUser() {
               <TableBody>
                 {users.map((u) => (
                   <TableRow key={u.id}>
-                    <TableCell>{u.name}</TableCell>
+                    <TableCell className="flex items-center gap-2">
+                      {getRoleIcon(u.role)}
+                      {u.name}
+                    </TableCell>
                     <TableCell className="flex items-center gap-2">
                       <Mail className="w-4 h-4 text-secondary-400" />
                       {u.email}

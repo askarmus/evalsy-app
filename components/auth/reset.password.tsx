@@ -1,8 +1,8 @@
 'use client';
 
-import { ChangePasswordSchema } from '@/helpers/schemas';
+import { ChangePasswordSchema, SetPasswordSchema } from '@/helpers/schemas';
 import { resetPassword } from '@/services/authService';
-import { Button, Input } from '@heroui/react';
+import { Button, Card, CardBody, Input } from '@heroui/react';
 import { Formik } from 'formik';
 import { useCallback, useState } from 'react';
 import { Logo } from '../shared/logo';
@@ -44,33 +44,39 @@ export const ResetPassword = () => {
       </div>
 
       {isSuccess ? (
-        <div className="mt-20 text-center">
-          <h2 className="text-lg font-semibold text-green-600">Password Changed Successfully!</h2>
-          <p className="mt-2 text-sm text-gray-700">Your password has been updated. You can now sign in with your new password.</p>
+        <Card radius="lg" className="p-4 mt-10 rounded-xl">
+          <CardBody>
+            <div className="  text-center">
+              <h2 className="text-lg font-semibold text-green-600">Password Changed Successfully!</h2>
+              <p className="mt-2 text-sm text-gray-700">Your password has been updated. You can now sign in with your new password.</p>
 
-          <Button className="mt-6" radius="full" color="primary" onPress={() => router.push('/login')}>
-            Back to Login
-          </Button>
-        </div>
+              <Button className="mt-6" radius="full" color="secondary" onPress={() => router.push('/login')}>
+                Back to Login
+              </Button>
+            </div>
+          </CardBody>
+        </Card>
       ) : (
-        <>
-          <h2 className="mt-20 text-lg font-semibold text-gray-900">Set Your New Password</h2>
-          <p className="mt-2 text-sm text-gray-700">Please enter your new password below.</p>
+        <Card radius="lg" className="p-6 mt-10  ">
+          <CardBody>
+            <h2 className="  text-lg font-semibold text-gray-900">Set Your New Password</h2>
+            <p className="mt-2 text-sm text-gray-700">Please enter your new password below.</p>
 
-          <Formik initialValues={initialValues} validationSchema={ChangePasswordSchema} onSubmit={handleChangePassword}>
-            {({ values, errors, touched, handleChange, handleSubmit }) => (
-              <form className="mt-10 grid grid-cols-1 gap-y-8" onSubmit={handleSubmit}>
-                <Input variant="bordered" label="New Password" type="password" value={values.newPassword} isInvalid={!!errors.newPassword && !!touched.newPassword} errorMessage={errors.newPassword} onChange={handleChange('newPassword')} />
+            <Formik initialValues={initialValues} validationSchema={SetPasswordSchema} onSubmit={handleChangePassword}>
+              {({ values, errors, touched, handleChange, handleSubmit }) => (
+                <form className="mt-10 grid grid-cols-1 gap-y-8" onSubmit={handleSubmit}>
+                  <Input variant="bordered" label="New Password" type="password" value={values.newPassword} isInvalid={!!errors.newPassword && !!touched.newPassword} errorMessage={errors.newPassword} onChange={handleChange('newPassword')} />
 
-                <Input variant="bordered" label="Confirm New Password" type="password" value={values.confirmPassword} isInvalid={!!errors.confirmPassword && !!touched.confirmPassword} errorMessage={errors.confirmPassword} onChange={handleChange('confirmPassword')} />
+                  <Input variant="bordered" label="Confirm New Password" type="password" value={values.confirmPassword} isInvalid={!!errors.confirmPassword && !!touched.confirmPassword} errorMessage={errors.confirmPassword} onChange={handleChange('confirmPassword')} />
 
-                <Button type="submit" radius="full" isLoading={isSubmitting} color="primary" className="bg-[#100145] text-white  ">
-                  Change Password
-                </Button>
-              </form>
-            )}
-          </Formik>
-        </>
+                  <Button type="submit" radius="full" isLoading={isSubmitting} color="primary" className="bg-[#100145] text-white  ">
+                    Change Password
+                  </Button>
+                </form>
+              )}
+            </Formik>
+          </CardBody>
+        </Card>
       )}
     </main>
   );

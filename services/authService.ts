@@ -21,7 +21,6 @@ export const resetPassword = async (values: ResetPasswordFormType) => {
   const response = await apiClient.post('/auth/resetPassword', values);
   return response.data;
 };
-``;
 export const addUser = async (values: any) => {
   const response = await apiClient.post('/auth/add-user', values);
   return response.data;
@@ -49,4 +48,9 @@ export async function getCompanyUsers() {
 export const toggleUserStatus = async (userId: string, isActive: boolean) => {
   const res = await apiClient.put('/auth/company/user/status', { userId, isActive });
   return res.data;
+};
+
+export const setPassword = async (values: ResetPasswordFormType) => {
+  const response = await apiClient.post('/auth/set-password', values);
+  return response.data;
 };
