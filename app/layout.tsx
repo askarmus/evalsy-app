@@ -14,7 +14,7 @@ export const metadata: Metadata = {
     type: 'article',
     images: [
       {
-        url: 'https://www.evalsy.com/og-image-new.png',
+        url: 'https://www.evalsy.com/og-image-new-v1.png',
         width: 1200,
         height: 630,
         alt: 'Evalsy – AI Interview Platform',
