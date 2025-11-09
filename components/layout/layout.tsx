@@ -17,7 +17,7 @@ export const Layout = ({ children }: Props) => {
   const currentItem = navItems.find((item) => pathname?.startsWith(item.href));
 
   return (
-    <div className="flex h-screen bg-gray-50 dark:bg-black">
+    <div className="flex h-screen bg-[#f3f4f6] dark:bg-black">
       <Header />
       <div className="flex-1 flex flex-col overflow-hidden">
         <header className="bg-white dark:bg-black border-b border-gray-200 dark:border-[#3f3f46] px-6 py-4">

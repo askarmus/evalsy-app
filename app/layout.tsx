@@ -6,6 +6,7 @@ import { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'Evalsy – AI Interview Platform for Smarter, Faster Hiring',
   description: 'Evalsy helps companies automate interviews, screen candidates, and generate instant reports — making hiring 75% faster and smarter with AI.',
+  icons: { icon: '/favicon-32x32.png' },
   openGraph: {
     title: 'Evalsy – AI Interview Platform for Smarter, Faster Hiring',
     description: 'Automate your hiring with Evalsy’s AI-driven interviews, candidate scoring, and instant report sharing.',
