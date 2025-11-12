@@ -3,7 +3,7 @@
 import { ForgetPasswordSchema } from '@/helpers/schemas';
 import { ForgetPasswordFormType } from '@/helpers/types';
 import { forgetPassword } from '@/services/authService';
-import { Button, Input } from '@heroui/react';
+import { Button, Card, CardBody, Input } from '@heroui/react';
 import { Formik } from 'formik';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -50,29 +50,31 @@ export const ForgetPassword = () => {
         </div>
       ) : (
         // Forget Password Form
-        <>
-          <h2 className="mt-20 text-lg font-semibold text-gray-900">Forgot your password?</h2>
-          <p className="mt-2 text-sm text-gray-700">Enter your email address below and we will send you instructions to reset your password.</p>
+        <Card radius="lg" className="p-6 mt-10  ">
+          <CardBody>
+            <h2 className="  text-lg font-semibold text-gray-900">Forgot your password?</h2>
+            <p className="mt-2 text-sm text-gray-700">Enter your email address below and we will send you instructions to reset your password.</p>
 
-          <Formik initialValues={initialValues} validationSchema={ForgetPasswordSchema} onSubmit={handleForgetPassword}>
-            {({ values, errors, touched, handleChange, handleSubmit }) => (
-              <form className="mt-10 grid grid-cols-1 gap-y-8" onSubmit={handleSubmit}>
-                <Input variant="bordered" label="Email" type="email" value={values.email} isInvalid={!!errors.email && !!touched.email} errorMessage={errors.email} onChange={handleChange('email')} />
+            <Formik initialValues={initialValues} validationSchema={ForgetPasswordSchema} onSubmit={handleForgetPassword}>
+              {({ values, errors, touched, handleChange, handleSubmit }) => (
+                <form className="mt-10 grid grid-cols-1 gap-y-8" onSubmit={handleSubmit}>
+                  <Input variant="bordered" label="Email" type="email" value={values.email} isInvalid={!!errors.email && !!touched.email} errorMessage={errors.email} onChange={handleChange('email')} />
 
-                <Button type="submit" radius="full" isLoading={isSubmitting} color="primary" className="bg-[#100145] text-white hover:bg-gray-800">
-                  Reset Password
-                </Button>
-              </form>
-            )}
-          </Formik>
+                  <Button type="submit" radius="full" isLoading={isSubmitting} color="primary" className="bg-[#100145] text-white hover:bg-gray-800">
+                    Reset Password
+                  </Button>
+                </form>
+              )}
+            </Formik>
 
-          <p className="mt-4 text-center text-sm text-gray-700">
-            Remember your password?{' '}
-            <Link href="/login" className="font-medium text-blue-600 hover:underline">
-              Sign in here
-            </Link>
-          </p>
-        </>
+            <p className="mt-4 text-center text-sm text-gray-700">
+              Remember your password?{' '}
+              <Link href="/login" className="font-medium text-blue-600 hover:underline">
+                Sign in
+              </Link>
+            </p>
+          </CardBody>
+        </Card>
       )}
     </main>
   );

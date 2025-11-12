@@ -42,7 +42,7 @@ export default function RequestDemo() {
   };
 
   return (
-    <section id="shedule-demo" className="  bg-white  flex items-center justify-center p-4 py-20 sm:py-32">
+    <section id="shedule-demo" className=" bg-[url('/02.svg')] bg-cover bg-center  flex items-center justify-center p-4 py-20 sm:py-32">
       <div className="w-full max-w-6xl">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
           <div className="hidden lg:block relative h-full rounded-2xl overflow-hidden">
@@ -129,7 +129,7 @@ export default function RequestDemo() {
                     onChange={handleInputChange}
                   />
 
-                  <Button radius="sm" isLoading={isSubmiting} type="submit" size="md" className="mt-8 text-white  bg-black py-4 px-8 font-medium hover: hover:bg-slate-600 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-700" endContent={<FaArrowRight className="w-4 h-4 text-white hover:translate-x-1 transition-transform" />}>
+                  <Button radius="full" isLoading={isSubmiting} type="submit" size="md" className="mt-8 text-white  bg-black py-4 px-8 font-medium hover: hover:bg-slate-600 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-700" endContent={<FaArrowRight className="w-4 h-4 text-white hover:translate-x-1 transition-transform" />}>
                     Request Demo
                   </Button>
                 </form>

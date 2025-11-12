@@ -3,7 +3,7 @@
 'use client';
 
 import HomeLayout from '../home-layout';
-import { Header } from '@/components/start/Header';
+import { Headerx } from '@/components/start/Header';
 import { Footer } from '@/components/start/Footer';
 import CookieBanner from '@/components/start/CookieBanner';
 import { useEffect, useState } from 'react';
@@ -38,7 +38,7 @@ export default function TermsPage() {
     <HomeLayout>
       <div className="flex min-h-screen flex-col text-black">
         <main className="flex-1">
-          <Header />
+          <Headerx />
           <div className="max-w-7xl mx-auto px-6 py-12 grid grid-cols-1 lg:grid-cols-4 gap-10">
             {/* Main Content */}
             <div className="lg:col-span-3 space-y-12">

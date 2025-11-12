@@ -115,14 +115,14 @@ export default function JobPostingClient({ jobData }: { jobData: JobData }) {
                 <div className="lg:col-span-1">
                   <div className="sticky top-8 space-y-6">
                     {/* Apply */}
-                    <div className="bg-gray-50 dark:bg-gray-700 p-6 rounded-lg">
+                    <div className="bg-gray-[#f3f4f6] dark:bg-gray-700 p-6 rounded-lg">
                       <Button onPress={() => setIsApply((prev) => !prev)} size="lg" radius="full" color="secondary" variant={!isApply ? 'solid' : 'bordered'} className="w-full font-semibold size-2xl">
                         {isApply && <ArrowLeft />} {!isApply ? 'Apply for This Job' : 'View Job Description'}
                       </Button>
                     </div>
 
                     {/* Share / Link */}
-                    <div className="bg-gray-50 dark:bg-gray-700 p-6 rounded-lg">
+                    <div className="bg-gray-[#f3f4f6] dark:bg-gray-700 p-6 rounded-lg">
                       <h3 className="font-medium text-gray-900 dark:text-white mb-3">Link to This Job</h3>
                       <Input value={shareLink} readOnly className="text-sm mb-4 bg-white dark:bg-gray-600" />
                       <div className="flex space-x-3">
@@ -139,7 +139,7 @@ export default function JobPostingClient({ jobData }: { jobData: JobData }) {
                     </div>
 
                     {/* Facts */}
-                    <div className="bg-gray-50 dark:bg-gray-700 p-6 rounded-lg space-y-4">
+                    <div className="bg-gray-[#f3f4f6] dark:bg-gray-700 p-6 rounded-lg space-y-4">
                       <div className="">
                         <h4 className="font-medium text-gray-900 dark:text-white mb-1">Location</h4>
                         <p className="text-sm text-gray-600 dark:text-gray-300">{[jobData.country, jobData.city].filter(Boolean).join(', ') || '—'}</p>

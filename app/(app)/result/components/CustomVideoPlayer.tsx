@@ -73,7 +73,7 @@ const CustomVideoPlayer: React.FC<CustomVideoPlayerProps> = ({ playTrigger, stop
   }, [activeIndex, filteredTranscript]);
 
   return (
-    <div className="max-w-5xl mx-auto  ">
+    <div className="mx-auto  ">
       <div className="flex flex-col md:flex-row gap-4">
         {/* Video Section */}
 

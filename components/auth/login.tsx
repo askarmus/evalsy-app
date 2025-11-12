@@ -38,7 +38,12 @@ export const Login = () => {
         }
       } catch (error: any) {
         console.error('Login error:', error);
-        showToast.error([401, 404].includes(error?.response?.status) ? 'Invalid email or password' : error?.response?.data?.error || 'Login failed. Please try again.');
+
+        if (error.status === 401 || error.status === 404) {
+          showToast.error('Invalid email or password');
+        } else {
+          showToast.error(error.message || 'Login failed. Please try again.');
+        }
       } finally {
         setSubmitting(false);
       }
@@ -53,17 +58,17 @@ export const Login = () => {
           <Logo />
         </div>
 
-        {/* <p className='mt-2 text-sm  '>
-          Don’t have an account?{" "}
-          <Link href='/signup' className='font-medium text-blue-600 hover:underline'>
-            Signup here
-          </Link>{" "}
+        <p className="mt-2 text-sm  ">
+          Don’t have an account?{' '}
+          <Link href="/signup" className="font-medium text-blue-600 hover:underline">
+            Signup
+          </Link>{' '}
           for a free trial.
-        </p> */}
+        </p>
 
         <Formik initialValues={initialValues} validationSchema={LoginSchema} onSubmit={handleLogin}>
           {({ values, errors, touched, handleChange, handleSubmit }) => (
-            <Card shadow="sm" radius="md" className="p-4 mt-6   rounded-xl">
+            <Card radius="lg" className="p-4 mt-6   rounded-xl">
               <CardHeader>
                 <h2 className=" text-2xl font-semibold ">Sign in to your account</h2>
               </CardHeader>
@@ -72,11 +77,11 @@ export const Login = () => {
                   <Input variant="bordered" label="Email" type="email" value={values.email} isInvalid={!!errors.email && !!touched.email} errorMessage={errors.email} onChange={handleChange('email')} />
                   <Input variant="bordered" label="Password" type="password" value={values.password} isInvalid={!!errors.password && !!touched.password} errorMessage={errors.password} onChange={handleChange('password')} />
 
-                  <Button onPress={() => handleSubmit()} isLoading={isSubmitting} className="text-white  bg-black py-4 px-8 font-medium">
+                  <Button onPress={() => handleSubmit()} isLoading={isSubmitting} color="secondary" radius="full">
                     Login
                   </Button>
                   <p className="mt-2 text-sm text-gray-700">
-                    <Link href="/forgetpassword" className="font-medium text-black-600 hover:underline">
+                    <Link href="/forgetpassword" className="font-medium text-blue-600 hover:underline">
                       Forget Password?
                     </Link>
                   </p>

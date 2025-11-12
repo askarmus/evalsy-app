@@ -157,7 +157,7 @@ export default function MediaPermission({ onPermissionChange }: { onPermissionCh
         {permissionStatus === 'granted' && (
           <Card shadow="none">
             <CardBody>
-              <Alert color="success" title="Camera and microphone permissions granted." hideIcon className="mb-5" />
+              <Alert variant="bordered" title="Camera and microphone permissions granted." className="mb-5 p-2" />
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
                 <Card shadow="none">
                   <CardBody>
@@ -182,7 +182,6 @@ export default function MediaPermission({ onPermissionChange }: { onPermissionCh
                         <Alert
                           hideIcon
                           className="mb-4 mt-4 text-xs"
-                          color="secondary"
                           title={
                             <>
                               Mic in use: <strong>{micDeviceLabel}</strong>

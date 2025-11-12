@@ -19,7 +19,7 @@ export const CreditBalanceCard = () => {
   const { credits, loading } = useCredits();
 
   return (
-    <Card className="p-0" radius="md" shadow="none">
+    <Card className="p-0" radius="md">
       <CardBody>
         <div className="mb-6 flex items-center gap-[5px] mb-3 md:mb-4 ">
           <Wallet className="w-5 h-5 text-xl text-secondary-400" />

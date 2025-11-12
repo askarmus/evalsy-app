@@ -121,7 +121,7 @@ export const SendInvitationDrawer: React.FC<SendInvitationDrawerProps> = ({ isOp
                   <Textarea
                     variant="bordered"
                     minRows={1}
-                    label="Message"
+                    label="Extra Note"
                     classNames={{
                       input: 'resize-y min-h-[30px]',
                     }}

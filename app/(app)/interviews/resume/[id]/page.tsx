@@ -74,9 +74,9 @@ export default function UploadFiles() {
   };
 
   return (
-    <div className="   max-w-[80rem] mx-auto w-full flex flex-col gap-4">
+    <div className="  w-full flex flex-col gap-4">
       <ResumeStatsGrid resumeStats={resumeStats} />
-      <ResumeUploaderTable jobid={id} onViewDetails={handleViewDetails} onDelete={handleDeleteClick} existingResume={files} />
+      <ResumeUploaderTable onRefresh={loadResumes} jobid={id} onViewDetails={handleViewDetails} onDelete={handleDeleteClick} existingResume={files} />
       <ResumeAnalyseDrawer isOpen={isDrawerOpen} onClose={closeDrawer} resumeData={selectedResumeData} />
       <ConfirmDialog isOpen={isConfirmDialogOpen} onClose={handleCancelDelete} title="Confirm Deletion" description="Are you sure you want to delete this resume?" onConfirm={handleConfirmDelete} confirmButtonText="Delete" cancelButtonText="Cancel" />
     </div>

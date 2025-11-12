@@ -157,7 +157,7 @@ export default function Jobs() {
   };
 
   return (
-    <div className="  my-10 px-4 lg:px-6   max-w-[94rem]   mx-auto w-full flex flex-col gap-4">
+    <div className="  my-10 px-4 lg:px-6  mx-auto w-full flex flex-col gap-4">
       <div className="flex justify-between flex-wrap gap-4 items-center">
         <div className="flex items-center gap-3 flex-wrap md:flex-nowrap">
           <Input
@@ -235,7 +235,7 @@ export default function Jobs() {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4">
                   <Link href="/interviews/add">
                     <Card className="border-2 border-dashed border-purple-300 hover:border-purple-400 transition-colors cursor-pointer group">
-                      <CardBody className="flex flex-col items-center justify-center h-64 text-center p-6">
+                      <CardBody className="flex flex-col items-center justify-center   text-center p-6">
                         <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mb-4 group-hover:bg-purple-200 transition-colors">
                           <Plus className="w-8 h-8 text-purple-600" />
                         </div>

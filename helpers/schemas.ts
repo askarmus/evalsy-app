@@ -107,3 +107,11 @@ export const ChangePasswordSettingSchema = object().shape({
     .oneOf([ref('newPassword'), undefined], 'Passwords must match')
     .required('Confirm Password is required'),
 });
+
+export const SetPasswordSchema = object().shape({
+  token: string().required('Token is missing'),
+  newPassword: string().min(8, 'Password must be at least 8 characters long').required('New Password is required'),
+  confirmPassword: string()
+    .oneOf([ref('newPassword'), undefined], 'Passwords must match')
+    .required('Confirm Password is required'),
+});

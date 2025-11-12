@@ -33,7 +33,7 @@ const faqData = [
 
 export default function FAQ() {
   return (
-    <section id="faq" aria-labelledby="faq-title" className="w-full py-12 md:py-24 lg:py-32 bg-gradient-6">
+    <section id="faq" aria-labelledby="faq-title" className="w-full py-12 md:py-24 lg:py-32  bg-[url('/02.svg')] bg-cover bg-center ">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative">
         <div className="  text-center lg:mx-0 mb-8">
           <h2 className="   text-4xl font-semibold  sm:text-4xl text-[#262626] text-center mb-5">

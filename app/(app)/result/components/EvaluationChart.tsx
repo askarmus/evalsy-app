@@ -8,7 +8,7 @@ const EvaluationChart = ({ data }: { data: any }) => {
   };
 
   return (
-    <div className="space-y-2">
+    <div className="space-y-2 w-full">
       {data?.categoryScores?.map(({ name, score, comment }) => {
         return (
           <div key={name} className="grid grid-cols-12 gap-2 items-center">

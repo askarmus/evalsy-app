@@ -45,7 +45,7 @@ const ChangePassword = () => {
     <Formik initialValues={initialValues} validationSchema={ChangePasswordSchema} onSubmit={handleSubmit}>
       {({ values, errors, touched, handleChange }) => (
         <Form>
-          <Card radius="md" shadow="none" className="p-0">
+          <Card radius="md">
             <CardBody>
               <div className="mb-6 flex items-center gap-[5px] mb-3 md:mb-4 ">
                 <Lock className="w-5 h-5 text-xl text-secondary-400" />

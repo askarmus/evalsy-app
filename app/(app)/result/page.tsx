@@ -15,6 +15,7 @@ import CustomVideoPlayer from './components/CustomVideoPlayer';
 import { FaStopCircle } from 'react-icons/fa';
 import { formatExperience } from '@/app/utils/formatExperience';
 import { Brain, Play, Shield, Trophy, Video } from 'lucide-react';
+import { QuestionResponses } from './components/QuestionResponses';
 
 export default function InterviewResultList() {
   const [page, setPage] = useState(1);
@@ -112,7 +113,7 @@ export default function InterviewResultList() {
   }, [page, filteredResults]);
 
   return (
-    <div className="my-6 px-4 lg:px-6   mx-auto w-full min-h-screen">
+    <div className=" my-10 px-4 lg:px-6  mx-auto w-full flex flex-col gap-4">
       {isLoadingOnResultSelected && (
         <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/10 backdrop-blur-sm">
           <Spinner label="Loading, please wait..." color="secondary" />
@@ -292,6 +293,10 @@ export default function InterviewResultList() {
                     </div>
                   </div>
                 </CardBody>
+              </Card>
+
+              <Card shadow="md" radius="md" className="mt-4 p-2">
+                <CardBody>{selectedInterviewerData?.questionRatings && <QuestionResponses assessmentData={selectedInterviewerData?.questionRatings} />}</CardBody>
               </Card>
             </div>
           </main>
