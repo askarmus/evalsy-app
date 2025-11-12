@@ -32,7 +32,8 @@ export default function CategoryAveragesChart({ data }: Props) {
         background: 'transparent',
       },
       theme: {
-        mode: isDark ? 'dark' : 'light',
+        // mode: isDark ? 'dark' : 'light',
+        mode: 'light',
       },
       plotOptions: {
         bar: {
