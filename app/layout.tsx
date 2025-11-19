@@ -1,5 +1,4 @@
 import { GoogleAnalytic } from '@/components/GoogleAnalytic';
-import { LayoutWrapper } from '@/components/LayoutWrapper';
 import '@/styles/globals.css';
 import { Metadata } from 'next';
 
@@ -35,6 +34,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <GoogleAnalytic />
       <body>{children} </body>
     </html>
   );

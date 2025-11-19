@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect } from 'react';
-import { GoogleAnalytic } from '@/components/GoogleAnalytic';
 
 export default function HomeLayout({ children }: { children: React.ReactNode }) {
   useEffect(() => {
