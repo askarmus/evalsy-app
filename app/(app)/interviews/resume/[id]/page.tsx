@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Input, Select, SelectItem, Button, Pagination, Chip, Card, CardBody, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Checkbox, Selection } from '@heroui/react';
+import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Input, Select, SelectItem, Button, Pagination, Chip, Card, CardBody, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Checkbox, Selection, Spinner } from '@heroui/react';
 import { useDropzone } from 'react-dropzone';
 import { v4 as uuidv4 } from 'uuid';
 import { supabase } from '@/lib/supabaseClient';
@@ -65,6 +65,7 @@ export default function ResumeUploaderHero({ jobId }: { jobId: string }) {
 
   const [selectedResumeData, setSelectedResumeData] = useState<any>(null);
   const [isDrawerOpen, setDrawerOpen] = useState(false);
+  const [isResumesLoading, setResumesLoading] = useState(false);
   const [loadingResults, setLoadingResults] = useState<{ [key: string]: boolean }>({});
 
   const handleClose = () => setDrawerOpen(false);
@@ -74,6 +75,7 @@ export default function ResumeUploaderHero({ jobId }: { jobId: string }) {
   useEffect(() => {
     const load = async () => {
       try {
+        setResumesLoading(true);
         const existing = await fetchResumes(jobId);
         setStats(existing.stats);
         const formatted: ResumeRow[] = (existing.resumes || []).map((r: any) => {
@@ -91,6 +93,8 @@ export default function ResumeUploaderHero({ jobId }: { jobId: string }) {
         setItems(formatted);
       } catch (err) {
         console.error('Failed loading existing resumes:', err);
+      } finally {
+        setResumesLoading(false);
       }
     };
 
@@ -490,7 +494,7 @@ export default function ResumeUploaderHero({ jobId }: { jobId: string }) {
             Actions
           </TableColumn>
         </TableHeader>
-        <TableBody emptyContent={'No resumes found'} items={paginated}>
+        <TableBody emptyContent={'No resumes found'} items={paginated} isLoading={isResumesLoading} loadingContent={<Spinner />}>
           {(item: ResumeRow) => (
             <TableRow key={item.resumeId}>
               <TableCell>{item.name}</TableCell>

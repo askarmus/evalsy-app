@@ -13,6 +13,7 @@ export const navItems = [
   { href: '/dashboard', label: 'Dashboard', icon: <AiOutlineHome className="w-4 h-4 mr-3" /> },
   { href: '/interviews/list', label: 'AI Interview Manager', icon: <AiOutlineShopping className="w-4 h-4 mr-3" /> },
   { href: '/result', label: 'Candidate Reports', icon: <AiOutlineNotification className="w-4 h-4 mr-3" /> },
+  { href: '/ai-shortlist', label: 'AI Shortlist', icon: <AiOutlineNotification className="w-4 h-4 mr-3" /> },
   { href: '/invitations', label: 'Interview Invites', icon: <AiOutlineMail className="w-4 h-4 mr-3" /> },
   { href: '/company/settings', label: 'Company Settings', icon: <AiOutlineSetting className="w-4 h-4 mr-3" /> },
 ];
@@ -49,7 +50,7 @@ export function Header() {
                 const isActive = pathname?.startsWith(item.href); // highlight based on current route
                 return (
                   <li key={item.label}>
-                    <Button variant="bordered" onPress={() => router.push(item.href)} className={cn('w-full justify-start', isActive && 'bg-purple-100 text-purple-700 hover:bg-purple-100 dark:bg-purple-900/40 dark:text-purple-300')}>
+                    <Button variant="bordered" color="secondary" onPress={() => router.push(item.href)} className={cn('w-full justify-start', isActive && 'bg-purple-100 text-purple-700 hover:bg-purple-100 dark:bg-purple-900/40 dark:text-purple-300')}>
                       {item.icon}
                       {item.label}
                     </Button>

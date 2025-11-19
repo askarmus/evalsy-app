@@ -9,6 +9,7 @@ import { SendInvitationSchema } from '@/helpers/schemas';
 import { useCredits } from '@/context/CreditContext';
 import { getAllJobs } from '@/services/job.service';
 import { Send } from 'lucide-react';
+import JobDropdown from '../shared/JobDropdown';
 
 interface SendInvitationDrawerProps {
   isOpen: boolean;
@@ -20,7 +21,6 @@ interface SendInvitationDrawerProps {
 
 export const SendInvitationDrawer: React.FC<SendInvitationDrawerProps> = ({ isOpen, onClose, jobId, email, name }) => {
   const [invitations, setInvitations] = useState<Invitation[]>([]);
-  const [jobLookup, setJobLookup] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const { credits, refreshCredits } = useCredits();
   const [selectedJobId, setSelectedJobId] = useState<string | null>(null);
@@ -32,9 +32,6 @@ export const SendInvitationDrawer: React.FC<SendInvitationDrawerProps> = ({ isOp
   const fetchInvitations = useCallback(async () => {
     const invitations = await getInvitations(jobId!);
     setInvitations(invitations);
-
-    const jobs = await getAllJobs();
-    setJobLookup(jobs);
   }, [jobId]);
 
   useEffect(() => {
@@ -95,26 +92,16 @@ export const SendInvitationDrawer: React.FC<SendInvitationDrawerProps> = ({ isOp
               </DrawerHeader>
               <DrawerBody>
                 <div className="flex flex-col gap-4 mb-6">
-                  <Autocomplete
-                    label="Select a job"
-                    variant="bordered"
-                    onSelectionChange={async (value) => {
-                      if (value) {
-                        setInvitations([]);
+                  <JobDropdown
+                    value={selectedJobId}
+                    onChange={async (jobId) => {
+                      setSelectedJobId(jobId);
+                      setFieldValue('jobId', jobId);
 
-                        setSelectedJobId(value.toString());
-                        setFieldValue('jobId', value);
-                        const result = await getInvitations(value.toString());
-                        setInvitations(result);
-                      }
+                      const result = await getInvitations(jobId);
+                      setInvitations(result);
                     }}
-                    selectedKey={selectedJobId ?? undefined}
-                    className="w-full"
-                  >
-                    {jobLookup.map((job) => (
-                      <AutocompleteItem key={job.id.toString()}>{job.jobTitle}</AutocompleteItem>
-                    ))}
-                  </Autocomplete>
+                  />
 
                   <Input label="Name" variant="bordered" value={values.name} onChange={handleChange('name')} isInvalid={!!errors.name && !!touched.name} errorMessage={errors.name} />
                   <Input label="Email" variant="bordered" value={values.email} onChange={handleChange('email')} isInvalid={!!errors.email && !!touched.email} errorMessage={errors.email} />
