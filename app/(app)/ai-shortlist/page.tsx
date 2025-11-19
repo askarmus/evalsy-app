@@ -1,9 +1,9 @@
 'use client';
 import React, { useState } from 'react';
 
-import ResumeUploaderHero from '../interviews/resume/[id]/page';
 import JobDropdown from '@/components/shared/JobDropdown';
 import { Card, CardBody } from '@heroui/react';
+import ResumeUploaderHero from '@/app/(app)/interviews/resume/components/ResumeUploaderHero';
 
 export default function AIShortlist() {
   const [jobId, setJobId] = useState<string | null>(null);

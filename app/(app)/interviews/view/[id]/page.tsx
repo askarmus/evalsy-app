@@ -7,7 +7,7 @@ import { Card, CardBody, CardHeader, Chip, Divider, Navbar, NavbarBrand, ScrollS
 import { Briefcase, Calendar, Clock, Edit, MapPin, MessageSquare } from 'lucide-react';
 import JobOverviewSkeleton from '../JobOverviewSkeleton';
 import SocialShareDropdown from '../components/SocialShareDropdown';
-import ResumeUploaderSimple from '@/app/(app)/interviews/resume/[id]/page';
+import ResumeUploaderHero from '../../resume/components/ResumeUploaderHero';
 
 export default function JobView() {
   const { id } = useParams() as { id?: string };
@@ -198,7 +198,7 @@ export default function JobView() {
           <Tab key="resume" title="AI Shortlist">
             <Card shadow="sm" className="mt-3">
               <CardBody>
-                <ResumeUploaderSimple jobId="be830a04-267b-46cf-88f5-80e4087498b0" />
+                <ResumeUploaderHero jobId={id!} />
               </CardBody>
             </Card>
           </Tab>
