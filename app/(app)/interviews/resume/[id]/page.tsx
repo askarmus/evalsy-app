@@ -1,5 +1,10 @@
-import ResumeUploaderHero from '@/app/(app)/interviews/resume/components/ResumeUploaderHero';
+'use client';
 
-export default function Page({ params }: { params: { id: string } }) {
-  return <ResumeUploaderHero jobId={params.id} />;
+import { useParams } from 'next/navigation';
+import ResumeUploaderHero from '../components/ResumeUploaderHero';
+
+export default function Page() {
+  const { id } = useParams() as { id?: string };
+
+  return <ResumeUploaderHero jobId={id as string} />;
 }
