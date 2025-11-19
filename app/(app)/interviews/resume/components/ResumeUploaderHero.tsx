@@ -10,8 +10,9 @@ import { AnimatePresence, motion } from 'framer-motion';
 import DateFormatter from '@/app/utils/DateFormatter';
 import { showToast } from '@/app/utils/toastUtils';
 import { ResumeAnalyseDrawer } from '../components/resume-view/resume.analyse.drawer';
-import { AiOutlineDownload } from 'react-icons/ai';
 import ResumeStatsGrid from '../components/stats.card';
+import { ArrowUpCircle, CheckCircle, Clock, Download, Eye, Loader2, Upload, View, XCircle } from 'lucide-react';
+import { toTitleCase } from '@/app/utils/text.utls';
 
 // Normalise analysis results coming from backend / realtime
 const normalize = (r: any) => ({
@@ -41,7 +42,6 @@ type ResumeRow = {
 
 export default function ResumeUploaderHero({ jobId }: { jobId: string }) {
   const [items, setItems] = useState<ResumeRow[]>([]);
-  const [stats, setStats] = useState();
 
   // Pagination
   const [page, setPage] = useState(1);
@@ -77,7 +77,7 @@ export default function ResumeUploaderHero({ jobId }: { jobId: string }) {
       try {
         setResumesLoading(true);
         const existing = await fetchResumes(jobId);
-        setStats(existing.stats);
+
         const formatted: ResumeRow[] = (existing.resumes || []).map((r: any) => {
           const norm = normalize(r);
           return {
@@ -101,6 +101,15 @@ export default function ResumeUploaderHero({ jobId }: { jobId: string }) {
     load();
   }, [jobId]);
 
+  const statusIcon = {
+    processed: <CheckCircle className="h-4 w-4 translate-y-[1px]" />,
+    error: <XCircle className="h-4 w-4 translate-y-[1px]" />,
+    processing: <Loader2 className="h-4 w-4 animate-spin translate-y-[1px]" />,
+    uploading: <ArrowUpCircle className="h-4 w-4 translate-y-[1px]" />,
+    uploaded: <Upload className="h-4 w-4 translate-y-[1px]" />,
+    queued: <Clock className="h-4 w-4 translate-y-[1px]" />,
+  };
+
   const handleViewDetails = async (resumeId: string) => {
     setLoadingResults((prev) => ({ ...prev, [resumeId]: true }));
 
@@ -115,6 +124,37 @@ export default function ResumeUploaderHero({ jobId }: { jobId: string }) {
       setLoadingResults((prev) => ({ ...prev, [resumeId]: false }));
     }
   };
+
+  const computedStats = useMemo(() => {
+    if (!items.length) {
+      return {
+        totalCandidates: 0,
+        avgMatchScore: 0,
+        topCandidates: 0,
+        topCandidatesPercent: 0,
+        rejectedCandidates: 0,
+        rejectedCandidatesPercent: 0,
+      };
+    }
+
+    const total = items.length;
+
+    const processed = items.filter((r) => r.status === 'processed');
+
+    const avgScore = processed.length === 0 ? 0 : Math.round(processed.reduce((sum, r) => sum + (r.analysisResults?.matchScore || 0), 0) / processed.length);
+
+    const top = processed.filter((r) => r.analysisResults.matchScore >= 75).length;
+    const rejected = processed.filter((r) => r.analysisResults.matchScore < 50).length;
+
+    return {
+      totalCandidates: total,
+      avgMatchScore: avgScore,
+      topCandidates: top,
+      topCandidatesPercent: Math.round((top / total) * 100),
+      rejectedCandidates: rejected,
+      rejectedCandidatesPercent: Math.round((rejected / total) * 100),
+    };
+  }, [items]);
 
   // -----------------------------------------------------------
   // SUPABASE REALTIME LISTENER
@@ -347,13 +387,13 @@ export default function ResumeUploaderHero({ jobId }: { jobId: string }) {
   // -----------------------------------------------------------
   return (
     <div className="p-4 space-y-6">
-      <ResumeStatsGrid resumeStats={stats} />
+      <ResumeStatsGrid resumeStats={computedStats} />
       <AnimatePresence mode="sync">
         {!isUploading && (
           <motion.div key="overview-upload" initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.35, ease: 'easeOut' }} className="space-y-6">
             {/* Upload Box */}
             <div {...getRootProps()} className="cursor-pointer">
-              <Card shadow="sm" className="bg-gray-50 hover:bg-gray-100">
+              <Card shadow="sm" className="bg-secondary-50 hover:bg-gray-100 border-2 border-dashed border-secondary">
                 <CardBody className="text-center py-10">
                   <input {...getInputProps()} />
                   <p className="text-lg font-medium text-gray-700">Drag & Drop resumes or click to upload</p>
@@ -505,10 +545,11 @@ export default function ResumeUploaderHero({ jobId }: { jobId: string }) {
             <TableRow key={item.resumeId}>
               <TableCell>{item.name}</TableCell>
               <TableCell>
-                <Chip size="sm" color={item.status === 'processed' ? 'success' : item.status === 'error' ? 'danger' : 'warning'} variant="flat">
-                  {item.status}
+                <Chip size="sm" startContent={statusIcon[item.status]} variant="flat" color={item.status === 'processed' ? 'success' : item.status === 'error' ? 'danger' : 'warning'} className="flex items-center gap-1 whitespace-nowrap">
+                  <span className="leading-none">{toTitleCase(item.status)}</span>
                 </Chip>
               </TableCell>
+
               <TableCell>{item.analysisResults.candidateName}</TableCell>
               <TableCell>{item.analysisResults.currentRole}</TableCell>
               <TableCell>
@@ -518,17 +559,23 @@ export default function ResumeUploaderHero({ jobId }: { jobId: string }) {
               </TableCell>
               <TableCell>{DateFormatter.formatDate(item.createdAt || '', true)} </TableCell>
 
-              <TableCell className="space-x-2" align="right">
-                <Button size="sm" variant="flat" onPress={() => openPreview(item)} isDisabled={!item.url}>
-                  Preview Resume
-                </Button>
+              <TableCell>
+                <div className="flex justify-end items-center gap-2">
+                  {/* Preview */}
+                  <Button size="sm" isIconOnly variant="flat" isDisabled={item.status !== 'processed'} onPress={() => openPreview(item)}>
+                    <Eye />
+                  </Button>
 
-                <Button isIconOnly aria-label="Download" as="a" href={item.url || '#'} target="_blank" size="sm" color="default" variant="bordered">
-                  <AiOutlineDownload />
-                </Button>
-                <Button color="secondary" isLoading={loadingResults[item.resumeId] === true} onPress={() => handleViewDetails(item.resumeId)} radius="full" variant="flat" size="sm">
-                  View Result
-                </Button>
+                  {/* Download */}
+                  <Button isIconOnly size="sm" variant="bordered" as="a" href={item.url || '#'} target="_blank" isDisabled={item.status !== 'processed'}>
+                    <Download />
+                  </Button>
+
+                  {/* View Result */}
+                  <Button size="sm" radius="full" variant="flat" color="secondary" isDisabled={item.status !== 'processed'} isLoading={loadingResults[item.resumeId] === true} onPress={() => handleViewDetails(item.resumeId)} className="min-w-[110px] justify-center">
+                    View Result
+                  </Button>
+                </div>
               </TableCell>
             </TableRow>
           )}

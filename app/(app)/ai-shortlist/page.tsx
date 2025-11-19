@@ -14,7 +14,7 @@ export default function AIShortlist() {
         <div className="mt-6 gap-6 flex flex-col w-full">
           <Card className="p-2">
             <CardBody>
-              <div className="pr-4 pl-4 w-64">
+              <div className="pr-4 pl-4 w-128">
                 <JobDropdown value={jobId} onChange={setJobId} />
               </div>
 
