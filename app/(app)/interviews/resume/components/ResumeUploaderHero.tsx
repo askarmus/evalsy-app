@@ -102,6 +102,8 @@ export default function ResumeUploaderHero({ jobId }: { jobId: string }) {
   }, [jobId]);
 
   const handleViewDetails = async (resumeId: string) => {
+    setLoadingResults((prev) => ({ ...prev, [resumeId]: true }));
+
     try {
       const data = await getResume(jobId, resumeId);
       setSelectedResumeData(data);
@@ -522,10 +524,9 @@ export default function ResumeUploaderHero({ jobId }: { jobId: string }) {
                 </Button>
 
                 <Button isIconOnly aria-label="Download" as="a" href={item.url || '#'} target="_blank" size="sm" color="default" variant="bordered">
-                  {' '}
                   <AiOutlineDownload />
                 </Button>
-                <Button color="secondary" onPress={() => handleViewDetails(item.resumeId)} radius="full" variant="flat" size="sm">
+                <Button color="secondary" isLoading={loadingResults[item.resumeId] === true} onPress={() => handleViewDetails(item.resumeId)} radius="full" variant="flat" size="sm">
                   View Result
                 </Button>
               </TableCell>
