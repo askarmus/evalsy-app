@@ -42,15 +42,15 @@ export default function ResumeStatsGrid({ resumeStats }: any) {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
-      {cards.map((card, idx) => (
+      {cards?.map((card, idx) => (
         <Card key={idx} className=" " radius="sm" shadow="sm">
           <div className="flex items-center p-3">
-            <div className="p-2 bg-purple-100 rounded-lg mr-5">{iconMap[card.key as keyof typeof iconMap]}</div>
+            <div className="p-2 bg-purple-100 rounded-lg mr-5">{iconMap[card?.key as keyof typeof iconMap]}</div>
             <div className="min-w-0">
-              <div className="text-[20px] font-medium   truncate">{card.title}</div>
+              <div className="text-[20px] font-medium   truncate">{card?.title}</div>
               <div className="flex items-baseline">
-                <span className="text-xl font-bold mr-2">{card.value}</span>
-                <span className="text-xs   truncate">{card.subtitle}</span>
+                <span className="text-xl font-bold mr-2">{card?.value}</span>
+                <span className="text-xs   truncate">{card?.subtitle}</span>
               </div>
             </div>
           </div>

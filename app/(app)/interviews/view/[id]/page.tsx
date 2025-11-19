@@ -4,10 +4,10 @@ import React, { useEffect, useState } from 'react';
 import { getJobById } from '@/services/job.service';
 import { useParams, useRouter } from 'next/navigation';
 import { Card, CardBody, CardHeader, Chip, Divider, Navbar, NavbarBrand, ScrollShadow, Tabs, Tab, Button, NavbarContent, NavbarItem, Table, TableHeader, TableRow, TableColumn, TableBody, TableCell } from '@heroui/react';
-import UploadFiles from '@/app/(app)/interviews/resume/[id]/page';
 import { Briefcase, Calendar, Clock, Edit, MapPin, MessageSquare } from 'lucide-react';
 import JobOverviewSkeleton from '../JobOverviewSkeleton';
 import SocialShareDropdown from '../components/SocialShareDropdown';
+import ResumeUploaderSimple from '@/app/(app)/interviews/resume/[id]/page';
 
 export default function JobView() {
   const { id } = useParams() as { id?: string };
@@ -29,7 +29,7 @@ export default function JobView() {
   return (
     <main className="min-h-screen bg-background text-foreground transition-colors">
       {/* Top bar */}
-      <Navbar maxWidth="2xl" className="backdrop-blur supports-[backdrop-filter]:bg-background/70  " isBordered>
+      <Navbar maxWidth="full" className="backdrop-blur supports-[backdrop-filter]:bg-background/70  " isBordered>
         <NavbarBrand>
           <div className="ml-3">
             <div className="text-tiny text-default-500">Interview</div>
@@ -197,13 +197,8 @@ export default function JobView() {
           </Tab>
           <Tab key="resume" title="AI Shortlist">
             <Card shadow="sm" className="mt-3">
-              <CardHeader className="flex-col items-start gap-1">
-                <div className="text-base font-semibold">AI Shortlist, Zero Hassle</div>
-                <div className="text-small text-default-500">Drop resumes to see ranked matches in seconds</div>
-              </CardHeader>
-              <Divider />
               <CardBody>
-                <UploadFiles />
+                <ResumeUploaderSimple jobId="be830a04-267b-46cf-88f5-80e4087498b0" />
               </CardBody>
             </Card>
           </Tab>

@@ -1,32 +1,49 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Drawer, DrawerContent, DrawerBody, DrawerFooter, Button } from '@heroui/react';
-
 import { Send } from 'lucide-react';
-import ResumeHeader, { bgTint } from './ResumeHeader';
+import ResumeHeader from './ResumeHeader';
 import { SendInvitationDrawer } from '@/components/jobs/send-invitation';
 
-export const ResumeAnalyseDrawer: React.FC<{ isOpen: boolean; onClose: () => void; resumeData: any }> = ({ isOpen, onClose, resumeData }) => {
-  const [isDrawerOpen, setDrawerOpen] = useState(false);
+export const ResumeAnalyseDrawer: React.FC<{
+  isOpen: boolean;
+  onClose: () => void;
+  resumeData: any;
+}> = ({ isOpen, onClose, resumeData }) => {
+  const [isInviteDrawerOpen, setInviteDrawerOpen] = useState(false);
 
-  const handleCloseDrawer = () => setDrawerOpen(false);
-  const handleInviteClick = () => {
-    setDrawerOpen(true);
-  };
-  if (!resumeData) return null;
+  // Ensure child drawer closes when main drawer closes
+  useEffect(() => {
+    if (!isOpen) {
+      setInviteDrawerOpen(false);
+    }
+  }, [isOpen]);
+
+  // If no resume data, do not render content
+  if (!resumeData) {
+    return null;
+  }
+
   const { jobId } = resumeData;
 
-  console.log(resumeData);
   return (
     <>
-      <Drawer isOpen={isOpen} onOpenChange={onClose} size="4xl">
+      <Drawer
+        isOpen={isOpen}
+        onOpenChange={(open) => {
+          if (!open) onClose();
+        }}
+        size="4xl"
+      >
         <DrawerContent>
           <DrawerBody className="space-y-6">
             <ResumeHeader data={resumeData.analysisResults} />
           </DrawerBody>
+
           <DrawerFooter>
-            <Button color="secondary" radius="full" variant="flat" size="md" onPress={() => handleInviteClick()} startContent={<Send />}>
+            <Button color="secondary" radius="full" variant="flat" size="md" onPress={() => setInviteDrawerOpen(true)} startContent={<Send />}>
               Invite Interview
             </Button>
+
             <Button color="default" radius="full" variant="bordered" size="md" onPress={onClose}>
               Close
             </Button>
@@ -34,7 +51,7 @@ export const ResumeAnalyseDrawer: React.FC<{ isOpen: boolean; onClose: () => voi
         </DrawerContent>
       </Drawer>
 
-      <SendInvitationDrawer isOpen={isDrawerOpen} name={resumeData?.analysisResults?.candidate_info.candidatename} email={resumeData?.analysisResults?.candidate_info.email} onClose={handleCloseDrawer} jobId={jobId} />
+      <SendInvitationDrawer isOpen={isInviteDrawerOpen} name={resumeData?.analysisResults?.candidate_info?.candidatename} email={resumeData?.analysisResults?.candidate_info?.email} jobId={jobId} onClose={() => setInviteDrawerOpen(false)} />
     </>
   );
 };
