@@ -13,7 +13,7 @@ export interface ProvidersProps {
 export function Providers({ children, themeProps }: ProvidersProps) {
   return (
     <HeroUIProvider>
-      <NextThemesProvider defaultTheme="system" attribute="class" {...themeProps}>
+      <NextThemesProvider  forcedTheme='light' attribute="class" {...themeProps}>
         <ToastProvider placement="top-right" />
 
         {children}

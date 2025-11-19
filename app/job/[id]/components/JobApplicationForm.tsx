@@ -51,19 +51,31 @@ const JobApplicationForm = ({ jobId, userId, onCancel }: { jobId: string; userId
 
   if (isSubmitted) {
     return (
-      <div className="self-start">
-        <Card className="p-2" radius="lg">
-          <CardBody>
-            <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ delay: 0.3, duration: 0.5 }} className="mb-6 inline-flex justify-center">
-              <div className="rounded-full bg-emerald-100 p-2">
-                <FaCheckCircle className="h-10 w-10 text-emerald-600" />
-              </div>
-            </motion.div>
-            <h2 className="text-xl font-semibold">Thank you for submitting your application!</h2>
-            <p className="mt-2 text-gray-600">We will review it shortly and get back to you.</p>
-          </CardBody>
-        </Card>
-      </div>
+<div className="w-full flex justify-center items-center">
+  <Card className="p-6 text-center" radius="lg" shadow="none">
+    <CardBody className="flex flex-col items-center justify-center text-center">
+      <motion.div
+        initial={{ scale: 0.9, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ delay: 0.3, duration: 0.5 }}
+        className="mb-6 flex justify-center"
+      >
+        <div className="rounded-full bg-emerald-100 p-2">
+          <FaCheckCircle className="h-10 w-10 text-emerald-600" />
+        </div>
+      </motion.div>
+
+      <h2 className="text-xl font-semibold">
+        Thank you for submitting your application!
+      </h2>
+
+      <p className="mt-2 text-gray-600">
+        We will review it shortly and get back to you.
+      </p>
+    </CardBody>
+  </Card>
+</div>
+
     );
   }
 
@@ -123,7 +135,7 @@ const JobApplicationForm = ({ jobId, userId, onCancel }: { jobId: string; userId
               <div className="mx-auto flex w-full max-w-[90rem] items-center px-5 xl:px-8 xl2:px-[60px] xl2:!pr-[60px] justify-between">
                 <div>
                   <Button className="text-white font-semibold mr-5" form="jobAppForm" color="default" type="submit" radius="full" variant="bordered" size="lg" isLoading={isSubmitting}>
-                    <CheckCircle className="mr-2 h-5 w-5" /> Submit Application
+                    <CheckCircle className="mr-2" /> Submit Application
                   </Button>
 
                   <Button onPress={() => onCancel()} color="default" className="text-white underline" radius="full" type="reset" variant="light">

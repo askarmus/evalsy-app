@@ -22,7 +22,7 @@ module.exports = {
       },
     },
   },
-  darkMode: 'class',
+  darkMode: false,
   plugins: [
     heroui({
       layout: {
@@ -30,7 +30,6 @@ module.exports = {
       },
       themes: {
         light: {},
-        dark: {},
       },
     }),
   ],

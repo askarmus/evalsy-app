@@ -185,14 +185,6 @@ div::-webkit-scrollbar-track {
   line-height: 1.6;
 }
 
-.job-description strong {
-  display: block;
-
-  margin-top: 20px;
-  margin-bottom: 10px;
-
-  padding-bottom: 4px;
-}
 
 .job-description ul {
   list-style: disc;

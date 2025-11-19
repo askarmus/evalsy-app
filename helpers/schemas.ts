@@ -11,21 +11,24 @@ export const LoginSchema = object().shape({
 export const RegisterSchema = Yup.object().shape({
   name: Yup.string().required('Name is required'),
 
-  email: string().email('This field must be an email').required('Email is required'),
-  // .test('is-work-email', 'Only work email addresses are allowed', (value: any) => {
-  //   if (!value) return false;
-  //   const domain = value.split('@')[1]?.toLowerCase().trim();
-  //   return domain && !freeEmailDomains.includes(domain);
-  //   // Block only hotmail.com for now
-  // }),
+  email: string()
+    .email('This field must be an email')
+    .required('Email is required')
+    // .test('is-work-email', 'Only work email addresses are allowed', (value: any) => {
+    //   if (!value) return false;
+    //   const domain = value.split('@')[1]?.toLowerCase().trim();
+    //   return domain && !freeEmailDomains.includes(domain);
+    //   // Block only hotmail.com for now
+    // }),
+,
   password: Yup.string()
     .required('Password is required')
-    .test('password-strength', "Password must be stronger (at least 'Fair')", (value) => {
-      if (!value) return false;
-      const result = zxcvbn(value);
-      return result.score >= 2;
-    }),
-
+    // .test('password-strength', "Password must be stronger (at least 'Fair')", (value) => {
+    //   if (!value) return false;
+    //   const result = zxcvbn(value);
+    //   return result.score >= 2;
+    // }),
+,
   confirmPassword: Yup.string()
     .required('Confirm password is required')
     .oneOf([ref('password')], 'Passwords must match'),
