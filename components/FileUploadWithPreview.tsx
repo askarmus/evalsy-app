@@ -2,19 +2,16 @@ import React, { useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { showToast } from '@/app/utils/toastUtils';
 import { upload } from '@/services/company.service';
-import { CircularProgress } from '@heroui/react';
 
 interface FileUploadWithPreviewProps {
   onUpload: (blob: any) => void;
-  acceptedFileTypes?: { [key: string]: string[] }; // default: image/*
-  browseText?: string; // NEW: customizable browse button text
+  acceptedFileTypes?: { [key: string]: string[] };
+  browseText?: string;
+  userId?: string;
+  subFolder?: string;
 }
 
-const FileUploadWithPreview: React.FC<FileUploadWithPreviewProps> = ({
-  onUpload,
-  acceptedFileTypes = { 'image/*': [] },
-  browseText = 'Browse files', // Default caption
-}) => {
+const FileUploadWithPreview: React.FC<FileUploadWithPreviewProps> = ({ onUpload, acceptedFileTypes = { 'image/*': [] }, browseText = 'Browse files', userId = 'public-folder', subFolder = 'no-sub-folder' }) => {
   const [isUploading, setUploading] = useState(false);
 
   const onDrop = async (acceptedFiles: File[]) => {
@@ -27,7 +24,7 @@ const FileUploadWithPreview: React.FC<FileUploadWithPreviewProps> = ({
     setUploading(true);
 
     try {
-      const blob = await upload(file);
+      const blob = await upload(file, 'image/png', userId, subFolder);
       onUpload(blob);
       showToast.success('File uploaded successfully!');
     } catch (error) {

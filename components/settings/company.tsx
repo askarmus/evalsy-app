@@ -10,6 +10,7 @@ import { CompanySettingsSchema } from '@/helpers/schemas';
 import { AiOutlineCloseCircle } from 'react-icons/ai';
 import { Building, Building2, Inbox, LayoutTemplate, Save, Upload } from 'lucide-react';
 import EmailInputList from './components/EmailInputList';
+import { useAuthContext } from '@/context/AuthContext';
 
 export type CompanySettingsFormValues = {
   name: string;
@@ -30,6 +31,8 @@ export type CompanySettingsFormValues = {
 const CompanySettings = () => {
   const [uploadLogoUrl, setUploadLogoUrl] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const { user, loading } = useAuthContext();
+
   const [initialValues, setInitialValues] = useState<CompanySettingsFormValues>({
     name: '',
     address: '',
@@ -128,6 +131,8 @@ const CompanySettings = () => {
                               </div>
 
                               <FileUploadWithPreview
+                                userId={user.id}
+                                subFolder="company"
                                 onUpload={(data) => {
                                   setFieldValue('logo', data.url);
                                   setUploadLogoUrl(data.url);

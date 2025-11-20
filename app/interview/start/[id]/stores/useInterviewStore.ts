@@ -17,6 +17,7 @@ export interface Question {
 }
 
 interface InterviewState {
+  userId: string;
   phase: Phase;
   questions: Question[];
   candidate: any;
@@ -42,6 +43,7 @@ interface InterviewState {
 }
 
 export const useInterviewStore = create<InterviewState>()((set, get) => ({
+  userId: '',
   phase: 'init',
   questions: [],
   currentQuestion: 0,
@@ -69,6 +71,7 @@ export const useInterviewStore = create<InterviewState>()((set, get) => ({
       set({ invitationId: id });
       set({
         phase: data.phase,
+        userId: data.userId,
         questions: data.questions,
         duration: data.duration * 60,
         timeLeft: data.timeLeft * 60,
@@ -90,8 +93,6 @@ export const useInterviewStore = create<InterviewState>()((set, get) => ({
       if (!resposne || !resposne.questions) {
         throw new Error('Failed to start interview');
       }
-
-      console.log('voiceid', resposne.voiceid);
 
       // Step 2: Prepare data only if Step 1 succeeded
       const baseInterviewData = {
@@ -134,7 +135,7 @@ export const useInterviewStore = create<InterviewState>()((set, get) => ({
         throw new Error('Interview ID not found.');
       }
       const file = new File([imageBlob], `screenshot_${interviewId}_${Date.now()}.png`, { type: 'image/png' });
-      const recordedUrl = await upload(file, 'image/png');
+      const recordedUrl = await upload(file, 'image/png', get().userId, 'screenshot');
 
       await updateScreeshot({
         invitationId: invitationId,

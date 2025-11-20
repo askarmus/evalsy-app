@@ -13,6 +13,7 @@ import { ResumeAnalyseDrawer } from '../components/resume-view/resume.analyse.dr
 import ResumeStatsGrid from '../components/stats.card';
 import { ArrowUpCircle, CheckCircle, Clock, Download, Eye, Loader2, Upload, View, XCircle } from 'lucide-react';
 import { toTitleCase } from '@/app/utils/text.utls';
+import { useAuthContext } from '@/context/AuthContext';
 
 // Normalise analysis results coming from backend / realtime
 const normalize = (r: any) => ({
@@ -42,6 +43,7 @@ type ResumeRow = {
 
 export default function ResumeUploaderHero({ jobId }: { jobId: string }) {
   const [items, setItems] = useState<ResumeRow[]>([]);
+  const { user, loading } = useAuthContext();
 
   // Pagination
   const [page, setPage] = useState(1);
@@ -164,23 +166,22 @@ export default function ResumeUploaderHero({ jobId }: { jobId: string }) {
       .channel(`resume-${jobId}`)
       .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'resume' }, (payload) => {
         const updated: any = payload.new;
+        console.log(updated);
         if (!updated || updated.jobId !== jobId) return;
 
-        if (updated.status === 'processed') {
-          const norm = normalize(updated);
+        const norm = normalize(updated);
 
-          setItems((prev) =>
-            prev.map((i) =>
-              i.resumeId === updated.resumeId
-                ? {
-                    ...i,
-                    status: 'processed',
-                    analysisResults: norm.analysisResults,
-                  }
-                : i
-            )
-          );
-        }
+        setItems((prev) =>
+          prev.map((i) =>
+            i.resumeId === updated.resumeId
+              ? {
+                  ...i,
+                  status: updated.status,
+                  analysisResults: norm.analysisResults,
+                }
+              : i
+          )
+        );
       })
       .subscribe();
 
@@ -206,7 +207,7 @@ export default function ResumeUploaderHero({ jobId }: { jobId: string }) {
       const res = await fetch('/api/upload-url', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ filename: file.name, contentType: file.type }),
+        body: JSON.stringify({ filename: file.name, contentType: file.type, userId: user?.id }),
       });
 
       const { uploadUrl, publicUrl } = await res.json();
@@ -544,7 +545,7 @@ export default function ResumeUploaderHero({ jobId }: { jobId: string }) {
           {(item: ResumeRow) => (
             <TableRow key={item.resumeId}>
               <TableCell>{item.name}</TableCell>
-              <TableCell>
+              <TableCell width={40}>
                 <Chip size="sm" startContent={statusIcon[item.status]} variant="flat" color={item.status === 'processed' ? 'success' : item.status === 'error' ? 'danger' : 'warning'} className="flex items-center gap-1 whitespace-nowrap">
                   <span className="leading-none">{toTitleCase(item.status)}</span>
                 </Chip>

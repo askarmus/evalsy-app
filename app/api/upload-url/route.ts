@@ -3,7 +3,7 @@ import { bucket } from '@/lib/googleStorage';
 import { v4 as uuidv4 } from 'uuid';
 
 export async function POST(request: Request) {
-  const { filename, contentType } = await request.json();
+  const { filename, contentType, userId } = await request.json();
 
   // 🧹 Sanitize filename (remove unsafe chars & spaces)
   const safeName = filename
@@ -11,11 +11,8 @@ export async function POST(request: Request) {
     .replace(/[^a-zA-Z0-9._-]/g, '') // remove weird characters
     .trim();
 
-  // 🗂️ Create a unique folder name
-  const folder = uuidv4();
-
   // 🧱 Full path inside GCS bucket
-  const filePath = `${folder}/uploads/${Date.now()}-${safeName}`;
+  const filePath = `${userId}/resumes/${uuidv4()}-${safeName}`;
   const file = bucket.file(filePath);
 
   // ✍️ Generate signed upload URL
