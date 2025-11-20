@@ -14,17 +14,32 @@ import ResumeStatsGrid from '../components/stats.card';
 import { ArrowUpCircle, CheckCircle, Clock, Download, Eye, Loader2, Upload, View, XCircle } from 'lucide-react';
 import { toTitleCase } from '@/app/utils/text.utls';
 import { useAuthContext } from '@/context/AuthContext';
+import { HiringGradeUtil, Recommendation } from '@/app/utils/hiring-grade.util';
 
 // Normalise analysis results coming from backend / realtime
-const normalize = (r: any) => ({
-  ...r,
-  analysisResults: {
-    candidateName: r.analysisResults?.candidateName ?? '-',
-    currentRole: r.analysisResults?.currentRole ?? '-',
-    matchScore: r.analysisResults?.matchScore ?? r.analysisResults?.matchscore ?? 0,
-    validityStatus: r.analysisResults?.validityStatus ?? r.analysisResults?.validitystatus ?? false,
-  },
-});
+const normalize = (r: any) => {
+  let ar = r.analysisResults;
+
+  // If Supabase sends JSONB as string → parse it
+  if (typeof ar === 'string') {
+    try {
+      ar = JSON.parse(ar);
+    } catch (e) {
+      console.error('Failed to parse analysisResults', e);
+    }
+  }
+
+  return {
+    ...r,
+    analysisResults: {
+      candidateName: ar?.candidate_info?.candidatename ?? '-',
+      currentRole: ar?.candidate_info?.current_role ?? '-',
+      totalExperience: ar?.candidate_info?.total_experience ?? '-',
+      matchScore: ar?.matchscore ?? 0,
+      validityStatus: ar?.validitystatus ?? false,
+    },
+  };
+};
 
 type ResumeRow = {
   resumeId: string;
@@ -54,6 +69,7 @@ export default function ResumeUploaderHero({ jobId }: { jobId: string }) {
   const [filter, setFilter] = useState<'all' | 'top' | 'rejected'>('all');
   const [sortField, setSortField] = useState<'date' | 'name' | 'score'>('date');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
+  const [recommendationFilter, setRecommendationFilter] = useState<Recommendation | 'all'>('all');
 
   // Bulk select
   const [selectedKeys, setSelectedKeys] = useState<Selection>(new Set([]));
@@ -80,17 +96,14 @@ export default function ResumeUploaderHero({ jobId }: { jobId: string }) {
         setResumesLoading(true);
         const existing = await fetchResumes(jobId);
 
-        const formatted: ResumeRow[] = (existing.resumes || []).map((r: any) => {
-          const norm = normalize(r);
-          return {
-            resumeId: norm.resumeId,
-            name: norm.name,
-            url: norm.url,
-            createdAt: norm.createdAt,
-            status: norm.status ?? 'processed',
-            analysisResults: norm.analysisResults,
-          };
-        });
+        const formatted: ResumeRow[] = (existing.resumes || []).map((r: any) => ({
+          resumeId: r.resumeId,
+          name: r.name,
+          url: r.url,
+          createdAt: r.createdAt,
+          status: r.status ?? 'processed',
+          analysisResults: r.analysisResults, // already normalized in BE
+        }));
 
         setItems(formatted);
       } catch (err) {
@@ -166,7 +179,6 @@ export default function ResumeUploaderHero({ jobId }: { jobId: string }) {
       .channel(`resume-${jobId}`)
       .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'resume' }, (payload) => {
         const updated: any = payload.new;
-        console.log(updated);
         if (!updated || updated.jobId !== jobId) return;
 
         const norm = normalize(updated);
@@ -176,13 +188,14 @@ export default function ResumeUploaderHero({ jobId }: { jobId: string }) {
             i.resumeId === updated.resumeId
               ? {
                   ...i,
-                  status: updated.status,
+                  status: norm.status,
                   analysisResults: norm.analysisResults,
                 }
               : i
           )
         );
       })
+
       .subscribe();
 
     return () => {
@@ -309,20 +322,22 @@ export default function ResumeUploaderHero({ jobId }: { jobId: string }) {
   // SEARCH / FILTER / SORT / PAGINATION
   // -----------------------------------------------------------
   const filteredAndSorted = useMemo(() => {
-    // Search
+    const q = search.toLowerCase();
+
+    // 1️⃣ Filtering by search
     let list = items.filter((r) => {
-      const q = search.toLowerCase();
       return r.name.toLowerCase().includes(q) || r.analysisResults.candidateName.toLowerCase().includes(q);
     });
 
-    // Filter
-    if (filter === 'top') {
-      list = list.filter((r) => r.analysisResults.matchScore >= 50);
-    } else if (filter === 'rejected') {
-      list = list.filter((r) => r.analysisResults.matchScore < 50);
+    // 2️⃣ Filter by hiring recommendation (Weak Fit / Needs Review / etc.)
+    if (recommendationFilter !== 'all') {
+      list = list.filter((r) => {
+        const grade = HiringGradeUtil.getHiringRecommendation(r.analysisResults.matchScore);
+        return grade.recommendation === recommendationFilter;
+      });
     }
 
-    // Status priority: uploading/processing at top, then processed, then error
+    // 3️⃣ Status priority sorting
     const statusRank = (s: string) => {
       if (['queued', 'uploading', 'uploaded', 'processing'].includes(s)) return 0;
       if (s === 'processed') return 1;
@@ -330,12 +345,14 @@ export default function ResumeUploaderHero({ jobId }: { jobId: string }) {
       return 3;
     };
 
+    // 4️⃣ Sort
     list.sort((a, b) => {
-      const srA = statusRank(a.status);
-      const srB = statusRank(b.status);
-      if (srA !== srB) return srA - srB;
+      // status first
+      const sa = statusRank(a.status);
+      const sb = statusRank(b.status);
+      if (sa !== sb) return sa - sb;
 
-      // Within same status group, sort by selected field
+      // then sorting by chosen field
       if (sortField === 'score') {
         return sortOrder === 'asc' ? a.analysisResults.matchScore - b.analysisResults.matchScore : b.analysisResults.matchScore - a.analysisResults.matchScore;
       }
@@ -344,14 +361,14 @@ export default function ResumeUploaderHero({ jobId }: { jobId: string }) {
         return sortOrder === 'asc' ? a.analysisResults.candidateName.localeCompare(b.analysisResults.candidateName) : b.analysisResults.candidateName.localeCompare(a.analysisResults.candidateName);
       }
 
-      // date
+      // fallback: date sorting
       const da = new Date(a.createdAt).getTime();
       const db = new Date(b.createdAt).getTime();
       return sortOrder === 'asc' ? da - db : db - da;
     });
 
     return list;
-  }, [items, search, filter, sortField, sortOrder]);
+  }, [items, search, recommendationFilter, sortField, sortOrder]);
 
   const totalPages = Math.max(1, Math.ceil(filteredAndSorted.length / pageSize));
   const paginated = useMemo(() => filteredAndSorted.slice((page - 1) * pageSize, page * pageSize), [filteredAndSorted, page, pageSize]);
@@ -463,22 +480,24 @@ export default function ResumeUploaderHero({ jobId }: { jobId: string }) {
           variant="bordered"
           className="w-72"
         />
-
         <Select
-          label="Filter"
-          size="sm"
+          label="Recommendation"
           labelPlacement="outside-left"
-          selectedKeys={[filter]}
+          size="sm"
+          selectedKeys={[recommendationFilter]}
           onChange={(e) => {
-            setFilter(e.target.value as any);
+            setRecommendationFilter(e.target.value as Recommendation);
             setPage(1);
           }}
-          variant="bordered"
-          className="w-44"
+          className="w-72"
         >
-          <SelectItem key="all">All</SelectItem>
-          <SelectItem key="top">Top candidates</SelectItem>
-          <SelectItem key="rejected">Rejected</SelectItem>
+          <>
+            <SelectItem key="all">All</SelectItem>
+
+            {HiringGradeUtil.RECOMMENDATION_LABELS.map((r) => (
+              <SelectItem key={r}>{r}</SelectItem>
+            ))}
+          </>
         </Select>
 
         <Select
@@ -542,44 +561,50 @@ export default function ResumeUploaderHero({ jobId }: { jobId: string }) {
           </TableColumn>
         </TableHeader>
         <TableBody emptyContent={'No resumes found'} items={paginated} isLoading={isResumesLoading} loadingContent={<Spinner />}>
-          {(item: ResumeRow) => (
-            <TableRow key={item.resumeId}>
-              <TableCell>{item.name}</TableCell>
-              <TableCell width={40}>
-                <Chip size="sm" startContent={statusIcon[item.status]} variant="flat" color={item.status === 'processed' ? 'success' : item.status === 'error' ? 'danger' : 'warning'} className="flex items-center gap-1 whitespace-nowrap">
-                  <span className="leading-none">{toTitleCase(item.status)}</span>
-                </Chip>
-              </TableCell>
+          {(item: ResumeRow) => {
+            // ✅ FIX — calculate here, OUTSIDE JSX
+            const grade = HiringGradeUtil.getHiringRecommendation(item.analysisResults.matchScore);
 
-              <TableCell>{item.analysisResults.candidateName}</TableCell>
-              <TableCell>{item.analysisResults.currentRole}</TableCell>
-              <TableCell>
-                <Chip size="sm" color={item.analysisResults.matchScore >= 50 ? 'success' : item.analysisResults.matchScore >= 20 ? 'warning' : 'danger'}>
-                  {item.analysisResults.matchScore}%
-                </Chip>
-              </TableCell>
-              <TableCell>{DateFormatter.formatDate(item.createdAt || '', true)} </TableCell>
+            return (
+              <TableRow key={item.resumeId}>
+                <TableCell>{item.name}</TableCell>
 
-              <TableCell>
-                <div className="flex justify-end items-center gap-2">
-                  {/* Preview */}
-                  <Button size="sm" isIconOnly variant="flat" isDisabled={item.status !== 'processed'} onPress={() => openPreview(item)}>
-                    <Eye />
-                  </Button>
+                <TableCell width={40}>
+                  <Chip size="sm" startContent={statusIcon[item.status]} variant="flat" color={item.status === 'processed' ? 'success' : item.status === 'error' ? 'danger' : 'warning'} className="flex items-center gap-1 whitespace-nowrap">
+                    <span className="leading-none">{toTitleCase(item.status)}</span>
+                  </Chip>
+                </TableCell>
 
-                  {/* Download */}
-                  <Button isIconOnly size="sm" variant="bordered" as="a" href={item.url || '#'} target="_blank" isDisabled={item.status !== 'processed'}>
-                    <Download />
-                  </Button>
+                <TableCell>{item.analysisResults.candidateName}</TableCell>
+                <TableCell>{item.analysisResults.currentRole}</TableCell>
 
-                  {/* View Result */}
-                  <Button size="sm" radius="full" variant="flat" color="secondary" isDisabled={item.status !== 'processed'} isLoading={loadingResults[item.resumeId] === true} onPress={() => handleViewDetails(item.resumeId)} className="min-w-[110px] justify-center">
-                    View Result
-                  </Button>
-                </div>
-              </TableCell>
-            </TableRow>
-          )}
+                {/* 🌟 MATCH SCORE BADGE ✔️ */}
+                <TableCell>
+                  <Chip size="sm" color={grade.color} variant="flat">
+                    {grade.text} ({item.analysisResults.matchScore}%)
+                  </Chip>
+                </TableCell>
+
+                <TableCell>{DateFormatter.formatDate(item.createdAt || '', true)}</TableCell>
+
+                <TableCell>
+                  <div className="flex justify-end items-center gap-2">
+                    <Button size="sm" isIconOnly variant="flat" isDisabled={item.status !== 'processed'} onPress={() => openPreview(item)}>
+                      <Eye />
+                    </Button>
+
+                    <Button isIconOnly size="sm" variant="bordered" as="a" href={item.url || '#'} target="_blank" isDisabled={item.status !== 'processed'}>
+                      <Download />
+                    </Button>
+
+                    <Button size="sm" radius="full" variant="flat" color="secondary" isDisabled={item.status !== 'processed'} isLoading={loadingResults[item.resumeId] === true} onPress={() => handleViewDetails(item.resumeId)} className="min-w-[110px] justify-center">
+                      View Result
+                    </Button>
+                  </div>
+                </TableCell>
+              </TableRow>
+            );
+          }}
         </TableBody>
       </Table>
 
