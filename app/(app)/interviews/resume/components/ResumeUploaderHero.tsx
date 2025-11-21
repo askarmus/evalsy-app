@@ -580,9 +580,13 @@ export default function ResumeUploaderHero({ jobId }: { jobId: string }) {
 
                 {/* 🌟 MATCH SCORE BADGE ✔️ */}
                 <TableCell>
-                  <Chip size="sm" color={grade.color} variant="flat">
-                    {grade.text} ({item.analysisResults.matchScore}%)
-                  </Chip>
+                  {item.status === 'processed' && (
+                    <Chip size="sm" color={grade.color} variant="flat">
+                      {grade.text} ({item.analysisResults.matchScore}%)
+                    </Chip>
+                  )}
+
+                  {item.status !== 'processed' && '--'}
                 </TableCell>
 
                 <TableCell>{DateFormatter.formatDate(item.createdAt || '', true)}</TableCell>
