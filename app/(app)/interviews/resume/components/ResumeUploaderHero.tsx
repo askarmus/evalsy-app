@@ -15,6 +15,7 @@ import { ArrowUpCircle, CheckCircle, Clock, Download, Eye, Loader2, Upload, View
 import { toTitleCase } from '@/app/utils/text.utls';
 import { useAuthContext } from '@/context/AuthContext';
 import { HiringGradeUtil, Recommendation } from '@/app/utils/hiring-grade.util';
+import pLimit from 'p-limit';
 
 // Normalise analysis results coming from backend / realtime
 const normalize = (r: any) => {
@@ -66,10 +67,10 @@ export default function ResumeUploaderHero({ jobId }: { jobId: string }) {
 
   // Filters / search / sort
   const [search, setSearch] = useState('');
-  const [filter, setFilter] = useState<'all' | 'top' | 'rejected'>('all');
   const [sortField, setSortField] = useState<'date' | 'name' | 'score'>('date');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
   const [recommendationFilter, setRecommendationFilter] = useState<Recommendation | 'all'>('all');
+  const [currentJobId, setCurrentJobId] = useState(jobId);
 
   // Bulk select
   const [selectedKeys, setSelectedKeys] = useState<Selection>(new Set([]));
@@ -87,6 +88,10 @@ export default function ResumeUploaderHero({ jobId }: { jobId: string }) {
   const [loadingResults, setLoadingResults] = useState<{ [key: string]: boolean }>({});
 
   const handleClose = () => setDrawerOpen(false);
+
+  useEffect(() => {
+    setCurrentJobId(jobId);
+  }, [jobId]);
   // -----------------------------------------------------------
   // LOAD EXISTING RESUMES AT MOUNT
   // -----------------------------------------------------------
@@ -236,7 +241,7 @@ export default function ResumeUploaderHero({ jobId }: { jobId: string }) {
       updateStatus(resumeId, 'uploaded');
 
       await createResume({
-        jobId,
+        jobId: currentJobId,
         resumeId,
         baseName: file.name,
         publicUrl,
@@ -253,32 +258,35 @@ export default function ResumeUploaderHero({ jobId }: { jobId: string }) {
   // -----------------------------------------------------------
   // DROPZONE HANDLER
   // -----------------------------------------------------------
-  const onDrop = useCallback(async (files: File[]) => {
-    const validFiles = files.filter((file) => ['pdf', 'doc', 'docx'].includes(file.name.split('.').pop()?.toLowerCase() || ''));
+  const onDrop = useCallback(
+    async (files: File[]) => {
+      const validFiles = files.filter((file) => ['pdf', 'doc', 'docx'].includes(file.name.split('.').pop()?.toLowerCase() || ''));
 
-    const rows: ResumeRow[] = validFiles.map((file) => ({
-      resumeId: uuidv4(),
-      name: file.name,
-      url: '',
-      file,
-      createdAt: new Date().toISOString(),
-      status: 'queued',
-      analysisResults: {
-        candidateName: '-',
-        currentRole: '-',
-        matchScore: 0,
-      },
-    }));
+      const rows: ResumeRow[] = validFiles.map((file) => ({
+        resumeId: uuidv4(),
+        name: file.name,
+        url: '',
+        file,
+        createdAt: new Date().toISOString(),
+        status: 'queued',
+        analysisResults: {
+          candidateName: '-',
+          currentRole: '-',
+          matchScore: 0,
+        },
+      }));
 
-    // Insert new at top
-    setItems((prev) => [...rows, ...prev]);
-    // Jump to first page so user sees uploads
-    setPage(1);
+      // Add to UI
+      setItems((prev) => [...rows, ...prev]);
+      setPage(1);
 
-    for (const row of rows) {
-      await uploadFile(row.file as File, row.resumeId);
-    }
-  }, []);
+      // ⏳ limit to 3 parallel uploads
+      const limit = pLimit(3);
+
+      await Promise.all(rows.map((row) => limit(() => uploadFile(row.file as File, row.resumeId))));
+    },
+    [uploadFile] // ✔️ correct dependency
+  );
 
   const { getRootProps, getInputProps } = useDropzone({ onDrop });
 
