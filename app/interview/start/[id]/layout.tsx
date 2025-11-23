@@ -2,7 +2,7 @@ import { Providers } from '@/app/providers';
 
 export default function NoLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="home_v2 min-h-screen">
+    <div className="bg-[url('/02.svg')] bg-cover bg-center min-h-screen">
       <Providers>{children}</Providers>
     </div>
   );
