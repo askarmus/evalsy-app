@@ -59,7 +59,7 @@ export default function RequestDemo() {
             </div>
           </div>
           <div>
-            <Card shadow="none" className=" shadow-2xl rounded-2xl  bg-white p-4">
+            <Card className="  p-4">
               <CardHeader className="pb-0 pt-4   flex flex-col items-start mb-3">
                 <p className="text-xl font-bold text-black">Tell us about your needs</p>
                 <p className="text-sm text-black">We will get back to you within 24 hours to schedule your personalized demo.</p>
@@ -75,7 +75,7 @@ export default function RequestDemo() {
                     variant="bordered"
                     radius="sm"
                     classNames={{
-                      inputWrapper: 'bg-white text-black border-slate-600',
+                      inputWrapper: 'bg-white text-black border-purple-600',
                       input: 'text-black placeholder:text-slate-500',
                     }}
                     value={formData.fullName}
@@ -92,7 +92,7 @@ export default function RequestDemo() {
                       variant="bordered"
                       radius="sm"
                       classNames={{
-                        inputWrapper: 'bg-white text-black border-slate-600',
+                        inputWrapper: 'bg-white text-black border-purple-600',
                         input: 'text-black placeholder:text-slate-500',
                       }}
                       value={formData.email}
@@ -108,7 +108,7 @@ export default function RequestDemo() {
                       variant="bordered"
                       radius="sm"
                       classNames={{
-                        inputWrapper: 'bg-white text-black border-slate-600',
+                        inputWrapper: 'bg-white text-black border-purple-600',
                         input: 'text-black placeholder:text-slate-500',
                       }}
                       value={formData.mobile}
@@ -122,14 +122,14 @@ export default function RequestDemo() {
                     variant="bordered"
                     radius="sm"
                     classNames={{
-                      inputWrapper: 'bg-white text-black border-slate-600',
+                      inputWrapper: 'bg-white text-black border-purple-600',
                       input: 'text-black placeholder:text-slate-500',
                     }}
                     value={formData.company}
                     onChange={handleInputChange}
                   />
 
-                  <Button radius="full" isLoading={isSubmiting} type="submit" size="md" className="mt-8 text-white  bg-black py-4 px-8 font-medium hover: hover:bg-slate-600 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-700" endContent={<FaArrowRight className="w-4 h-4 text-white hover:translate-x-1 transition-transform" />}>
+                  <Button radius="full" color="secondary" isLoading={isSubmiting} type="submit" size="md">
                     Request Demo
                   </Button>
                 </form>
