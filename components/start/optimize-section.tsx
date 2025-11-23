@@ -38,7 +38,7 @@ export function OptimizationComparison() {
 
                 {/* RIGHT: Image */}
                 <div className="flex justify-center lg:justify-end">
-                  <img src="/images/dig.png" alt="AI Recruiting Dashboard" className="w-full max-w-[500px] rounded-2xl shadow-lg" />
+                  <img src="/images/software-interview.png" alt="AI Recruiting Dashboard" className="w-full max-w-[500px] rounded-2xl shadow-lg" />
                 </div>
 
                 <div className="flex flex-col gap-8">
