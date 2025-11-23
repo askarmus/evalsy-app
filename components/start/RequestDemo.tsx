@@ -48,7 +48,9 @@ export default function RequestDemo() {
           <div className="hidden lg:block relative h-full rounded-2xl overflow-hidden">
             <div className="relative z-10 p-8 h-full flex flex-col justify-center">
               <div className="mb-12">
-                <div className="inline-block   px-4 py-1 border-2 border-black rounded-full mb-5">Demo</div>
+                <div className="inline-flex items-center justify-center gap-2 px-4 py-2 bg-white rounded-full border border-purple-200 shadow-sm">
+                  <span className="text-purple-600 text-xs sm:text-sm font-medium">Demo</span>
+                </div>
                 <div className="space-y-4">
                   <h2 className="text-4xl font-semibold  sm:text-4xl text-[#262626]  sm:text-4xl md:text-4xl">
                     Request Your <br></br> <span className="gradients-primary-2-text-hard">Personalized</span> Demo
