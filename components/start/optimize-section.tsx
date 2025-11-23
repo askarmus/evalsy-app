@@ -23,7 +23,7 @@ export function OptimizationComparison() {
   ];
 
   return (
-    <section id="cost-analysis" className="w-full   md:mt-40 lg:py-30 overflow-hidden">
+    <section id="cost-analysis" className="w-full    lg:py-30 overflow-hidden">
       <div className="container  ">
         <div className=" w-full mx-auto">
           <Card className="bg-[#0B0A33] rounded-3xl mb-6 bg-[url('/66cf226f15f01e88921e897a_Ellipse%202449-1.svg')] bg-cover bg-center">

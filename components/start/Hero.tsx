@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 
-import { Play, TrendingUp, Users, DollarSign, Clock, CheckCircle, Star } from 'lucide-react';
+import { Play, TrendingUp, Users, DollarSign, Clock, CheckCircle, Star, CheckCircle2, ArrowRight } from 'lucide-react';
 import { Button, Chip } from '@heroui/react';
 import RequestDemoHero from './RequestDemoHero';
 import VideoModal from '@/app/interview/start/[id]/components/how-it-work-video';
@@ -45,63 +45,29 @@ export function Hero() {
   ];
 
   return (
-    <section className="relative w-full mt-16 sm:mt-24 md:mt-32 lg:mt-48 p-4 overflow-hidden">
-      {/* Background Elements */}
-
-      <div className="container relative z-10">
-        <div className="flex flex-col lg:flex-row gap-12 items-center">
-          {/* Left Content - 60% width on large screens */}
-          <div className="w-full flex flex-col space-y-8 items-center text-center sm:items-start sm:text-left">
-            {/* Badge */}
-
-            {/* Main Heading */}
-            <div className="space-y-4">
-              <h1 className="text-4xl sm:text-6xl md:text-6xl lg:text-7xl font-black leading-tight font-bold">
-                <span
-                  className="bg-gradient-to-r from-purple-600 via-purple-700 to-indigo-800 bg-clip-text text-transparent"
-                  style={{
-                    backgroundSize: '200% 200%',
-                    backgroundPosition: '46.04% 50%',
-                    willChange: 'auto',
-                  }}
-                >
-                  AI-Powered Hiring.
-                </span>
-              </h1>
-
-              <h1 className="text-2xl  sm:text-2xl font-black leading-tight font-semibold" style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
-                <span
-                  className=" mt-5"
-                  style={{
-                    backgroundSize: '200% 200%',
-                    backgroundPosition: '73.96% 50%',
-                    willChange: 'auto',
-                  }}
-                >
-                  Hire 90% Faster. Pay 70% Less
-                </span>
-              </h1>
-
-              {/* Description */}
-              <p className="text-lg md:text-xl text-gray-900 max-w-2xl leading-relaxed mx-auto sm:mx-0">Evalsy automatically interviews candidates 24/7 and gives you AI-powered shortlists. Focus only on the best.</p>
-
-              {/* Typewriter Effect */}
-              <div className="flex flex-col sm:flex-row items-center justify-center sm:justify-start gap-2">
-                <span className="text-xl md:text-2xl font-semibold text-gray-700">It&apos;s</span>
-                <span className="text-xl md:text-2xl font-bold bg-gradient-to-r from-pink-400 via-purple-400 to-blue-400 bg-clip-text text-transparent pr-1 min-w-[120px]"> {currentText || '\u00A0'}</span>
-              </div>
-            </div>
-
-            {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center sm:justify-start">
-              <VideoModal />
-            </div>
+    <section className="relative w-full mt-8 sm:mt-12 md:mt-16 lg:mt-24 p-4 overflow-hidden">
+      <div className="relative flex flex-col items-center justify-center  px-4 py-12 sm:px-6 lg:px-8">
+        <div className="w-full max-w-4xl mx-auto space-y-8 text-center">
+          {/* Badge */}
+          <div className="inline-flex items-center justify-center gap-2 px-4 py-2 bg-white rounded-full border border-purple-200 shadow-sm">
+            <span className="text-purple-600 text-xs sm:text-sm font-medium">Hire 90% Faster. Pay 70% Less</span>
           </div>
 
-          <div>
-            <div className="flex-center w-full">
-              <img alt="image" decoding="async" data-nimg="1" src="/images/software-interview.png"></img>
-            </div>
+          {/* Main Headline */}
+          <div className="space-y-4">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.15]">
+              <span className="block bg-gradient-to-r from-purple-600 via-purple-700 to-indigo-800 bg-clip-text text-transparent pb-4">Transform your hiring speed with</span>
+
+              <span className="block bg-gradient-to-r from-blue-500 to-blue-600 bg-clip-text text-transparent">Smart AI</span>
+            </h1>
+
+            {/* Subheading */}
+            <p className="mt-6 text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">Evalsy automatically interviews candidates 24/7 and gives you AI-powered shortlists. Focus only on the best.</p>
+          </div>
+
+          {/* CTA Button */}
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-8">
+            <VideoModal />
           </div>
         </div>
       </div>

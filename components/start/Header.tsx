@@ -37,7 +37,7 @@ export function Headerx() {
           <ul className="hidden md:flex flex-1 items-center justify-end gap-5 whitespace-nowrap">
             {navigationItems.map((item) => (
               <li key={item.href}>
-                <Link as={NextLink} href={item.href} onClick={closeMenu} className="text-white font-medium hover:text-[#7FE67F] transition-colors">
+                <Link as={NextLink} href={item.href} onPress={closeMenu} className="text-white   hover:text-[#7FE67F] transition-colors">
                   {item.label}
                 </Link>
               </li>
@@ -50,17 +50,17 @@ export function Headerx() {
                   Sign in
                 </Link>
 
-                <Button as={NextLink} href="#shedule-demo" radius="full" variant="solid" className=" font-semibold  bg-[#3534ff] text-white px-4 py-2 h-[40px]">
+                <Button as={NextLink} size="sm" href="#shedule-demo" radius="full" variant="solid" className=" font-semibold  bg-[#3534ff] text-white ">
                   Schedule a Demo
                 </Button>
 
-                <Button as={NextLink} href="/signup" radius="full" variant="solid" className="font-semibold  bg-white text-black px-4 py-2 h-[40px]">
+                <Button as={NextLink} size="sm" href="/signup" radius="full" variant="solid" className="font-semibold  bg-white text-black  ">
                   Sign Up
                 </Button>
               </>
             ) : (
               // ✅ Authenticated → show dashboard button
-              <Button as={NextLink} href="/dashboard" radius="full" variant="bordered" className="border-2 border-black btn-gradient text-white px-4 py-2 h-[40px] font-semibold">
+              <Button as={NextLink} size="sm" href="/dashboard" radius="full" variant="bordered" className="border-2 border-black btn-gradient text-white  font-semibold">
                 Go to Dashboard
               </Button>
             )}
