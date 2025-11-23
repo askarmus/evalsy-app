@@ -47,7 +47,7 @@ export function Hero() {
   return (
     <section className="relative w-full mt-8 sm:mt-12 md:mt-16 lg:mt-24 p-4 overflow-hidden">
       <div className="relative flex flex-col items-center justify-center  px-4 py-12 sm:px-6 lg:px-8">
-        <div className="w-full max-w-4xl mx-auto space-y-8 text-center">
+        <div className="w-full max-w-6xl mx-auto space-y-8 text-center">
           {/* Badge */}
           <div className="inline-flex items-center justify-center gap-2 px-4 py-2 bg-white rounded-full border border-purple-200 shadow-sm">
             <span className="text-purple-600 text-xs sm:text-sm font-medium">Hire 90% Faster. Pay 70% Less</span>
@@ -55,7 +55,7 @@ export function Hero() {
 
           {/* Main Headline */}
           <div className="space-y-4">
-            <h1 className="text-4xl sm:text-5xl lg:text-7xl font-bold tracking-tight leading-[1.15]">
+            <h1 className="text-4xl sm:text-5xl lg:text-8xl font-bold tracking-tight leading-[1.15]">
               <span className="block bg-gradient-to-r from-purple-600 via-purple-700 to-indigo-800 bg-clip-text text-transparent pb-4">AI interview automation,</span>
 
               <span className="block bg-gradient-to-r from-blue-500 to-blue-600 bg-clip-text text-transparent  pb-4">done right</span>
