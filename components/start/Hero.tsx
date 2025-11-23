@@ -55,10 +55,10 @@ export function Hero() {
 
           {/* Main Headline */}
           <div className="space-y-4">
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.15]">
-              <span className="block bg-gradient-to-r from-purple-600 via-purple-700 to-indigo-800 bg-clip-text text-transparent pb-4">Transform your hiring speed with</span>
+            <h1 className="text-4xl sm:text-5xl lg:text-7xl font-bold tracking-tight leading-[1.15]">
+              <span className="block bg-gradient-to-r from-purple-600 via-purple-700 to-indigo-800 bg-clip-text text-transparent pb-4">AI interview automation,</span>
 
-              <span className="block bg-gradient-to-r from-blue-500 to-blue-600 bg-clip-text text-transparent">Smart AI</span>
+              <span className="block bg-gradient-to-r from-blue-500 to-blue-600 bg-clip-text text-transparent  pb-4">done right</span>
             </h1>
 
             {/* Subheading */}
