@@ -1,14 +1,13 @@
-import { Button, Card, CardBody, CardFooter, Chip, Divider } from '@heroui/react';
+import { Button, Card, CardBody, CardFooter, Divider } from '@heroui/react';
 import React, { useState } from 'react';
 import { useInterviewStore } from '../stores/useInterviewStore';
 import CandidateInfo from './CandidateInfo';
 import PoweredBy from './PoweredBy';
 import MediaPermission from './MediaPermission';
-import { ChevronRight, Mic, Play, Video } from 'lucide-react';
+import { ChevronRight, Play } from 'lucide-react';
 import { cleanDescription } from '@/app/utils/formatRelativeDate';
 
 const InterviewInstruction: React.FC<any> = () => {
-  const [showFullDescription, setShowFullDescription] = useState(true);
   const [showMicTest, setShowMicTest] = useState(false);
   const [status, setStatus] = useState<'pending' | 'granted' | 'denied' | 'blocked'>('pending');
 
@@ -25,16 +24,11 @@ const InterviewInstruction: React.FC<any> = () => {
               <div className="mt-1 flex flex-col gap-[6px] font-xs">
                 <h1 className="text-md font-medium text-tertiary mb-2">Job Description</h1>
 
-                <div className="relative  job-description">
-                  <div className={`text-primary4 container space-y-4 text-sm pr-2 ${showFullDescription ? 'max-h-full' : 'max-h-[160px] overflow-hidden'}`} dangerouslySetInnerHTML={{ __html: cleanDescription(job?.description) || '' }} />
-                  {!showFullDescription && <div className="absolute bottom-0 left-0 right-0 h-16 pointer-events-none rounded-b-md" />}
+                <div className="job-description max-h-[260px] overflow-y-auto pr-2">
+                  <div className="text-primary4 space-y-4 text-sm" dangerouslySetInnerHTML={{ __html: cleanDescription(job?.description) || '' }} />
                 </div>
-
-                {/* <Button variant="ghost" radius="full" size="sm" onPress={() => setShowFullDescription((prev) => !prev)} className="w-fit">
-                  {showFullDescription ? 'Read Less' : 'Read More'}
-                  <ChevronRight className="w-4 h-4 ml-1" />
-                </Button> */}
               </div>
+
               <Divider className="mt-6" />
             </CardBody>
           )}

@@ -8,7 +8,7 @@ const ThankYou: React.FC = () => {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center   relative">
       <div className="w-full max-w-screen-md px-6 py-8">
-        <Card className="p-8 bg-white dark:bg-gray-800 relative" shadow="lg" radius="md">
+        <Card className="p-8 bg-white dark:bg-gray-800 relative" shadow="none" radius="md">
           {/* Top-right and bottom-left icons */}
 
           <CardBody className="py-8 text-center">

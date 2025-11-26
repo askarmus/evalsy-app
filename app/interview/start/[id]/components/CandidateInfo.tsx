@@ -15,17 +15,17 @@ const CandidateInfo: React.FC<any> = ({ job, addTopPadding = true }) => {
 
             <div className="flex items-center space-x-4">
               <div className="flex items-center text-sm text-gray-600 ">
-                <Chip variant="flat" size="sm" startContent={<Clock className="w-4 h-4 mr-1  " />}>
+                <Chip variant="flat" size="sm" startContent={<Clock className="w-4 h-4 mr-1 text-secondary  " />}>
                   {duration / 60} minutes
                 </Chip>
               </div>
               <div className="flex items-center text-sm text-gray-600">
-                <Chip variant="flat" size="sm" startContent={<Building className="w-4 h-4 mr-1  " />}>
+                <Chip variant="flat" size="sm" startContent={<Building className="w-4 h-4 mr-1  text-secondary" />}>
                   {company?.name}
                 </Chip>
               </div>
               <div className="flex items-center text-sm text-gray-600">
-                <Chip variant="flat" size="sm" startContent={<User className="w-4 h-4 mr-1  " />}>
+                <Chip variant="flat" size="sm" startContent={<User className="w-4 h-4 mr-1  text-secondary" />}>
                   {candidate?.name}
                 </Chip>
               </div>

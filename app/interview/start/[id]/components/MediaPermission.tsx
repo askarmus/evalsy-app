@@ -3,7 +3,6 @@
 import { Alert, Button, Card, CardBody } from '@heroui/react';
 import { Mic, Video } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
-import { FaCamera, FaCheckCircle, FaMicrophone } from 'react-icons/fa';
 
 export default function MediaPermission({ onPermissionChange }: { onPermissionChange?: (status: 'pending' | 'granted' | 'denied' | 'blocked') => void }) {
   const [permissionStatus, setPermissionStatus] = useState<'pending' | 'granted' | 'denied' | 'blocked'>('pending');
@@ -157,7 +156,6 @@ export default function MediaPermission({ onPermissionChange }: { onPermissionCh
         {permissionStatus === 'granted' && (
           <Card shadow="none">
             <CardBody>
-              <Alert variant="bordered" title="Camera and microphone permissions granted." className="mb-5 p-2" />
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
                 <Card shadow="none">
                   <CardBody>
@@ -184,12 +182,12 @@ export default function MediaPermission({ onPermissionChange }: { onPermissionCh
                           className="mb-4 mt-4 text-xs"
                           title={
                             <>
-                              Mic in use: <strong>{micDeviceLabel}</strong>
+                              <strong> Mic in use:</strong> {micDeviceLabel}
                             </>
                           }
                         />
                       )}
-                      <Button onPress={testMic} isDisabled={isTestingMic} color="default">
+                      <Button onPress={testMic} isDisabled={isTestingMic} color="default" variant="bordered" radius="full">
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                           <path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3zm-7 9a7 7 0 0014 0M5 10v1a7 7 0 0014 0v-1M12 19v4m-4 0h8" />
                         </svg>
